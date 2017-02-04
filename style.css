@@ -1,0 +1,699 @@
+/*
+Theme Name: qnrwp_a
+Theme URI: http://XXXX
+Author: Karl Dolenc, beholdingeye.com
+Author URI: http://www.beholdingeye.com
+Description: qnrwp_a is the first Quicknr WordPress theme.
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: basic, blank
+Text Domain: qnrwp_a
+*/
+
+/*
+  QNRWP_A Stylesheet
+*/
+
+@font-face {
+    font-family: "testfont";
+    src: url("../font/testfont.woff") format("woff");
+}
+/* Font in the fonts folder outside the website */
+/*
+@font-face {
+    font-family: "Custom";
+    src: url("../../../../../../../Web/GoogleFonts_20160219/fonts/montserrat/Montserrat-Regular.ttf");
+}
+*/
+
+input[type="button"]::-moz-focus-inner {
+    outline: none;
+    border: none;
+}
+                                             /* Layout */
+
+body {
+    display: block;
+    position: absolute;
+/*
+    top: 0;
+    bottom: 0;
+*/
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial,sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    color: black;
+    text-align: center;
+    vertical-align: top;
+    background-color: white;
+    
+    /* Font rendering settings from Google */
+    
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+    /* Support for IE. */
+    font-feature-settings: "liga";
+    
+    /* Possible solution for Chrome text rendering? */
+/*
+    -webkit-text-stroke: 0.23px;
+*/
+
+    /* iPhone inconsistent text sizing fix */
+    -webkit-text-size-adjust: 100%;
+
+}
+
+a {
+    outline: none;
+    text-decoration: none;
+    font-weight: bold;
+    color: inherit;
+}
+a:hover {
+    text-decoration: underline;
+}
+img {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    max-width: 100%; /* Prevent overflow */
+    height: auto; /* Prevent distortion */
+    border: none;
+}
+
+div {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Style Headers as they are used in Edit screens */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+}
+h1 {
+    font-size: 1.3em;
+}
+h2 {
+    font-size: 1.2em;
+}
+h3 {
+    font-size: 1.1em;
+}
+h4 {
+    font-size: 1em;
+}
+h5 {
+    font-size: 0.9em;
+}
+h6 {
+    font-size: 0.8em;
+}
+
+
+/* HEADER
+ * ----------------------------------------------------- */
+
+div#header-row {
+    text-align: right;
+    color: white;
+    overflow: visible;
+}
+
+
+/* CONTENT
+ * ----------------------------------------------------- */
+
+div#middle-row {
+    display: inline-flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: stretch;
+    margin: 0;
+    min-width: 320px;
+    max-width: 1600px;
+    height: auto;
+    text-align: center;
+    vertical-align: top;
+    background-color: black; /* For bg-img opacity */
+}
+
+div#content-box {
+    flex: 2 1 0;
+    display: inline-block;
+    margin: 0;
+    padding: 0 1em;
+    padding-top: 2em;
+    min-width: 320px;
+    max-width: 1600px;
+    height: auto;
+    text-align: center;
+    background-color: white;
+}
+div#content-box.single-col-content {
+    width: 100%;
+    padding: 0;
+}
+div#content-box.three-col-content {
+    width: 40%;
+}
+div#content-box.two-col-content-left {
+    width: 70%;
+}
+div#content-box.two-col-content-right {
+    width: 70%;
+}
+
+/* ----------------------------- Post Type */
+
+div.post.type-post {
+    text-align: left;
+}
+div.post-date {
+    font-size: 0.9em;
+    font-style: normal;
+    color: #888;
+}
+div.post.type-post h1.page-title {
+    text-align: left;
+}
+
+/* Previous and Next post links */
+
+div.post-nav-links {
+    margin-top: 2em;
+    padding-top: 1em;
+    margin-bottom: 1em;
+    text-align: justify;
+    border-top: solid thin #EEE;
+}
+div.post-nav-links span.post-newer,
+div.post-nav-links span.post-older {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 50%; /* Assume no whitespace between items */
+    font-weight: normal;
+    font-size: 0.9em;
+    vertical-align: top;
+    color: #444;
+}
+div.post-nav-links span.post-newer {
+    text-align: right;
+}
+div.post-nav-links span.post-older {
+    text-align: left;
+}
+div.post-nav-links span.post-newer:hover,
+div.post-nav-links span.post-older:hover {
+    color: black;
+}
+
+
+/* SIDEBARS
+ * ----------------------------------------------------- */
+
+div.sidebar {
+    display: inline-block;
+    flex: 1 2 0;
+    padding-top: 1em;
+    min-width: 200px;
+    max-width: 400px;
+    text-align: center;
+    vertical-align: top;
+    background-color: white;
+}
+
+div#sidebar-left {
+    width: 30%;     /* Here for sizing later */
+}
+div#sidebar-right {
+    width: 30%;
+}
+
+
+/* WIDGET
+ * ----------------------------------------------------- */
+
+div.widget {
+    display: inline-block;
+    overflow: hidden;
+}
+
+div#header-row div.widget {
+    overflow: visible;  /* So that collapsed nav menu will show */
+}
+div.sidebar div.widget {
+    margin: 1em auto;
+    padding: 0 1em;
+    width: 100%;
+    text-align: center;
+}
+div.sidebar h2.widget-title {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-size: 0.9em;
+    font-weight: normal;
+    text-transform: uppercase;
+    text-align: center;
+    color: gray;
+}
+
+/* Calendar */
+
+div.calendar_wrap {
+    display: inline-block;
+    padding-top: 1em;
+    text-align: center;
+}
+table#wp-calendar {
+    display: inline-block;
+}
+
+/* Recent Posts */
+
+div.widget_recent_entries ul {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    max-width: 400px;
+    text-align: left;
+    list-style-type: none;
+}
+div.widget_recent_entries span.post-date {
+    font-size: 0.85em;
+    font-style: normal;
+    color: #888;
+}
+div.widget_recent_entries li {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+div.widget_recent_entries li a {
+    font-weight: normal;
+}
+div.widget_recent_entries li a + span {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+/* FOOTER
+ * ----------------------------------------------------- */
+
+div#footer-row {
+    color: white;
+    background-color: #444;
+}
+
+
+/* FEATURED NEWS
+ * ----------------------------------------------------- */
+
+/* 4-item rows, responsively adjusting to 2-item, then singles */
+
+div.featured-news-block {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    vertical-align: top;
+    text-align: center;
+}
+div.featured-news-block > div {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    min-width: 650px;
+    max-width: 100%;
+    width: 48%;
+    vertical-align: top;
+    text-align: center;
+}
+div.featured-news-block > div:first-child {
+    text-align: right;
+}
+div.featured-news-block > div:last-child {
+    text-align: left;
+}
+a.featured-news-item {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 1em;
+    min-width: 320px;
+    width: 49%;
+    height: 28em;
+    max-width: 380px;
+    vertical-align: top;
+    overflow: hidden;
+    box-sizing: border-box;
+    
+    outline: none;
+    text-decoration: none;
+    font-weight: inherit;
+    color: inherit;
+}
+a.featured-news-item:hover {
+    background-color: #F2F2F2;
+}
+div.featured-news-item-header {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 200px;
+    background-image: linear-gradient(gray,white); /* Placeholder */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;
+}
+div.featured-news-item-text {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    color: #333;
+}
+div.featured-news-item-text h1 {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+a.featured-news-item:hover div.featured-news-item-header {
+    opacity: 0.9;
+}
+a.featured-news-item:hover div.featured-news-item-text {
+    color: black;
+}
+
+
+/* NEWS EXCERPTS
+ * ----------------------------------------------------- */
+
+a.excerpt-item {
+    display: block;
+    position: relative;
+    margin: 0;
+    margin-bottom: 1em;
+    padding: 0;
+    width: 100%;
+    height: 150px;
+    font-weight: normal;
+    text-align: left;
+    color: #333;
+    box-sizing: border-box;
+}
+a.excerpt-item:hover {
+    text-decoration: none;
+    color: black;
+    background-color: #F2F2F2;
+}
+a.excerpt-item img.qnrwp-post-featured-img {
+    display: inline-block;
+    position: relative;
+    float: left;
+    width: 150px;
+    height: 150px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+a.excerpt-item:hover img.qnrwp-post-featured-img {
+    opacity: 0.9;
+}
+a.excerpt-item > div.excerpt-item-block {
+    display: block;
+    padding: 0 1em;
+    width: auto;
+    height: 150px;
+    vertical-align: top;
+    overflow: hidden;
+}
+a.excerpt-item p.excerpt-date {
+    margin-top: 0.5em;
+    padding: 0;
+    font-size: 0.9em;
+    font-style: normal;
+    color: #888;
+}
+a.excerpt-item h1 {
+    padding: 0;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+a.excerpt-item div.excerpt-text {
+    margin: 0;
+    padding: 0;
+}
+
+/* Previous and Next pages links */
+
+div.excerpts-pages-links {
+    margin-top: 2em;
+    padding-top: 1em;
+    margin-bottom: 1em;
+    text-align: justify;
+    border-top: solid thin #EEE;
+}
+div.excerpts-pages-links span.excerpts-newer,
+div.excerpts-pages-links span.excerpts-older {
+    display: inline-block;
+    position: relative;
+    width: 50%; /* Assume no whitespace between items */
+    font-weight: normal;
+    font-size: 0.9em;
+    color: #444;
+}
+div.excerpts-pages-links span.excerpts-newer {
+    text-align: right;
+}
+div.excerpts-pages-links span.excerpts-older {
+    text-align: left;
+}
+div.excerpts-pages-links span.excerpts-newer:hover,
+div.excerpts-pages-links span.excerpts-older:hover {
+    color: black;
+}
+
+
+/* GALLERY
+ * ----------------------------------------------------- */
+
+div.gallery {
+    text-align: left;
+    line-height: 0;
+}
+div.gallery figure {
+    display: inline-block;
+    position: relative;
+    margin: 0.1em;
+    padding: 0;
+    vertical-align: top;
+    border: none;
+    box-sizing: border-box;
+}
+
+
+/* SEARCH FORM
+ * ----------------------------------------------------- */
+
+form.search-form input.search-field {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0 1em;
+    width: 70%;
+    height: 32px;
+    font-size: 0.9em;
+    vertical-align: middle;
+    border: solid thin silver;
+    box-sizing: border-box;
+    border-radius: 6px 0 0 6px;
+}
+form.search-form input.search-submit {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0.1em;
+    width: 32px;
+    height: 32px;
+    font-family: Quicknr;
+    font-size: 1.4em;
+    color: white;
+    line-height: 0;
+    vertical-align: middle;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    background-color: gray;
+}
+form.search-form input.search-submit:hover {
+    cursor: pointer;
+    background-color: #666;
+}
+div.search-no-results {
+    padding: 2em;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* SCROLLER OVERRIDE
+ * ----------------------------------------------------- */
+
+div.qnr-scroller {
+    opacity: 1;
+}
+div.qnr-scroller div {
+    height: 100%;
+    background-image: linear-gradient(rgba(50,50,50,0.5), rgba(50,50,50,0.5));
+}
+div.qnr-scroller div p {
+    display: block;
+    position: absolute;
+    bottom: 1em;
+    left: 50%;
+    margin: 0 auto;
+    padding: 0.1em;
+    width: auto;
+    height: auto;
+    padding-top: 100px;
+    font-size: 1.6em;
+    font-weight: normal;
+    text-align: center;
+    text-transform: lowercase;
+    color: white;
+    border-bottom: dotted thin white;
+    box-sizing: border-box;
+}
+
+
+/**
+ * Media Queries
+ */
+
+/**
+ * Does the same thing as <meta name="viewport" content="width=device-width">,
+ * but in the future W3C standard way. -ms- prefix is required for IE10+ to
+ * render responsive styling in Windows 8 "snapped" views; IE10+ does not honor
+ * the meta tag. See https://core.trac.wordpress.org/ticket/25888.
+ */
+@-ms-viewport {
+	width: device-width;
+}
+
+@viewport {
+	width: device-width;
+}
+
+
+/* Width */
+
+@media (max-width: 1300px) {
+    div.featured-news-block > div {
+        min-width: 320px;
+        max-width: 100%;
+        width: 100%;
+    }
+    div.featured-news-block > div:first-child {
+        text-align: center;
+    }
+    div.featured-news-block > div:last-child {
+        text-align: center;
+    }
+}
+@media (max-width: 1210px) {
+    body {
+        font-size: 14px;
+    }
+}
+@media (max-width: 910px) {
+/*
+    div#sidebar-left {
+        order: 1;
+    }
+    div#sidebar-right {
+        order: 2;
+    }
+*/
+    div#sidebar-right {
+        display: block;
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+@media (max-width: 710px) {
+    div#content-box {
+        min-width: 90%;
+    }
+    div#sidebar-left {
+        order: 1;
+        width: 50%;
+    }
+    div#sidebar-right {
+        order: 2;
+        display: inline-block;
+        flex: 1 2 0;
+        width: 50%;
+        min-width: 200px;
+        max-width: 400px;
+    }
+}
+@media (max-width: 650px) {
+    /* Too narrow to support three columns */
+/*
+    div#middle-row {
+        flex-flow: column;
+    }
+    div.sidebar {
+        width: 100%;
+    }
+    div#sidebar-left {
+        order: 1;
+        border-right: none;
+    }
+    div#sidebar-right {
+        order: 2;
+        border-left: none;
+    }
+*/
+    div.featured-news-item {
+        display: inline-block;
+        position: relative;
+        margin: 0;
+        padding: 1em;
+        min-width: 320px;
+        width: 70%;
+        max-width: 70%;
+        vertical-align: top;
+        box-sizing: border-box;
+    }
+}
