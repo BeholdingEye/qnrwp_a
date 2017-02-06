@@ -131,21 +131,55 @@ h6 {
  * ----------------------------------------------------- */
 
 div#header-row {
+    display: inline-block;
+    min-width: 320px;
+    max-width: 1600px;
     text-align: right;
     color: white;
     overflow: visible;
+}
+div#header-row > div.textwidget {
+    display: block;
+    position: absolute;
+    margin-top: 0.2em;
+    padding: 0.1em;
+    width: 11em;
+    font-size: 2em;
+    font-stretch: condensed;
+    font-weight: bold;
+    text-align: left;
+    color: #454;
+}
+
+/* Override */
+div.qnr-navmenu {
+    width: calc(100% - 15em);
 }
 
 
 /* CONTENT
  * ----------------------------------------------------- */
 
+div#content-row {   /* May contain sub header before middle row */
+    margin: 0 auto;
+    min-width: 320px;
+    max-width: 1600px;
+    text-align: center;
+}
+
+/* SUB HEADER */
+
+div#content-row div.sub-header-row {
+    display: block;
+    margin: 0 auto;
+    text-align: center; /* Required for its content */
+}
+
 div#middle-row {
     display: inline-flex;
     flex-flow: row wrap;
     justify-content: center;
     align-items: stretch;
-    margin: 0;
     min-width: 320px;
     max-width: 1600px;
     height: auto;
@@ -153,6 +187,8 @@ div#middle-row {
     vertical-align: top;
     background-color: black; /* For bg-img opacity */
 }
+
+/* Content box, optionally between sidebars */
 
 div#content-box {
     flex: 2 1 0;
@@ -225,6 +261,13 @@ div.post-nav-links span.post-newer:hover,
 div.post-nav-links span.post-older:hover {
     color: black;
 }
+span.post-newer p:first-child,
+span.post-older p:first-child {
+    text-transform: uppercase;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #888;
+}
 
 
 /* SIDEBARS
@@ -260,6 +303,9 @@ div.widget {
 div#header-row div.widget {
     overflow: visible;  /* So that collapsed nav menu will show */
 }
+
+/* Footer widgets are in Footer section */
+
 div.sidebar div.widget {
     margin: 1em auto;
     padding: 0 1em;
@@ -286,6 +332,17 @@ div.calendar_wrap {
 }
 table#wp-calendar {
     display: inline-block;
+}
+table#wp-calendar th {
+    font-weight: normal;
+    font-size: 0.9em;
+    color: black;
+}
+table#wp-calendar tbody td {
+    color: #888;
+}
+table#wp-calendar tbody td a {
+    color: black;
 }
 
 /* Recent Posts */
@@ -318,12 +375,132 @@ div.widget_recent_entries li a + span {
     padding: 0;
 }
 
+/* PAGE CONTENT
+ * ----------------------------------------------------- */
+
+div.page {
+    margin: 0 auto;
+    text-align: left;
+    width: 50%;
+    min-width: 280px;
+    max-width: 640px;
+    padding-left: 1em;
+    padding-bottom: 2em;
+}
+div.page h3 {
+    display: inline-block;
+    position: relative;
+    width: auto;
+    left: -10%;
+    padding-top: 1em;
+    font-weight: normal;
+    text-align: right;
+    border-bottom: dotted thin silver;
+}
+
+/* HOME PAGE */
+
+div.page.home {
+    width: 100%;
+    max-width: inherit;
+    padding: 0;
+}
+
+/* Promo responsive row */
+
+div#promo {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+span.promo-glyph {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0.1em;
+    font-size: 4em;
+    color: #454;
+}
+
+div#promo h1 {
+    font-weight: normal;
+    font-size: 1.4em;
+}
+
+
 /* FOOTER
  * ----------------------------------------------------- */
 
 div#footer-row {
-    color: white;
-    background-color: #444;
+    color: #EEE;
+    text-align: center;
+    background-color: #666;
+}
+div#footer-row a,
+div#footer-row a:hover {
+    font-weight: normal;
+    text-decoration: none;
+    border: none;
+}
+div#footer-row a:hover {
+    text-decoration: underline;
+}
+
+div#footer-row div.widget,
+div#footer-row div.textwidget {
+    display: inline-block;
+    margin-top: 1em;
+    padding-bottom: 1em;
+    width: 320px;
+    text-align: center;
+    vertical-align: top;
+}
+
+/* Copyright Notice (Text Widget) */
+
+div#footer-row div.textwidget:last-child {
+    display: block;
+    width: 100%;
+    margin-top: 2em;
+    padding-bottom: 1em;
+    text-align: center;
+}
+div#footer-row div.textwidget div.qnrwp-copyright {
+    display: inline-block;
+    width: auto;
+    font-size: 0.9em;
+    text-align: center;
+    border-top: dotted thin silver;
+}
+div#footer-row div.qnrwp-copyright p:first-child {
+    width: auto;
+}
+
+/* Menus */
+
+div#footer-row ul {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    list-style-type: none;
+    text-align: left;
+    vertical-align: top;
+}
+div#footer-row li {
+    margin-top: 1em;
+}
+div#footer-row div.qnrwp-social-links ul {
+    margin: 0 1em;
+}
+div#footer-row div.qnrwp-social-links li {
+    margin-top: 0.4em;
+    font-size: 2em;
+    list-style-type: none;
+}
+div#footer-row div.qnrwp-social-links a:hover {
+    text-decoration: none;
 }
 
 
@@ -559,13 +736,13 @@ form.search-form input.search-submit:hover {
     cursor: pointer;
     background-color: #666;
 }
-div.search-no-results {
-    padding: 2em;
+div.search-results {
+    padding: 0 2em 2em 0;
     font-weight: bold;
     text-align: left;
 }
 
-/* SCROLLER OVERRIDE
+/* QNR SCROLLER OVERRIDE
  * ----------------------------------------------------- */
 
 div.qnr-scroller {
@@ -587,11 +764,18 @@ div.qnr-scroller div p {
     padding-top: 100px;
     font-size: 1.6em;
     font-weight: normal;
-    text-align: center;
+    text-align: left;
     text-transform: lowercase;
     color: white;
+    opacity: 0.8;
     border-bottom: dotted thin white;
     box-sizing: border-box;
+}
+/* Override on Home page */
+body.home div.qnr-scroller div p {
+    bottom: 0.5em;
+    text-transform: none;
+    border-bottom: none;
 }
 
 
@@ -629,7 +813,7 @@ div.qnr-scroller div p {
         text-align: center;
     }
 }
-@media (max-width: 1210px) {
+@media (max-width: 1280px) {
     body {
         font-size: 14px;
     }
@@ -695,5 +879,15 @@ div.qnr-scroller div p {
         max-width: 70%;
         vertical-align: top;
         box-sizing: border-box;
+    }
+}
+@media (max-width: 460px) {
+    a.excerpt-item img.qnrwp-post-featured-img {
+        width: 50px;
+        height: 50px;
+    }
+    a.excerpt-item,
+    a.excerpt-item > div.excerpt-item-block {
+        height: auto;
     }
 }
