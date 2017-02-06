@@ -26,7 +26,7 @@ set_error_handler('exception_error_handler');
     <link rel="profile" href="http://gmpg.org/xfn/11">
     <?php wp_head(); ?>
   </head>
-  <body onload="afterLoad()">    
+  <body onload="afterLoad()" <?php body_class('qnr-winscroller'); ?>>    
   <?php 
     try {
       // Show in source that we're reporting errors
@@ -45,28 +45,37 @@ set_error_handler('exception_error_handler');
         $rHtml = '';
         $postsAmount = 'multi';
         $isNews = false;
+        $pageTitle = 'News';
         
         // ----------------------- The Loop (page/post content and meta)
         if (have_posts()) {
           while (have_posts()) {
             the_post(); // Must be here, for correct sequence of posts and their thumbs
-            
+                        
             // ----------------------- Singular types: single post, page, attachment
             if (is_singular()) {
               $postsAmount = 'single';
+              $pageTitle = get_the_title();
               // Set layout
               if (get_post_type() == 'page') $layout = 'single';
               // If not Page, single Posts are laid out same as multi-item pages
               else if (is_active_sidebar('qnrwp-sidebar-1') && is_active_sidebar('qnrwp-sidebar-2')) $layout = 'three-cols';
               else if (is_active_sidebar('qnrwp-sidebar-1')) $layout = 'left-sidebar';
               else if (is_active_sidebar('qnrwp-sidebar-2')) $layout = 'right-sidebar';
-              $postClass = 'class="' . join(' ', get_post_class()) . '"';
+              $postClass = 'class="' . join(' ', get_post_class()).' '.get_post_field('post_name').'"'; // Slug...
               // Start constructing return HTML
               $rHtml = '<div id="post-'.get_the_ID().'" '.$postClass.'>'.PHP_EOL; // Open singular
               // Get the date, if type is post
               if (get_post_type() == 'post') $rHtml .= '<div class="post-date">'.get_the_date().'</div>'.PHP_EOL;
-              if (!is_front_page()) $rHtml .= '<h1 class="page-title">'.get_the_title().'</h1>'.PHP_EOL; // Not on Home
-              $htmlContent = apply_filters('the_content', get_the_content());
+              //if (!is_front_page()) $rHtml .= '<h1 class="page-title">'.$pageTitle.'</h1>'.PHP_EOL; // Not on Home
+              if (get_post_type() != 'page') $rHtml .= '<h1 class="page-title">'.$pageTitle.'</h1>'.PHP_EOL; // Not on Pages
+              if (!is_front_page()) { // Not on Home
+                $htmlContent = apply_filters('the_content', get_the_content());
+              }
+              else { // Home page
+                $htmlContent = include('include-home.php');
+              }
+              
               $rHtml .= $htmlContent;
               if (get_post_type() == 'post') {
                 $isNews = true;
@@ -92,8 +101,8 @@ set_error_handler('exception_error_handler');
                                                         $taxonomy = 'category');
                 // Previous and Next post links
                 $rHtml .= '<div class="post-nav-links">'.PHP_EOL;
-                $rHtml .= '<span class="post-older">'.$prevPostLink.'</span>'; // No whitespace
-                $rHtml .= '<span class="post-newer">'.$nextPostLink.'</span>'.PHP_EOL;
+                $rHtml .= '<span class="post-older"><p>Previous</p><p>'.$prevPostLink.'</p></span>'; // No whitespace
+                $rHtml .= '<span class="post-newer"><p>Next</p><p>'.$nextPostLink.'</p></span>'.PHP_EOL;
                 $rHtml .= '</div>'.PHP_EOL;
               }
               $rHtml .= '</div>'.PHP_EOL; // Close singular
@@ -154,7 +163,12 @@ set_error_handler('exception_error_handler');
           if (is_active_sidebar('qnrwp-sidebar-1') && is_active_sidebar('qnrwp-sidebar-2')) $layout = 'three-cols';
           else if (is_active_sidebar('qnrwp-sidebar-1')) $layout = 'left-sidebar';
           else if (is_active_sidebar('qnrwp-sidebar-2')) $layout = 'right-sidebar';
-          $rHtml = '<div class="search-no-results">No news posts found for this search.</div>'.PHP_EOL;
+          $rHtml = '<div class="search-results">No news posts found for this search.</div>'.PHP_EOL;
+        }
+        else if (is_search() && $rHtml != '') { // Something found
+          $isNews = true;
+          // Layout has already been set
+          $rHtml = '<div class="search-results">News posts matching your search query:</div>'.PHP_EOL.$rHtml;
         }
       }
       
@@ -168,13 +182,28 @@ set_error_handler('exception_error_handler');
         dynamic_sidebar('qnrwp-row-1'); // Navigation menu & intro header
         echo '</div><!-- End of Header -->'.PHP_EOL;
       }
+      // ----------------------- Content Row
+      
+      echo '<!-- Content Row -->'.PHP_EOL.'<div id="content-row">'.PHP_EOL; // Open content row
+      
+      // ----------------------- Sub Header Row (may be narrower than header as it is in Content Row)
+      
+      if (is_active_sidebar('qnrwp-subrow-1')) {
+        echo '<!-- Sub Header Row -->'.PHP_EOL;
+        echo '<div id="sub-header-row" class="sub-header-row widget-area" role="complementary">' .PHP_EOL;
+        
+        // Globals for widget
+        $GLOBALS['isNews'] = $isNews;
+        $GLOBALS['postsAmount'] = $postsAmount;
+        $GLOBALS['pageTitle'] = $pageTitle;
+        
+        dynamic_sidebar('qnrwp-subrow-1'); // Sub Header
+        echo '</div><!-- End of Sub Header -->'.PHP_EOL;
+      }
+      
+      // ----------------------- Middle Row
       
       echo '<!-- Middle Row -->'.PHP_EOL.'<div id="middle-row">'.PHP_EOL; // Open row of content & sidebars
-      if ($isNews) { // Create News header
-        $newsHeaderURL = trailingslashit(get_template_directory_uri()) . 'res/img/news-reader_toa-heftiba.jpg';
-        echo '<div class="qnr-scroller" style="background-image:url(\''.$newsHeaderURL.'\');">'.PHP_EOL;
-        echo '<div><p>News</p></div></div>'.PHP_EOL;
-      }
       
       // ----------------------- Left Sidebar
       
@@ -188,7 +217,7 @@ set_error_handler('exception_error_handler');
       // ----------------------- Main Content
       
       if (is_active_sidebar('qnrwp-row-2')) {
-        echo '<!-- Content -->'.PHP_EOL;
+        echo '<!-- Content Box -->'.PHP_EOL;
         // Adjust Content classes, accounting for sidebars
         $contentBoxClass = 'content-box widget-area';
         if ($layout == 'three-cols') $contentBoxClass .= ' three-col-content';
@@ -203,7 +232,7 @@ set_error_handler('exception_error_handler');
         
         dynamic_sidebar('qnrwp-row-2');
         
-        echo '</div><!-- End of Content -->'.PHP_EOL;
+        echo '</div><!-- End of Content Box -->'.PHP_EOL;
       }
       
       // ----------------------- Right Sidebar
@@ -216,6 +245,7 @@ set_error_handler('exception_error_handler');
       }
       
       echo '</div><!-- End of Middle Row -->'.PHP_EOL; // Close row of content & sidebars
+      echo '</div><!-- End of Content Row -->'.PHP_EOL; // Close content row
       
       // ----------------------- Footer Row
       
