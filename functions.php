@@ -24,6 +24,7 @@ function qnrwp_enqueue_styles() {
   }
   // Load active theme stylesheet in both cases
   wp_enqueue_style('qnr-interface-stylesheet', trailingslashit(get_template_directory_uri()) . 'res/css/qnr-interface.css', null, null);
+  wp_enqueue_style('contact-form-stylesheet', trailingslashit(get_template_directory_uri()) . 'res/css/contact_form.css', null, null);
   //wp_enqueue_style('qnr-hmenu-stylesheet', trailingslashit(get_template_directory_uri()) . 'res/css/qnr-hmenu.css', null, null);
   wp_enqueue_style('theme-stylesheet', get_stylesheet_uri(), null, null);
 }
@@ -34,8 +35,9 @@ function qnrwp_enqueue_styles() {
 
 function qnrwp_enqueue_scripts() {
   wp_enqueue_script('qnr-interface-js', trailingslashit(get_template_directory_uri()) . 'res/js/qnr-interface.js', null, null);
+  wp_enqueue_script('contact-js', trailingslashit(get_template_directory_uri()) . 'res/js/contact.js', null, null);
   //wp_enqueue_script('qnr-hmenu-js', trailingslashit(get_template_directory_uri()) . 'res/js/qnr-hmenu.js', null, null);
-  wp_enqueue_script('qnrwp_a-main-js', trailingslashit(get_template_directory_uri()) . 'res/js/qnrwp_a-main.js', null, null);
+  wp_enqueue_script('qnrwp_a-main-js', trailingslashit(get_template_directory_uri()) . 'qnrwp_a-main.js', null, null);
 }
 add_action('wp_enqueue_scripts', 'qnrwp_enqueue_styles');
 add_action('wp_enqueue_scripts', 'qnrwp_enqueue_scripts');
@@ -58,7 +60,7 @@ function qnrwp_search_form_filter($form) {
   $form = preg_replace('@\s+<span class="screen-reader-text">[^<]+</span>@i', '', $form);
   $form = preg_replace('@\s+<input type="submit" class="search-submit" value="[^\"]+" />@i', 
                             '<input type="submit" class="search-submit" value="g" />', $form); // No whitespace
-  $form = preg_replace('@Search &hellip;@i', 'Search News&hellip;', $form);
+  $form = preg_replace('@Search &hellip;@i', 'Search news&hellip;', $form);
   $form = preg_replace('@\s+</?label>@i', '', $form);
   return $form;
 }
@@ -74,6 +76,32 @@ function qnrwp_main_query_filter($query) {
 }
 add_action('pre_get_posts', 'qnrwp_main_query_filter' );
 
+// ----------------------- General Widget before/after filter
+
+// Take care of things other filters cannot...
+function qnrwp_dynamic_sidebar_params($params) {
+  //if ($params[0]['widget_name'] == 'Recent Posts') {
+    //$params[0]['before_widget'] = PHP_EOL.'<!-- Widget -->'.PHP_EOL.'<div class="widget widget-recent-posts">'.PHP_EOL;
+    //$params[0]['after_widget'] = '</div>'.PHP_EOL;
+  //}
+  //else if ($params[0]['widget_name'] == 'Search') {
+    //$params[0]['before_widget'] = PHP_EOL.'<!-- Widget -->'.PHP_EOL.'<div class="widget widget-search">'.PHP_EOL;
+    //$params[0]['after_widget'] = '</div>'.PHP_EOL;
+  //}
+  //else if ($params[0]['widget_name'] == 'Calendar') {
+    //$params[0]['before_widget'] = PHP_EOL.'<!-- Widget -->'.PHP_EOL.'<div class="widget widget-calendar">'.PHP_EOL;
+    //$params[0]['after_widget'] = '</div>'.PHP_EOL;
+  //}
+  
+  // Actually, don't filter positive, we do it negative (generic positives are in sidebar definition)
+  // Text widget will have an inconsistent 'textwidget' class only, cannot be filtered
+  if ($params[0]['widget_name'] == 'Custom Menu' || $params[0]['widget_name'] == 'Text') {
+    $params[0]['before_widget'] = PHP_EOL.'<!-- Widget -->'.PHP_EOL;
+    $params[0]['after_widget'] = '';
+  }
+  return $params;
+}
+add_filter('dynamic_sidebar_params', 'qnrwp_dynamic_sidebar_params');
 
 // ----------------------- Title filter
 
@@ -88,23 +116,43 @@ function qnrwp_title_filter($title) {
 add_filter('wp_title', 'qnrwp_title_filter');
 
 
+// ----------------------- Widget Title filter
+
+// Remove titles on widgets that shouldn't have them displayed
+function qnrwp_widget_title_filter($wtitle) {
+  if (  stripos($wtitle, 'Copyright') !== false || 
+        stripos($wtitle, 'Menu') !== false || 
+        stripos($wtitle, 'Logo') !== false || 
+        stripos($wtitle, 'Search') !== false || 
+        stripos($wtitle, 'Social Links') !== false   ) {
+    return '';
+  }
+  return $wtitle;
+}
+add_filter('widget_title', 'qnrwp_widget_title_filter');
+
+
 // ----------------------- Recent Posts widget args filter
 
-function qnrwp_recent_posts_widget_parameters($params) {
-  $params['category_name'] = 'news,uncategorized';
-  return $params;
+function qnrwp_recent_posts_widget_args($args) {
+  $args['category_name'] = 'news,uncategorized';
+  return $args;
 }
-add_filter('widget_posts_args', 'qnrwp_recent_posts_widget_parameters'); 
+add_filter('widget_posts_args', 'qnrwp_recent_posts_widget_args'); 
 
 
 // ----------------------- Custom Menu widget args filter
 
 function qnrwp_nav_menu_args($args) {
   // Make main nav menu a Quicknr Nav Menu
-  $mObj = wp_get_nav_menu_object('QNRWP Main Nav Menu');
-  if($args['menu'] == $mObj) {
+  if($args['menu'] == wp_get_nav_menu_object('QNRWP Main Nav Menu')) {
     $args['depth'] = -1; // Make it flat, no submenus
-    $args['container_class'] = 'qnr-navmenu';
+    // Cannot concatenate to default container class...
+    $args['container_class'] = 'widget qnr-navmenu';
+  }
+  // Class footer menu
+  else if($args['menu'] == wp_get_nav_menu_object('QNRWP Footer Menu')) {
+    $args['container_class'] = 'widget qnr-footer-menu';
   }
 	return $args;
 }
@@ -161,6 +209,7 @@ class QNRWP_My_Widget extends WP_Widget {
 		$mysetting = !empty($instance['mysetting']) ? $instance['mysetting'] : esc_html('New mysetting');
     $fieldMySettingID = esc_attr($this->get_field_id('mysetting'));
     $fieldMySettingName = esc_attr($this->get_field_name('mysetting'));
+    // HTML form
 		?>
 		<p>
 		<label for="<?php echo $fieldTitleID ?>"><?php esc_attr('Title:'); ?></label> 
@@ -197,8 +246,7 @@ class QNRWP_Carousel_Image extends WP_Widget {
 	}
   
 	public function widget($args, $instance) {
-		// Echo global with pre-constructed page or post content HTML
-    //echo $GLOBALS['contentHtml'];
+		// TODO
 	}
   
 	public function form($instance) {
@@ -206,6 +254,59 @@ class QNRWP_Carousel_Image extends WP_Widget {
     ?>
 		<p>Quicknr Interface image carousel, using "slide-1.jpg", "slide-2.jpg" etc. in "res/img/" theme folder, to appear on the static Home page.</p>
 		<?php 
+	}
+}
+
+
+// ----------------------- Sub Header widget definition
+
+class QNRWP_Sub_Header extends WP_Widget {
+  
+	public function __construct() {
+		// Instantiate the parent object
+		$widget_ops = array( 
+			'classname'   => 'qnrwp_sub_header',
+			'description' => 'Sub header with a scrolling image and page title.',
+		);
+		parent::__construct('qnrwp_sub_header', 'QNRWP Sub Header', $widget_ops);
+	}
+  
+	public function widget($args, $instance) {
+    if ($GLOBALS['isNews']) { // Create News header, for all News pages
+      $headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/type-blocks_amador-loureiro.jpg';
+      $headerTitle = 'News';
+      echo '<div class="qnr-scroller" style="background-image:url(\''.$headerURL.'\');">'.PHP_EOL;
+      echo '<div><p>'.$headerTitle.'</p></div></div>'.PHP_EOL;
+    }
+    else if ($GLOBALS['postsAmount'] == 'single') { // Create Page header
+      if ($GLOBALS['pageTitle'] == 'Home') {
+        $headerTitleText = '<b><big>'.get_bloginfo('name').'</big></b><br>'.PHP_EOL;
+        $headerTitleText .= get_bloginfo('description');
+      }
+      else {
+        $headerTitleText = $GLOBALS['pageTitle'];
+      }
+      if ($GLOBALS['pageTitle'] == 'Support') {
+        $headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/climbing-gear_cameron-kirby.jpg';
+      }
+      //else if ($GLOBALS['pageTitle'] == 'News') {
+        //$headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/type-blocks_amador-loureiro.jpg';
+      //}
+      else if ($GLOBALS['pageTitle'] == 'About') {
+        $headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/green-shoots_markus-spiske.jpg';
+      }
+      else if ($GLOBALS['pageTitle'] == 'Contact') {
+        $headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/road-snow_kimon-maritz.jpg';
+      }
+      else if ($GLOBALS['pageTitle'] == 'Legal') {
+        $headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/books_eli-francis.jpg';
+      }
+      else if ($GLOBALS['pageTitle'] == 'Home') {
+        $headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/design-tools_sergey-zolkin.jpg';
+      }
+      echo '<div class="qnr-scroller" style="background-image:url(\''.$headerURL.'\');">'.PHP_EOL;
+      echo '<div><p>'.$headerTitleText.'</p></div></div>'.PHP_EOL;
+    }
 	}
 }
 
@@ -302,6 +403,20 @@ function qnrwp_widgets_init() {
     'description'   => 'Widgets in this area will be shown on all posts and pages.',
     'before_widget' => "<!-- Widget -->\n" . '<div id="%1$s" class="widget %2$s">'.PHP_EOL,
     'after_widget'  => "\n</div>\n",
+    //'before_widget' => "<!-- Widget -->\n",
+    //'after_widget'  => '',
+    'before_title'  => "<h2 class=\"widget-title\">",
+    'after_title'   => "</h2>\n",
+  ));
+  // ----------------------- Sub Header Row (within narrower content & sidebars row)
+  register_sidebar(array(
+    'name'          => 'Sub Header Row',
+    'id'            => 'qnrwp-subrow-1',
+    'description'   => 'Widgets in this area will be shown on all or some posts and pages.',
+    'before_widget' => "<!-- Widget -->\n" . '<div id="%1$s" class="widget %2$s">'.PHP_EOL,
+    'after_widget'  => "\n</div>\n",
+    //'before_widget' => "<!-- Widget -->\n",
+    //'after_widget'  => '',
     'before_title'  => "<h2 class=\"widget-title\">",
     'after_title'   => "</h2>\n",
   ));
@@ -312,6 +427,8 @@ function qnrwp_widgets_init() {
     'description'   => 'Widgets in this area will be shown on all posts but not on pages.',
     'before_widget' => "<!-- Widget -->\n" . '<div id="%1$s" class="widget %2$s">'.PHP_EOL,
     'after_widget'  => "\n</div>\n",
+    //'before_widget' => "<!-- Widget -->\n",
+    //'after_widget'  => '',
     'before_title'  => "<h2 class=\"widget-title\">",
     'after_title'   => "</h2>\n",
   ));
@@ -322,6 +439,8 @@ function qnrwp_widgets_init() {
     'description'   => 'Widgets in this area will be shown on all or some posts and pages.',
     'before_widget' => "<!-- Widget -->\n" . '<div id="%1$s" class="widget %2$s">'.PHP_EOL,
     'after_widget'  => "\n</div>\n",
+    //'before_widget' => "<!-- Widget -->\n",
+    //'after_widget'  => '',
     'before_title'  => "<h2 class=\"widget-title\">",
     'after_title'   => "</h2>\n",
   ));
@@ -332,6 +451,8 @@ function qnrwp_widgets_init() {
     'description'   => 'Widgets in this area will be shown on all  posts but not on pages.',
     'before_widget' => "<!-- Widget -->\n" . '<div id="%1$s" class="widget %2$s">'.PHP_EOL,
     'after_widget'  => "\n</div>\n",
+    //'before_widget' => "<!-- Widget -->\n",
+    //'after_widget'  => '',
     'before_title'  => "<h2 class=\"widget-title\">",
     'after_title'   => "</h2>\n",
   ));
@@ -342,11 +463,14 @@ function qnrwp_widgets_init() {
     'description'   => 'Widgets in this area will be shown on all posts and pages.',
     'before_widget' => "<!-- Widget -->\n" . '<div id="%1$s" class="widget %2$s">'.PHP_EOL,
     'after_widget'  => "\n</div>\n",
+    //'before_widget' => "<!-- Widget -->\n",
+    //'after_widget'  => '',
     'before_title'  => "<h2 class=\"widget-title\">",
     'after_title'   => "</h2>\n",
   ));
   register_widget('QNRWP_My_Widget');
   register_widget('QNRWP_Carousel_Image');
+  register_widget('QNRWP_Sub_Header');
   register_widget('QNRWP_Content');
   register_widget('QNRWP_Featured_News');
 }
@@ -450,6 +574,18 @@ function qnrwp_featuredimage_shortcode($atts, $content = null) {
   }
 }
 add_shortcode('featuredimage', 'qnrwp_featuredimage_shortcode');
+
+
+// [include file='fileURL']
+function qnrwp_include_shortcode($atts, $content = null) {
+  $a = shortcode_atts(array(
+    'file' => '',
+  ), $atts);
+  if ($a['file'] !== '') {
+    return include($a['file']);
+  }
+}
+add_shortcode('include', 'qnrwp_include_shortcode');
 
 
 //// ----------------------- Menu registration (not needed)
