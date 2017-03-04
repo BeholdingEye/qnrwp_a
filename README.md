@@ -9,7 +9,7 @@ This theme will be developed rapidly. No releases will be packaged - the latest 
 Aspects of this theme:
 
 * No effort made to translate the output, English only.
-* File number kept to a minimum - all Posts, Pages, archives and search results handled by index.php. No page templates used.
+* Number of files kept to a minimum - all Posts, Pages, archives and search results handled by index.php. No page templates used.
 * Dashboard is not cluttered with theme settings. All custom widgets are defined in Pages and subpages or implemented with shortcodes.
 * Semi-automated layout, no need for page building plugins. Presence of sidebar widgets controls the layout logically.
 
