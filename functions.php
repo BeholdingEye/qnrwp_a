@@ -1,11 +1,15 @@
 <?php
+/**
+ * QNRWP-A functions.php
+ */
 
 // ===================== GENERIC FUNCTIONS =====================
 
 // ----------------------- Post Thumbnail URL getter
 
-function get_post_thumbnail_url($thumbHtml) {
+function qnrwp_get_post_thumbnail_url($thumbHtml) {
     // Get URL from IMG src attribute for CSS background styling
+    // TODO get size
     $mm = preg_match('@src="(https?://[^\"]+)"@i', $thumbHtml, $matches);
     if ($mm) {
       return $matches[1];
@@ -13,31 +17,228 @@ function get_post_thumbnail_url($thumbHtml) {
     else return '';
 }
 
+
+// ----------------------- Layout type getter
+
+function qnrwp_get_layout() {
+  // Get layout type according to active sidebars
+  $layout = 'single';
+  if (is_active_sidebar('qnrwp-sidebar-1') && is_active_sidebar('qnrwp-sidebar-2')) $layout = 'three-cols';
+  else if (is_active_sidebar('qnrwp-sidebar-1')) $layout = 'left-sidebar';
+  else if (is_active_sidebar('qnrwp-sidebar-2')) $layout = 'right-sidebar';
+  return $layout;
+}
+
+
+// ----------------------- Custom Widget subheader HTML getter from defining page ID
+
+function qnrwp_get_subheader_html($widgetDefPageID) {
+  // $widgetDefPageID - ID of the page defining the subheader
+  
+  // Get subheader attributes from the defining page
+  $subheaderAttributes = '';
+  // No validation, we trust the settings text to be untampered
+  $rawS = get_post_field('post_content', $widgetDefPageID);
+  if (stripos($rawS, '{subheader-options') !== false) {
+    $rawS = preg_replace('@\s*//.*?(?:\n+|$)@i', ' ', $rawS); // Remove comments
+    $rawS = preg_replace('@\s*\{subheader-options\s*@i', '', $rawS); // Remove "{subheader=options"
+    $rawS = preg_replace('@\s*\}@i', '', $rawS); // Remove ending "}"
+    $rawS = preg_replace('@\s+@i', ' ', $rawS); // Convert whitespace to a space
+    $subheaderAttributes = ' '.$rawS; // Add a space to place attributes in tag
+  }
+  
+  $rHtml = '';
+  $shOptionsL = array(); // Array of page name : image URL
+  $shOptionsL['*'] = ''; // Avoid an error later if key/value not set
+  $shOptionsL['News'] = ''; // Likewise, prefer no-URL if News not present
+  
+  // Get Featured Image from definition page, as default for pages not defined by child pages
+  if (has_post_thumbnail($widgetDefPageID)) {
+    $thumbHtml = get_the_post_thumbnail($widgetDefPageID, 'qnrwp-largest'); // Largest theme size
+    $shOptionsL['*'] = qnrwp_get_post_thumbnail_url($thumbHtml);
+  }
+  
+  // Get child pages and their Featured Images
+  $widgetChildren = get_page_children($widgetDefPageID, get_pages());
+  if (count($widgetChildren) > 0) {
+    foreach ($widgetChildren as $widgetChild) {
+      // Store name and img URL as key:value
+      if (has_post_thumbnail($widgetChild)) {
+        $thumbHtml = get_the_post_thumbnail($widgetChild, 'qnrwp-largest');
+        $shOptionsL[$widgetChild->post_title] = qnrwp_get_post_thumbnail_url($thumbHtml);
+      }
+    }
+  }
+
+  if ($GLOBALS['isNews']) { // Create News header, for all News pages
+    $headerTitleText = 'News';
+    $headerURL = $shOptionsL['News'];
+  }
+  else if ($GLOBALS['postsAmount'] == 'single') { // Create Page header
+    if ($GLOBALS['pageTitle'] == 'Home') {
+      // TODO use page content instead
+      $headerTitleText = '<b><big>'.get_bloginfo('name').'</big></b><br>'.PHP_EOL;
+      $headerTitleText .= get_bloginfo('description');
+    }
+    else {
+      $headerTitleText = $GLOBALS['pageTitle'];
+    }
+    try { // Match URLs to pages, named, or as assigned to *
+      $headerURL = $shOptionsL[$GLOBALS['pageTitle']];
+    }
+    catch (Exception $e) {
+      $headerURL = $shOptionsL['*'];
+    }
+  }
+  $rHtml = '<div'.$subheaderAttributes.' style="background-image:url(\''.$headerURL.'\');">'.PHP_EOL;
+  $rHtml .= '<div><p>'.$headerTitleText.'</p></div></div>'.PHP_EOL;
+  return $rHtml;
+}
+
+
+// ----------------------- Custom Widget carousel HTML getter from defining page ID
+
+function qnrwp_get_carousel_html($widgetDefPageID, $imageSize = 'large') {
+  // $widgetDefPageID - ID of the page defining the carousel
+  // $imageSize - thumbnail, medium, large, full, qnrwp-largest (keep them under 2000px)
+  
+  // Get carousel attributes from the defining page
+  $carouselDataAttributes = '';
+  // No validation, we trust the settings text to be untampered
+  $rawS = get_post_field('post_content', $widgetDefPageID);
+  if (stripos($rawS, '{carousel-options') !== false) {
+    $rawS = preg_replace('@\s*//.*?\n+@i', ' ', $rawS); // Remove comments
+    $rawS = preg_replace('@\s*\{carousel-options\s*@i', '', $rawS); // Remove "{carousel=options"
+    $rawS = preg_replace('@\s*\}@i', '', $rawS); // Remove ending "}"
+    $rawS = preg_replace('@\s+@i', ' ', $rawS); // Convert whitespace to a space
+    $carouselDataAttributes = ' '.$rawS; // Add a space to place attributes in tag
+  }
+  // Construct carousel HTML
+  $rHtml = '';
+  // Get child pages as content DIVs
+  $widgetChildren = get_page_children($widgetDefPageID, get_pages());
+  $iC = 0;
+  if (count($widgetChildren) > 0) {
+    foreach ($widgetChildren as $widgetChild) {
+      // Construct item DIV for carousel
+      $thumbBG = '';
+      if (has_post_thumbnail($widgetChild)) {
+        // Get BG image from Featured Image, hide all but the first two (JS will show them)
+        // Hoping that will speed up the load: only first image loaded at first, then when displayed, the rest
+        $thumbHtml = get_the_post_thumbnail($widgetChild, $imageSize);
+        if ($iC < 1) $thumbBG = ' style="background-image:url(\''.qnrwp_get_post_thumbnail_url($thumbHtml).'\')"';
+        else $thumbBG = ' style="display:none;background-image:url(\''.qnrwp_get_post_thumbnail_url($thumbHtml).'\')"';
+      }
+      $htmlContent = apply_filters('the_content', get_post_field('post_content', $widgetChild->ID));
+      // Wrap the content with centered inner DIV for easier styling
+      $htmlContent = '<div class="slide-inner center">'.PHP_EOL.$htmlContent.'</div>'.PHP_EOL;
+      $rHtml .= '<div'.$thumbBG.'>'.PHP_EOL.$htmlContent.'</div>'.PHP_EOL;
+      $iC += 1;
+    }
+  }
+  // The carousel widget may already have a class assigned in the defining options
+  if (stripos($carouselDataAttributes, 'class="') !== false) {
+    $carouselDataAttributes = str_replace('class="', 'class="qnr-carousel ', $carouselDataAttributes);
+    $rHtml = '<div'.$carouselDataAttributes.'>'.PHP_EOL.$rHtml.'</div>'.PHP_EOL;
+  }
+  else $rHtml = '<div class="qnr-carousel"'.$carouselDataAttributes.'>'.PHP_EOL.$rHtml.'</div>'.PHP_EOL;
+  return $rHtml;
+}
+
+
+// ----------------------- Custom Widget picker menu
+
+function qnrwp_get_widget_defs_menu($existingVal, $outputID, $outputName) {
+  // Returns HTML select/options menu listing widgets defined as "QNRWP-Widget-" prefixed pages
+  // No output field required, the Widget updating works with "selected" <option> in <select>
+  $pages = get_pages();
+  $rP = '';
+  $selected = '';
+  foreach ($pages as $page) {
+    // Omit pages that are children of other pages (widgets are defined as main pages)
+    // wp_get_post_parent_id is supposed to return false when no parent, but returns 0
+    if (! wp_get_post_parent_id($page->ID) && stripos($page->post_title, 'QNRWP-Widget-') !== false) {
+      // Save the page ID instead of name, for faster retrieval later
+      if ($page->ID == $existingVal) $selected = ' selected="selected"';
+      $rP .= '<option '.$selected.' value="'.esc_attr($page->ID).'">'.esc_html($page->post_title).'</option>'.PHP_EOL;
+      // Reset $selected for next item
+      $selected = '';
+    }
+  }
+  if ($rP) {
+    $rP = '<p>Select the widget to display:</p><select name="'.$outputName.'" id="'.$outputID.'">'.PHP_EOL . $rP . '</select><br>'.PHP_EOL;
+  }
+  else $rP = '<p>No pages defining QNRWP widgets exist yet.</p>'.PHP_EOL;
+  return $rP;
+}
+
+
+// ----------------------- Custom Widget pages-to-display-on selector
+
+function qnrwp_get_pages_form_for_widget($pagesVal, $pagesL, $outputID, $outputName) {
+  // Returns HTML to use in a widget form so pages can be selected for widget to appear on
+  // $pagesVal - string value that is stored in db
+  // $pagesL - array exploded from pagesVal, listing checked pages options
+  // $outputID - output field ID matching the ID for saving the value that is updated by JS on checkbox clicks
+  // $outputName - output field Name
+  $pages = get_pages(); 
+  $rP = '';
+  $pageCheckbox = '';
+  $pageParentID = false;
+  foreach ($pages as $page) {
+    // Omit pages set up as a widget's contents with "QNRWP-Widget-" prefix, and their children (one level only)
+    $pageParentID = wp_get_post_parent_id($page->ID);
+    // wp_get_post_parent_id is supposed to return false when no parent, but returns 0
+    $pageParentTitle = $pageParentID ? get_post($pageParentID)->post_title : '';
+    if (stripos($page->post_title, 'QNRWP-Widget-') === false && stripos($pageParentTitle, 'QNRWP-Widget-') === false) {
+      // Test if this page is in $pagesL array parameter, select if so
+      $checked = in_array($page->ID, $pagesL) ? ' checked="checked"' : ''; // Don't convert page ID to string...
+      $pageCheckbox = '&nbsp;&nbsp;<label><input onclick="javascript:qnrwp_collect_pages_options_for_widget(event)" type="checkbox"'.$checked
+                          .' value="'.$page->ID.'">'.esc_html($page->post_title).'</label><br>'.PHP_EOL;
+      $rP .= $pageCheckbox;
+    }
+  }
+  if ($rP) {
+    // All News Posts checkbox (reverse order of concatenating)
+    $checked = in_array('-1', $pagesL) ? ' checked="checked"' : '';
+    $rP = '&nbsp;&nbsp;<label><input onclick="javascript:qnrwp_collect_pages_options_for_widget(event)" type="checkbox"'.$checked
+            .' value="-1" name="qnrwp-all-news" id="qnrwp-all-news">All News Posts</label><br>'.PHP_EOL . $rP;
+    // All Pages Except the Following checkbox
+    $checked = in_array('-2', $pagesL) ? ' checked="checked"' : '';
+    $rP = '<label><input onclick="javascript:qnrwp_collect_pages_options_for_widget(event)" type="checkbox"'.$checked
+            .' value="-2" name="qnrwp-all-except" id="qnrwp-all-except">All except the following:</label><br>'.PHP_EOL . $rP;
+    // Input field collecting the checked values as a setting to save, ID passed in param, as well as previous value
+    // Class attribute is for JS identification as the ID and name are set by WP code
+    $rP .= 'Output: <input name="'.$outputName.'" id="'.$outputID.'" class="qnrwp-setting-output-field" value="'.$pagesVal.'">'.PHP_EOL;
+    // No <form> wrap, that's handled by the WP widget code, but DIV parent wrap for JS
+    $rP = '<div style="box-sizing:border-box;padding:1em;height:200px;overflow:auto;border:solid thin #EEE">'.PHP_EOL . $rP;
+    $rP = '<p>Select the page(s) to display this Widget. Click "All except the following:" to exclude the selected.</p>'.PHP_EOL . $rP;
+    $rP .= '</div>'.PHP_EOL;
+  }
+  else $rP = '<p>No pages that could display the widget exist yet.</p>';
+  return $rP;
+}
+
 // ===================== WP FUNCTIONS =====================
 
 // ----------------------- Enqueue Scripts & Styles
 
 function qnrwp_enqueue_styles() {
+  wp_enqueue_style('qnr-interface-stylesheet', get_template_directory_uri() . '/res/css/qnr-interface.css', null, null);
+  wp_enqueue_style('qnr-hmenu-stylesheet', get_template_directory_uri() . '/res/css/qnr-hmenu.css', null, null);
+  // Load parent stylesheet before child's
+  // Retreive parent theme dir: get_template_directory_uri()
+  // Retreive child theme dir: get_stylesheet_directory_uri()
+  wp_enqueue_style('theme-stylesheet', get_template_directory_uri() . '/style.css', null, null);
   if (is_child_theme()) {
-    // Load parent stylesheet first if this is a child theme
-    wp_enqueue_style('parent-stylesheet', trailingslashit(get_template_directory_uri()) . 'style.css', null, null);
+    wp_enqueue_style('child-stylesheet', get_stylesheet_uri(), null, null); // Child theme style.css
   }
-  // Load active theme stylesheet in both cases
-  wp_enqueue_style('qnr-interface-stylesheet', trailingslashit(get_template_directory_uri()) . 'res/css/qnr-interface.css', null, null);
-  wp_enqueue_style('contact-form-stylesheet', trailingslashit(get_template_directory_uri()) . 'res/css/contact_form.css', null, null);
-  //wp_enqueue_style('qnr-hmenu-stylesheet', trailingslashit(get_template_directory_uri()) . 'res/css/qnr-hmenu.css', null, null);
-  wp_enqueue_style('theme-stylesheet', get_stylesheet_uri(), null, null);
 }
 
-//function qnrwp_enqueue_style() {
-  //wp_enqueue_style('core', 'style.css', false); 
-//}
-
 function qnrwp_enqueue_scripts() {
-  wp_enqueue_script('qnr-interface-js', trailingslashit(get_template_directory_uri()) . 'res/js/qnr-interface.js', null, null);
-  wp_enqueue_script('contact-js', trailingslashit(get_template_directory_uri()) . 'res/js/contact.js', null, null);
-  //wp_enqueue_script('qnr-hmenu-js', trailingslashit(get_template_directory_uri()) . 'res/js/qnr-hmenu.js', null, null);
-  wp_enqueue_script('qnrwp_a-main-js', trailingslashit(get_template_directory_uri()) . 'qnrwp_a-main.js', null, null);
+  wp_enqueue_script('qnr-interface-js', get_template_directory_uri() . '/res/js/qnr-interface.js', null, null);
+  wp_enqueue_script('qnr-hmenu-js', get_template_directory_uri() . '/res/js/qnr-hmenu.js', null, null);
+  wp_enqueue_script('qnrwp_a-main-js', get_template_directory_uri() . '/qnrwp_a-main.js', null, null);
 }
 add_action('wp_enqueue_scripts', 'qnrwp_enqueue_styles');
 add_action('wp_enqueue_scripts', 'qnrwp_enqueue_scripts');
@@ -45,18 +246,25 @@ add_action('wp_enqueue_scripts', 'qnrwp_enqueue_scripts');
 
 // ----------------------- FILTERS
 
+// ----------------------- Media Screen JS with note about image size
+function qnrwp_selectively_enqueue_admin_script( $hook ) {
+  $currentScreen = get_current_screen();
+  if($currentScreen->id == 'options-media') {
+    wp_enqueue_script('qnrwp_a-admin-js', get_template_directory_uri() . '/qnrwp_a-admin.js', null, null);
+  }
+}
+add_action('admin_enqueue_scripts', 'qnrwp_selectively_enqueue_admin_script');
+
+// ----------------------- Add registered custom image size to Dashboard
+function qnrwp_custom_image_sizes($sizes) {
+    return array_merge($sizes, array(
+        'qnrwp-largest' => 'QNRWP-Largest',
+    ));
+}
+add_filter('image_size_names_choose', 'qnrwp_custom_image_sizes');
+
 // ----------------------- Search Form filter
-function qnrwp_search_form_filter($form) {
-  //if ( 'html5' == $format ) {
-			//$form = '<form role="search" method="get" class="search-form" action="' . esc_url( home_url( '/' ) ) . '">
-				//<label>
-					//<span class="screen-reader-text">' . _x( 'Search for:', 'label' ) . '</span>
-					//<input type="search" class="search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder' ) . '" value="' . get_search_query() . '" name="s" />
-				//</label>
-				//<input type="submit" class="search-submit" value="'. esc_attr_x( 'Search', 'submit button' ) .'" />
-			//</form>';
-		//}
-  
+function qnrwp_search_form_filter($form) {  
   $form = preg_replace('@\s+<span class="screen-reader-text">[^<]+</span>@i', '', $form);
   $form = preg_replace('@\s+<input type="submit" class="search-submit" value="[^\"]+" />@i', 
                             '<input type="submit" class="search-submit" value="g" />', $form); // No whitespace
@@ -66,11 +274,17 @@ function qnrwp_search_form_filter($form) {
 }
 add_filter('get_search_form', 'qnrwp_search_form_filter');
 
+// ----------------------- Excerpt 'read more' filter
+function qnrwp_excerpt_more_filter($moreStr) {
+  return '...';
+}
+add_filter('excerpt_more', 'qnrwp_excerpt_more_filter');
+
 // ----------------------- Main Query filter
 
 // Customize parameters of main Loop query
 function qnrwp_main_query_filter($query) {
-    if ($query->is_main_query() && !is_page() && !is_admin()) { // Not in Admin screens
+    if ($query->is_main_query() && !is_page() && !is_admin()) { // Not in Admin screens...
         $query->set('category_name', 'news,uncategorized');
     }
 }
@@ -80,20 +294,7 @@ add_action('pre_get_posts', 'qnrwp_main_query_filter' );
 
 // Take care of things other filters cannot...
 function qnrwp_dynamic_sidebar_params($params) {
-  //if ($params[0]['widget_name'] == 'Recent Posts') {
-    //$params[0]['before_widget'] = PHP_EOL.'<!-- Widget -->'.PHP_EOL.'<div class="widget widget-recent-posts">'.PHP_EOL;
-    //$params[0]['after_widget'] = '</div>'.PHP_EOL;
-  //}
-  //else if ($params[0]['widget_name'] == 'Search') {
-    //$params[0]['before_widget'] = PHP_EOL.'<!-- Widget -->'.PHP_EOL.'<div class="widget widget-search">'.PHP_EOL;
-    //$params[0]['after_widget'] = '</div>'.PHP_EOL;
-  //}
-  //else if ($params[0]['widget_name'] == 'Calendar') {
-    //$params[0]['before_widget'] = PHP_EOL.'<!-- Widget -->'.PHP_EOL.'<div class="widget widget-calendar">'.PHP_EOL;
-    //$params[0]['after_widget'] = '</div>'.PHP_EOL;
-  //}
-  
-  // Actually, don't filter positive, we do it negative (generic positives are in sidebar definition)
+  // Don't filter positive, we do it negative (generic positives are in sidebar definition)
   // Text widget will have an inconsistent 'textwidget' class only, cannot be filtered
   if ($params[0]['widget_name'] == 'Custom Menu' || $params[0]['widget_name'] == 'Text') {
     $params[0]['before_widget'] = PHP_EOL.'<!-- Widget -->'.PHP_EOL;
@@ -141,12 +342,12 @@ function qnrwp_recent_posts_widget_args($args) {
 add_filter('widget_posts_args', 'qnrwp_recent_posts_widget_args'); 
 
 
-// ----------------------- Custom Menu widget args filter
+// ----------------------- Custom Menu widget args filters
 
 function qnrwp_nav_menu_args($args) {
-  // Make main nav menu a Quicknr Nav Menu
+  // Make main nav menu a QI Navmenu
   if($args['menu'] == wp_get_nav_menu_object('QNRWP Main Nav Menu')) {
-    $args['depth'] = -1; // Make it flat, no submenus
+    //$args['depth'] = -1; // Make it flat, no submenus
     // Cannot concatenate to default container class...
     $args['container_class'] = 'widget qnr-navmenu';
   }
@@ -154,159 +355,102 @@ function qnrwp_nav_menu_args($args) {
   else if($args['menu'] == wp_get_nav_menu_object('QNRWP Footer Menu')) {
     $args['container_class'] = 'widget qnr-footer-menu';
   }
+  //// Class test menu - Doesn't work from shortcode...
+  //else if($args['menu'] == wp_get_nav_menu_object('Test_Menu')) {
+    //$args['container_class'] = 'qnr-hmenu';
+  //}
 	return $args;
 }
 add_filter('wp_nav_menu_args', 'qnrwp_nav_menu_args');
+
+function qnrwp_menu_classes($classes, $item, $args, $depth) {
+  // Make submenu of main nav menu a qnr-hmenu
+  // Note that args and its menu are objects in this hook...
+  if ($args->menu == wp_get_nav_menu_object('QNRWP Main Nav Menu') && 
+            $depth == 0 && in_array('menu-item-has-children', $classes)) {
+    $classes[] = 'qnr-hmenu';
+  }
+  return $classes;
+}
+add_filter('nav_menu_css_class', 'qnrwp_menu_classes', 10, 4);
 
 
 // ----------------------- Excerpt length filter
 
 function qnrwp_custom_excerpt_length($length) {
-	return 25;
+	return 20;
 }
 add_filter('excerpt_length', 'qnrwp_custom_excerpt_length', 999);
 
 
 // ----------------------- WIDGETS
 
-// ----------------------- My Widget widget definition
+// ----------------------- Custom Widget definition
 
-class QNRWP_My_Widget extends WP_Widget {
+class QNRWP_Custom_Widget extends WP_Widget {
   
 	public function __construct() {
 		// Instantiate the parent object
 		$widget_ops = array( 
-			'classname'   => 'qnrwp_my_widget',
-			'description' => 'My Widget is awesome.',
+			'classname'   => 'qnrwp_custom_widget',
+			'description' => 'Custom Widget to display.',
 		);
-		parent::__construct('qnrwp_my_widget', 'QNRWP My Widget', $widget_ops);
+		parent::__construct('qnrwp_custom_widget', 'QNRWP Custom Widget', $widget_ops);
 	}
   
 	public function widget($args, $instance) {
-		// Widget content output
-    echo 'This is my widget output';
-    
-		echo $args['before_widget'];
-		if (!empty($instance['title'])) {
-			echo $args['before_title'] . apply_filters('widget_title', $instance['title']) . $args['after_title'];
-		}
-		if (!empty($instance['mysetting'])) {
-			echo '<div class="widget-mysetting">' . $instance['mysetting'] . '</div>';
-		}
-		echo esc_html__('Hello, World!', 'text_domain');
-		echo $args['after_widget'];
+    // Get the pages list from string value
+    $pagesL = explode(',', $instance['mypages']);
+    // Decide whether to show the widget on this page
+    $allExcept = in_array('-2', $pagesL);
+    $allNews = in_array('-1', $pagesL);
+    $thisPage = get_the_ID();
+    $showWidget = false;
+    $postType = get_post_type();
+    // TODO: News page has a different post ID from its page ID
+    if ($postType == 'post' && ! is_home() && $allNews && ! $allExcept) $showWidget = true;
+    else if ($postType == 'post' && ! is_home() && ! $allNews && $allExcept) $showWidget = true;
+    else if (($postType == 'page' || is_home()) && in_array($thisPage, $pagesL) && ! $allExcept) $showWidget = true;
+    else if (($postType == 'page' || is_home()) && ! in_array($thisPage, $pagesL) && $allExcept) $showWidget = true;
+    // Display
+    if ($showWidget) {
+      $rHtml = '';
+      // Carousel
+      if (stripos(get_post($instance['mywidget'])->post_title, 'Carousel') !== false) {
+        $rHtml = qnrwp_get_carousel_html($instance['mywidget'], 'large'); // Other sizes supported by shortcode
+      }
+      // Sub Header
+      else if (stripos(get_post($instance['mywidget'])->post_title, 'SubHeader') !== false) {
+        $rHtml = qnrwp_get_subheader_html($instance['mywidget']);
+      }
+      echo $rHtml; // Done
+    }
 	}
   
 	public function form($instance) {
-		// Output widget admin options form
-    ?>
-    <?php
-    // Title field vars
-		$title = !empty($instance['title']) ? $instance['title'] : esc_html('New title');
-    $fieldTitleID = esc_attr($this->get_field_id('title'));
-    $fieldTitleName = esc_attr($this->get_field_name('title'));
-    // My Setting field vars
-		$mysetting = !empty($instance['mysetting']) ? $instance['mysetting'] : esc_html('New mysetting');
-    $fieldMySettingID = esc_attr($this->get_field_id('mysetting'));
-    $fieldMySettingName = esc_attr($this->get_field_name('mysetting'));
+		// ----------------------- Output widget admin options form
+    // Add JS for widget form
+    wp_enqueue_script('qnrwp_a-adminwidgets-js', get_template_directory_uri() . '/qnrwp_a-adminwidgets.js', null, null);
+    // Page(s) to display the widget field
+		$pagesVal = !empty($instance['mypages']) ? $instance['mypages'] : '';
+    $pagesL = explode(',', $pagesVal);
+    $pagesOutputID = esc_attr($this->get_field_id('mypages'));
+    $pagesOutputName = esc_attr($this->get_field_name('mypages'));
+    // Widget (defined by a page) to display field
+		$widget = (!empty($instance['mywidget'])) ? $instance['mywidget'] : '';
+    $fieldWidgetID = esc_attr($this->get_field_id('mywidget'));
+    $fieldWidgetName = esc_attr($this->get_field_name('mywidget'));
     // HTML form
-		?>
-		<p>
-		<label for="<?php echo $fieldTitleID ?>"><?php esc_attr('Title:'); ?></label> 
-		<input class="widefat" id="<?php echo $fieldTitleID ?>" name="<?php echo $fieldTitleName ?>" type="text" value="<?php echo esc_attr($title); ?>">
-		</p>
-		<p>
-		<label for="<?php echo $fieldMySettingID ?>"><?php esc_attr('Mysetting:'); ?></label> 
-		<input class="widefat" id="<?php echo $fieldMySettingID ?>" name="<?php echo $fieldMySettingName ?>" type="text" value="<?php echo esc_attr($mysetting); ?>">
-		</p>
-		<?php 
+    echo qnrwp_get_pages_form_for_widget($pagesVal, $pagesL, $pagesOutputID, $pagesOutputName);
+    echo qnrwp_get_widget_defs_menu($widget, $fieldWidgetID, $fieldWidgetName);
 	}
   
 	public function update($new_instance, $old_instance) {
 		// Process and save widget options
 		$instance = array();
-		$instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
-		$instance['mysetting'] = (!empty($new_instance['mysetting'])) ? strip_tags($new_instance['mysetting']) : '';
+		$instance['mypages'] = (!empty($new_instance['mypages'])) ? strip_tags($new_instance['mypages']) : '';
+		$instance['mywidget'] = (!empty($new_instance['mywidget'])) ? strip_tags($new_instance['mywidget']) : '';
 		return $instance;
-	}
-}
-
-
-// ----------------------- Carousel_Image widget definition
-
-class QNRWP_Carousel_Image extends WP_Widget {
-  
-	public function __construct() {
-		// Instantiate the parent object
-		$widget_ops = array( 
-			'classname'   => 'qnrwp_carousel_image',
-			'description' => 'Quicknr Interface image carousel, using "slide-1.jpg", "slide-2.jpg" etc. in "res/img/" theme folder, to appear on the static Home page.',
-		);
-		parent::__construct('qnrwp_carousel_image', 'QNRWP Carousel-Image', $widget_ops);
-	}
-  
-	public function widget($args, $instance) {
-		// TODO
-	}
-  
-	public function form($instance) {
-		// Output widget admin options form
-    ?>
-		<p>Quicknr Interface image carousel, using "slide-1.jpg", "slide-2.jpg" etc. in "res/img/" theme folder, to appear on the static Home page.</p>
-		<?php 
-	}
-}
-
-
-// ----------------------- Sub Header widget definition
-
-class QNRWP_Sub_Header extends WP_Widget {
-  
-	public function __construct() {
-		// Instantiate the parent object
-		$widget_ops = array( 
-			'classname'   => 'qnrwp_sub_header',
-			'description' => 'Sub header with a scrolling image and page title.',
-		);
-		parent::__construct('qnrwp_sub_header', 'QNRWP Sub Header', $widget_ops);
-	}
-  
-	public function widget($args, $instance) {
-    if ($GLOBALS['isNews']) { // Create News header, for all News pages
-      $headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/type-blocks_amador-loureiro.jpg';
-      $headerTitle = 'News';
-      echo '<div class="qnr-scroller" style="background-image:url(\''.$headerURL.'\');">'.PHP_EOL;
-      echo '<div><p>'.$headerTitle.'</p></div></div>'.PHP_EOL;
-    }
-    else if ($GLOBALS['postsAmount'] == 'single') { // Create Page header
-      if ($GLOBALS['pageTitle'] == 'Home') {
-        $headerTitleText = '<b><big>'.get_bloginfo('name').'</big></b><br>'.PHP_EOL;
-        $headerTitleText .= get_bloginfo('description');
-      }
-      else {
-        $headerTitleText = $GLOBALS['pageTitle'];
-      }
-      if ($GLOBALS['pageTitle'] == 'Support') {
-        $headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/climbing-gear_cameron-kirby.jpg';
-      }
-      //else if ($GLOBALS['pageTitle'] == 'News') {
-        //$headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/type-blocks_amador-loureiro.jpg';
-      //}
-      else if ($GLOBALS['pageTitle'] == 'About') {
-        $headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/green-shoots_markus-spiske.jpg';
-      }
-      else if ($GLOBALS['pageTitle'] == 'Contact') {
-        $headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/road-snow_kimon-maritz.jpg';
-      }
-      else if ($GLOBALS['pageTitle'] == 'Legal') {
-        $headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/books_eli-francis.jpg';
-      }
-      else if ($GLOBALS['pageTitle'] == 'Home') {
-        $headerURL = trailingslashit(get_template_directory_uri()) . 'res/img/design-tools_sergey-zolkin.jpg';
-      }
-      echo '<div class="qnr-scroller" style="background-image:url(\''.$headerURL.'\');">'.PHP_EOL;
-      echo '<div><p>'.$headerTitleText.'</p></div></div>'.PHP_EOL;
-    }
 	}
 }
 
@@ -358,7 +502,7 @@ class QNRWP_Featured_News extends WP_Widget {
           $the_query->the_post();
           if (in_category(array('news', 'uncategorized')) && has_post_thumbnail()) {
             $thumbHtml = get_the_post_thumbnail(get_the_ID(), 'medium');
-            $thumbUrl = get_post_thumbnail_url($thumbHtml);
+            $thumbUrl = qnrwp_get_post_thumbnail_url($thumbHtml);
             $postLink = get_the_permalink(get_the_ID());
             $rHtml .= '<a class="featured-news-item" href="'.$postLink.'">'.PHP_EOL; // Opening item
             $rHtml .= '<div class="featured-news-item-header" style="background-image:url(\''.$thumbUrl.'\')">&nbsp;</div>'.PHP_EOL;
@@ -408,7 +552,7 @@ function qnrwp_widgets_init() {
     'before_title'  => "<h2 class=\"widget-title\">",
     'after_title'   => "</h2>\n",
   ));
-  // ----------------------- Sub Header Row (within narrower content & sidebars row)
+  // ----------------------- Sub Header Row (within possibly narrower content & sidebars row)
   register_sidebar(array(
     'name'          => 'Sub Header Row',
     'id'            => 'qnrwp-subrow-1',
@@ -468,9 +612,7 @@ function qnrwp_widgets_init() {
     'before_title'  => "<h2 class=\"widget-title\">",
     'after_title'   => "</h2>\n",
   ));
-  register_widget('QNRWP_My_Widget');
-  register_widget('QNRWP_Carousel_Image');
-  register_widget('QNRWP_Sub_Header');
+  register_widget('QNRWP_Custom_Widget');
   register_widget('QNRWP_Content');
   register_widget('QNRWP_Featured_News');
 }
@@ -490,78 +632,18 @@ function qnrwp_setup() {
 		'caption',
 	));
   
-  // ----------------------- Post Formats support
+  // ----------------------- Add new image size, the largest
+  add_image_size('qnrwp-largest', 2000, 1500, false);
 
-  /*
-    - ASIDE - Typically styled without a title. Similar to a Facebook 
-    note update.
-
-    - GALLERY - A gallery of images. Post will likely contain a gallery 
-    shortcode and will have image attachments.
-
-    - LINK - A link to another site. Themes may wish to use the first 
-    <a href=””> tag in the post content as the external link for that 
-    post. An alternative approach could be if the post consists only of 
-    a URL, then that will be the URL and the title (post_title) will be 
-    the name attached to the anchor for it.
-
-    - IMAGE - A single image. The first <img /> tag in the post could be 
-    considered the image. Alternatively, if the post consists only of a 
-    URL, that will be the image URL and the title of the post (post_title) 
-    will be the title attribute for the image.
-
-    - QUOTE - A quotation. Probably will contain a blockquote holding 
-    the quote content. Alternatively, the quote may be just the content, 
-    with the source/author being the title.
-
-    - STATUS - A short status update, similar to a Twitter status update.
-
-    - VIDEO - A single video or video playlist. The first <video /> tag 
-    or object/embed in the post content could be considered the video. 
-    Alternatively, if the post consists only of a URL, that will be the 
-    video URL. May also contain the video as an attachment to the post, 
-    if video support is enabled on the blog (like via a plugin).
-
-    - AUDIO - An audio file or playlist. Could be used for Podcasting.
-
-    - CHAT - A chat transcript, like so:
-
-      John: foo
-      Mary: bar
-      John: foo 2
-
-    Note: When writing or editing a Post, Standard is used to designate 
-    that no Post Format is specified. Also if a format is specified that 
-    is invalid then standard (no format) will be used.
-
-  */
-  
-  // Post Formats are not enabled, better handled with categories
-  //add_theme_support('post-formats', array(    'aside',
-                                              //'gallery',
-                                              //'link',
-                                              //'image',
-                                              //'quote',
-                                              //'status',
-                                              //'video',
-                                              //'audio',
-                                              //'chat',
-                                              //));
-  
 }
 add_action('after_setup_theme', 'qnrwp_setup');
 
-// Add post-formats to post_type 'page' (not used)
-//function qnrwp_add_post_formats_to_page(){
-    //add_post_type_support('page', 'post-formats');
-    //register_taxonomy_for_object_type('post_format', 'page');
-//}
-//add_action('init', 'qnrwp_add_post_formats_to_page', 11);
 
+// ----------------------- Shortcodes definitions
 
-// ----------------------- Shortcodes definition
+// Content argument is for content enclosed in open/closed shortcodes
 
-// [featuredimage size=large align=center link=no]
+// [featuredimage size=large align=center link=no] TODO process options
 function qnrwp_featuredimage_shortcode($atts, $content = null) {
   $a = shortcode_atts(array(
     'size' => 'large',
@@ -582,17 +664,47 @@ function qnrwp_include_shortcode($atts, $content = null) {
     'file' => '',
   ), $atts);
   if ($a['file'] !== '') {
-    return include($a['file']);
+    // Assume file parameter is relative to child theme directory, or parent if no child
+    return include(trailingslashit(get_stylesheet_directory()) . $a['file']);
   }
 }
 add_shortcode('include', 'qnrwp_include_shortcode');
 
+// [menu name='menuName']
+function qnrwp_menu_shortcode($atts, $content = null) {
+  $a = shortcode_atts(array(
+    'name' => '',
+    'id' => '',
+    'depth' => 0,
+  ), $atts);
+  $mymenu = wp_nav_menu(array(
+    'menu'              => $a['name'],
+    'echo'              => false,
+    'container_class'   => 'test-menu qnr-hmenu',
+    'container_id'      => $a['id'],
+    'depth'             => $a['depth'],
+    //'walker' => new QNRWP_Walker_Nav_Menu()
+  ));
+  return $mymenu;
+}
+add_shortcode('menu', 'qnrwp_menu_shortcode');
 
-//// ----------------------- Menu registration (not needed)
-//function qnrwp_register_menus() {
-  //register_nav_menus();
-//}
-//add_action( 'init', 'qnrwp_register_menus' );
-
+// [carousel name="QNRWP-Widget-Carousel-1" size="large"]
+function qnrwp_carousel_shortcode($atts, $content = null) {
+  $a = shortcode_atts(array(
+    'name' => '',
+    'size' => 'large',
+  ), $atts);
+  $pages = get_pages();
+  $rHtml = '';
+  foreach ($pages as $page) {
+    if ($page->post_title === $a['name']) {
+      $rHtml = qnrwp_get_carousel_html($page->ID, $a['size']);
+      break;
+    }
+  }
+  return $rHtml;
+}
+add_shortcode('carousel', 'qnrwp_carousel_shortcode');
 
 ?>

@@ -15,18 +15,6 @@ Text Domain: qnrwp_a
   QNRWP_A Stylesheet
 */
 
-@font-face {
-    font-family: "testfont";
-    src: url("../font/testfont.woff") format("woff");
-}
-/* Font in the fonts folder outside the website */
-/*
-@font-face {
-    font-family: "Custom";
-    src: url("../../../../../../../Web/GoogleFonts_20160219/fonts/montserrat/Montserrat-Regular.ttf");
-}
-*/
-
 input[type="button"]::-moz-focus-inner {
     outline: none;
     border: none;
@@ -137,11 +125,12 @@ div#header-row {
     text-align: right;
     color: white;
     overflow: visible;
+    z-index: 999;
 }
-div#header-row > div.textwidget {
+div#header-row > div.textwidget {   /* Logo */
     display: block;
     position: absolute;
-    margin-top: 0.2em;
+    bottom: 0.2em;
     padding: 0.1em;
     width: 11em;
     font-size: 2em;
@@ -151,9 +140,13 @@ div#header-row > div.textwidget {
     color: #454;
 }
 
-/* Override */
-div.qnr-navmenu {
-    width: calc(100% - 15em);
+/* Clickable logo */
+div#logo a {
+    text-decoration: none;
+}
+div#logo a:hover {
+    cursor: pointer;
+    text-decoration: none;
 }
 
 
@@ -165,6 +158,7 @@ div#content-row {   /* May contain sub header before middle row */
     min-width: 320px;
     max-width: 1600px;
     text-align: center;
+    z-index: 2;
 }
 
 /* SUB HEADER */
@@ -174,24 +168,33 @@ div#content-row div.sub-header-row {
     margin: 0 auto;
     text-align: center; /* Required for its content */
 }
+div#content-row div.sub-header-row div.qnr-aspect-keeper {
+    min-height: 200px;
+    max-height: 600px;
+}
 
 div#middle-row {
     display: inline-flex;
+    display: -webkit-inline-flex;
     flex-flow: row wrap;
+    -webkit-flex-flow: row wrap;
     justify-content: center;
+    -webkit-justify-content: center;
     align-items: stretch;
+    -webkit-align-items: stretch;
     min-width: 320px;
     max-width: 1600px;
     height: auto;
     text-align: center;
     vertical-align: top;
-    background-color: black; /* For bg-img opacity */
+    background-color: white; /* For bg-img opacity */
 }
 
 /* Content box, optionally between sidebars */
 
 div#content-box {
     flex: 2 1 0;
+    -webkit-flex: 2 1 0;
     display: inline-block;
     margin: 0;
     padding: 0 1em;
@@ -201,6 +204,9 @@ div#content-box {
     height: auto;
     text-align: center;
     background-color: white;
+}
+div#content-box p {
+    line-height: 1.3em;
 }
 div#content-box.single-col-content {
     width: 100%;
@@ -220,6 +226,11 @@ div#content-box.two-col-content-right {
 
 div.post.type-post {
     text-align: left;
+}
+div.post.type-post img.wp-post-image {
+    margin: 1em auto;
+    width: 95%;
+    max-width: 95%;
 }
 div.post-date {
     font-size: 0.9em;
@@ -276,6 +287,7 @@ span.post-older p:first-child {
 div.sidebar {
     display: inline-block;
     flex: 1 2 0;
+    -webkit-flex: 1 2 0;
     padding-top: 1em;
     min-width: 200px;
     max-width: 400px;
@@ -398,8 +410,9 @@ div.page h3 {
     border-bottom: dotted thin silver;
 }
 
-/* HOME PAGE */
+/* HOME PAGE & Demo page*/
 
+div.page.page-id-302,
 div.page.home {
     width: 100%;
     max-width: inherit;
@@ -451,7 +464,7 @@ div#footer-row div.textwidget {
     display: inline-block;
     margin-top: 1em;
     padding-bottom: 1em;
-    width: 320px;
+    width: 200px;
     text-align: center;
     vertical-align: top;
 }
@@ -543,7 +556,7 @@ a.featured-news-item {
     padding: 1em;
     min-width: 320px;
     width: 49%;
-    height: 28em;
+    height: 26em;
     max-width: 380px;
     vertical-align: top;
     overflow: hidden;
@@ -712,8 +725,9 @@ form.search-form input.search-field {
     font-size: 0.9em;
     vertical-align: middle;
     border: solid thin silver;
-    box-sizing: border-box;
     border-radius: 6px 0 0 6px;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 form.search-form input.search-submit {
     display: inline-block;
@@ -730,6 +744,7 @@ form.search-form input.search-submit {
     box-sizing: border-box;
     border: none;
     border-radius: 0 4px 4px 0;
+    overflow: hidden;
     background-color: gray;
 }
 form.search-form input.search-submit:hover {
@@ -744,15 +759,16 @@ div.search-results {
 
 /* QNR SCROLLER OVERRIDE
  * ----------------------------------------------------- */
-
-div.qnr-scroller {
+    
+div#sub-header-row div.qnr-scroller {
+    height: 200px;  /* Required for the following */
     opacity: 1;
 }
-div.qnr-scroller div {
+div#sub-header-row div.qnr-scroller div {
     height: 100%;
     background-image: linear-gradient(rgba(50,50,50,0.5), rgba(50,50,50,0.5));
 }
-div.qnr-scroller div p {
+div#sub-header-row div.qnr-scroller div p {
     display: block;
     position: absolute;
     bottom: 1em;
@@ -771,11 +787,258 @@ div.qnr-scroller div p {
     border-bottom: dotted thin white;
     box-sizing: border-box;
 }
+
+/* QNR NAVMENU OVERRIDE
+ * ----------------------------------------------------- */
+
+div.qnr-navmenu {
+    width: calc(100% - 15em);
+}
+div.qnr-navmenu > ul > li {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    font-size: 0.9em;
+}
+div.qnr-navmenu li,
+div.qnr-navmenu-wrapper li {
+    text-transform: uppercase !important;
+}
+div.qnr-navmenu-expanded > ul > li {
+    border: none;
+    font-weight: bold;
+}
+div.qnr-navmenu-wrapper li {
+    font-weight: normal;
+    text-align: left;
+}
+div.qnr-navmenu-wrapper li a {
+    font-weight: normal;
+}
+div.qnr-navmenu > ul > li.qnr-hmenu {
+    padding-right: 2.2em;
+}
+div.qnr-navmenu li::after,
+div.qnr-navmenu-wrapper li::after {
+    
+}
+
+/* +++ HMENU OVERRIDE
+ * ----------------------------------------------------- */
+
+.qnr-hmenu-in-collapsed ul {
+    top: 0.8em;
+}
+div.qnr-navmenu > ul > li.qnr-hmenu::after {
+    top: 0.6em;
+}
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu::after {
+    top: 0.8em;
+}
+div.qnr-navmenu-wrapper > ul > li {
+    height: 2.6em;
+}
+div.qnr-navmenu-wrapper li a,
+div.qnr-navmenu-wrapper li.qnr-hmenu-idle,
+div.qnr-navmenu-wrapper li.qnr-hmenu-subholder {
+    padding-top: 0.8em !important;
+    padding-bottom: 0.8em !important;
+}
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu {
+    /* From div.qnr-navmenu-wrapper > ul > li.qnr-hmenu.qnr-hmenu-in-collapsed */
+    height: auto !important;       /* Adjusting to contained menu */
+    min-height: 2.6em !important;    /* Matching nav menu LI settings above */
+    padding-top: 0.8em !important;
+    padding-bottom: 0.8em !important;
+}
+
+
+/* ----------------------------- PAGE OVERRIDES */
+
 /* Override on Home page */
-body.home div.qnr-scroller div p {
+body.home div#sub-header-row div.qnr-scroller div p {
     bottom: 0.5em;
     text-transform: none;
     border-bottom: none;
+}
+
+/* ----------------------------- Carousel Demo page 1 */
+
+/* Content across whole page */
+body.page.page-id-302 {
+    width: 100%;
+    height: 100%;
+}
+body.page.page-id-302 div#content-row,
+body.page.page-id-302 div#middle-row,
+body.page.page-id-302 div#content-box,
+body.page.page-id-302 div#post-302 {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Header */
+body.page.page-id-302 div#header-row {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    color: white;
+    z-index: 1000;
+}
+body.page.page-id-302 div#header-row * {
+    color: white;
+    box-shadow: none;
+    border: none;
+    background-color: transparent;
+}
+
+/* Clickable logo */
+body.page.page-id-302 div#logo {
+    margin-left: 0.5em;
+}
+body.page.page-id-302 div#logo a {
+    text-decoration: none;
+}
+body.page.page-id-302 div#logo a:hover {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* Nav and Hmenu */
+body.page.page-id-302 div.qnr-navmenu {
+    color: white !important;
+}
+body.page.page-id-302 div.qnr-navmenu > ul > li {
+    border-radius: 4px;
+    border: solid thin transparent !important;
+}
+body.page.page-id-302 div.qnr-navmenu > ul > li:hover {
+    border: solid thin white !important;
+}
+body.page.page-id-302 div.qnr-navmenu > ul ul {
+    box-shadow: 1px 1px 2px rgba(1,1,1,0.6) !important;
+    border-radius: 4px;
+    border: solid thin white !important;
+    background-color: rgba(1,1,1,0.1) !important;
+}
+body.page.page-id-302 div.qnr-navmenu > ul ul li:hover,
+body.page.page-id-302 div.qnr-navmenu > ul ul a:hover {
+    background-color: rgba(255,255,255,0.1) !important;
+}
+body.page.page-id-302 div.qnr-navmenu-wrapper ul {
+    background-color: rgba(1,1,1,0.9) !important;
+}
+body.page.page-id-302 div.qnr-navmenu-wrapper li,
+body.page.page-id-302 div.qnr-navmenu-wrapper li a {
+    font-size: 1em !important;
+    font-weight: bold !important;
+}
+body.page.page-id-302 div.qnr-navmenu-wrapper li:hover {
+    background-color: rgba(255,255,255,0.4) !important;
+}
+body.page.page-id-302 div.qnr-navmenu-wrapper > ul ul li a {
+    padding-left: 1em !important;
+}
+body.page.page-id-302 div.qnr-navmenu-wrapper > ul ul {
+    background-color: transparent !important;
+}
+
+/* Slide content */
+body.page.page-id-302 div.slide-inner {
+    padding: 1em;
+    width: 55%;
+    min-width: 240px;
+    max-width: 600px;
+    font-size: 1.2em;
+    text-align: left;
+    background-color: rgba(1,1,1,0.1);
+    border-radius: 10px;
+}
+body.page.page-id-302 div.slide-inner h3 {
+    display: block;
+    position: relative;
+    width: auto;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 0.5em;
+    font-weight: bold;
+    text-align: left;
+    border-bottom: solid 2px orange;
+}
+
+
+/* ----------------------------- Menu Test page */
+
+/*
+<div id="post-241" class="post-241 page type-page status-publish hentry test">
+*/
+
+div.page.test {  /* Page content div */
+    text-align: left !important;
+    vertical-align: top;
+}
+div.test-menu { /* Block containing hmenu, the widget itself */
+    display: inline-block;
+    position: relative;
+    margin: 0.5em;
+    margin-top: 2.5em;
+    padding: 0;
+    width: 100px;
+    height: 40px;
+    color: gray;
+    text-align: center;
+    vertical-align: top;
+    border: solid thin silver;
+}
+div.test-menu:hover {
+    color: black;
+}
+
+div.test-menu.qnr-hmenu::after {
+    font-weight: bold;
+    margin: 0 auto;
+    margin-top: 0.5em;
+    padding: 0;
+    line-height: 3em;
+    text-align: center;
+}
+
+
+div#post-241 {
+    margin-top: 2em;
+    min-width: 310px;
+}
+div#post-241 p {
+    display: inline-block;
+    position: relative;
+    margin: 0.5em;
+    margin-top: 2.5em;
+    padding: 0;
+    width: calc(80% - 110px);
+    text-align: left;
+    box-sizing: border-box;
+}
+div#post-241 p:nth-of-type(1) {
+    display: block !important;
+    width: 80%;
+    margin-top: 0.5em;
+}
+div#post-241 p:nth-of-type(5){
+    width: 80% !important;
+}
+div#post-241 h3 {   
+    display: block;
+    left: 0;
+    text-align: left;
 }
 
 
@@ -830,22 +1093,30 @@ body.home div.qnr-scroller div p {
     div#sidebar-right {
         display: block;
         flex: none;
+        -webkit-flex: none;
         width: 100%;
         max-width: 100%;
     }
 }
 @media (max-width: 710px) {
     div#content-box {
+        display: block;
+        -webkit-flex: none; /* iPhone */
         min-width: 90%;
+        width: 100%;
     }
     div#sidebar-left {
         order: 1;
+        -webkit-order: 1;
+        -webkit-flex: 1 1 320px; /* iPhone */
         width: 50%;
     }
     div#sidebar-right {
         order: 2;
+        -webkit-order: 2;
         display: inline-block;
         flex: 1 2 0;
+        -webkit-flex: 1 1 320px; /* iPhone */
         width: 50%;
         min-width: 200px;
         max-width: 400px;
@@ -881,6 +1152,27 @@ body.home div.qnr-scroller div p {
         box-sizing: border-box;
     }
 }
+@media (max-width: 610px) {
+    body.page.page-id-302 div.slide-inner {
+        width: 80%;
+    }
+}
+@media (max-width: 480px) { /* iPhone */
+    form.search-form input.search-field {
+        -webkit-appearance: none;
+        border-radius: 0;
+        -webkit-border-radius: 0;
+    }
+    form.search-form input.search-submit {
+        -webkit-appearance: none;
+        border-radius: 0;
+        -webkit-border-radius: 0;
+    }
+    body.page.page-id-302 span.qnr-carousel-stickyarrow-left,
+    body.page.page-id-302 span.qnr-carousel-stickyarrow-right {
+        background-color: transparent !important;
+    }
+}
 @media (max-width: 460px) {
     a.excerpt-item img.qnrwp-post-featured-img {
         width: 50px;
@@ -889,5 +1181,17 @@ body.home div.qnr-scroller div p {
     a.excerpt-item,
     a.excerpt-item > div.excerpt-item-block {
         height: auto;
+    }
+}
+@media (max-width: 320px) { /* iPhone */
+    div#content-row,
+    div#middle-row {
+        width: 320px;
+    }
+    div.sidebar,
+    div#sidebar-left,
+    div#sidebar-right {
+        -webkit-flex: 1 1 320px;
+        width: 320px;
     }
 }
