@@ -664,7 +664,7 @@ function qnrwp_include_shortcode($atts, $content = null) {
     'file' => '',
   ), $atts);
   if ($a['file'] !== '') {
-    // Assume file parameter is relative to child theme directory, or parent if no child
+    // Assume file parameter is relative to child theme directory, or theme if no child
     return include(trailingslashit(get_stylesheet_directory()) . $a['file']);
   }
 }

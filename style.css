@@ -119,34 +119,14 @@ h6 {
  * ----------------------------------------------------- */
 
 div#header-row {
-    display: inline-block;
+    display: block;
+    margin: 0 auto;
     min-width: 320px;
     max-width: 1600px;
     text-align: right;
     color: white;
     overflow: visible;
     z-index: 999;
-}
-div#header-row > div.textwidget {   /* Logo */
-    display: block;
-    position: absolute;
-    bottom: 0.2em;
-    padding: 0.1em;
-    width: 11em;
-    font-size: 2em;
-    font-stretch: condensed;
-    font-weight: bold;
-    text-align: left;
-    color: #454;
-}
-
-/* Clickable logo */
-div#logo a {
-    text-decoration: none;
-}
-div#logo a:hover {
-    cursor: pointer;
-    text-decoration: none;
 }
 
 
@@ -161,17 +141,13 @@ div#content-row {   /* May contain sub header before middle row */
     z-index: 2;
 }
 
-/* SUB HEADER */
-
 div#content-row div.sub-header-row {
     display: block;
     margin: 0 auto;
     text-align: center; /* Required for its content */
 }
-div#content-row div.sub-header-row div.qnr-aspect-keeper {
-    min-height: 200px;
-    max-height: 600px;
-}
+
+/* Middle row after sub-header, containing one to three columns, flex displayed */
 
 div#middle-row {
     display: inline-flex;
@@ -205,9 +181,6 @@ div#content-box {
     text-align: center;
     background-color: white;
 }
-div#content-box p {
-    line-height: 1.3em;
-}
 div#content-box.single-col-content {
     width: 100%;
     padding: 0;
@@ -222,12 +195,12 @@ div#content-box.two-col-content-right {
     width: 70%;
 }
 
-/* ----------------------------- Post Type */
+/* News Post Type, in Content box */
 
-div.post.type-post {
+div.type-post {
     text-align: left;
 }
-div.post.type-post img.wp-post-image {
+div.type-post img.wp-post-image {
     margin: 1em auto;
     width: 95%;
     max-width: 95%;
@@ -237,7 +210,7 @@ div.post-date {
     font-style: normal;
     color: #888;
 }
-div.post.type-post h1.page-title {
+div.type-post h1.page-title {
     text-align: left;
 }
 
@@ -386,60 +359,6 @@ div.widget_recent_entries li a + span {
     margin: 0;
     padding: 0;
 }
-
-/* PAGE CONTENT
- * ----------------------------------------------------- */
-
-div.page {
-    margin: 0 auto;
-    text-align: left;
-    width: 50%;
-    min-width: 280px;
-    max-width: 640px;
-    padding-left: 1em;
-    padding-bottom: 2em;
-}
-div.page h3 {
-    display: inline-block;
-    position: relative;
-    width: auto;
-    left: -10%;
-    padding-top: 1em;
-    font-weight: normal;
-    text-align: right;
-    border-bottom: dotted thin silver;
-}
-
-/* HOME PAGE & Demo page*/
-
-div.page.page-id-302,
-div.page.home {
-    width: 100%;
-    max-width: inherit;
-    padding: 0;
-}
-
-/* Promo responsive row */
-
-div#promo {
-    margin-top: 2em;
-    margin-bottom: 2em;
-}
-
-span.promo-glyph {
-    display: inline-block;
-    position: relative;
-    margin: 0;
-    padding: 0.1em;
-    font-size: 4em;
-    color: #454;
-}
-
-div#promo h1 {
-    font-weight: normal;
-    font-size: 1.4em;
-}
-
 
 /* FOOTER
  * ----------------------------------------------------- */
@@ -854,191 +773,11 @@ div.qnr-navmenu-wrapper > ul > li.qnr-hmenu {
 
 /* ----------------------------- PAGE OVERRIDES */
 
-/* Override on Home page */
+/* Override on Home page (other overrides in child theme style.css) */
 body.home div#sub-header-row div.qnr-scroller div p {
     bottom: 0.5em;
     text-transform: none;
     border-bottom: none;
-}
-
-/* ----------------------------- Carousel Demo page 1 */
-
-/* Content across whole page */
-body.page.page-id-302 {
-    width: 100%;
-    height: 100%;
-}
-body.page.page-id-302 div#content-row,
-body.page.page-id-302 div#middle-row,
-body.page.page-id-302 div#content-box,
-body.page.page-id-302 div#post-302 {
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 100% !important;
-    max-width: 100% !important;
-    min-height: 100% !important;
-    max-height: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-/* Header */
-body.page.page-id-302 div#header-row {
-    display: block;
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    max-width: 100%;
-    color: white;
-    z-index: 1000;
-}
-body.page.page-id-302 div#header-row * {
-    color: white;
-    box-shadow: none;
-    border: none;
-    background-color: transparent;
-}
-
-/* Clickable logo */
-body.page.page-id-302 div#logo {
-    margin-left: 0.5em;
-}
-body.page.page-id-302 div#logo a {
-    text-decoration: none;
-}
-body.page.page-id-302 div#logo a:hover {
-    cursor: pointer;
-    text-decoration: none;
-}
-
-/* Nav and Hmenu */
-body.page.page-id-302 div.qnr-navmenu {
-    color: white !important;
-}
-body.page.page-id-302 div.qnr-navmenu > ul > li {
-    border-radius: 4px;
-    border: solid thin transparent !important;
-}
-body.page.page-id-302 div.qnr-navmenu > ul > li:hover {
-    border: solid thin white !important;
-}
-body.page.page-id-302 div.qnr-navmenu > ul ul {
-    box-shadow: 1px 1px 2px rgba(1,1,1,0.6) !important;
-    border-radius: 4px;
-    border: solid thin white !important;
-    background-color: rgba(1,1,1,0.1) !important;
-}
-body.page.page-id-302 div.qnr-navmenu > ul ul li:hover,
-body.page.page-id-302 div.qnr-navmenu > ul ul a:hover {
-    background-color: rgba(255,255,255,0.1) !important;
-}
-body.page.page-id-302 div.qnr-navmenu-wrapper ul {
-    background-color: rgba(1,1,1,0.9) !important;
-}
-body.page.page-id-302 div.qnr-navmenu-wrapper li,
-body.page.page-id-302 div.qnr-navmenu-wrapper li a {
-    font-size: 1em !important;
-    font-weight: bold !important;
-}
-body.page.page-id-302 div.qnr-navmenu-wrapper li:hover {
-    background-color: rgba(255,255,255,0.4) !important;
-}
-body.page.page-id-302 div.qnr-navmenu-wrapper > ul ul li a {
-    padding-left: 1em !important;
-}
-body.page.page-id-302 div.qnr-navmenu-wrapper > ul ul {
-    background-color: transparent !important;
-}
-
-/* Slide content */
-body.page.page-id-302 div.slide-inner {
-    padding: 1em;
-    width: 55%;
-    min-width: 240px;
-    max-width: 600px;
-    font-size: 1.2em;
-    text-align: left;
-    background-color: rgba(1,1,1,0.1);
-    border-radius: 10px;
-}
-body.page.page-id-302 div.slide-inner h3 {
-    display: block;
-    position: relative;
-    width: auto;
-    left: 0;
-    margin: 0;
-    padding: 0;
-    padding-bottom: 0.5em;
-    font-weight: bold;
-    text-align: left;
-    border-bottom: solid 2px orange;
-}
-
-
-/* ----------------------------- Menu Test page */
-
-/*
-<div id="post-241" class="post-241 page type-page status-publish hentry test">
-*/
-
-div.page.test {  /* Page content div */
-    text-align: left !important;
-    vertical-align: top;
-}
-div.test-menu { /* Block containing hmenu, the widget itself */
-    display: inline-block;
-    position: relative;
-    margin: 0.5em;
-    margin-top: 2.5em;
-    padding: 0;
-    width: 100px;
-    height: 40px;
-    color: gray;
-    text-align: center;
-    vertical-align: top;
-    border: solid thin silver;
-}
-div.test-menu:hover {
-    color: black;
-}
-
-div.test-menu.qnr-hmenu::after {
-    font-weight: bold;
-    margin: 0 auto;
-    margin-top: 0.5em;
-    padding: 0;
-    line-height: 3em;
-    text-align: center;
-}
-
-
-div#post-241 {
-    margin-top: 2em;
-    min-width: 310px;
-}
-div#post-241 p {
-    display: inline-block;
-    position: relative;
-    margin: 0.5em;
-    margin-top: 2.5em;
-    padding: 0;
-    width: calc(80% - 110px);
-    text-align: left;
-    box-sizing: border-box;
-}
-div#post-241 p:nth-of-type(1) {
-    display: block !important;
-    width: 80%;
-    margin-top: 0.5em;
-}
-div#post-241 p:nth-of-type(5){
-    width: 80% !important;
-}
-div#post-241 h3 {   
-    display: block;
-    left: 0;
-    text-align: left;
 }
 
 
@@ -1152,11 +891,6 @@ div#post-241 h3 {
         box-sizing: border-box;
     }
 }
-@media (max-width: 610px) {
-    body.page.page-id-302 div.slide-inner {
-        width: 80%;
-    }
-}
 @media (max-width: 480px) { /* iPhone */
     form.search-form input.search-field {
         -webkit-appearance: none;
@@ -1167,10 +901,6 @@ div#post-241 h3 {
         -webkit-appearance: none;
         border-radius: 0;
         -webkit-border-radius: 0;
-    }
-    body.page.page-id-302 span.qnr-carousel-stickyarrow-left,
-    body.page.page-id-302 span.qnr-carousel-stickyarrow-right {
-        background-color: transparent !important;
     }
 }
 @media (max-width: 460px) {
