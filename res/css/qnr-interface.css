@@ -1,0 +1,1552 @@
+/*
+  QNR Interface Stylesheet
+*/
+
+@font-face {
+    font-family: "Quicknr";
+    src: url("../font/quicknr-interface.woff") format("woff");
+}
+@font-face {
+    font-family: "QuicknrLogos";
+    src: url("../font/quicknr-logos.woff") format("woff");
+}
+@font-face {
+    font-family: "QuicknrIcons";
+    src: url("../font/quicknr-icons.woff") format("woff");
+}
+
+body {
+    display: block;
+    position: absolute;
+/*
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+*/
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial,sans-serif;
+    font-size: 17px;
+    text-align: center;
+    background-color: white;
+    
+    /* iPhone inconsistent text sizing fix */
+    -webkit-text-size-adjust: 100%;
+}
+
+
+/* ARROW ANIM
+ * ----------------------------------------------------- */
+
+@keyframes qnr-arrow-anim-down {
+    from {
+        top: -10px;
+        opacity: 0.2;
+    }
+    10% {
+        top: 4px;
+        opacity: 1;
+    }
+    13% {
+        top: -2px;
+        opacity: 0.6;
+    }
+    15% {
+        top: 2px;
+        opacity: 1;
+    }
+    to {
+        top: 2px;
+        opacity: 1;
+    }
+}
+@keyframes qnr-arrow-anim-up {
+    from {
+        top: 10px;
+        opacity: 0.2;
+    }
+    10% {
+        top: -4px;
+        opacity: 1;
+    }
+    13% {
+        top: 2px;
+        opacity: 0.6;
+    }
+    15% {
+        top: -2px;
+        opacity: 1;
+    }
+    to {
+        top: -2px;
+        opacity: 1;
+    }
+}
+@keyframes qnr-arrow-anim-left {
+    from {
+        left: 10px;
+        opacity: 0.2;
+    }
+    10% {
+        left: -4px;
+        opacity: 1;
+    }
+    13% {
+        left: 2px;
+        opacity: 0.6;
+    }
+    15% {
+        left: -2px;
+        opacity: 1;
+    }
+    to {
+        left: -2px;
+        opacity: 1;
+    }
+}
+@keyframes qnr-arrow-anim-right {
+    from {
+        right: 12px;
+        opacity: 0.2;
+    }
+    10% {
+        right: -2px;
+        opacity: 1;
+    }
+    13% {
+        right: 4px;
+        opacity: 0.6;
+    }
+    15% {
+        right: 0px;
+        opacity: 1;
+    }
+    to {
+        right: 0px;
+        opacity: 1;
+    }
+}
+
+div.qnr-arrow-anim {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0.3em;
+    width: 1em;
+    height: 1em;
+    font-size: 2em;
+    line-height: 1em;
+    color: #EEE;
+    border-radius: 50%;
+    border: solid 3px #EEE;
+    overflow: hidden;
+}
+div.qnr-arrow-anim:hover {
+    color: white;
+    border-color: white;
+    cursor: pointer;
+}
+div.qnr-arrow-anim:active {
+    box-shadow: 0 0 6px white;
+}
+
+/* SPAN created by Javascript */
+
+div.qnr-arrow-anim span {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    animation-duration: 4s;
+    animation-fill-mode: both;
+    animation-iteration-count: infinite;
+}
+span.qnr-arrow-anim-down {
+    animation-name: qnr-arrow-anim-down;
+}
+span.qnr-arrow-anim-up {
+    animation-name: qnr-arrow-anim-up;
+}
+span.qnr-arrow-anim-left {
+    animation-name: qnr-arrow-anim-left;
+}
+span.qnr-arrow-anim-right {
+    animation-name: qnr-arrow-anim-right;
+}
+span.qnr-arrow-anim-still {
+    animation-name: none;
+    animation-iteration-count: 0;
+}
+
+
+/* RESPONSIVE
+ * ----------------------------------------------------- */
+
+div.qnr-responsive {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    -moz-flex-flow: row wrap;
+    flex-flow: row wrap;
+    position: relative;
+    margin: 0 auto 0 auto;
+    padding: 0;
+    width: auto;
+    min-width: 320px;
+    max-width: 94%;
+    text-align: center;
+    -webkit-align-content: flex-start;
+    align-content: flex-start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    -moz-justify-content: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+div.qnr-responsive-item {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 320px;
+    -ms-flex: 1 0 320px;
+    -moz-flex: 1 0 320px;
+    -webkit-flex: 1 0 320px;
+    flex: 1 0 320px;
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0.5em 2em;
+    width: 320px;
+    min-width: 320px;
+    max-width: 600px;
+    box-sizing: border-box;     /* Never mind IE, it isn't a mobile browser much... */
+}
+
+/* WINSCROLLER
+ * ----------------------------------------------------- */
+
+.qnr-winscroller {
+    /* Widget itself */
+}
+
+/* The arrow, if widget is BODY */
+span.qnr-winscroller-arrow {
+    display: block;
+    position: fixed;
+    margin: 0;
+    padding: 0.2em;
+    bottom: 30px;
+    right: 0;
+    top: auto;
+    left: auto;
+    width: 25px;
+    height: 25px;
+    font-family: Quicknr;
+    font-size: 24px;
+    line-height: 1em;
+    color: #999;
+    text-decoration: none;
+    visibility: hidden;
+    speak: none;
+    border-radius: 5px 0 0 5px;
+    opacity: 0.8;
+    background-color: rgba(1,1,1,0.2);
+    z-index: 10000;
+}
+span.qnr-winscroller-arrow::before {
+    content: "6"; /* Up arrow */
+}
+span.qnr-winscroller-arrow:link, span.qnr-winscroller-arrow:visited {
+    color: #999;
+}
+span.qnr-winscroller-arrow:hover {
+    cursor: pointer;
+    color: #EEE;
+}
+span.qnr-winscroller-arrow:active {
+    color: white;
+}
+
+
+/* CAROUSEL
+ * ----------------------------------------------------- */
+
+@keyframes qnr-carousel-fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes qnr-carousel-slidefade-rtl {
+    from {
+        left: 100%;
+        opacity: 0;
+    }
+    to {
+        left: 0;
+        opacity: 1;
+    }
+}
+@keyframes qnr-carousel-slidefade-ltr {
+    from {
+        left: -100%;
+        opacity: 0;
+    }
+    to {
+        left: 0;
+        opacity: 1;
+    }
+}
+@keyframes qnr-carousel-slidein-rtl {
+    from {
+        left: 100%;
+    }
+    to {
+        left: 0;
+    }
+}
+@keyframes qnr-carousel-slidein-ltr {
+    from {
+        left: -100%;
+    }
+    to {
+        left: 0;
+    }
+}
+@keyframes qnr-carousel-slideout-rtl {
+    from {
+        left: 0;
+    }
+    to {
+        left: -100%;
+    }
+}
+@keyframes qnr-carousel-slideout-ltr {
+    from {
+        left: 0;
+    }
+    to {
+        left: 100%;
+    }
+}
+
+div.qnr-carousel,
+div.qnr-carousel-caption {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    overflow: hidden;
+}
+div.qnr-carousel-caption {
+    padding: 1em;
+    height: auto;
+    box-sizing: border-box;
+}
+
+/* Carousel item */
+
+div.qnr-carousel-item {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+div.qnr-carousel-slidefade-rtl {
+    animation-name: qnr-carousel-slidefade-rtl;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+div.qnr-carousel-slidefade-ltr {
+    animation-name: qnr-carousel-slidefade-ltr;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+div.qnr-carousel-slidein-rtl {
+    animation-name: qnr-carousel-slidein-rtl;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+div.qnr-carousel-slidein-ltr {
+    animation-name: qnr-carousel-slidein-ltr;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+div.qnr-carousel-slideout-rtl {
+    animation-name: qnr-carousel-slideout-rtl;
+    animation-duration: 1s;
+    animation-fill-mode: backwards;
+}
+div.qnr-carousel-slideout-ltr {
+    animation-name: qnr-carousel-slideout-ltr;
+    animation-duration: 1s;
+    animation-fill-mode: backwards;
+}
+div.qnr-carousel-fadein {
+    animation-name: qnr-carousel-fadein;
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+
+/* Control strip */
+
+div.qnr-carousel-controlstrip {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    left: 50%;
+    margin-right: -50%;
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%); 
+    bottom: 16px;
+    width: auto;
+    max-width: 90%;
+/*
+    height: 40px;
+*/
+    text-align: center;
+    vertical-align: middle;
+    opacity: 1;
+    border-radius: 10px;
+    background-color: rgba(1,1,1,0.1);
+    z-index: 3;
+}
+div.qnr-carousel-controlstrip:hover {
+    background-color: rgba(1,1,1,0.06);
+}
+span.qnr-carousel-thumb {
+    display: inline-block;
+    position: relative;
+    margin: 12px 17px 12px 17px;
+    padding: 2px;
+    width: 6px;
+    height: 6px;
+    font-size: 1.5em;
+    font-weight: bold;
+    line-height: 1em;
+    vertical-align: top;
+    color: white;
+    border: solid 3px silver;
+    background-color: transparent;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    border-radius: 50%;
+    opacity: 1;
+    overflow: hidden;
+    cursor: pointer;
+}
+span.qnr-carousel-thumb-inactive {
+    border-color: #CCC;
+    background-color: transparent;
+}
+span.qnr-carousel-thumb-active {
+    border-color: #DDD;
+    background-color: #EEE;
+}
+span.qnr-carousel-thumb-number-inactive {
+    border-color: black;
+    background-color: black;
+}
+span.qnr-carousel-thumb-number-active {
+    border-color: orange;
+    background-color: orange;
+}
+span.qnr-carousel-thumb:hover {
+/*
+    border-color: #DDD;
+    background-color: transparent;
+*/
+}
+
+/* Preview thumbs */
+span.qnr-carousel-thumb-preview:hover {
+    width: 54px;
+    height: 54px;
+    margin: -9px -4px -9px -4px;
+    padding: 0;
+    border: solid 2px #DDD;
+    opacity: 1;
+    transition-property: height;
+    transition-duration: 0.1s;
+    z-index: 4;
+}
+
+/* Prev Next arrow navigators */
+
+span.qnr-carousel-arrow-left,
+span.qnr-carousel-arrow-right,
+span.qnr-carousel-stickyarrow-left,
+span.qnr-carousel-stickyarrow-right,
+span.qnr-carousel-bigarrow-left,
+span.qnr-carousel-bigarrow-right {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 8px;
+/*
+    top: 50%;
+    transform: translateY(-50%);
+*/
+    
+    top: 50%;
+    -o-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    
+    font-family: Quicknr;
+}
+
+/* Regular */
+span.qnr-carousel-arrow-left,
+span.qnr-carousel-arrow-right {
+    font-size: 32px;
+    font-weight: normal;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+    border-radius: 50%;
+    opacity: 0.3;
+    background-color: rgba(100,100,100,0.5);
+    speak: none;
+    z-index: 5;
+}
+span.qnr-carousel-arrow-left {
+    left: 1%;
+}
+span.qnr-carousel-arrow-right {
+    right: 1%;
+}
+span.qnr-carousel-arrow-left::before {
+    content: "4";
+}
+span.qnr-carousel-arrow-right::before {
+    content: "5";
+}
+
+/* Bigarrow */
+span.qnr-carousel-bigarrow-left,
+span.qnr-carousel-bigarrow-right {
+    padding: 0;
+    font-size: 74px;
+    font-weight: normal;
+    text-decoration: none;
+    color: silver;
+    cursor: pointer;
+    opacity: 0.6;
+    background-color: transparent;
+    speak: none;
+    z-index: 5;
+}
+span.qnr-carousel-bigarrow-left {
+    left: 0.5%;
+}
+span.qnr-carousel-bigarrow-right {
+    right: 0.5%;
+}
+span.qnr-carousel-bigarrow-left::before {
+    content: "2";
+}
+span.qnr-carousel-bigarrow-right::before {
+    content: "3";
+}
+
+/* Stickyarrow */
+span.qnr-carousel-stickyarrow-left,
+span.qnr-carousel-stickyarrow-right {
+    font-size: 32px;
+    font-weight: normal;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    opacity: 0.6;
+    background-color: rgba(1,1,1,0.5);
+    speak: none;
+    z-index: 5;
+}
+span.qnr-carousel-stickyarrow-left {
+    left: 0;
+    border-radius: 0 10px 10px 0;
+}
+span.qnr-carousel-stickyarrow-right {
+    right: 0;
+    border-radius: 10px 0 0 10px;
+}
+span.qnr-carousel-stickyarrow-left::before {
+    content: "2";
+}
+span.qnr-carousel-stickyarrow-right::before {
+    content: "3";
+}
+
+span.qnr-carousel-arrow-left:hover,
+span.qnr-carousel-arrow-right:hover,
+span.qnr-carousel-stickyarrow-left:hover,
+span.qnr-carousel-stickyarrow-right:hover,
+span.qnr-carousel-bigarrow-left:hover,
+span.qnr-carousel-bigarrow-right:hover {
+    color: white;
+    opacity: 0.9;
+}
+span.qnr-carousel-arrow-left:active,
+span.qnr-carousel-arrow-right:active,
+span.qnr-carousel-stickyarrow-left:active,
+span.qnr-carousel-stickyarrow-right:active,
+span.qnr-carousel-bigarrow-left:active,
+span.qnr-carousel-bigarrow-right:active {
+    color: white;
+}
+
+
+/* STICKY BAR
+ * ----------------------------------------------------- */
+
+div.qnr-stickybar {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+/* Essential styling of fixed version - override for other parameters */
+div.qnr-stickybar-fixed {
+    position: fixed;
+    top: 0;
+    z-index: 1000;  /* All other z-index settings should be lower */
+}
+
+
+/* SLIDER
+ * ----------------------------------------------------- */
+
+@keyframes qnr-slide-rtl {
+    from {
+        left: 100%;
+    }
+    25% {
+        left: 0;
+    }
+    75% {
+        left: 0;
+    }
+    to {
+        left: -100%;
+    }
+}
+@keyframes qnr-slide-ltr {
+    from {
+        left: -100%;
+    }
+    20% {
+        left: 0;
+    }
+    80% {
+        left: 0;
+    }
+    to {
+        left: 100%;
+    }
+}
+@keyframes qnr-slide-up {
+    from {
+        top: 100%;
+    }
+    20% {
+        top: 0;
+    }
+    80% {
+        top: 0;
+    }
+    to {
+        top: -100%;
+    }
+}
+@keyframes qnr-slide-down {
+    from {
+        top: -100%;
+    }
+    20% {
+        top: 0;
+    }
+    80% {
+        top: 0;
+    }
+    to {
+        top: 100%;
+    }
+}
+
+/* Stopping variants */
+
+@keyframes qnr-slide-rtl-stop {
+    from {
+        left: 100%;
+    }
+    to {
+        left: 0;
+    }
+}
+@keyframes qnr-slide-ltr-stop {
+    from {
+        left: -100%;
+    }
+    to {
+        left: 0;
+    }
+}
+@keyframes qnr-slide-up-stop {
+    from {
+        top: 100%;
+    }
+    to {
+        top: 0;
+    }
+}
+@keyframes qnr-slide-down-stop {
+    from {
+        top: -100%;
+    }
+    to {
+        top: 0;
+    }
+}
+div.qnr-slider {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    overflow: hidden;
+}
+div.qnr-slide-item {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    animation-duration: 4s;         /* JS may override */
+    animation-fill-mode: both;
+    animation-timing-function: ease;
+    animation-iteration-count: 1;
+    opacity: 1;
+}
+
+/* Slide turned off to prevent onload flashing... */
+div.qnr-slide-none {
+    display: none;
+}
+
+/* Animations */
+
+div.qnr-slide-rtl {
+    animation-name: qnr-slide-rtl;
+}
+div.qnr-slide-ltr {
+    animation-name: qnr-slide-ltr;
+}
+div.qnr-slide-up {
+    animation-name: qnr-slide-up;
+}
+div.qnr-slide-down {
+    animation-name: qnr-slide-down;
+}
+
+div.qnr-slide-rtl-stop {
+    animation-name: qnr-slide-rtl-stop;
+}
+div.qnr-slide-ltr-stop {
+    animation-name: qnr-slide-ltr-stop;
+}
+div.qnr-slide-up-stop {
+    animation-name: qnr-slide-up-stop;
+}
+div.qnr-slide-down-stop  {
+    animation-name: qnr-slide-down-stop;
+}
+
+
+/* IMAGE ANIMATOR
+ * ----------------------------------------------------- */
+
+@keyframes qnr-img-zoom-in {
+    from {
+        width: 100%;
+        opacity: 1;
+    }
+    66% {
+        opacity: 1;
+    }
+    to {
+        width: 110%;
+        opacity: 0;
+    }
+}
+@keyframes qnr-img-zoom-out {
+    from {
+        width: 110%;
+        opacity: 1;
+    }
+    66% {
+        opacity: 1;
+    }
+    to {
+        width: 100%;
+        opacity: 0;
+    }
+}
+@keyframes qnr-img-zoom-in-opaque {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 110%;
+    }
+}
+@keyframes qnr-img-zoom-out-opaque {
+    from {
+        width: 110%;
+    }
+    to {
+        width: 100%;
+    }
+}
+div.qnr-img-anim {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    overflow: hidden;
+    background-color: red;
+}
+
+/* imgDIVs replacing the IMGs */
+
+div.qnr-img-anim-div {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: silver;
+    background-position: 50% 50%;   /* Ready for bg-img by JS */
+    background-size: cover;
+    background-repeat: no-repeat;
+    animation-duration: 4s;         /* JS may override */
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    opacity: 1;
+}
+
+/* For centered zooming, plus other anchorings, lopleft is default */
+
+div.qnr-centered {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+div.qnr-topright {
+    top: 0;
+    right: 0;
+}
+div.qnr-topleft {
+    top: 0;
+    left: 0;
+}
+div.qnr-bottomright {
+    right: 0;
+    bottom: 0;
+}
+div.qnr-bottomleft {
+    left: 0;
+    bottom: 0;
+}
+div.qnr-leftcenter {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+div.qnr-rightcenter {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+/* Animations */
+
+div.qnr-img-zoom-in {
+    animation-name: qnr-img-zoom-in;
+}
+div.qnr-img-zoom-out {
+    animation-name: qnr-img-zoom-out;
+}
+div.qnr-img-zoom-in-opaque  {
+    animation-name: qnr-img-zoom-in-opaque ;
+}
+div.qnr-img-zoom-out-opaque  {
+    animation-name: qnr-img-zoom-out-opaque ;
+}
+
+/* Animation timing function */
+
+div.qnr-ease {
+    animation-timing-function: ease;
+}
+div.qnr-ease-in {
+    animation-timing-function: ease-in;
+}
+div.qnr-ease-out {
+    animation-timing-function: ease-out;
+}
+div.qnr-linear {
+    animation-timing-function: linear;
+}
+
+/* Translucent cover over the images */
+
+div.qnr-img-translucent-cover {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.5;
+}
+
+
+/* NAVIGATOR MENU
+ * ----------------------------------------------------- */
+
+@keyframes qnr-navmenu-slide-down {
+    from {
+        top: -300px;
+        opacity: 0.4;
+    }
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+@keyframes qnr-navmenu-slide-up {
+    from {
+        top: 0;
+        opacity: 1;
+    }
+    to {
+        top: -500px;
+        opacity: 0;
+    }
+}
+@keyframes qnr-navmenu-slide-right {
+    from {
+        left: -500px;
+        opacity: 0.4;
+    }
+    to {
+        left: 0px;
+        opacity: 1;
+    }
+}
+@keyframes qnr-navmenu-slide-left {
+    from {
+        left: 0;
+        opacity: 1;
+    }
+    to {
+        left: -500px;
+        opacity: 0;
+    }
+}
+div.qnr-navmenu {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 54px;
+    color: gray;
+    visibility: hidden;     /* Will be made visible by JS */
+    background-color: white;
+    z-index: 999;
+}
+
+/* Styling limited to immediate children so we don't style any contained hmenus */
+
+/* No-wrapper styling will be active when menu expanded, not collapsed */
+div.qnr-navmenu > ul {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    box-sizing: border-box;
+    
+    /* From qnr-navmenu-expanded */
+    width: 100%;
+    text-align: right;
+}
+
+
+/* Wrapper created by code, for positioning */
+
+div.qnr-navmenu-wrapper {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 0;      /* Wrapper itself not taking any space */
+    color: gray;
+    overflow: visible;
+    z-index: 999;
+}
+div.qnr-navmenu-wrapper > ul {
+    background-color: white;
+}
+
+/* Menu items */
+
+div.qnr-navmenu > ul > li,
+div.qnr-navmenu-wrapper > ul > li {
+    display: inline-block;
+    position: relative;
+    height: 2em;
+    margin: 0;
+    padding: 0;     /* Will be overriden by hmenu holders below */
+    font-size: 1em;
+    vertical-align: middle;
+    white-space: nowrap;
+    box-sizing: border-box;
+    
+    /* From ul.qnr-navmenu-vertical -horizontal */
+    width: 100%;
+    text-align: left;
+    border: none;
+    border-top: dotted thin silver;
+}
+div.qnr-navmenu > ul > li {
+    /* From qnr-navmenu-expanded > ul > li */
+    margin: 1em;
+    padding: 0;
+    width: auto;
+    text-align: center;
+    border: solid thin silver;
+}
+
+div.qnr-navmenu > ul > li > a,
+div.qnr-navmenu-wrapper > ul > li > a {       /* Text links, not buttons */
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;     /* Will be overriden below */
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: inherit;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+}
+/* Account for hmenu holder with no <A> tag */
+div.qnr-navmenu > ul > li.qnr-hmenu,
+div.qnr-navmenu > ul > li > a,
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu,
+div.qnr-navmenu-wrapper > ul > li > a {
+    padding: 0.5em;
+}
+div.qnr-navmenu > ul > li.qnr-hmenu {  
+    /* From  qnr-navmenu-expanded > ul > li.qnr-hmenu */
+    padding-right: 3em;
+}
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu {
+    /* From div.qnr-navmenu-wrapper > ul > li.qnr-hmenu.qnr-hmenu-in-collapsed */
+    height: auto;       /* Adjusting to contained menu */
+    min-height: 2em;    /* Matching nav menu LI settings above */
+    padding-right: 0;
+}
+
+div.qnr-navmenu > ul > li.qnr-hmenu:hover,
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu:hover,
+div.qnr-navmenu > ul > li > a:hover,
+div.qnr-navmenu-wrapper > ul > li > a:hover {
+    cursor: pointer;
+    color: black;
+    background-color: #F8F8F8;
+}
+div.qnr-navmenu > ul > li.qnr-hmenu:hover, /* Must be specific */
+div.qnr-navmenu > ul > li > a:hover {
+    background-color: transparent;
+}
+
+/* Triangle-down following submenu holding item */
+div.qnr-navmenu > ul > li.qnr-hmenu::after,
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu::after {
+    content: "A";
+    display: block;
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    top: 0.5em;
+    right: 0.5em;
+    color: silver;
+    font-family: Quicknr;
+    vertical-align: top;
+    line-height: 1em;
+}
+/* Override with Triangle-up when hmenu is open */
+div.qnr-navmenu > ul > li.qnr-hmenu.qnr-hmenu-hover::after,
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu.qnr-hmenu-hover::after {
+    content: "B";
+}
+
+/* Expanded, desktop */
+
+/*
+div.qnr-navmenu-expanded > ul {
+    width: 100%;
+    text-align: right;
+}
+*/
+/*
+div.qnr-navmenu-expanded > ul > li {
+    margin: 1em;
+    padding: 0;
+    width: auto;
+    text-align: center;
+    border: solid thin silver;
+}
+*/
+/*
+div.qnr-navmenu-expanded > ul > li.qnr-hmenu {
+    padding: 0.5em;
+    padding-right: 3em;
+}
+*/
+
+/* Collapsed, mobile (applied to widget DIV that no longer holds the menu UL) */
+
+div.qnr-navmenu-collapsed {
+    overflow: visible;
+}
+
+/* Collapsed menu icon */
+
+div.qnr-navmenu-icon {
+    display: block;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin: 0;
+    padding: 10px;
+    font-family: Quicknr;
+    font-size: 20px;
+    line-height: 1em;
+    color: #777;
+    opacity: 1;
+    z-index: 300;
+}
+div.qnr-navmenu-icon:hover {
+    cursor: pointer;
+    color: silver;
+}
+div.qnr-navmenu-icon-open::before {
+    content: "0";
+}
+div.qnr-navmenu-icon-close::before {
+    content: "1";
+}
+
+/* Vertical menu list */
+
+ul.qnr-navmenu-vertical,
+ul.qnr-navmenu-vertical-horizontal {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    box-shadow: 4px 4px 4px rgba(10,10,10,0.6);
+    z-index: 200;
+}
+ul.qnr-navmenu-vertical {               /* Animated up-down */
+    width: 100%;
+    text-align: center;
+}
+ul.qnr-navmenu-vertical-horizontal {    /* Animated left-right */
+    width: 200px;
+    text-align: left;
+}
+ul.qnr-navmenu-vertical-show {          /* Up/down */
+    display: block;
+    animation-name: qnr-navmenu-slide-down;
+    animation-duration: 0.8s;
+    top: 0;
+}
+ul.qnr-navmenu-vertical-show-right {    /* Left/right */
+    display: block;
+    animation-name: qnr-navmenu-slide-right;
+    animation-duration: 0.8s;
+    top: 0;
+    left: 0;
+}
+ul.qnr-navmenu-vertical-hide {
+    animation-name: qnr-navmenu-slide-up;
+    animation-duration: 1s;
+    top: -500px;
+}
+ul.qnr-navmenu-vertical-hide-left {
+    animation-name: qnr-navmenu-slide-left;
+    animation-duration: 1s;
+    top: 0;
+    left: -500px;
+}
+ul.qnr-navmenu-vertical-hidden {
+    display: none;
+    top: -1000px;
+}
+ul.qnr-navmenu-vertical-hidden-left {
+    display: none;
+    top: 0;
+    left: -500px;
+}
+/*
+ul.qnr-navmenu-vertical > li,
+ul.qnr-navmenu-vertical-horizontal > li {
+    margin: 0;
+    width: 100%;
+    text-align: left;
+    border: none;
+    border-top: dotted thin silver;
+}
+ul.qnr-navmenu-vertical > li {
+    text-align: left;
+}
+*/
+/*
+ul.qnr-navmenu-vertical > li > a,
+ul.qnr-navmenu-vertical-horizontal > li > a {
+}
+li.qnr-hmenu-in-collapsed:hover,
+ul.qnr-navmenu-vertical > li > a:hover,
+ul.qnr-navmenu-vertical-horizontal > li > a:hover {
+    background-color: #F8F8F8;
+}
+*/
+
+/* Hmenu override in collapsed navmenu */
+/*
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu.qnr-hmenu-in-collapsed {
+    height: auto;
+    min-height: 2em;
+    padding-right: 0;
+}
+*/
+/*
+li.qnr-hmenu.qnr-hmenu-in-collapsed:hover {
+    background-color: #F8F8F8;
+}
+*/
+
+/* PARALLAX SCROLLER
+ * ----------------------------------------------------- */
+
+div.qnr-scroller {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+/*
+    height: 300px;
+*/
+    color: white;
+    text-align: center;
+    background-color: #EEE;
+    opacity: 1;
+    background-image: url("img/omega.jpg");  /* Override */
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* ----------------------------- Carousel Item Scroller Override */
+
+div.qnr-carousel > div.qnr-carousel-item.qnr-scroller {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+
+/* X-ICON
+ * ----------------------------------------------------- */
+
+.qnr-x-icon-btn {      /* block & absolute set in JS */
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    margin: 0;
+    padding: 0;
+    font-family: Verdana,sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 0.3em;
+    color: silver;
+    text-shadow: 0 0 1px silver;
+    transform: scaleX(1.3);
+}
+.qnr-x-icon-btn:hover {
+    cursor: pointer;
+    color: gray;
+}
+
+
+/* ACCORDION
+ * ----------------------------------------------------- */
+
+div.qnr-accordion {
+    display: inline-block;
+    position: relative;
+    margin: 1em;
+    padding: 0;
+    width: 50%;
+    min-width: 300px;
+    text-align: left;
+    opacity: 0;                 /* Overriden in code */
+}
+
+/* Questions */
+
+div.qnr-accordion > p {
+    display: block;
+    position: relative;
+    margin: -8px 0;             /* Negative margin to hide DIV */
+    padding: 0.5em 2%;
+    width: 96%;
+    font-weight: bold;
+    border-radius: 10px;
+    box-shadow: 1px 1px 2px silver;
+    background-color: #EEF;
+    z-index: 10;                 /* Over the answer */
+}
+div.qnr-accordion > p:hover {
+    cursor: pointer;
+    background-color: #E4E4FA;
+}
+
+/* Answers */
+
+div.qnr-accordion div {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 1em 2em;
+    width: 90%;
+}
+
+
+/* LAYOUT HELPERS
+ * ----------------------------------------------------- */
+
+.center-bottom {
+    position: absolute !important;
+    margin: auto auto !important;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.center {
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+.center-horizontal {
+    left: 50%;
+    margin-right: -50%;
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+.center-vertical {
+    top: 50%;
+    -o-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+
+/* GLYPHS - INTERFACE
+ * ----------------------------------------------------- */
+
+/* Not exhaustive, more glyphs are in the font file */
+
+.qnr-glyph {
+    font-family: Quicknr;
+    font-weight: normal;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    speak: none;
+}
+.qnr-glyph-menuicon::before             {content: "0";}
+.qnr-glyph-xicon::before                {content: "1";}
+.qnr-glyph-bigarrow-left::before        {content: "2";}
+.qnr-glyph-bigarrow-right::before       {content: "3";}
+.qnr-glyph-arrow-left::before           {content: "4";}
+.qnr-glyph-arrow-right::before          {content: "5";}
+.qnr-glyph-arrow-up::before             {content: "6";}
+.qnr-glyph-arrow-down::before           {content: "7";}
+.qnr-glyph-checkmark::before            {content: "8";}
+.qnr-glyph-xmark::before                {content: "9";}
+.qnr-glyph-triangle-down::before        {content: "A";}
+.qnr-glyph-triangle-up::before          {content: "B";}
+.qnr-glyph-triangle-left::before        {content: "C";}
+.qnr-glyph-triangle-right::before       {content: "D";}
+.qnr-glyph-gear::before                 {content: "E";}
+.qnr-glyph-arrow-close::before          {content: "F";}
+.qnr-glyph-circle-checkmark::before     {content: "G";}
+.qnr-glyph-circle-xmark::before         {content: "H";}
+.qnr-glyph-zoom-in::before              {content: "I";}
+.qnr-glyph-zoom-out::before             {content: "J";}
+.qnr-glyph-circle-down::before          {content: "K";}
+.qnr-glyph-circle-up::before            {content: "L";}
+.qnr-glyph-circle-left::before          {content: "M";}
+.qnr-glyph-circle-right::before         {content: "N";}
+.qnr-glyph-globe::before                {content: "Y";}
+.qnr-glyph-cart::before                 {content: "Z";}
+.qnr-glyph-enlarge::before              {content: "a";}
+.qnr-glyph-reduce::before               {content: "b";}
+.qnr-glyph-search::before               {content: "g";}
+.qnr-glyph-home::before                 {content: "k";}
+.qnr-glyph-profile::before              {content: "o";}
+.qnr-glyph-share::before                {content: "s";}
+.qnr-glyph-thumb-down::before           {content: "u";}
+.qnr-glyph-thumb-up::before             {content: "v";}
+.qnr-glyph-embed::before                {content: "z";}
+.qnr-glyph-arrowthin-down::before       {content: "\00c0";}
+.qnr-glyph-arrowthin-up::before         {content: "\00c1";}
+.qnr-glyph-arrowthin-left::before       {content: "\00c2";}
+.qnr-glyph-arrowthin-right::before      {content: "\00c3";}
+.qnr-glyph-phone::before                {content: "\00c5";}
+.qnr-glyph-waterdrop::before            {content: "\0166";}
+.qnr-glyph-lightning::before            {content: "\0168";}
+.qnr-glyph-connections::before          {content: "\0169";}
+.qnr-glyph-chart::before                {content: "\016a";}
+.qnr-glyph-barchart::before             {content: "\0172";}
+.qnr-glyph-bell::before                 {content: "\0177";}
+.qnr-glyph-calculator::before           {content: "\0184";}
+.qnr-glyph-camera::before               {content: "\0186";}
+.qnr-glyph-clock::before                {content: "\0188";}
+.qnr-glyph-quoteopen::before            {content: "\019a";}
+.qnr-glyph-quoteclose::before           {content: "\019b";}
+.qnr-glyph-more::before                 {content: "\019e";}
+.qnr-glyph-eye::before                  {content: "\01a6";}
+.qnr-glyph-image::before                {content: "\01ae";}
+.qnr-glyph-link::before                 {content: "\01b8";}
+.qnr-glyph-marker::before               {content: "\01c0";}
+.qnr-glyph-minus::before                {content: "\01cc";}
+.qnr-glyph-paperclip::before            {content: "\01cf";}
+.qnr-glyph-piechart::before             {content: "\01d2";}
+.qnr-glyph-pin::before                  {content: "\01d3";}
+.qnr-glyph-plus::before                 {content: "\01d5";}
+.qnr-glyph-pulse::before                {content: "\01d9";}
+.qnr-glyph-puzzle::before               {content: "\01da";}
+.qnr-glyph-shield::before               {content: "\01e0";}
+.qnr-glyph-signpost::before             {content: "\01e2";}
+.qnr-glyph-wrench::before               {content: "\01f7";}
+.qnr-glyph-star::before                 {content: "\01ff";}
+
+
+/* GLYPHS - ICONS
+ * ----------------------------------------------------- */
+
+.qnr-glyph-icons {
+    font-family: QuicknrIcons;
+    font-weight: normal;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    speak: none;
+}
+
+/* Font Awesome */
+.qnr-glyph-team::before                 {content: "A";}
+.qnr-glyph-gears::before                {content: "B";}
+.qnr-glyph-film::before                 {content: "C";}
+.qnr-glyph-spinner::before              {content: "D";}
+.qnr-glyph-flag::before                 {content: "E";}
+.qnr-glyph-boxes::before                {content: "F";}
+
+/* BeholdingEye icons */
+.qnr-glyph-gears-be::before             {content: "0";}
+.qnr-glyph-bulb-be::before              {content: "1";}
+
+
+/* GLYPHS - LOGOS
+ * ----------------------------------------------------- */
+
+.qnr-glyph-logo {
+    font-family: QuicknrLogos;
+    font-weight: normal;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    speak: none;
+}
+.qnr-glyph-blogger::before              {content: "b";}
+.qnr-glyph-email::before                {content: "e";}
+.qnr-glyph-facebook::before             {content: "f";}
+.qnr-glyph-googleplus::before           {content: "g";}
+.qnr-glyph-instagram::before            {content: "i";}
+.qnr-glyph-linkedin::before             {content: "l";}
+.qnr-glyph-pinterest::before            {content: "p";}
+.qnr-glyph-skype::before                {content: "s";}
+.qnr-glyph-twitter::before              {content: "t";}
+.qnr-glyph-youtube::before              {content: "y";}
+
+

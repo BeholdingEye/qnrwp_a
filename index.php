@@ -26,7 +26,6 @@ set_error_handler('exception_error_handler');
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php wp_title(''); ?></title>
-    <link rel="profile" href="http://gmpg.org/xfn/11">
     <?php wp_head(); ?>
   </head>
   <body onload="afterLoad()" <?php body_class('qnr-winscroller'); ?>>    
@@ -240,6 +239,6 @@ set_error_handler('exception_error_handler');
       echo ' Line: ', $e->getLine(), "\n";
     }
   ?>
-  <?php wp_footer(); ?>
+  <?php print_late_styles(); wp_footer(); ?>
   </body>
 </html>
