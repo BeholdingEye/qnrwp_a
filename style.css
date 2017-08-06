@@ -213,6 +213,12 @@ div.post-date {
 div.type-post h1.page-title {
     text-align: left;
 }
+div.type-post li {
+    margin-top: 1em;
+    padding-right: 3em;
+    line-height: 1.2em;
+    font-size: 0.8em;
+}
 
 /* Previous and Next post links */
 
