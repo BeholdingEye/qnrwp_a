@@ -1297,7 +1297,7 @@ function qnrwp_image_editor_init($editors) {
           if ( 'image/png' === $this->mime_type ) {
             $this->image->setOption( 'png:compression-filter', '5' );
             $this->image->setOption( 'png:compression-level', '9' );
-            $this->image->setOption( 'png:compression-strategy', '0' ); // QNRWP changed from 1 for better compression, tested
+            $this->image->setOption( 'png:compression-strategy', '0' ); // QNRWP changed from 1 for better compression
             $this->image->setOption( 'png:exclude-chunk', 'all' );
           }
 
@@ -1324,11 +1324,15 @@ function qnrwp_image_editor_init($editors) {
             }
           }
 
-          // QNRWP: keep interlacing (NOT USED - abandoned)
-          //if ( is_callable( array( $this->image, 'setInterlaceScheme' ) ) && defined( 'Imagick::INTERLACE_LINE' ) ) {
-          if ( is_callable( array( $this->image, 'setInterlaceScheme' ) ) && defined( 'Imagick::INTERLACE_NO' ) ) {
-            //$this->image->setInterlaceScheme( Imagick::INTERLACE_LINE );
-            $this->image->setInterlaceScheme( Imagick::INTERLACE_NO );
+          // QNRWP: keep interlacing, for JPEGS
+          if ($this->mime_type == 'image/jpeg') {
+            if ( is_callable( array( $this->image, 'setInterlaceScheme' ) ) && defined( 'Imagick::INTERLACE_LINE' ) ) {
+              $this->image->setInterlaceScheme( Imagick::INTERLACE_LINE );
+            }
+          } else { // PNG etc.
+            if ( is_callable( array( $this->image, 'setInterlaceScheme' ) ) && defined( 'Imagick::INTERLACE_NO' ) ) {
+              $this->image->setInterlaceScheme( Imagick::INTERLACE_NO );
+            }
           }
 
         }
