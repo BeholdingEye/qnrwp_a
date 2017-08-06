@@ -1177,7 +1177,11 @@ function qnrwp_image_editor_init($editors) {
             $this->image->setInterlaceScheme(Imagick::INTERLACE_LINE);
           }
           else {
-            $this->image->setImageCompressionQuality($quality);
+            // QNRWP: if PNG, set compression quality to 95 (a compound number...)
+            if ($this->mime_type == 'image/png') $this->image->setImageCompressionQuality(95);
+            else $this->image->setImageCompressionQuality($quality);
+            
+            //$this->image->setImageCompressionQuality($quality);
           }
         }
         catch (Exception $e) {
@@ -1188,7 +1192,7 @@ function qnrwp_image_editor_init($editors) {
 
       /**
        * Efficiently resize the current image
-       * Overriden to change filter to Lanczos, keep interlacing
+       * Overriden to change filter to Lanczos
        *
        * This is a WordPress specific implementation of Imagick::thumbnailImage(),
        * which resizes an image to given dimensions and removes any associated profiles.
@@ -1202,7 +1206,7 @@ function qnrwp_image_editor_init($editors) {
        * @param bool   $strip_meta  Optional. Strip all profiles, excluding color profiles, from the image. Default true.
        * @return bool|WP_Error
        */
-      protected function thumbnail_image( $dst_w, $dst_h, $filter_name = 'FILTER_LANCZOS', $strip_meta = true ) {
+      protected function thumbnail_image( $dst_w, $dst_h, $filter_name = 'FILTER_TRIANGLE', $strip_meta = true ) {
         $allowed_filters = array(
           'FILTER_POINT',
           'FILTER_BOX',
@@ -1226,9 +1230,17 @@ function qnrwp_image_editor_init($editors) {
          * Imagick constant is defined or fall back to our default filter.
          */
         if ( in_array( $filter_name, $allowed_filters ) && defined( 'Imagick::' . $filter_name ) ) {
-          $filter = constant( 'Imagick::' . $filter_name );
+          if ($this->mime_type == 'image/jpeg') {
+            $filter = defined( 'Imagick::FILTER_LANCZOS' ) ? Imagick::FILTER_LANCZOS : false;
+          } else { // PNG etc.
+            $filter = constant( 'Imagick::' . $filter_name );
+          }
         } else {
-          $filter = defined( 'Imagick::FILTER_LANCZOS' ) ? Imagick::FILTER_LANCZOS : false;
+          if ($this->mime_type == 'image/jpeg') {
+            $filter = defined( 'Imagick::FILTER_LANCZOS' ) ? Imagick::FILTER_LANCZOS : false;
+          } else { // PNG etc.
+            $filter = defined( 'Imagick::FILTER_TRIANGLE' ) ? Imagick::FILTER_TRIANGLE : false;
+          }
         }
 
         /**
@@ -1285,7 +1297,7 @@ function qnrwp_image_editor_init($editors) {
           if ( 'image/png' === $this->mime_type ) {
             $this->image->setOption( 'png:compression-filter', '5' );
             $this->image->setOption( 'png:compression-level', '9' );
-            $this->image->setOption( 'png:compression-strategy', '1' );
+            $this->image->setOption( 'png:compression-strategy', '0' ); // QNRWP changed from 1 for better compression, tested
             $this->image->setOption( 'png:exclude-chunk', 'all' );
           }
 
@@ -1312,11 +1324,11 @@ function qnrwp_image_editor_init($editors) {
             }
           }
 
-          // QNRWP: keep interlacing
-          if ( is_callable( array( $this->image, 'setInterlaceScheme' ) ) && defined( 'Imagick::INTERLACE_LINE' ) ) {
-          //if ( is_callable( array( $this->image, 'setInterlaceScheme' ) ) && defined( 'Imagick::INTERLACE_NO' ) ) {
-            $this->image->setInterlaceScheme( Imagick::INTERLACE_LINE );
-            //$this->image->setInterlaceScheme( Imagick::INTERLACE_NO );
+          // QNRWP: keep interlacing (NOT USED - abandoned)
+          //if ( is_callable( array( $this->image, 'setInterlaceScheme' ) ) && defined( 'Imagick::INTERLACE_LINE' ) ) {
+          if ( is_callable( array( $this->image, 'setInterlaceScheme' ) ) && defined( 'Imagick::INTERLACE_NO' ) ) {
+            //$this->image->setInterlaceScheme( Imagick::INTERLACE_LINE );
+            $this->image->setInterlaceScheme( Imagick::INTERLACE_NO );
           }
 
         }
@@ -1332,7 +1344,7 @@ function qnrwp_image_editor_init($editors) {
 }
 add_filter('wp_image_editors', 'qnrwp_image_editor_init');
 // Set quality with filter hook and settings option rather than hardcoding in class
-add_filter('jpeg_quality', function($args) {return get_option('qnrwp_jpeg_quality', $default='50');});
+add_filter('jpeg_quality', function($args) {return get_option('qnrwp_jpeg_quality', $default='60');});
 
 
 // ----------------------- Regenerate Images
@@ -1391,7 +1403,7 @@ function qnrwp_regenerate_images_cron() {
         if ($image_data != $attach_data) wp_update_attachment_metadata($attach_id, $attach_data); // May be redundant, unavoidably
         $riSavedOptions['processed-ids'][] = $attach_id;
         $riSavedOptions['last-update'] = time();
-        // Reduce full-size original if larger than 2500px width (may redundant if filter hook being used)
+        // Reduce full-size original if larger than 2500px width (may be redundant if filter hook being used)
         if ($attach_data['width'] > 2500) { // Due to the above, we are now testing possibly updated metadata, including by any filter hook
           $imageFull = wp_get_image_editor($uploaded_image_location);
           // Set JPEG quality to half way between Media setting and 100, for better quality
