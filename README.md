@@ -2,7 +2,7 @@
 
 Bare-bones Wordpress theme for web developers, intended as a starting point for custom themes for clients.
 
-The theme incorporates Quicknr Interface widgets as custom WP Widgets and Shortcodes. The QI package is kept in sync with the QI repository, with all files included except the License and Readme.
+The theme incorporates Quicknr Interface widgets as custom WP Widgets and Shortcodes. The QI README.md file is in the "res" folder containing the QI files.
 
 This theme will be developed rapidly. No releases will be packaged - the latest commit is the latest version. Once you have adapted this theme to your requirements, you will no longer want to refer to this original, an update would not make sense. This theme is expected to be customized beyond what would usually be done with a child theme.
 
