@@ -259,6 +259,7 @@ function qnrwp_get_carousel_html($widgetDefPageID, $imageSize = 'large') {
   // Construct carousel HTML
   $rHtml = '';
   $msHtml = ''; // Media rules style block
+  $bsHtml = ''; // Style HTML for base sizes of slides
   
   // Test if size large enough to bother making it responsive
   $makeResponsive = false;
@@ -285,7 +286,11 @@ function qnrwp_get_carousel_html($widgetDefPageID, $imageSize = 'large') {
     $thumbBG = '';
     // Hide all but the first two (JS will show them)
     // Hoping that will speed up the load: only first image loaded at first, then when displayed, the rest
-    if ($iC > 0) $thumbBG = ' style="display:none;"';
+    
+    if ($iC < 1) $thumbBG = ' style="background-image:url(\''.$attsSizesURLs[$attID][$imageSize].'\')"';
+    else $thumbBG = ' style="display:none;background-image:url(\''.$attsSizesURLs[$attID][$imageSize].'\')"';
+    
+    $bsHtml .= 'div#'.$slideIDs[$attID].' {background-image:url("'.$attsSizesURLs[$attID][$imageSize].'");}'.PHP_EOL;
     
     $htmlContent = apply_filters('the_content', get_post_field('post_content', $widgetChild->ID));
     // Wrap the content with centered inner DIV for easier styling
@@ -299,15 +304,8 @@ function qnrwp_get_carousel_html($widgetDefPageID, $imageSize = 'large') {
   foreach ($attMeta['sizes'] as $size => $sizeArray) {
     $sizesALL[$size] = $sizeArray['width'];
   }
-  
   // Get pixel width of imageSize
   $imageWidth = $sizesALL[$imageSize];
-  
-  // Create style HTML for base sizes of slides
-  $bsHtml = '';
-  foreach ($attsSizesURLs as $attID => $sizeArray) {
-    $bsHtml .= 'div#'.$slideIDs[$attID].' {background-image:url("'.$sizeArray[$imageSize].'");}'.PHP_EOL;
-  }
   
   if ($makeResponsive) {
     // Create media blocks for large to imageSize
@@ -591,7 +589,7 @@ add_action('wp_enqueue_scripts', 'qnrwp_enqueue_scripts');
 
 // ----------------------- Reduce uploaded image
 
-function qnrwp_reduce_uploaded_image($upload) { // NOT USED, we use next filter
+function qnrwp_reduce_uploaded_image($upload) {
   // $upload = array of 'file', 'url', 'type'
   // There is also a $context argument, but we don't care about it
   // Load uploaded image into editor object
@@ -649,7 +647,7 @@ add_filter('wp_handle_upload', 'qnrwp_reduce_uploaded_image');
 //}
 //add_filter('wp_generate_attachment_metadata', 'qnrwp_reduce_uploaded_image', 10, 2);
 
-// ----------------------- Add registered custom image size to Dashboard, plus post-thumbnail's Medium Large
+// ----------------------- Add registered custom image sizes to Dashboard, plus post-thumbnail's Medium Large
 function qnrwp_custom_image_sizes($sizes) {
     return array_merge($sizes, array(
         'medium_large' => 'Medium Large',
@@ -910,7 +908,7 @@ class QNRWP_Featured_News extends WP_Widget {
             $rHtml .= '<div class="featured-news-item-excerpt">'.PHP_EOL.get_the_excerpt().PHP_EOL.'</div>'.PHP_EOL;
             $rHtml .= '</div>'.PHP_EOL.'</a>'.PHP_EOL; // Closing item
             $featuredCount += 1;
-            if ($featuredCount == 2) $rHtml .= '</div><div><!-- No whitespace! -->'.PHP_EOL; // Close first item-of-two, open next
+            if ($featuredCount == 2) $rHtml .= '</div><div><!-- No whitespace -->'.PHP_EOL; // Close first item-of-two, open next
           }
           if ($featuredCount == 4) break;
         }

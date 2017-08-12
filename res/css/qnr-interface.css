@@ -485,7 +485,8 @@ span.qnr-carousel-thumb-preview:hover {
     padding: 0;
     border: solid 2px #DDD;
     opacity: 1;
-    transition-property: height;
+    /* Transitions developed from 'height' only, because of flashing problem on Wordpress in Firefox */
+    transition-property: height, margin-top, margin-bottom, padding-top, padding-bottom;
     transition-duration: 0.1s;
     z-index: 4;
 }
