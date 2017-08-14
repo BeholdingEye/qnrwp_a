@@ -1,6 +1,6 @@
 /* ==================================================================
  *
- *            QUICKNR INTERFACE 1.5.0
+ *            QUICKNR INTERFACE 1.5.0+
  *
  *            Copyright 2016 Karl Dolenc, beholdingeye.com.
  *            All rights reserved.

@@ -1,6 +1,6 @@
 /* ==================================================================
  *
- *            QUICKNR HIERARCHICAL MENU 1.3.0
+ *            QUICKNR HIERARCHICAL MENU 1.3.0+
  *
  *            Copyright 2016 Karl Dolenc, beholdingeye.com.
  *            All rights reserved.

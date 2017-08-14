@@ -169,6 +169,6 @@ li.qnr-hmenu-subholder:hover {
     content: "B";
 }
 
-/* Override for appearance of widget while menu is displayed */
+/* Override for appearance of widget while menu is displayed (overriden with triangle in QI) */
 .qnr-hmenu-hover {
 }

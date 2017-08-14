@@ -1,6 +1,6 @@
 # Quicknr-Interface
 
-Javascript and CSS interface widgets for web pages and web apps
+Javascript and CSS interface widgets for web pages and web apps.
 -----------------
 
 A lighter alternative to Bootstrap, does not depend on jQuery
@@ -8,6 +8,8 @@ A lighter alternative to Bootstrap, does not depend on jQuery
 Documentation is presently available only as a comment block at the top of the "js/qnr-interface.js" file.
 
 GPL licensed. The package includes fonts based on work by others, namely Iconic and Font Awesome.
+
+From version 1.5.0 onward, QI is no longer updated independently on GitHub; it is maintained as part of the QNRWP-A Wordpress theme.
 
 Included widgets are:
 

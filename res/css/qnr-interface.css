@@ -1156,9 +1156,11 @@ div.qnr-navmenu-expanded > ul > li.qnr-hmenu {
 
 /* Collapsed, mobile (applied to widget DIV that no longer holds the menu UL) */
 
+/*
 div.qnr-navmenu-collapsed {
     overflow: visible;
 }
+*/
 
 /* Collapsed menu icon */
 
@@ -1194,7 +1196,7 @@ ul.qnr-navmenu-vertical-horizontal {
     position: absolute;
     margin: 0;
     padding: 0;
-    box-shadow: 4px 4px 4px rgba(10,10,10,0.6);
+    box-shadow: 0 12px 12px rgba(1,1,1,0.2);
     z-index: 200;
 }
 ul.qnr-navmenu-vertical {               /* Animated up-down */
