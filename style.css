@@ -1,10 +1,10 @@
 /*
 Theme Name: qnrwp_a
-Theme URI: http://XXXX
+Theme URI: http://github.com/beholdingeye
 Author: Karl Dolenc, beholdingeye.com
 Author URI: http://www.beholdingeye.com
 Description: qnrwp_a is the first Quicknr WordPress theme.
-Version: 1.0.0
+Version: 1.0.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: basic, blank
@@ -15,12 +15,30 @@ Text Domain: qnrwp_a
   QNRWP_A Stylesheet
 */
 
+/* EM sizes / font pixel sizes
+ * 
+ * at 14px font size:
+ * 
+ * 16px = 1.14em
+ * 20px = 1.43em
+ * 24px = 1.71em
+ * 32px = 2.29em
+ * 40px = 2.86em
+ * 48px = 3.43em
+ * 56px = 4.00em
+ * 72px = 5.14em
+ * 
+ *  */
+
+* {
+    box-sizing: border-box;
+}
+
 input[type="button"]::-moz-focus-inner {
     outline: none;
     border: none;
 }
                                              /* Layout */
-
 body {
     display: block;
     position: absolute;
@@ -32,9 +50,10 @@ body {
     padding: 0;
     width: 100%;
     height: 100%;
+    min-height: 100%;
     font-family: Arial,sans-serif;
-    font-size: 15px;
-    line-height: 1.2em;
+    font-size: 14px;
+    line-height: 20px;
     font-weight: normal;
     font-style: normal;
     font-stretch: normal;
@@ -72,11 +91,12 @@ a {
 }
 a:hover {
     text-decoration: underline;
+    color: black;
 }
 img {
     display: block;
     position: relative;
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
     max-width: 100%; /* Prevent overflow */
     height: auto; /* Prevent distortion */
@@ -89,12 +109,12 @@ div {
     margin: 0;
     padding: 0;
     width: 100%;
-    box-sizing: border-box;
 }
 
 /* Style Headers as they are used in Edit screens */
 h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
+    margin: 2em auto 1em; /* More spacing at top, overriden as needed */
 }
 h1 {
     font-size: 1.3em;
@@ -112,7 +132,19 @@ h5 {
     font-size: 0.9em;
 }
 h6 {
-    font-size: 0.8em;
+    font-size: 0.9em;
+}
+
+
+/* NAV MENU
+ * ----------------------------------------------------- */
+div.qnr-navmenu li.current-menu-item a,
+div.qnr-navmenu li.current_page_parent a,
+div.qnr-navmenu li.current-menu-parent,
+div.qnr-navmenu-wrapper li.current-menu-item a,
+div.qnr-navmenu-wrapper li.current_page_parent a,
+div.qnr-navmenu-wrapper li.current-menu-parent {
+    color: black;
 }
 
 
@@ -124,7 +156,7 @@ div#header-row {
     margin: 0 auto;
     min-width: 320px;
     max-width: 1600px;
-    height: 54px;           /* Matching navmenu height */
+    height: 56px;           /* Matching navmenu height */
     text-align: right;
     color: white;
     overflow: visible;
@@ -175,8 +207,7 @@ div#content-box {
     -webkit-flex: 2 1 0;
     display: inline-block;
     margin: 0;
-    padding: 0 1em;
-    padding-top: 2em;
+    padding: 2em 1em 0;
     min-width: 320px;
     max-width: 1600px;
     height: auto;
@@ -185,7 +216,7 @@ div#content-box {
 }
 div#content-box.single-col-content {
     width: 100%;
-    padding: 0;
+    padding: 0; /* Possibly overriden in child style */
 }
 div#content-box.three-col-content {
     width: 40%;
@@ -196,6 +227,11 @@ div#content-box.two-col-content-left {
 div#content-box.two-col-content-right {
     width: 70%;
 }
+/* Limit changed LI to the content box */
+div#content-box li {
+    margin-top: 1em;
+    padding-right: 3em; /* Overriden in @media */
+}
 
 /* News Post Type, in Content box */
 
@@ -204,8 +240,9 @@ div.type-post {
 }
 div.type-post img.wp-post-image {
     margin: 1em auto;
-    width: 95%;
-    max-width: 95%;
+    width: 100%;
+    max-width: 100%;
+    border: solid thin #DDD;
 }
 div.post-date {
     font-size: 0.9em;
@@ -213,13 +250,14 @@ div.post-date {
     color: #888;
 }
 div.type-post h1.page-title {
-    margin-bottom: 1em;
+    margin: 1em auto;
     text-align: left;
 }
-div.type-post li {
-    margin-top: 1em;
-    padding-right: 3em;
-    font-size: 0.95em;
+/* Style first paragraph of news posts */
+div.type-post > p:first-of-type,
+p.news-post-first-para { /* Set by filter, perhaps after Featured Image */
+    margin-top: 1.5em;
+    font-weight: bold;
 }
 
 /* Previous and Next post links */
@@ -239,7 +277,7 @@ div.post-nav-links span.post-older {
     padding: 0;
     width: 50%; /* Assume no whitespace between items */
     font-weight: normal;
-    font-size: 0.9em;
+    font-size: 1em;
     vertical-align: top;
     color: #444;
 }
@@ -249,15 +287,15 @@ div.post-nav-links span.post-newer {
 div.post-nav-links span.post-older {
     text-align: left;
 }
-div.post-nav-links span.post-newer:hover,
-div.post-nav-links span.post-older:hover {
-    color: black;
+span.post-newer p,
+span.post-older p {
+    margin: 0.5em 0;
 }
 span.post-newer p:first-child,
-span.post-older p:first-child {
+span.post-older p:first-child { /* Prev and Next labels above titles */
     text-transform: uppercase;
-    font-size: 0.9em;
     font-weight: bold;
+    font-size: 0.9em;
     color: #888;
 }
 
@@ -384,6 +422,7 @@ div#footer-row a:hover {
 }
 div#footer-row a:hover {
     text-decoration: underline;
+    color: white;
 }
 
 div#footer-row div.widget,
@@ -524,11 +563,9 @@ div.featured-news-item-text {
 div.featured-news-item-text h1 {
     font-size: 1.1em;
     font-weight: bold;
+    margin: 1em auto;
 }
 a.featured-news-item:hover div.featured-news-item-header {
-/*
-    opacity: 0.9;
-*/
 }
 a.featured-news-item:hover div.featured-news-item-text {
     color: black;
@@ -541,10 +578,11 @@ a.featured-news-item:hover div.featured-news-item-text {
 a.excerpt-item {
     display: block;
     position: relative;
-    margin: 0;
+    margin: 0 auto;
     margin-bottom: 1em;
     padding: 0;
     width: 100%;
+    max-width: 650px;
     height: 150px;
     font-weight: normal;
     text-align: left;
@@ -565,6 +603,7 @@ a.excerpt-item img.qnrwp-post-featured-img {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    border: solid thin #DDD;
 }
 a.excerpt-item:hover img.qnrwp-post-featured-img {
 /*
@@ -580,7 +619,7 @@ a.excerpt-item > div.excerpt-item-block {
     overflow: hidden;
 }
 a.excerpt-item p.excerpt-date {
-    margin-top: 0.5em;
+    margin-top: 0;
     padding: 0;
     font-size: 0.9em;
     font-style: normal;
@@ -590,10 +629,13 @@ a.excerpt-item h1 {
     padding: 0;
     font-size: 1.1em;
     font-weight: bold;
+    /* Override margins set above */
+    margin: 0 auto;
 }
 a.excerpt-item div.excerpt-text {
     margin: 0;
     padding: 0;
+    line-height: 1.53em;
 }
 
 /* Previous and Next pages links */
@@ -611,7 +653,7 @@ div.excerpts-pages-links span.excerpts-older {
     position: relative;
     width: 50%; /* Assume no whitespace between items */
     font-weight: normal;
-    font-size: 0.9em;
+    font-size: 1em;
     color: #444;
 }
 div.excerpts-pages-links span.excerpts-newer {
@@ -619,10 +661,6 @@ div.excerpts-pages-links span.excerpts-newer {
 }
 div.excerpts-pages-links span.excerpts-older {
     text-align: left;
-}
-div.excerpts-pages-links span.excerpts-newer:hover,
-div.excerpts-pages-links span.excerpts-older:hover {
-    color: black;
 }
 
 
@@ -720,67 +758,125 @@ div#sub-header-row div.qnr-scroller div p { /* Home page overrride below */
     box-sizing: border-box;
 }
 
-/* QNR NAVMENU OVERRIDE
+
+/* SAMPLES
  * ----------------------------------------------------- */
 
-div.qnr-navmenu {
-    width: calc(100% - 15em);
+div.samples-row,
+div.samples-list-block,
+div.samples-list-block div,
+div.samples-list-block img {
+    position: relative;
+    box-sizing: border-box;
 }
-div.qnr-navmenu > ul > li {
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-    font-size: 0.9em;
+div.samples-row,
+div.samples-list-block,
+div.samples-list-block img {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    vertical-align: top;
 }
-div.qnr-navmenu li,
-div.qnr-navmenu-wrapper li {
-    text-transform: uppercase !important;
-}
-div.qnr-navmenu-expanded > ul > li {
-    border: none;
-    font-weight: bold;
-}
-div.qnr-navmenu-wrapper li {
-    font-weight: normal;
-    text-align: left;
-}
-div.qnr-navmenu-wrapper li a {
-    font-weight: normal;
-}
-div.qnr-navmenu > ul > li.qnr-hmenu {
-    padding-right: 2.2em;
-}
-div.qnr-navmenu li::after,
-div.qnr-navmenu-wrapper li::after {
+div.samples-list-block {    
+    -moz-column-count: 4;
+    -moz-column-width: 260px;
+    -moz-column-gap: 1px;
+    -moz-column-fill: balance;
+    -moz-column-rule-width: 1px;
     
+    -webkit-column-count: 4;
+    -webkit-column-width: 260px;
+    -webkit-column-gap: 1px;
+    -webkit-column-fill: balance;
+    -webkit-column-rule-width: 1px;
+    
+    column-count: 4;
+    column-width: 260px;
+    column-gap: 1px;
+    column-fill: balance;
+    column-rule-width: 1px;
+    
+    margin: 0 auto;
+    width: 100%;
+    min-width: 280px;
+    max-width: 1400px;
+    height: auto;
+    text-align: center;
 }
-
-/* +++ HMENU OVERRIDE
- * ----------------------------------------------------- */
-
-.qnr-hmenu-in-collapsed ul {
-    top: 0.8em;
+div.samples-row {
+    padding: 1em 1em 0;
+    text-align: center;
 }
-div.qnr-navmenu > ul > li.qnr-hmenu::after {
-    top: 0.6em;
+h2.samples-list-title { /* Outside the block */
+    margin: 0 auto;
+    margin-top: 1em;
+    padding-top: 0.5em;
+    margin-bottom: 1.5em;
+    padding-bottom: 0.5em;
+    width: 100%;
+    min-width: 280px;
+    max-width: 1400px;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-align: center;
+    text-transform: uppercase;
+    color: gray;
+    border-bottom: solid thin #DDD;
 }
-div.qnr-navmenu-wrapper > ul > li.qnr-hmenu::after {
-    top: 0.8em;
+div.samples-list-item {
+    display: inline-block;
+    page-break-inside: avoid;
+    -moz-break-inside: avoid-column;
+    -webkit-break-inside: avoid-column;
+    break-inside: avoid-column;
+    -moz-column-span: none;
+    -webkit-column-span: none;
+    column-span: none;
+    
+    margin: 4px;
+    padding: 0;
+    width: auto;
+/*
+    min-width: 260px;
+*/
+    max-width: 360px;
+    height: auto;
+    vertical-align: top;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(1,1,1,0.6);
+    background-color: white;
 }
-div.qnr-navmenu-wrapper > ul > li {
-    height: 2.6em;
+div.samples-list-item div {
+    width: 100%;
 }
-div.qnr-navmenu-wrapper li a,
-div.qnr-navmenu-wrapper li.qnr-hmenu-idle,
-div.qnr-navmenu-wrapper li.qnr-hmenu-subholder {
-    padding-top: 0.8em !important;
-    padding-bottom: 0.8em !important;
+div.samples-list-item-text {
+    display: block;
+    padding: 0 1em;
+    font-size: 0.9em;
+    line-height: 1.3em;
+    text-align: left;
+    border-top: solid thin #DDD;
 }
-div.qnr-navmenu-wrapper > ul > li.qnr-hmenu {
-    /* From div.qnr-navmenu-wrapper > ul > li.qnr-hmenu.qnr-hmenu-in-collapsed */
-    height: auto !important;       /* Adjusting to contained menu */
-    min-height: 2.6em !important;    /* Matching nav menu LI settings above */
-    padding-top: 0.8em !important;
-    padding-bottom: 0.8em !important;
+div.samples-list-item-text h3 {
+    margin: 1em auto 0;
+}
+/* Reduce the space between title and text in blurb */
+div.samples-list-item-text p:first-of-type {
+    margin-top: 0.5em;
+}
+div.samples-list-item-buttons {
+    display: block;
+    width: 100%;
+    font-size: 1.35em;
+    text-align: right;
+    padding: 0.5em;
+    padding-bottom: 1em;
+}
+div.samples-list-item-buttons a {
+    padding: 0.5em;
+    margin: 0.5em;
 }
 
 
@@ -831,7 +927,14 @@ body.home div#sub-header-row div.qnr-scroller div p {
 }
 @media (max-width: 1280px) {
     body {
+/*
         font-size: 14px;
+*/
+    }
+    /* Reduce pre/next links in smaller windows */
+    div.post-nav-links span.post-newer,
+    div.post-nav-links span.post-older {
+        font-size: 0.9em;
     }
 }
 @media (max-width: 910px) {
@@ -855,8 +958,11 @@ body.home div#sub-header-row div.qnr-scroller div p {
     div#content-box {
         display: block;
         -webkit-flex: none; /* iPhone */
-        min-width: 90%;
+        min-width: 100%; /* Changed from 90% to remove the extra margin */
         width: 100%;
+    }
+    div#content-box li {
+        padding-right: 2em;
     }
     div#sidebar-left {
         order: 1;

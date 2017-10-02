@@ -28,7 +28,7 @@ set_error_handler('exception_error_handler');
     <title><?php wp_title(''); ?></title>
     <?php wp_head(); ?>
   </head>
-  <body onload="afterLoad()" <?php body_class('qnr-winscroller'); ?>>    
+  <body onload="afterLoad()" <?php body_class('qnr-winscroller'); ?> data-qnr-offset="-4">    
   <?php 
     try {
       // Show in source that we're reporting errors
@@ -78,14 +78,14 @@ set_error_handler('exception_error_handler');
                     array_push($exCats, $category->cat_ID);
                   }
                 }
-                $prevPostLink = get_previous_post_link( $format = '&laquo;&nbsp;%link', 
-                                                        $link = '%title', 
+                $prevPostLink = get_previous_post_link( $format = '%link', 
+                                                        $link = '&laquo;&nbsp;%title', 
                                                         $in_same_term = false, 
                                                         $excluded_terms = $exCats, 
                                                         $taxonomy = 'category');
                                                         
-                $nextPostLink = get_next_post_link(     $format = '%link&nbsp;&raquo;', 
-                                                        $link = '%title', 
+                $nextPostLink = get_next_post_link(     $format = '%link', 
+                                                        $link = '%title&nbsp;&raquo;', 
                                                         $in_same_term = false, 
                                                         $excluded_terms = $exCats, 
                                                         $taxonomy = 'category');
@@ -112,9 +112,17 @@ set_error_handler('exception_error_handler');
               }
               $rHtml .= '<div class="excerpt-item-block">'.PHP_EOL;
               $rHtml .= '<p class="excerpt-date">'.get_the_date().'</p>'.PHP_EOL;
-              $rHtml .= '<h1>'.get_the_title().'</h1>'.PHP_EOL;
+              $excerptTitle = get_the_title();
+              // Truncate title if it is too long, over 60 chars NOT USED
+              //if (strlen($excerptTitle) > 60) {
+                //$excerptTitle = trim(substr($excerptTitle, 0, 60));
+                //$excerptTitle = preg_replace('/(\S+)\s+\S*$/', '$1...', $excerptTitle);
+              //}
+              $rHtml .= '<h1>'.$excerptTitle.'</h1>'.PHP_EOL;
               $rHtml .= '<div class="excerpt-text">'.PHP_EOL;
               $htmlExcerpt = apply_filters('the_excerpt', get_the_excerpt());
+              // Roll our own excerpt getter NOT USED
+              //$htmlExcerpt = qnrwp_get_news_first_para_excerpt();
               if (!$htmlExcerpt) $htmlExcerpt = '<p>Click here to see this post.</p>';
               $rHtml .= $htmlExcerpt;
               $rHtml .= '</div></div></a>'.PHP_EOL; // Close item
@@ -122,18 +130,20 @@ set_error_handler('exception_error_handler');
           }
           if ($postsAmount == 'multi') {
             // Previous and Next posts pages links
-            $rHtml .= '<div class="excerpts-pages-links">'.PHP_EOL;
-            $nextPostsLink = get_next_posts_link('Older');
-            $prevPostsLink = get_previous_posts_link('Newer');
-            if ($nextPostsLink) { // Test so that we're not showing isolated &laquo;
-              $nextPostsLink = '&laquo;&nbsp;'.$nextPostsLink;
+            $nextPostsLink = get_next_posts_link('&laquo;&nbsp;Older');
+            $prevPostsLink = get_previous_posts_link('Newer&nbsp;&raquo;');
+            //if ($nextPostsLink) { // Test so that we're not showing isolated &laquo;
+              //$nextPostsLink = '&laquo;&nbsp;'.$nextPostsLink;
+            //}
+            //if ($prevPostsLink) {
+              //$prevPostsLink = $prevPostsLink.'&nbsp;&raquo;';
+            //}
+            if ($prevPostsLink || $nextPostsLink) { // Could be only one page of posts
+              $rHtml .= '<div class="excerpts-pages-links">'.PHP_EOL;
+              $rHtml .= '<span class="excerpts-older">'.$nextPostsLink.'</span>'; // No whitespace
+              $rHtml .= '<span class="excerpts-newer">'.$prevPostsLink.'</span>'.PHP_EOL;
+              $rHtml .= '</div>'.PHP_EOL;
             }
-            if ($prevPostsLink) {
-              $prevPostsLink = $prevPostsLink.'&nbsp;&raquo;';
-            }
-            $rHtml .= '<span class="excerpts-older">'.$nextPostsLink.'</span>'; // No whitespace
-            $rHtml .= '<span class="excerpts-newer">'.$prevPostsLink.'</span>'.PHP_EOL;
-            $rHtml .= '</div>'.PHP_EOL;
           }
         }
         if (is_search() && $rHtml == '') { // Nothing found

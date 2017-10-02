@@ -15,27 +15,11 @@
     src: url("../font/quicknr-icons.woff") format("woff");
 }
 
-body {
-    display: block;
-    position: absolute;
-/*
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-*/
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: Arial,sans-serif;
-    font-size: 17px;
-    text-align: center;
-    background-color: white;
-    
-    /* iPhone inconsistent text sizing fix */
-    -webkit-text-size-adjust: 100%;
-}
+
+/* HOVER REVEAL - TODO
+ * ----------------------------------------------------- */
+
+/* To be developed */
 
 
 /* ARROW ANIM
@@ -137,7 +121,7 @@ div.qnr-arrow-anim {
     padding: 0.3em;
     width: 1em;
     height: 1em;
-    font-size: 2em;
+    font-size: 2em; /* TODO */
     line-height: 1em;
     color: #EEE;
     border-radius: 50%;
@@ -242,8 +226,8 @@ span.qnr-winscroller-arrow {
     right: 0;
     top: auto;
     left: auto;
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     font-family: Quicknr;
     font-size: 24px;
     line-height: 1em;
@@ -343,6 +327,14 @@ div.qnr-carousel-caption {
     padding: 0;
     width: 100%;
     height: 100%;
+    
+    /* Override font settings for consistency across sites */
+    font-family: Arial,sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+
     text-align: center;
     overflow: hidden;
 }
@@ -439,7 +431,7 @@ span.qnr-carousel-thumb {
     padding: 2px;
     width: 6px;
     height: 6px;
-    font-size: 1.5em;
+    font-size: 1.5em; /* TODO */
     font-weight: bold;
     line-height: 1em;
     vertical-align: top;
@@ -453,6 +445,7 @@ span.qnr-carousel-thumb {
     opacity: 1;
     overflow: hidden;
     cursor: pointer;
+    box-sizing: content-box;    /* Fixes thumb size */
 }
 span.qnr-carousel-thumb-inactive {
     border-color: #CCC;
@@ -576,6 +569,7 @@ span.qnr-carousel-bigarrow-right::before {
 span.qnr-carousel-stickyarrow-left,
 span.qnr-carousel-stickyarrow-right {
     font-size: 32px;
+    line-height: 1.4em;
     font-weight: normal;
     text-decoration: none;
     color: white;
@@ -844,7 +838,6 @@ div.qnr-img-anim {
     height: 300px;
     text-align: center;
     overflow: hidden;
-    background-color: red;
 }
 
 /* imgDIVs replacing the IMGs */
@@ -944,7 +937,123 @@ div.qnr-img-translucent-cover {
 }
 
 
-/* NAVIGATOR MENU
+/* HIERARCHICAL MENU
+ * ----------------------------------------------------- */
+
+/* Widget itself */
+.qnr-hmenu {
+}
+.qnr-hmenu * {
+    box-sizing: border-box;
+}
+
+/* Top UL, the one to use for font settings */
+.qnr-hmenu > ul {
+    font-size: inherit;
+}
+
+.qnr-hmenu ul {     /* All ULs in widget, main and sub */
+    display: none;  /* Hidden to prevent flashes on load */
+    position: absolute;
+    margin: 0;
+    padding: 0; /* Default */
+    /* Create some spacing */
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+    width: 14em;
+    text-align: left;
+    list-style-type: none;
+    box-shadow: 0px 1px 4px rgba(1,1,1,0.4);
+    background-color: white;
+    z-index: 1000;
+}
+.qnr-hmenu:hover {
+    cursor: pointer;
+}
+
+.qnr-hmenu li {
+    display: block;
+    position: relative;
+    /* LIs have no height, As create it (except subholders and idles) */
+    height: auto;
+    margin: 0;
+    padding: 0;
+    color: #555;
+    font-weight: normal;
+    text-transform: none;
+/*
+    border-top: solid thin #DDD;
+*/
+    white-space: normal;
+    background-color: white;
+}
+.qnr-hmenu li:first-child {     /* Override due to UL border-top */
+/*
+    border-top: none;
+*/
+}
+.qnr-hmenu li a {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    font-weight: normal;
+    text-decoration: none;
+}
+.qnr-hmenu li:not([class~="qnr-hmenu-idle"]):hover,
+.qnr-hmenu li a:hover {
+    color: black;
+    background-color: #EEE;
+}
+.qnr-hmenu li a,
+.qnr-hmenu li.qnr-hmenu-idle,
+.qnr-hmenu li.qnr-hmenu-subholder {
+    padding: 0.5em 1em;
+}
+
+/* Main menu, hidden to begin with */
+ul.qnr-hmenu-menu {
+    display: none;  
+    margin-top: 0.2em;  /* Separate from container */
+    top: 100%;      /* Containing widget object must be positioned */
+                    /* Left position is done in code */
+}
+
+/* Submenu */
+ul.qnr-hmenu-submenu {
+    display: none;
+    top: -0.2em;
+    left: 11.6em;
+}
+ul.qnr-hmenu-submenu-left {
+    left: auto;
+    right: 11.6em;
+}
+ul.qnr-hmenu-submenu-up {
+    top: auto;
+    bottom: 0;
+}
+/* Submenu holder */
+li.qnr-hmenu-subholder::before {
+    content: "D";   /* Triangle right */
+    display: block;
+    position: absolute;
+    right: 0.1em;
+    font-family: Quicknr;
+    font-weight: normal;
+    font-style: normal;
+    color: silver;
+    margin: 0;
+    padding: 0;
+    speak: none;
+}
+/* Override for appearance of widget while menu is displayed (overriden with triangle in navmenu) */
+.qnr-hmenu-hover {
+}
+
+
+/* NAVIGATOR MENU ++ HMENU
  * ----------------------------------------------------- */
 
 @keyframes qnr-navmenu-slide-down {
@@ -987,84 +1096,58 @@ div.qnr-img-translucent-cover {
         opacity: 0;
     }
 }
+
+/* qnr-navmenu styling will be active when menu expanded, not collapsed */
 div.qnr-navmenu {
     display: block;
     position: relative;
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 54px;
+    width: 100%;                /* Default */
+    width: calc(100% - 15em);   /* Allow for the logo to the left */
+    height: 56px;
     color: gray;
     visibility: hidden;     /* Will be made visible by JS */
-    background-color: white;
+    background-color: transparent;
     z-index: 999;
+}
+div.qnr-navmenu * {
+    box-sizing: border-box;
 }
 
 /* Styling limited to immediate children so we don't style any contained hmenus */
-
-/* No-wrapper styling will be active when menu expanded, not collapsed */
 div.qnr-navmenu > ul {
     display: block;
     position: relative;
     margin: 0;
     padding: 0;
+    padding-right: 1em;
     list-style-type: none;
-    box-sizing: border-box;
     
-    /* From qnr-navmenu-expanded */
     width: 100%;
     text-align: right;
 }
 
-
-/* Wrapper created by code, for positioning */
-
-div.qnr-navmenu-wrapper {
-    display: block;
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 0;      /* Wrapper itself not taking any space */
-    color: gray;
-    overflow: visible;
-    z-index: 999;
-}
-div.qnr-navmenu-wrapper > ul {
-    background-color: white;
-}
-
 /* Menu items */
 
-div.qnr-navmenu > ul > li,
-div.qnr-navmenu-wrapper > ul > li {
+div.qnr-navmenu > ul > li {
     display: inline-block;
     position: relative;
-    height: 2em;
-    margin: 0;
-    padding: 0;     /* Will be overriden by hmenu holders below */
-    font-size: 1em;
-    vertical-align: middle;
-    white-space: nowrap;
-    box-sizing: border-box;
-    
-    /* From ul.qnr-navmenu-vertical -horizontal */
-    width: 100%;
-    text-align: left;
-    border: none;
-    border-top: dotted thin silver;
-}
-div.qnr-navmenu > ul > li {
-    /* From qnr-navmenu-expanded > ul > li */
+    height: 2.6em;
     margin: 1em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
     padding: 0;
     width: auto;
+    vertical-align: middle;
+    font-size: 1em;
+    font-weight: bold;
     text-align: center;
-    border: solid thin silver;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border: none;
 }
-
-div.qnr-navmenu > ul > li > a,
-div.qnr-navmenu-wrapper > ul > li > a {       /* Text links, not buttons */
+div.qnr-navmenu > ul > li > a {       /* Text links, not buttons */
     display: block;
     position: relative;
     margin: 0;
@@ -1072,29 +1155,135 @@ div.qnr-navmenu-wrapper > ul > li > a {       /* Text links, not buttons */
     width: 100%;
     height: 100%;
     text-decoration: none;
-    text-transform: uppercase;
     color: inherit;
-    box-sizing: border-box;
     outline: none;
     border: none;
 }
 /* Account for hmenu holder with no <A> tag */
 div.qnr-navmenu > ul > li.qnr-hmenu,
-div.qnr-navmenu > ul > li > a,
-div.qnr-navmenu-wrapper > ul > li.qnr-hmenu,
-div.qnr-navmenu-wrapper > ul > li > a {
-    padding: 0.5em;
+div.qnr-navmenu > ul > li > a {
+    padding: 0.57em;    /* 8px at 14px font-size */
 }
-div.qnr-navmenu > ul > li.qnr-hmenu {  
-    /* From  qnr-navmenu-expanded > ul > li.qnr-hmenu */
-    padding-right: 3em;
+div.qnr-navmenu > ul > li.qnr-hmenu {
+    padding-right: 1.5em;
+}
+/* Increase right padding if hmenu is in last item */
+div.qnr-navmenu > ul > li:last-child.qnr-hmenu {
+    padding-right: 2.2em;
+}
+
+/* Vertical menu */
+
+/* Wrapper created by code, for positioning, may contain hmenu */
+div.qnr-navmenu-wrapper {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 0;      /* Wrapper itself not taking any space */
+    font-size: 1.14em; /* Must be here */
+    font-weight: bold;
+    overflow: visible;
+    z-index: 999;
+}
+div.qnr-navmenu-wrapper * {
+    box-sizing: border-box;
+}
+/* Space the main UL */
+div.qnr-navmenu-wrapper > ul {
+    padding-top: 2em;
+    padding-bottom: 2em;
+    padding-left: 10%;
+    padding-right: 10%;
+    background-color: white;
+}
+/* All ULs of hmenu in wrapper */
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu ul {
+    display: none;  /* Hidden to prevent flashes on load */
+    position: relative;
+    margin: 0;
+    padding: 0;
+    top: 0.8em;
+    left: 0;
+    width: 100%;
+    text-align: left;
+    list-style-type: none;
+    box-shadow: none;
+    border: none;
+}
+div.qnr-navmenu-wrapper li,
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu li {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    text-align: left;
+    color: #666;
+    font-weight: bold;
+    white-space: normal;
+    border: none;
+    border-bottom: dotted thin silver;
+}
+div.qnr-navmenu-wrapper li:last-child { /* Override hmenu */
+    border-bottom: none !important;
+}
+/* Let's be specific with padding... */
+div.qnr-navmenu-wrapper > ul > li a {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding-left: 0;
+    padding-top: 1.4em;
+    padding-bottom: 0.8em;
+    padding-right: 0;
+    width: 100%;
+    height: 100%;
+    color: #666;
+    font-weight: bold;
+    text-decoration: none;
+    outline: none;
+    border: none;
 }
 div.qnr-navmenu-wrapper > ul > li.qnr-hmenu {
-    /* From div.qnr-navmenu-wrapper > ul > li.qnr-hmenu.qnr-hmenu-in-collapsed */
-    height: auto;       /* Adjusting to contained menu */
-    min-height: 2em;    /* Matching nav menu LI settings above */
+    padding-left: 0;
+    padding-top: 1.4em;
+    padding-bottom: 0.8em;
+    padding-right: 0;
+    border-bottom: dotted thin silver;
+}
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu li {
+    padding: 0;
+    /* Deeper padding on left */
+/*
+    padding-left: 1.5em;
+*/
+    margin-left: 1.5em;             /* Indent */
+    width: calc(100% - 1.5em);
+}
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu li a {
+    padding-left: 0;
+    padding-top: 1.4em;
+    padding-bottom: 0.8em;
     padding-right: 0;
 }
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu li.qnr-hmenu-idle,
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu li.qnr-hmenu-subholder {
+/*
+    padding-left: 1.5em;
+*/
+    padding-left: 0;
+    padding-top: 1.4em;
+    padding-bottom: 0.8em;
+    padding-right: 0;
+    margin-left: 1.5em;             /* Indent */
+    width: calc(100% - 1.5em);
+}
+
+/* Hovering for expanded and collapsed */
 
 div.qnr-navmenu > ul > li.qnr-hmenu:hover,
 div.qnr-navmenu-wrapper > ul > li.qnr-hmenu:hover,
@@ -1104,12 +1293,31 @@ div.qnr-navmenu-wrapper > ul > li > a:hover {
     color: black;
     background-color: #F8F8F8;
 }
+div.qnr-navmenu-wrapper > ul > li > a:hover,
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu:hover,
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu li:hover,
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu li a:hover {
+    color: black;
+    background-color: transparent;
+}
+/* Expanded navmenu LIs have no hover bg color */
 div.qnr-navmenu > ul > li.qnr-hmenu:hover, /* Must be specific */
 div.qnr-navmenu > ul > li > a:hover {
     background-color: transparent;
 }
 
-/* Triangle-down following submenu holding item */
+/* Override with Triangle-down in collapsed navmenu */
+div.qnr-navmenu-wrapper li.qnr-hmenu-subholder::before {
+    content: "A";
+    right: 0.5em;
+    top: 1em;
+}
+/* Override with Triangle-up when submenu is open in collapsed navmenu */
+div.qnr-navmenu-wrapper li.qnr-hmenu-subholder.qnr-hmenu-sub-hover::before {
+    content: "B";
+}
+
+/* Triangle-down following hmenu holding item */
 div.qnr-navmenu > ul > li.qnr-hmenu::after,
 div.qnr-navmenu-wrapper > ul > li.qnr-hmenu::after {
     content: "A";
@@ -1117,50 +1325,32 @@ div.qnr-navmenu-wrapper > ul > li.qnr-hmenu::after {
     position: absolute;
     padding: 0;
     margin: 0;
-    top: 0.5em;
+    top: 0.5em;         /* Default */
     right: 0.5em;
     color: silver;
     font-family: Quicknr;
     vertical-align: top;
     line-height: 1em;
 }
+/* Reset right to 0 if in expanded menu and not last item */
+div.qnr-navmenu > ul > li.qnr-hmenu::after {
+    right: 0;
+}
+/* Increaset to 0.5em if in last item */
+div.qnr-navmenu > ul > li:last-child.qnr-hmenu::after {
+    right: 0.5em;
+}
+div.qnr-navmenu > ul > li.qnr-hmenu::after {
+    top: 0.7em;
+}
+div.qnr-navmenu-wrapper > ul > li.qnr-hmenu::after {
+    top: 1.1em;
+}
 /* Override with Triangle-up when hmenu is open */
 div.qnr-navmenu > ul > li.qnr-hmenu.qnr-hmenu-hover::after,
 div.qnr-navmenu-wrapper > ul > li.qnr-hmenu.qnr-hmenu-hover::after {
     content: "B";
 }
-
-/* Expanded, desktop */
-
-/*
-div.qnr-navmenu-expanded > ul {
-    width: 100%;
-    text-align: right;
-}
-*/
-/*
-div.qnr-navmenu-expanded > ul > li {
-    margin: 1em;
-    padding: 0;
-    width: auto;
-    text-align: center;
-    border: solid thin silver;
-}
-*/
-/*
-div.qnr-navmenu-expanded > ul > li.qnr-hmenu {
-    padding: 0.5em;
-    padding-right: 3em;
-}
-*/
-
-/* Collapsed, mobile (applied to widget DIV that no longer holds the menu UL) */
-
-/*
-div.qnr-navmenu-collapsed {
-    overflow: visible;
-}
-*/
 
 /* Collapsed menu icon */
 
@@ -1196,7 +1386,7 @@ ul.qnr-navmenu-vertical-horizontal {
     position: absolute;
     margin: 0;
     padding: 0;
-    box-shadow: 0 12px 12px rgba(1,1,1,0.2);
+    box-shadow: 0 2px 4px rgba(1,1,1,0.2);
     z-index: 200;
 }
 ul.qnr-navmenu-vertical {               /* Animated up-down */
@@ -1240,43 +1430,7 @@ ul.qnr-navmenu-vertical-hidden-left {
     top: 0;
     left: -500px;
 }
-/*
-ul.qnr-navmenu-vertical > li,
-ul.qnr-navmenu-vertical-horizontal > li {
-    margin: 0;
-    width: 100%;
-    text-align: left;
-    border: none;
-    border-top: dotted thin silver;
-}
-ul.qnr-navmenu-vertical > li {
-    text-align: left;
-}
-*/
-/*
-ul.qnr-navmenu-vertical > li > a,
-ul.qnr-navmenu-vertical-horizontal > li > a {
-}
-li.qnr-hmenu-in-collapsed:hover,
-ul.qnr-navmenu-vertical > li > a:hover,
-ul.qnr-navmenu-vertical-horizontal > li > a:hover {
-    background-color: #F8F8F8;
-}
-*/
 
-/* Hmenu override in collapsed navmenu */
-/*
-div.qnr-navmenu-wrapper > ul > li.qnr-hmenu.qnr-hmenu-in-collapsed {
-    height: auto;
-    min-height: 2em;
-    padding-right: 0;
-}
-*/
-/*
-li.qnr-hmenu.qnr-hmenu-in-collapsed:hover {
-    background-color: #F8F8F8;
-}
-*/
 
 /* PARALLAX SCROLLER
  * ----------------------------------------------------- */
@@ -1471,6 +1625,7 @@ div.qnr-accordion div {
 .qnr-glyph-thumb-down::before           {content: "u";}
 .qnr-glyph-thumb-up::before             {content: "v";}
 .qnr-glyph-embed::before                {content: "z";}
+.qnr-glyph-expand::before               {content: "{";}
 .qnr-glyph-arrowthin-down::before       {content: "\00c0";}
 .qnr-glyph-arrowthin-up::before         {content: "\00c1";}
 .qnr-glyph-arrowthin-left::before       {content: "\00c2";}
@@ -1488,8 +1643,10 @@ div.qnr-accordion div {
 .qnr-glyph-quoteopen::before            {content: "\019a";}
 .qnr-glyph-quoteclose::before           {content: "\019b";}
 .qnr-glyph-more::before                 {content: "\019e";}
+.qnr-glyph-openpage::before             {content: "\01a5";}
 .qnr-glyph-eye::before                  {content: "\01a6";}
 .qnr-glyph-image::before                {content: "\01ae";}
+.qnr-glyph-info::before                 {content: "\01b0";}
 .qnr-glyph-link::before                 {content: "\01b8";}
 .qnr-glyph-marker::before               {content: "\01c0";}
 .qnr-glyph-minus::before                {content: "\01cc";}

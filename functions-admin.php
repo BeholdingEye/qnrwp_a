@@ -50,7 +50,7 @@ function qnrwp_admin_settings() {
 add_action('admin_init', 'qnrwp_admin_settings');
 
 function qnrwp_media_section() {
-  // Callback function for the section; display info about two additional sizes
+  // Callback function for the section; display info about additional sizes
   ?>
   <div style="font-size:1.1em"><p>This theme defines and makes available three additional sizes not listed above:</p>
   <ul>
@@ -183,15 +183,123 @@ add_filter('update_footer', function($content){return '';}, 11);
 
 // ===================== ENQUEUE =====================
 
-// ----------------------- Admin stylesheet, hiding WP footer
-function qnrwp_enqueue_admin_scripts($hook) {
+// ----------------------- Admin stylesheet and script
+add_action('admin_enqueue_scripts', function($hook) {
   // Enqueue admin stylesheet
   wp_enqueue_style('qnrwp_a-admin-stylesheet', get_template_directory_uri() . '/qnrwp_a-admin-style.css', null, null);
-  // Media Screen JS
+  // Media Screen JS (as this is an admin page, we don't bother placing the script at end of page)
   $currentScreen = get_current_screen();
   if($currentScreen->id == 'options-media') {
     wp_enqueue_script('qnrwp_a-admin-media-js', get_template_directory_uri() . '/qnrwp_a-admin-media.js', null, null);
   }
-}
-add_action('admin_enqueue_scripts', 'qnrwp_enqueue_admin_scripts');
+});
+
+
+// ===================== SIMPLIFY DASHBOARD FOR NON-ADMINS =====================
+
+if (!current_user_can('manage_options')) {
+
+  add_action('admin_init', function() {
+    
+    // ----------------------- Redirect from Dashboard to Posts
+    if (strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/index.php') !== false) {
+      wp_redirect('edit.php');
+      exit;
+    }
+    
+    // ----------------------- Remove 'Drag boxes here' on Dashboard
+    // NOT USED, as we now redirect from Dashboard (and this spoils collapse bars generally)
+    // Disable the feature by deregistering script
+    //wp_deregister_script('postbox');
+    
+    // ----------------------- Prepare global for hiding widget definition pages
+    // We do this here to avoid impossible recursion problem in pre_get_posts below,
+    //   taking care to control the flow with state of the qnrwpWidgetPageIDs global
+    if (strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/edit.php') !== false && strpos($_SERVER['QUERY_STRING'], 'post_type=page') !== false) {
+      if (!isset($GLOBALS['qnrwpWidgetPageIDs'])) {
+        // Get IDs of widget pages
+        $allPages = get_posts(array(
+                      'numberposts' => -1,
+                      'nopaging' => true,
+                      'no_found_rows' => true,
+                      'post_type' => 'page',
+                      'fields' => 'ids',
+                      'suppress_filters' => true, // Doesn't seem to work...
+                    ));
+        $GLOBALS['qnrwpWidgetPageIDs'] = [];
+        foreach ($allPages as $pageID) {
+          $page = get_post($pageID);
+          if (strpos(get_the_title($pageID), 'QNRWP-Widget-') !== false) {
+            $GLOBALS['qnrwpWidgetPageIDs'][] = $pageID;
+          } else if ($page->post_parent !== 0) {
+            if (strpos(get_the_title($page->post_parent), 'QNRWP-Widget-') !== false) {
+              $GLOBALS['qnrwpWidgetPageIDs'][] = $pageID;
+            }
+          }
+        }
+      } // Else do nothing, the global is set
+    }
+  }); // End of admin_init
+  
+  // ----------------------- Hide Pages defining QNRWP Widgets
+  // $query is global $wp_query object passed by reference
+  add_action('pre_get_posts', function($query) {
+    if ($query->is_admin && !$query->in_the_loop && strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/edit.php') !== false 
+            && strpos($_SERVER['QUERY_STRING'], 'post_type=page') !== false && isset($GLOBALS['qnrwpWidgetPageIDs'])) {
+      // If we pass the test, we assume we're in WP_Posts_List_Table, can change query
+      $query->set('post__not_in', $GLOBALS['qnrwpWidgetPageIDs']);
+    }
+  });
+  
+  // ----------------------- Change posts count to actual
+  add_filter('wp_count_posts', function($counts, $type='page', $perm='readable') {
+    if (strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/edit.php') !== false && strpos($_SERVER['QUERY_STRING'], 'post_type=page') !== false 
+            && isset($GLOBALS['qnrwpWidgetPageIDs'])) {
+      //qnrwp_debug_printout($counts, $append=false);
+      $counts->publish -= count($GLOBALS['qnrwpWidgetPageIDs']); // We assume widget definition pages are published
+    }
+    return $counts;
+  }, 10, 3);
+  
+  // ----------------------- Remove from vertical menu on the left
+  add_action('admin_menu', function() {
+    remove_menu_page('index.php');                  // Dashboard
+    remove_menu_page('jetpack');                    // Jetpack*
+    //remove_menu_page('edit.php');                   // Posts
+    //remove_menu_page('upload.php');                 // Media
+    //remove_menu_page('edit.php?post_type=page');    // Pages
+    remove_menu_page('edit-comments.php');          // Comments
+    remove_menu_page('themes.php');                 // Appearance
+    remove_menu_page('plugins.php');                // Plugins
+    remove_menu_page('users.php');                  // Users
+    remove_menu_page('tools.php');                  // Tools
+    remove_menu_page('options-general.php');        // Settings
+    remove_menu_page('link-manager.php');           // Links
+    // Remove Category submenu under Posts
+    remove_submenu_page('edit.php', 'edit-tags.php?taxonomy=category');
+    // Remove Tags submenu under Posts
+    remove_submenu_page('edit.php', 'edit-tags.php?taxonomy=post_tag');
+  }, 999);
+    
+  // ----------------------- Edit top Toolbar
+  add_action('admin_bar_menu', function($wp_admin_bar) {
+    // Remove comments item as we don't use comments
+    $wp_admin_bar->remove_node('comments');
+    // Remove new-user item from New menu
+    $wp_admin_bar->remove_node('new-user');
+    $wp_admin_bar->remove_node('user-info');
+    // Edit 'Howdy,' on the right
+    $my_account = $wp_admin_bar->get_node('my-account');
+    $newtitle = str_replace('Howdy,', 'Logged in as', $my_account->title);
+    // add_node() will update existing
+    $wp_admin_bar->add_node(array('id' => 'my-account', 'title' => $newtitle));
+  }, 999);
+
+  // ----------------------- Edit At a Glance in Dashboard (not needed any more)
+  // Return empty to get rid of 'WordPress xx running xx theme'
+  //add_filter('update_right_now_text', function() {return '';});
+  
+  // ----------------------- Remove Screen Options tab
+  add_filter('screen_options_show_screen', function() {return false;});
+} // End of simplifying
 

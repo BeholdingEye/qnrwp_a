@@ -385,6 +385,61 @@ function qnrwp_get_carousel_html($widgetDefPageID, $imageSize = 'large') {
 //}
 
 
+// ----------------------- Samples HTML getter TODO
+
+function qnrwp_get_samples_html($samplesName, $sampleCategories, $sampleSize) {
+  // ----------------------- Custom Query
+  $the_query = new WP_Query(array('post_type' => 'post', 'nopaging' => true));
+  if ($the_query->have_posts()) {
+    $samplesCount = 0;
+    $rHtml = '<!-- Samples Row -->'.PHP_EOL;
+    $rHtml .= '<div class="samples-row">'.PHP_EOL;
+    $rHtml .= '<h2 class="samples-list-title">'.$samplesName.'</h2>'.PHP_EOL; // Place before the block
+    $rHtml .= '<!-- Samples List -->'.PHP_EOL;
+    $rHtml .= '<div class="samples-list-block">'.PHP_EOL; // Opening Samples List block
+    // ----------------------- The Loop
+    while ($the_query->have_posts()) {
+      $the_query->the_post();
+      if (in_category($sampleCategories) && has_post_thumbnail()) { // TODO      
+        // Custom meta values for the post
+        // WP has tricky meta functions with multi-dimensional arrays,
+        //   we use a relatively simple one
+        $sampleInfo = get_post_custom_values('Sample-Info') ? get_post_custom_values('Sample-Info')[0] : '';
+        $sampleLink = get_post_custom_values('Sample-Link') ? get_post_custom_values('Sample-Link')[0] : '';
+        if (!$sampleInfo && !$sampleLink) continue;
+        // Construct item HTML
+        $imageLink = $sampleLink ? $sampleLink : $sampleInfo;
+        $rHtml .= '<!-- Samples List Item -->'.PHP_EOL;
+        $rHtml .= '<div class="samples-list-item">'.PHP_EOL;
+        $rHtml .= '<a href="'.$imageLink.'">';
+        $rHtml .= get_the_post_thumbnail(get_the_ID(), $sampleSize, array('class' => 'samples-list-item-img'));
+        $rHtml .= '</a>';
+        $rHtml .= '<div class="samples-list-item-text">'.PHP_EOL;
+        $rHtml .= '<h3>'.get_the_title().'</h3>'.PHP_EOL;
+        $rHtml .= apply_filters('the_content', get_the_content());
+        $rHtml .= '</div>'.PHP_EOL; // End of item text
+        $rHtml .= '<div class="samples-list-item-buttons">'.PHP_EOL;
+        if ($sampleInfo) {
+          $rHtml .= '<a href="'.$sampleInfo.'" title="More info"><span class="qnr-glyph qnr-glyph-info"></span></a>';
+        }
+        if ($sampleLink) {
+          $rHtml .= '<a href="'.$sampleLink.'" title="View the sample"><span class="qnr-glyph qnr-glyph-openpage"></span></a>'.PHP_EOL;
+        }
+        $rHtml .= '</div></div><!-- End of Samples List Item -->'.PHP_EOL; // 
+        $samplesCount += 1;
+      }
+    }
+    // Restore original Post Data
+    wp_reset_postdata();
+    if ($samplesCount > 0) {
+      $rHtml .= '</div></div><!-- End of Samples List and Row -->'.PHP_EOL; // Closing Samples List block
+      return $rHtml; // Return nothing if no Samples List items obtained
+    }
+  }
+  return ''; // Either no posts found or no samples
+}
+
+
 // ----------------------- Custom Widget picker menu
 
 function qnrwp_get_widget_defs_menu($existingVal, $outputID, $outputName) {
@@ -491,7 +546,6 @@ function qnrwp_enqueue_styles() {
   // -------- Combine and minify stylesheets
   // Create ordered list of relative paths to stylesheets used
   $stylesL = array( '/res/css/qnr-interface.css', 
-                    '/res/css/qnr-hmenu.css', 
                     '/style.css');
   // Create array of stylesheet file paths, theme files first
   $tF = get_template_directory();
@@ -544,7 +598,6 @@ function qnrwp_enqueue_scripts() {
   // ----------------------- Minify JS
   // List JS files
   $jsFilesL = array('/res/js/qnr-interface.js',
-                    '/res/js/qnr-hmenu.js',
                     '/qnrwp_a-main.js');
   // Create array of JS file paths
   $tF = get_template_directory();
@@ -770,12 +823,61 @@ function qnrwp_menu_classes($classes, $item, $args, $depth) {
 add_filter('nav_menu_css_class', 'qnrwp_menu_classes', 10, 4);
 
 
-// ----------------------- Excerpt length filter
+// ----------------------- Excerpt length and form filters
 
 function qnrwp_custom_excerpt_length($length) {
-	return 20;
+	return 35; // On average there are 5 characters per word
 }
 add_filter('excerpt_length', 'qnrwp_custom_excerpt_length', 999);
+
+add_filter('get_the_excerpt', function($excerpt) {
+  // Reduce length to max 110 chars
+  $excerptDecode = wp_kses_decode_entities($excerpt); // Decode numerical entities, only for counting
+  $eLen = 110;
+  if (substr($excerptDecode, 0, $eLen) !== substr($excerpt, 0, $eLen)) {
+    $eLen += strlen($excerpt) - strlen($excerptDecode);
+  }
+  $excerpt = trim(substr($excerpt, 0, $eLen)); // Limit to 110 chars
+  // Delete last, possibly truncated word
+  $excerpt = preg_replace('/(\S+)\s+\S*$/', '$1', $excerpt);
+  // Remove single closing word after sentence
+  $excerpt = preg_replace('/([.!?]+)\s+\S*$/', '$1', $excerpt);
+  // Remove closing punctuation (not including ; as it may end a char entity)
+  $excerpt = preg_replace('/[,:.!?-]+$/', '', $excerpt);
+  return $excerpt . '...';
+});
+
+// NOT USED: output too long for small tablet window size
+function qnrwp_get_news_first_para_excerpt() {
+  // We get first paragraph from HTML content, as classed by content filter
+  $htmlContent = apply_filters('the_content', get_the_content());
+  $rc = preg_match('/<p[^>]+news-post-first-para[^>]+>(.+?)<\/p>/', $htmlContent, $matches);
+  if ($rc) {
+    $rT = wp_strip_all_tags($matches[1], true);
+    if (strlen($rT) < 250) {
+      return $rT;
+    }
+  }
+  // If our excerpt too long, use reqular excerpt function
+  return apply_filters('the_excerpt', get_the_excerpt());
+}
+
+
+// ----------------------- News Post first paragraph classing filter
+
+add_filter('the_content', function($content) {
+  // Test if inside the main loop, a news post
+  // Test for 'is_single()' removed, so that qnrwp_get_news_first_para_excerpt() will work (reinstated)
+  if (is_single() && in_the_loop() && is_main_query() && get_post_type() == 'post' 
+                  && !is_admin() && in_category(array('news', 'uncategorized'))) {
+    // Class first paragraph as "news-post-first-para", perhaps after featured image possibly wrapped in A and P tags
+    // Won't work if a carousel precedes the first paragraph, but that will be caught by CSS
+    qnrwp_debug_printout($content, $append=false);
+    $gP = '/^(\s*((<p>\s*<a[^>]+>\s*<img[^>]+>\s*<\/a>\s*<\/p>)|(<img[^>]+>))?\s*<p)>/';
+    $content = preg_replace($gP, '$1 class="news-post-first-para">', $content);
+  }
+  return $content;
+}, 999); // Run late so we're working with complete HTML after shortcodes
 
 
 // ----------------------- WIDGETS
@@ -934,6 +1036,36 @@ class QNRWP_Featured_News extends WP_Widget {
 }
 
 
+// ----------------------- Samples List widget definition TODO
+
+class QNRWP_Samples_List extends WP_Widget {
+  
+	public function __construct() {
+		// Instantiate the parent object
+		$widget_ops = array( 
+			'classname'   => 'qnrwp_samples_list',
+			'description' => 'List of sample links with Featured Images, to appear on the static Home page.',
+		);
+		parent::__construct('qnrwp_samples_list', 'QNRWP Samples List', $widget_ops);
+	}
+  
+	public function widget($args, $instance) {
+    if (is_front_page()) {
+      // Params: name, categories, size
+      echo qnrwp_get_samples_html('Samples', array('sample-web-design', 'sample-website', 'sample-work'), 'medium');
+    } // If not on front page, do nothing
+	}
+  
+	public function form($instance) {
+		// Output widget admin options form
+    ?>
+		<p>List of sample links with Featured Images, to appear on the static Home page.</p>
+		<?php 
+	}
+  
+}
+
+
 // ----------------------- Sidebar & Widget registration
 
 function qnrwp_widgets_init() {
@@ -1012,6 +1144,7 @@ function qnrwp_widgets_init() {
   register_widget('QNRWP_Custom_Widget');
   register_widget('QNRWP_Content');
   register_widget('QNRWP_Featured_News');
+  register_widget('QNRWP_Samples_List');
 }
 add_action('widgets_init', 'qnrwp_widgets_init');
 
@@ -1042,7 +1175,7 @@ add_action('after_setup_theme', 'qnrwp_setup');
 
 // Content argument is for content enclosed in open/closed shortcodes
 
-// [featuredimage size=large align=center link=no] TODO process options
+// [featured-image size=large align=center link=no] TODO process options
 function qnrwp_featuredimage_shortcode($atts, $content = null) {
   $a = shortcode_atts(array(
     'size' => 'large',
@@ -1054,7 +1187,7 @@ function qnrwp_featuredimage_shortcode($atts, $content = null) {
     return get_the_post_thumbnail($post=$id,$size=$a['size']);
   }
 }
-add_shortcode('featuredimage', 'qnrwp_featuredimage_shortcode');
+add_shortcode('featured-image', 'qnrwp_featuredimage_shortcode');
 
 
 // [include file='fileURL']
@@ -1105,6 +1238,19 @@ function qnrwp_carousel_shortcode($atts, $content = null) {
   return $rHtml;
 }
 add_shortcode('carousel', 'qnrwp_carousel_shortcode');
+
+// [samples categories="cat1, cat2, cat3"] shortcode version of custom widget TODO
+function qnrwp_samples_shortcode($atts, $content = null) {
+  $a = shortcode_atts(array(
+    'name' => 'Samples',
+    'size' => 'medium',
+    'categories' => 'sample-web-design, sample-website, sample-work',
+  ), $atts);
+  $sCatsL = preg_split('/,\s+/', $a['categories']);
+  $rHtml = qnrwp_get_samples_html($a['name'], $sCatsL, $a['size']);
+  return $rHtml; // Could be empty
+}
+add_shortcode('samples', 'qnrwp_samples_shortcode');
 
 
 // ----------------------- Disable WP emojis
