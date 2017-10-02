@@ -1,1 +1,3 @@
 res/* linguist-vendored
+*.js linguist-vendored
+*.css linguist-vendored
