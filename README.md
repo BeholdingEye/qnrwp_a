@@ -11,6 +11,7 @@ This theme will be developed rapidly. No releases will be packaged - the latest 
 * No effort made to translate the output, English only.
 * Number of files kept to a minimum - all Posts, Pages, archives and search results handled by index.php. No page templates used.
 * Dashboard is not cluttered with theme settings. All custom widgets are defined in Pages and subpages or implemented with shortcodes.
+* For non-admin users, Dashboard allows only creation and editing of Posts, Pages and Media, the rest of the interface does not display. Pages that define widgets are not visible to non-admins either.
 * Semi-automated layout, no need for page building plugins. Presence of sidebar widgets controls the layout logically.
 * Page loading speed is optimized and scores well on Google Page Speed. Theme CSS and JS files are combined into one file each and minified. CSS stylesheet is linked from the head, and JS file in the foot of the page. JS minification is by the bundled JsMin.php file from <https://github.com/searchturbine/phpwee-php-minifier>.
 * If the ImageMagick PHP module is installed on the server, uploaded images will be better optimized.
