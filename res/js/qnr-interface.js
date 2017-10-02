@@ -347,7 +347,7 @@ var QNR_INTER = {};
      * classed as "qnr-navmenu-wrapper". This wrapper has CSS height
      * of 0 and allows the contained UL to overflow
      * 
-     * When the navmenu is collapsed, licking the icon reveals the menu.
+     * When the navmenu is collapsed, clicking the icon reveals the menu.
      * The direction of the menu animation can be set with the 
      * "data-qnr-direction" attribute, either "vertical" (default) or 
      * "horizontal". The menu appears over page content
