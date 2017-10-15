@@ -12,7 +12,7 @@ Text Domain: qnrwp_a
 */
 
 /*
-  QNRWP_A Stylesheet
+  QNRWP_A Stylesheet 
 */
 
 /* EM sizes / font pixel sizes
@@ -211,6 +211,7 @@ div#content-box {
     min-width: 320px;
     max-width: 1600px;
     height: auto;
+    min-height: 500px;
     text-align: center;
     background-color: white;
 }
@@ -242,7 +243,7 @@ div.type-post img.wp-post-image {
     margin: 1em auto;
     width: 100%;
     max-width: 100%;
-    border: solid thin #DDD;
+    border: solid thin #EEE;
 }
 div.post-date {
     font-size: 0.9em;
@@ -491,7 +492,7 @@ div#footer-row div.qnrwp-social-links a:hover {
 div.featured-news-block {
     display: block;
     position: relative;
-    margin: 0;
+    margin: 0 auto;
     margin-bottom: 2em;
     padding: 0;
     width: 100%;
@@ -503,7 +504,7 @@ div.featured-news-block > div {
     display: inline-block;
     position: relative;
     margin: 0;
-    padding: 0;
+    padding: 0 2px;     /* 2px to correct middle 'gutter', overriden in @media */
     min-width: 650px;
     max-width: 100%;
     width: 48%;
@@ -519,23 +520,35 @@ div.featured-news-block > div:last-child {
 a.featured-news-item {
     display: inline-block;
     position: relative;
-    margin: 0;
-    padding: 1em;
-    min-width: 320px;
-    width: 49%;
+    margin: 8px;
+    padding: 0;
+    min-width: 300px;
+    width: 47%;
     height: 26em;
     max-width: 380px;
     vertical-align: top;
     overflow: hidden;
     box-sizing: border-box;
+    border-radius: 2px;
     
     outline: none;
     text-decoration: none;
     font-weight: inherit;
     color: inherit;
+    
+    box-shadow: 0 1px 6px rgba(1,1,1,0.26);
 }
 a.featured-news-item:hover {
-    box-shadow: 0 0 12px rgba(1,1,1,0.4);
+    box-shadow: 0 1px 12px rgba(1,1,1,0.4);
+    background-color: #f8f8f8;
+}
+a.featured-news-item:hover div.featured-news-item-header {
+/*
+    background-size: 105%;
+*/
+}
+a.featured-news-item:hover div.featured-news-item-text {
+    color: black;
 }
 div.featured-news-item-header {
     display: block;
@@ -544,7 +557,7 @@ div.featured-news-item-header {
     padding: 0;
     width: 100%;
     height: 200px;
-    background-image: linear-gradient(gray,white); /* Placeholder */
+    background-image: linear-gradient(gray,gray); /* Placeholder */
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -554,7 +567,7 @@ div.featured-news-item-text {
     display: block;
     position: relative;
     margin: 0;
-    padding: 0;
+    padding: 0 1em 1em;
     width: 100%;
     height: 100%;
     text-align: left;
@@ -564,11 +577,6 @@ div.featured-news-item-text h1 {
     font-size: 1.1em;
     font-weight: bold;
     margin: 1em auto;
-}
-a.featured-news-item:hover div.featured-news-item-header {
-}
-a.featured-news-item:hover div.featured-news-item-text {
-    color: black;
 }
 
 
@@ -603,7 +611,7 @@ a.excerpt-item img.qnrwp-post-featured-img {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    border: solid thin #DDD;
+    border: solid thin #EEE;
 }
 a.excerpt-item:hover img.qnrwp-post-featured-img {
 /*
@@ -730,7 +738,7 @@ div.search-results {
 /* QNR SCROLLER OVERRIDE
  * ----------------------------------------------------- */
     
-div#sub-header-row div.qnr-scroller {
+div#sub-header-row div.qnr-scroller {   /* Also classed as 'subheader' */
     height: 200px;  /* Required for the following */
     opacity: 1;
 }
@@ -738,6 +746,7 @@ div#sub-header-row div.qnr-scroller div {
     height: 100%;
     background-image: linear-gradient(rgba(50,50,50,0.5), rgba(50,50,50,0.5));
 }
+/* TODO refactor for QNRWP_A site child style */
 div#sub-header-row div.qnr-scroller div p { /* Home page overrride below */
     display: block;
     position: absolute;
@@ -759,7 +768,7 @@ div#sub-header-row div.qnr-scroller div p { /* Home page overrride below */
 }
 
 
-/* SAMPLES
+/* SAMPLES - TODO transfer to QI?
  * ----------------------------------------------------- */
 
 div.samples-row,
@@ -779,6 +788,7 @@ div.samples-list-block img {
     vertical-align: top;
 }
 div.samples-list-block {    
+/*
     -moz-column-count: 4;
     -moz-column-width: 260px;
     -moz-column-gap: 1px;
@@ -796,6 +806,13 @@ div.samples-list-block {
     column-gap: 1px;
     column-fill: balance;
     column-rule-width: 1px;
+*/
+    display: flex;
+    display: -webkit-flex;
+    flex-flow: row wrap;
+    -webkit-flex-flow: row wrap;
+    justify-content: center;
+    -webkit-justify-content: center;
     
     margin: 0 auto;
     width: 100%;
@@ -812,7 +829,9 @@ h2.samples-list-title { /* Outside the block */
     margin: 0 auto;
     margin-top: 1em;
     padding-top: 0.5em;
-    margin-bottom: 1.5em;
+/*
+    margin-bottom: 0.5em;
+*/
     padding-bottom: 0.5em;
     width: 100%;
     min-width: 280px;
@@ -822,10 +841,14 @@ h2.samples-list-title { /* Outside the block */
     text-align: center;
     text-transform: uppercase;
     color: gray;
+/*
     border-bottom: solid thin #DDD;
+*/
 }
 div.samples-list-item {
     display: inline-block;
+    
+/*
     page-break-inside: avoid;
     -moz-break-inside: avoid-column;
     -webkit-break-inside: avoid-column;
@@ -833,20 +856,22 @@ div.samples-list-item {
     -moz-column-span: none;
     -webkit-column-span: none;
     column-span: none;
+*/
     
-    margin: 4px;
+    flex: 2 1 400px;
+    -webkit-flex: 2 1 400px;
+    
+    margin: 1em;
     padding: 0;
     width: auto;
-/*
     min-width: 260px;
-*/
-    max-width: 360px;
+    max-width: 500px;
     height: auto;
     vertical-align: top;
     border-radius: 2px;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(1,1,1,0.6);
-    background-color: white;
+    box-shadow: 0 1px 4px rgba(1,1,1,0.4);
+    background-color: #f8f8f8;
 }
 div.samples-list-item div {
     width: 100%;
@@ -854,10 +879,9 @@ div.samples-list-item div {
 div.samples-list-item-text {
     display: block;
     padding: 0 1em;
-    font-size: 0.9em;
-    line-height: 1.3em;
+    height: 5em;
     text-align: left;
-    border-top: solid thin #DDD;
+    box-sizing: border-box;
 }
 div.samples-list-item-text h3 {
     margin: 1em auto 0;
@@ -869,7 +893,7 @@ div.samples-list-item-text p:first-of-type {
 div.samples-list-item-buttons {
     display: block;
     width: 100%;
-    font-size: 1.35em;
+    font-size: 1.2em;
     text-align: right;
     padding: 0.5em;
     padding-bottom: 1em;
@@ -882,7 +906,7 @@ div.samples-list-item-buttons a {
 
 /* ----------------------------- PAGE OVERRIDES */
 
-/* Override on Home page (other overrides in child theme style.css) */
+/* Override on Home page (other overrides in child theme style.css) TODO refactor as above */
 body.home div#sub-header-row div.qnr-scroller div p {
     bottom: 0.5em;
     line-height: 1.2em;
@@ -912,8 +936,9 @@ body.home div#sub-header-row div.qnr-scroller div p {
 
 /* Width */
 
-@media (max-width: 1300px) {
+@media (max-width: 1320px) {
     div.featured-news-block > div {
+        padding: 0;
         min-width: 320px;
         max-width: 100%;
         width: 100%;
@@ -999,16 +1024,11 @@ body.home div#sub-header-row div.qnr-scroller div p {
         border-left: none;
     }
 */
-    div.featured-news-item {
-        display: inline-block;
-        position: relative;
-        margin: 0;
-        padding: 1em;
-        min-width: 320px;
+    a.featured-news-item {
+        margin: 16px;
+        min-width: 288px;
         width: 70%;
         max-width: 70%;
-        vertical-align: top;
-        box-sizing: border-box;
     }
 }
 @media (max-width: 480px) { /* iPhone */

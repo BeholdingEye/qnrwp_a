@@ -11,6 +11,170 @@
 
 function qnrwp_admin_settings() {
   /**
+   * ----------------------- QNRWP settings on Writing page
+   * 
+   * Settings for generation of meta and OpenGraph / Twitter card tags:
+   *  meta description
+   *  meta keywords
+   *  meta author
+   *  OG title
+   *  OG description
+   *  OG image URL
+   *  Twitter title
+   *  Twitter description
+   *  Twitter image URL
+   * 
+   */
+  
+  add_settings_section(
+    'qnrwp_metatags_section',      // ID attribute of tags
+    'QNRWP Meta Tag Settings',     // Section title
+    'qnrwp_metatags_section',      // Callback to echo section content
+    'writing'                      // Admin page to use
+  );
+  add_settings_section(
+    'qnrwp_favicon_section',      // ID attribute of tags
+    'QNRWP Favicon Settings',     // Section title
+    'qnrwp_favicon_section',      // Callback to echo section content
+    'writing'                     // Admin page to use
+  );
+  // Use Meta Tags
+  add_settings_field(
+    'qnrwp_use_meta_tags',          // ID attribute of tags
+    'Use Meta Tags',                // Field title
+    'qnrwp_use_meta_tags',          // Callback to echo input control
+    'writing',                      // Admin page to use
+    'qnrwp_metatags_section'        // Section to use
+  );
+  // Meta Description
+  add_settings_field(
+    'qnrwp_meta_description',       // ID attribute of tags
+    'Meta Description',             // Field title
+    'qnrwp_meta_description',       // Callback to echo input control
+    'writing',                      // Admin page to use
+    'qnrwp_metatags_section'        // Section to use
+  );
+  // Meta Keywords
+  add_settings_field(
+    'qnrwp_meta_keywords',         // ID attribute of tags
+    'Meta Keywords',               // Field title
+    'qnrwp_meta_keywords',         // Callback to echo input control
+    'writing',                     // Admin page to use
+    'qnrwp_metatags_section'       // Section to use
+  );
+  // Meta Author
+  add_settings_field(
+    'qnrwp_meta_author',           // ID attribute of tags
+    'Meta Author',                 // Field title
+    'qnrwp_meta_author',           // Callback to echo input control
+    'writing',                     // Admin page to use
+    'qnrwp_metatags_section'       // Section to use
+  );
+  // Use OpenGraph Tags
+  add_settings_field(
+    'qnrwp_use_opengraph_tags',          // ID attribute of tags
+    'Use OpenGraph Tags',                // Field title
+    'qnrwp_use_opengraph_tags',          // Callback to echo input control
+    'writing',                           // Admin page to use
+    'qnrwp_metatags_section'             // Section to use
+  );
+  // OpenGraph Title
+  add_settings_field(
+    'qnrwp_opengraph_title',         // ID attribute of tags
+    'OpenGraph Title',               // Field title
+    'qnrwp_opengraph_title',         // Callback to echo input control
+    'writing',                       // Admin page to use
+    'qnrwp_metatags_section'         // Section to use
+  );
+  // OpenGraph Description
+  add_settings_field(
+    'qnrwp_opengraph_description',         // ID attribute of tags
+    'OpenGraph Description',               // Field title
+    'qnrwp_opengraph_description',         // Callback to echo input control
+    'writing',                             // Admin page to use
+    'qnrwp_metatags_section'               // Section to use
+  );
+  // OpenGraph Image URL
+  add_settings_field(
+    'qnrwp_opengraph_imageurl',            // ID attribute of tags
+    'OpenGraph Image URL',                 // Field title
+    'qnrwp_opengraph_imageurl',            // Callback to echo input control
+    'writing',                             // Admin page to use
+    'qnrwp_metatags_section'               // Section to use
+  );
+  // Use Twitter Tags
+  add_settings_field(
+    'qnrwp_use_twitter_tags',          // ID attribute of tags
+    'Use Twitter Tags',                // Field title
+    'qnrwp_use_twitter_tags',          // Callback to echo input control
+    'writing',                         // Admin page to use
+    'qnrwp_metatags_section'           // Section to use
+  );
+  // Twitter Title
+  add_settings_field(
+    'qnrwp_twitter_title',           // ID attribute of tags
+    'Twitter Title',                 // Field title
+    'qnrwp_twitter_title',           // Callback to echo input control
+    'writing',                       // Admin page to use
+    'qnrwp_metatags_section'         // Section to use
+  );
+  // Twitter Description
+  add_settings_field(
+    'qnrwp_twitter_description',           // ID attribute of tags
+    'Twitter Description',                 // Field title
+    'qnrwp_twitter_description',           // Callback to echo input control
+    'writing',                             // Admin page to use
+    'qnrwp_metatags_section'               // Section to use
+  );
+  // Twitter Image URL
+  add_settings_field(
+    'qnrwp_twitter_imageurl',              // ID attribute of tags
+    'Twitter Image URL',                   // Field title
+    'qnrwp_twitter_imageurl',              // Callback to echo input control
+    'writing',                             // Admin page to use
+    'qnrwp_metatags_section'               // Section to use
+  );
+  // Twitter Site
+  add_settings_field(
+    'qnrwp_twitter_site',                  // ID attribute of tags
+    'Twitter Site',                        // Field title
+    'qnrwp_twitter_site',                  // Callback to echo input control
+    'writing',                             // Admin page to use
+    'qnrwp_metatags_section'               // Section to use
+  );
+  // Favicon URL
+  add_settings_field(
+    'qnrwp_favicon_url',                  // ID attribute of tags
+    'Favicon URL',                        // Field title
+    'qnrwp_favicon_url',                  // Callback to echo input control
+    'writing',                            // Admin page to use
+    'qnrwp_favicon_section'               // Section to use
+  );
+  // Apple Icon URL
+  add_settings_field(
+    'qnrwp_appleicon_url',                   // ID attribute of tags
+    'Apple Icon URL',                        // Field title
+    'qnrwp_appleicon_url',                   // Callback to echo input control
+    'writing',                               // Admin page to use
+    'qnrwp_favicon_section'                  // Section to use
+  );
+  register_setting('writing', 'qnrwp_use_meta_tags');
+  register_setting('writing', 'qnrwp_use_opengraph_tags');
+  register_setting('writing', 'qnrwp_use_twitter_tags');
+  register_setting('writing', 'qnrwp_meta_description');
+  register_setting('writing', 'qnrwp_meta_keywords');
+  register_setting('writing', 'qnrwp_meta_author');
+  register_setting('writing', 'qnrwp_opengraph_title');
+  register_setting('writing', 'qnrwp_opengraph_description');
+  register_setting('writing', 'qnrwp_opengraph_imageurl');
+  register_setting('writing', 'qnrwp_twitter_title');
+  register_setting('writing', 'qnrwp_twitter_description');
+  register_setting('writing', 'qnrwp_twitter_imageurl');
+  register_setting('writing', 'qnrwp_twitter_site');
+  register_setting('writing', 'qnrwp_favicon_url');
+  register_setting('writing', 'qnrwp_appleicon_url');
+  
+  /**
    * ----------------------- QNRWP settings on Media page
    * 
    * The Regenerate Images record is first created in the construction
@@ -48,6 +212,9 @@ function qnrwp_admin_settings() {
   register_setting('media', 'qnrwp_regenerate_images');
 }
 add_action('admin_init', 'qnrwp_admin_settings');
+
+
+// ----------------------- Media
 
 function qnrwp_media_section() {
   // Callback function for the section; display info about additional sizes
@@ -114,6 +281,158 @@ function qnrwp_regenerate_images() {
   <hr>
   <p><em>Note that the checkbox is always saved in its unchecked state<?php echo ($riSavedOptions['start-time'] && !$riSavedOptions['end-time'] && time() - intval($riSavedOptions['last-update']) < 1800) ? '. The checkbox is disabled during image regeneration.' : ''; ?></em></p>
   <p><label><input type="checkbox" value="1" <?php checked(get_option('qnrwp_regenerate_images', $default=0), 1); echo ($riSavedOptions['start-time'] && !$riSavedOptions['end-time'] && time() - intval($riSavedOptions['last-update']) < 1800) ? ' disabled' : ''; ?> name="qnrwp_regenerate_images" id="qnrwp_regenerate_images">Regenerate thumbnails and intermediate image sizes, and reduce originals</label></p>
+  <?php
+}
+
+
+// ----------------------- Writing
+
+function qnrwp_metatags_section() {
+  // Callback function for the section; display info about meta tags
+  ?>
+  <div style="font-size:1.1em"><p>This theme supports dynamic generation of meta and OpenGraph / Twitter card tags in the HTML head of every page and post. The settings below define the defaults for the site. On individual posts, the title, description and URL tags will be derived from the post and its Featured Image. If the user prefers to use another image for the tags, a Custom Field may be created in the post interface, named "OpenGraph-Twitter-Card-Image", with the image URL as its value.</p>
+  </div>
+  <?php
+}
+
+function qnrwp_favicon_section() {
+  // Callback function for the section
+  ?>
+  <div style="font-size:1.1em"><p>This theme does not support the Site Icon API, offering a simpler, lighter solution. The small favicon and the larger Apple icon are supported. They should be uploaded to the Media Library and their URLs entered in the fields below.</p>
+  </div>
+  <?php
+}
+
+function qnrwp_use_meta_tags() {
+  // Echo the input control for this option
+  ?>
+  <p><label><input type="checkbox" value="1" <?php checked(1, get_option('qnrwp_use_meta_tags'), true); ?>
+                name="qnrwp_use_meta_tags" id="qnrwp_use_meta_tags">Enable the use of meta tags. If unchecked, the following meta tag settings will have no effect, except that they may be used in OpenGraph / Twitter card tags as defined below.</label></p>
+  <?php
+}
+
+function qnrwp_use_opengraph_tags() {
+  // Echo the input control for this option
+  ?>
+  <p><label><input type="checkbox" value="1" <?php checked(1, get_option('qnrwp_use_opengraph_tags'), true); ?>
+                name="qnrwp_use_opengraph_tags" id="qnrwp_use_opengraph_tags">Enable the use of OpenGraph tags. If unchecked, the following OpenGraph settings will have no effect.</label></p>
+  <?php
+}
+
+function qnrwp_use_twitter_tags() {
+  // Echo the input control for this option
+  ?>
+  <p><label><input type="checkbox" value="1" <?php checked(1, get_option('qnrwp_use_twitter_tags'), true); ?>
+                name="qnrwp_use_twitter_tags" id="qnrwp_use_twitter_tags">Enable the use of Twitter tags. If unchecked, the following Twitter settings will have no effect.</label></p>
+  <?php
+}
+
+function qnrwp_meta_description() {
+  // Echo the input control for this option
+  ?>
+  <p>Enter the site description for use in the meta description tag. If left blank, the Tagline from General Settings will be used. On individual posts, this tag will be set to the opening paragraph of the post, up to 255 characters in length.</p>
+  <textarea id="qnrwp_meta_description" name="qnrwp_meta_description" 
+                class="large-text code" rows="2"><?php echo get_option('qnrwp_meta_description', $default=''); ?></textarea>
+  <?php
+}
+
+function qnrwp_meta_keywords() {
+  // Echo the input control for this option
+  ?>
+  <p>Enter the keywords for use in the meta keywords tag, up to 255 characters in total, comma separated. If left blank, a keywords meta tag will not be used.</p>
+  <textarea id="qnrwp_meta_keywords" name="qnrwp_meta_keywords" 
+                class="large-text code" rows="2"><?php echo get_option('qnrwp_meta_keywords', $default=''); ?></textarea>
+  <?php
+}
+
+function qnrwp_meta_author() {
+  // Echo the input control for this option
+  ?>
+  <p>Enter the author name for use in the meta author tag. If left blank, an author meta tag will not be used.</p>
+  <input type="text" name="qnrwp_meta_author" id="qnrwp_meta_author" 
+                maxlength="100" class="regular-text" value="<?php echo get_option('qnrwp_meta_author', $default=''); ?>">
+  <?php
+}
+
+function qnrwp_opengraph_title() {
+  // Echo the input control for this option
+  ?>
+  <p>Enter the site title for the OpenGraph title tag. If left blank, Site Title from General Settings will be used. On individual posts, this tag will be set to the title of the post.</p>
+  <input type="text" name="qnrwp_opengraph_title" id="qnrwp_opengraph_title" 
+                maxlength="100" class="regular-text" value="<?php echo get_option('qnrwp_opengraph_title', $default=''); ?>">
+  <?php
+}
+
+function qnrwp_opengraph_description() {
+  // Echo the input control for this option
+  ?>
+  <p>Enter the site description for use in the OpenGraph description tag. If left blank, the meta description will be used, if it is set above, otherwise the Tagline from General Settings will be used. On individual posts, this tag will be set to the opening paragraph of the post.</p>
+  <textarea id="qnrwp_opengraph_description" name="qnrwp_opengraph_description" 
+                class="large-text code" rows="2"><?php echo get_option('qnrwp_opengraph_description', $default=''); ?></textarea>
+  <?php
+}
+
+function qnrwp_opengraph_imageurl() {
+  // Echo the input control for this option
+  ?>
+  <p>Enter the OpenGraph image URL. If left blank, this tag will not be used. On individual posts, a post image will be used as explained in the section introduction above.</p>
+  <input type="text" name="qnrwp_opengraph_imageurl" id="qnrwp_opengraph_imageurl" 
+                maxlength="255" class="regular-text" value="<?php echo get_option('qnrwp_opengraph_imageurl', $default=''); ?>">
+  <?php
+}
+
+function qnrwp_twitter_title() {
+  // Echo the input control for this option
+  ?>
+  <p>Enter the site title for the Twitter title tag. If left blank, Site Title from General Settings will be used. On individual posts, this tag will be set to the title of the post.</p>
+  <input type="text" name="qnrwp_twitter_title" id="qnrwp_twitter_title" 
+                maxlength="100" class="regular-text" value="<?php echo get_option('qnrwp_twitter_title', $default=''); ?>">
+  <?php
+}
+
+function qnrwp_twitter_description() {
+  // Echo the input control for this option
+  ?>
+  <p>Enter the site description for use in the Twitter description tag. If left blank, the meta description will be used, if it is set, otherwise the Tagline from General Settings will be used. On individual posts, this tag will be set to the opening paragraph of the post.</p>
+  <textarea id="qnrwp_twitter_description" name="qnrwp_twitter_description" 
+                class="large-text code" rows="2"><?php echo get_option('qnrwp_twitter_description', $default=''); ?></textarea>
+  <?php
+}
+
+function qnrwp_twitter_imageurl() {
+  // Echo the input control for this option
+  ?>
+  <p>Enter the Twitter image URL. If left blank, this tag will not be used. On individual posts, a post image will be used as explained in the section introduction above.</p>
+  <input type="text" name="qnrwp_twitter_imageurl" id="qnrwp_twitter_imageurl" 
+                maxlength="255" class="regular-text" value="<?php echo get_option('qnrwp_twitter_imageurl', $default=''); ?>">
+  <?php
+}
+
+function qnrwp_twitter_site() {
+  // Echo the input control for this option
+  ?>
+  <p>Enter the Twitter account handle (like "@twitter", without the quotes) to associate with this website. If left blank, this tag will not be used.</p>
+  <input type="text" name="qnrwp_twitter_site" id="qnrwp_twitter_site" 
+                maxlength="100" class="regular-text" value="<?php echo get_option('qnrwp_twitter_site', $default=''); ?>">
+  <?php
+}
+
+function qnrwp_favicon_url() {
+  // Echo the input control for this option
+  // Use a HR for separation from the meta tag settings
+  ?>
+  <p>Enter the favicon.ico URL. If left blank, a favicon will not be used. Dimensions should be 32px x 32px.</p>
+  <input type="text" name="qnrwp_favicon_url" id="qnrwp_favicon_url" 
+                maxlength="255" class="regular-text" value="<?php echo get_option('qnrwp_favicon_url', $default=''); ?>">
+  <?php
+}
+
+function qnrwp_appleicon_url() {
+  // Echo the input control for this option
+  ?>
+  <p>Enter the Apple icon URL. If left blank, an Apple icon will not be used. Dimensions should be 256px x 256px, and the file in PNG format.</p>
+  <input type="text" name="qnrwp_appleicon_url" id="qnrwp_appleicon_url" 
+                maxlength="255" class="regular-text" value="<?php echo get_option('qnrwp_appleicon_url', $default=''); ?>">
   <?php
 }
 
@@ -273,7 +592,7 @@ if (!current_user_can('manage_options')) {
     remove_menu_page('plugins.php');                // Plugins
     remove_menu_page('users.php');                  // Users
     remove_menu_page('tools.php');                  // Tools
-    remove_menu_page('options-general.php');        // Settings
+    remove_menu_page('options-general.php');        // Settings TODO ??
     remove_menu_page('link-manager.php');           // Links
     // Remove Category submenu under Posts
     remove_submenu_page('edit.php', 'edit-tags.php?taxonomy=category');

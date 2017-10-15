@@ -21,11 +21,21 @@ if (is_admin()) require_once('functions-admin.php');
   //else return '';
 //}
 
-function qnrwp_debug_printout($valueToPrint, $append=true) {
+function qnrwp_debug_printout($valueToPrint, $append=false) { // Append must be false...
   // Print any variable to the debug-printout.txt file
+  $debugPrintFile = trailingslashit(dirname(__FILE__)) . 'debug-printout.txt';
+  $dpfSize = filesize($debugPrintFile);
   $tv = print_r($valueToPrint, $return=true) . PHP_EOL;
-  if ($append) file_put_contents(trailingslashit(dirname(__FILE__)) . 'debug-printout.txt', $tv, FILE_APPEND);
-  else file_put_contents(trailingslashit(dirname(__FILE__)) . 'debug-printout.txt', $tv);
+  // Limit printout to max 5000 chars
+  if (strlen($tv) > 5000) $tv = 'DEBUG PRINTOUT ERROR: Length limit exceeded.';
+  // Limit printout text file size to 9K
+  if ($dpfSize !== false && $dpfSize < 10000) {
+    if ($append) file_put_contents($debugPrintFile, $tv, FILE_APPEND);
+    else {
+      //unlink(trailingslashit(dirname(__FILE__)) . 'debug-printout.txt'); // Needed
+      file_put_contents($debugPrintFile, $tv);
+    }
+  } // Else do nothing
 }
 
 // ===================== TEST PRINTOUT ===================== TODO
@@ -61,6 +71,292 @@ function qnrwp_get_layout() {
   else if (is_active_sidebar('qnrwp-sidebar-1')) $layout = 'left-sidebar';
   else if (is_active_sidebar('qnrwp-sidebar-2')) $layout = 'right-sidebar';
   return $layout;
+}
+
+
+// ----------------------- Interpret user boolean input, usually string
+
+function qnrwp_interpret_bool_input($bool) {
+  if (strtolower($bool) === 'yes' || strtolower($bool) === 'y' 
+                                  || strtolower($bool) === 'true' 
+                                  || $bool === '1' 
+                                  || $bool === 1 
+                                  || $bool === true) return true;
+  else return false;
+}
+
+
+// ----------------------- Contact Form generator, called by shortcode
+
+function qnrwp_contact_form($options) {
+  // $options = array('subject','subject-line','message','name','warnings' etc.)
+  // Convert string boolean inputs into booleans (subject-line etc. not boolean)
+  $subjectBool = qnrwp_interpret_bool_input($options['subject']);
+  $messageBool = qnrwp_interpret_bool_input($options['message']);
+  $nameBool = qnrwp_interpret_bool_input($options['name']);
+  $warningsBool = qnrwp_interpret_bool_input($options['warnings']);
+  $emailSent = false;
+  $emailSendAttempted = false;
+  // Test for adequate input to proceed
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' 
+        && isset($_POST['email']) 
+        && isset($_POST['form-name-hidden'])
+        && isset($_POST['client-ip-hidden'])
+        && (($messageBool && isset($_POST['message'])) || !$messageBool)) {
+    $emailSendAttempted = true;
+    
+    // If data won't validate, $emailSent will remain false
+    // Using 'name' as an input name doesn't work, so we use 'emailname'
+    if (strlen($_POST['email']) < 100 
+          && is_email($_POST['email']) 
+          && strlen(get_bloginfo('admin_email')) < 100 
+          && is_email(get_bloginfo('admin_email')) 
+          && ((isset($_POST['emailname']) && strlen($_POST['emailname']) < 100) || !isset($_POST['emailname'])) 
+          && ((isset($_POST['subject']) && strlen($_POST['subject']) < 100) || !isset($_POST['subject'])) 
+          && (($messageBool && strlen($_POST['message']) < 501) || !$messageBool)) {
+      // Construct the message
+      $emailAddress = $_POST['email'];
+      $emailSubject = ($subjectBool && isset($_POST['subject'])) ? $_POST['subject'] : '';
+      $emailMessage = ($messageBool && isset($_POST['message'])) ? $_POST['message'] : '';
+      $emailName = ($nameBool && isset($_POST['emailname'])) ? sanitize_text_field($_POST['emailname']) : '';
+      // If no subject, pass the generic one constructed in caller or specified in shortcode
+      if (!$emailSubject) $emailSubject = $options['subject-line'];
+      // If no message, construct generic one, only email submitted, probably for subscription
+      if (!$emailMessage) {
+        $emailMessage = 'Email contact details submitted via online form:' . PHP_EOL . PHP_EOL;
+        if ($emailName) $emailMessage .= 'Name: ' . $emailName . PHP_EOL . PHP_EOL;
+        $emailMessage .= 'Email address: ' . $emailAddress;
+      } else if ($emailName) { // Place the name in the message, for more reliable visibility than only in Reply-To
+        $emailMessage = 'Message from "' . $emailName . '":' . PHP_EOL . PHP_EOL . $emailMessage;
+      }
+      $mT = $emailMessage . PHP_EOL . PHP_EOL;
+      // Append a note about the message source
+      $mT .= '=========='.PHP_EOL;
+      $mT .= 'Message sent from IP '.$_POST['client-ip-hidden'].', '.PHP_EOL;
+      $mT .= 'using the online contact form at '.PHP_EOL;
+      $mT .= '<'. get_permalink().'>.'.PHP_EOL;
+      $mT .= '=========='.PHP_EOL;
+      // Set Reply-To header to user's email, not WP
+      if ($emailName && !preg_match('/[^a-zA-Z\. -]+/',$emailName)) $headers = array('Reply-To: '.$emailName.' <'.$emailAddress.'>');
+      else $headers = array('Reply-To: <'.$emailAddress.'>');
+    
+      // Check transient records for recent mailings
+      // Control mailing times sitewide
+      $tlmsOldRecord = get_transient('qnrwp_last_mailing_sitewide');
+      if ($tlmsOldRecord !== false) { // Transient record exists, not expired, disallow email
+        $sitewideBlockingMinutesRemaining = max(0, 5 - intval(ceil((time() - $tlmsOldRecord)/60)));
+      }
+      if (!isset($sitewideBlockingMinutesRemaining) || !$sitewideBlockingMinutesRemaining) {
+        // Send the email
+        $emailSent = wp_mail(get_bloginfo('admin_email'), $emailSubject, $mT, $headers);
+        set_transient('qnrwp_last_mailing_sitewide', time(), 5 * MINUTE_IN_SECONDS);
+      }
+    }
+  } else { // Not sending email, but showing the form
+    // Set global count of contact forms, to set unique form names and IDs
+    if (isset($GLOBALS['QNRWP_GLOBALS']['ContactFormsCount'])) $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount'] += 1;
+    else $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount'] = 1;
+  }
+  ?>
+<?php if (!$emailSent && !$emailSendAttempted): // Show the form if not submitted yet ?>
+<div class="contact-block <?php echo $options['form-class']; ?>">
+  <form name="<?php echo 'contact-form' . $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount']; ?>" 
+        id="<?php echo 'contact-form' . $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount']; ?>" 
+        action="<?php echo get_permalink(); ?>" method="post">
+    <input type="hidden" name="form-name-hidden" value="<?php echo 'contact-form' . $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount']; ?>">
+    <input type="hidden" name="client-ip-hidden" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>">
+    <div class="contact-emailframe contact-subframe">
+      <span class="label label-email">Your email address:</span>
+      <input type="email" name="email" class="email user-entry" maxlength="60" required autofocus>
+    </div>
+<?php if ($nameBool): // Must use 'emailname' instead of 'name'... ?>
+    <div class="contact-nameframe contact-subframe">
+      <span class="label label-name">Your name:</span>
+      <input type="text" name="emailname" class="name user-entry" maxlength="60">
+    </div>
+<?php endif; ?>
+<?php if ($subjectBool): ?>
+    <div class="contact-subjectframe contact-subframe">
+      <span class="label label-subject">Subject:</span>
+      <input type="text" name="subject" class="subject user-entry" maxlength="60" placeholder="<?php echo $options['subject-line']; ?>">
+    </div>
+<?php endif; ?>
+<?php if ($messageBool): ?>
+    <div class="contact-textframe contact-subframe">
+      <span class="label label-message">Message:</span>
+      <textarea pattern=".{40,500}" required cols="20" name="message" class="message user-entry" rows="10" minlength="40" maxlength="500" onkeyup="CountTextarea(this,'count')" onblur="CountTextarea(this,'reset')"></textarea>
+<?php if ($warningsBool): ?>
+<p class="user-info"><span class="textarea-count">Max 500 characters</span><span class="client-ip">Your IP: <?php echo $_SERVER['REMOTE_ADDR']; ?></span>
+</p>
+<?php endif; ?>
+    </div>
+<?php endif; ?>
+    <div class="contact-send-btn">
+      <button type="submit" name="form-send" class="form-send" value="Send" onclick="SendEmail(event)">Send</button>
+    </div>
+  </form>
+<?php endif; // End of outermost test for not email sent nor attempted ?>
+<?php
+if ($emailSendAttempted && !$emailSent) {
+  // Instruct number of minutes to wait if too many attempts sitewide
+  if (isset($sitewideBlockingMinutesRemaining) && $sitewideBlockingMinutesRemaining) {
+    // Call it a subscription if no message field present
+    $messOrSub = $messageBool ? 'message' : 'subscription';
+    $minutesInResponse = ($sitewideBlockingMinutesRemaining == 1) ? ' minute' : ' minutes';
+    echo '<div class="contact-block fail-reply '.$options['form-class'].'">'.PHP_EOL
+          .'Sorry, due to high level of traffic on the site your '.$messOrSub.' could not be sent. '
+          .'Please try again in '.$sitewideBlockingMinutesRemaining.$minutesInResponse.'.'.PHP_EOL;
+  } else { // Some other failure
+    echo '<div class="contact-block fail-reply '.$options['form-class'].'">'.PHP_EOL.$options['fail-reply'].PHP_EOL;
+  }
+}
+else if ($emailSendAttempted && $emailSent) 
+  echo '<div class="contact-block sent-reply '.$options['form-class'].'">'.PHP_EOL.$options['sent-reply'].PHP_EOL;
+if ($emailSendAttempted || $emailSent) {
+  // In either of the above cases, provide a close box on the block, to return to page sans POST
+  echo '<a href="'.get_permalink().'"><span class="qnr-glyph qnr-glyph-circle-xmark"></span></a>';
+}
+?>
+</div>
+  <?php
+} // End of QNRWP Contact Form function
+
+
+// ----------------------- Meta, OpenGraph, Twitter card tags generator
+
+function qnrwp_meta_opengraph_twitter_tags() {
+  $rHtml = '';
+  if (get_option('qnrwp_use_meta_tags')) {
+    // ----------------------- Description
+    // Get description from first paragraph if news post
+    if (is_singular() && get_post_type() == 'post') {
+      $postFirstPara = qnrwp_get_news_first_para_excerpt();
+      if ($postFirstPara) $rHtml .= '<meta name="description" content="'.esc_attr(trim($postFirstPara)).'">'.PHP_EOL;
+      else $rHtml .= '<meta name="description" content="'.esc_attr(trim(get_bloginfo('description'))).'">'.PHP_EOL;
+    } else { // Other pages get description from settings option or site tagline
+      if (get_option('qnrwp_meta_description')) 
+        $rHtml .= '<meta name="description" content="'.esc_attr(trim(get_option('qnrwp_meta_description'))).'">'.PHP_EOL;
+      else
+        $rHtml .= '<meta name="description" content="'.esc_attr(trim(get_bloginfo('description'))).'">'.PHP_EOL;
+    }
+    // ----------------------- Keywords
+    if (get_option('qnrwp_meta_keywords')) 
+      $rHtml .= '<meta name="keywords" content="'.esc_attr(trim(get_option('qnrwp_meta_keywords'))).'">'.PHP_EOL;
+    // ----------------------- Author
+    if (get_option('qnrwp_meta_author')) 
+      $rHtml .= '<meta name="author" content="'.esc_attr(trim(get_option('qnrwp_meta_author'))).'">'.PHP_EOL;
+  }
+    
+  //<!-- Open Graph -->
+  //<meta name="og:title" content="">
+  //<meta name="og:description" content="">
+  //<meta name="og:type" content="website">
+  //<meta name="og:site_name" content="">
+  //<meta name="og:url" content="">
+  //<meta name="og:image" content="">
+  if (get_option('qnrwp_use_opengraph_tags')) {
+    $rHtml .= '<!-- Open Graph -->'.PHP_EOL;
+    $genericOG = false; // Avoid some code duplication later
+    // News post; ensure title matches post only if excerpt obtained
+    if (is_singular() && get_post_type() == 'post') {
+      if (!isset($postFirstPara) || empty($postFirstPara)) $postFirstPara = qnrwp_get_news_first_para_excerpt();
+      if ($postFirstPara) {
+        $rHtml .= '<meta name="og:title" content="'.esc_attr(trim(single_post_title('', $display=false))).'">'.PHP_EOL;
+        $rHtml .= '<meta name="og:description" content="'.esc_attr(trim($postFirstPara)).'">'.PHP_EOL;
+      }
+      else { // Both title and description generic together
+        $genericOG = true;
+      }
+    } else { // Other pages get title and description from settings option, meta tag, or site tagline
+      $genericOG = true;
+    }
+    if ($genericOG) {
+      // ----------------------- Title
+      if (get_option('qnrwp_opengraph_title')) 
+        $rHtml .= '<meta name="og:title" content="'.esc_attr(trim(get_option('qnrwp_opengraph_title'))).'">'.PHP_EOL;
+      else
+        $rHtml .= '<meta name="og:title" content="'.esc_attr(trim(get_bloginfo('name'))).'">'.PHP_EOL;
+      // ----------------------- Description
+      if (get_option('qnrwp_opengraph_description')) 
+        $rHtml .= '<meta name="og:description" content="'.esc_attr(trim(get_option('qnrwp_opengraph_description'))).'">'.PHP_EOL;
+      else if (get_option('qnrwp_meta_description')) 
+        $rHtml .= '<meta name="og:description" content="'.esc_attr(trim(get_option('qnrwp_meta_description'))).'">'.PHP_EOL;
+      else 
+        $rHtml .= '<meta name="og:description" content="'.esc_attr(trim(get_bloginfo('description'))).'">'.PHP_EOL;
+    }
+    // Site type, and name and URL, always from Site Title and URL settings (custom for news posts)
+    $rHtml .= '<meta name="og:type" content="website">'.PHP_EOL;
+    $rHtml .= '<meta name="og:site_name" content="'.esc_attr(trim(get_bloginfo('name'))).'">'.PHP_EOL;
+    // ----------------------- Page and image URLs, generic or post Custom Field or Featured Image
+    if (is_singular() && get_post_type() == 'post') {
+      $rHtml .= '<meta name="og:url" content="'.esc_attr(get_permalink()).'">'.PHP_EOL;
+      if (get_post_custom_values('OpenGraph-Twitter-Card-Image'))
+        $rHtml .= '<meta name="og:image" content="'.esc_attr(esc_url(trim(get_post_custom_values('OpenGraph-Twitter-Card-Image')[0]))).'">'.PHP_EOL;
+      else if (has_post_thumbnail())
+        $rHtml .= '<meta name="og:image" content="'.esc_attr(get_the_post_thumbnail_url(null, $size='large')).'">'.PHP_EOL;
+      else if (get_option('qnrwp_opengraph_imageurl')) 
+        $rHtml .= '<meta name="og:image" content="'.esc_attr(trim(get_option('qnrwp_opengraph_imageurl'))).'">'.PHP_EOL;
+    } else {
+      $rHtml .= '<meta name="og:url" content="'.esc_attr(trim(get_bloginfo('url'))).'">'.PHP_EOL;
+      if (get_option('qnrwp_opengraph_imageurl')) 
+        $rHtml .= '<meta name="og:image" content="'.esc_attr(trim(get_option('qnrwp_opengraph_imageurl'))).'">'.PHP_EOL;
+    }
+  }
+  
+  //<!-- Twitter Card -->
+  //<meta name="twitter:card" content="summary">
+  //<!-- alernative content: summary_large_image -->
+  //<meta name="twitter:site" content="">
+  //<meta name="twitter:title" content="">
+  //<meta name="twitter:description" content="">
+  //<meta name="twitter:image" content="">
+  if (get_option('qnrwp_use_twitter_tags')) {
+    $rHtml .= '<!-- Twitter Card -->'.PHP_EOL;
+    $rHtml .= '<meta name="twitter:card" content="summary">'.PHP_EOL;
+    if (get_option('qnrwp_twitter_site')) 
+      $rHtml .= '<meta name="twitter:site" content="'.esc_attr(trim(get_option('qnrwp_twitter_site'))).'">'.PHP_EOL;
+  
+    $genericTW = false; // Avoid some code duplication later
+    // News post; ensure title matches post only if excerpt obtained
+    if (is_singular() && get_post_type() == 'post') {
+      if (!isset($postFirstPara) || empty($postFirstPara)) $postFirstPara = qnrwp_get_news_first_para_excerpt();
+      if ($postFirstPara) {
+        $rHtml .= '<meta name="twitter:title" content="'.esc_attr(trim(single_post_title('', $display=false))).'">'.PHP_EOL;
+        $rHtml .= '<meta name="twitter:description" content="'.esc_attr(trim($postFirstPara)).'">'.PHP_EOL;
+      }
+      else { // Both title and description generic together
+        $genericTW = true;
+      }
+    } else { // Other pages get title and description from settings option, meta tag, or site tagline
+      $genericTW = true;
+    }
+    if ($genericTW) {
+      // ----------------------- Title
+      if (get_option('qnrwp_twitter_title')) 
+        $rHtml .= '<meta name="twitter:title" content="'.esc_attr(trim(get_option('qnrwp_twitter_title'))).'">'.PHP_EOL;
+      else
+        $rHtml .= '<meta name="twitter:title" content="'.esc_attr(trim(get_bloginfo('name'))).'">'.PHP_EOL;
+      // ----------------------- Description
+      if (get_option('qnrwp_twitter_description')) 
+        $rHtml .= '<meta name="twitter:description" content="'.esc_attr(trim(get_option('qnrwp_twitter_description'))).'">'.PHP_EOL;
+      else if (get_option('qnrwp_meta_description')) 
+        $rHtml .= '<meta name="twitter:description" content="'.esc_attr(trim(get_option('qnrwp_meta_description'))).'">'.PHP_EOL;
+      else 
+        $rHtml .= '<meta name="twitter:description" content="'.esc_attr(trim(get_bloginfo('description'))).'">'.PHP_EOL;
+    }
+    // ----------------------- Image URLs, generic or post Custom Field or Featured Image
+    if (is_singular() && get_post_type() == 'post') {
+      if (get_post_custom_values('OpenGraph-Twitter-Card-Image'))
+        $rHtml .= '<meta name="twitter:image" content="'.esc_attr(esc_url(trim(get_post_custom_values('OpenGraph-Twitter-Card-Image')[0]))).'">'.PHP_EOL;
+      else if (has_post_thumbnail())
+        $rHtml .= '<meta name="twitter:image" content="'.esc_attr(get_the_post_thumbnail_url(null, $size='large')).'">'.PHP_EOL;
+      else if (get_option('qnrwp_twitter_imageurl')) 
+        $rHtml .= '<meta name="twitter:image" content="'.esc_attr(trim(get_option('qnrwp_twitter_imageurl'))).'">'.PHP_EOL;
+    } else if (get_option('qnrwp_twitter_imageurl')) {
+      $rHtml .= '<meta name="twitter:image" content="'.esc_attr(trim(get_option('qnrwp_twitter_imageurl'))).'">'.PHP_EOL;
+    }
+  }
+  return $rHtml;
 }
 
 
@@ -147,6 +443,7 @@ function qnrwp_get_subheader_html($widgetDefPageID) {
   }
   
   $rHtml = '';
+  $wcContent = ''; // Widget child page content for display in subheader on matching named page
   $shOptionsL = array(); // Array of page name => image attachment ID
   $shOptionsL['*'] = ''; // Avoid an error later if key/value not set
   $shOptionsL['News'] = ''; // Likewise, prefer no-URL if News not present
@@ -156,34 +453,31 @@ function qnrwp_get_subheader_html($widgetDefPageID) {
     $shOptionsL['*'] = get_post_thumbnail_id($widgetDefPageID);
   }
 
-  // Get child pages and their Featured Images
+  // Get child pages and their Featured Images / content
   $widgetChildren = get_page_children($widgetDefPageID, get_pages());
   if (count($widgetChildren) > 0) {
     foreach ($widgetChildren as $widgetChild) {
+      // Get any content from child page for its matching named page
+      if ($widgetChild->post_title == $GLOBALS['pageTitle']) {
+        $wcContent = apply_filters('the_content', get_post_field('post_content', $widgetChild->ID));
+      }
       // Store name and img URL as key => value
       if (has_post_thumbnail($widgetChild)) {
         $shOptionsL[$widgetChild->post_title] = get_post_thumbnail_id($widgetChild);
       }
     }
   }
-
-  if ($GLOBALS['isNews']) { // Create News header, for all News pages
-    $headerTitleText = 'News';
+  
+  $headerTitleText = $wcContent ? $wcContent : $GLOBALS['pageTitle']; // May be overriden below
+  
+  if ($GLOBALS['isNews']) { // Create News header, for all News pages, if no content defined
+    $headerTitleText = $wcContent ? $wcContent : 'News';
     $attID = $shOptionsL['News'];
   }
   else if ($GLOBALS['postsAmount'] == 'single') { // Create Page header
-    if ($GLOBALS['pageTitle'] == 'Home') {
-      // TODO use page content instead
-      $headerTitleText = '<b><big>'.get_bloginfo('name').'</big></b><br>'.PHP_EOL;
-      $headerTitleText .= get_bloginfo('description');
-    }
-    else {
-      $headerTitleText = $GLOBALS['pageTitle'];
-    }
-    try { // Match URLs to pages, named, or as assigned to *
+    if (isset($shOptionsL[$GLOBALS['pageTitle']]) && !empty($shOptionsL[$GLOBALS['pageTitle']])) {
       $attID = $shOptionsL[$GLOBALS['pageTitle']];
-    }
-    catch (Exception $e) {
+    } else {
       $attID = $shOptionsL['*'];
     }
   }
@@ -200,11 +494,14 @@ function qnrwp_get_subheader_html($widgetDefPageID) {
     // Create file path for intermediate size image
     $imgPath = $upload_dir['baseurl'] . '/' . $image_subdir . '/' . $sizeArray['file'];
     if (is_ssl()) $imgPath = set_url_scheme($imgPath, 'https');
-    // Prepend presumably increasing sizes to media html
-    $mItem = '@media (max-width: '.$sizeArray['width'].'px) {'.PHP_EOL;
-    $mItem .= 'div#subheader {background-image:url("'.$imgPath.'");}'.PHP_EOL;
-    $mItem .= '}'.PHP_EOL;
-    $mHtml = $mItem . $mHtml;
+    // Limit to min 600px width or height to avoid stretching low res on mobiles
+    if ($sizeArray['width'] > 600 && $sizeArray['height'] > 600) {
+      // Prepend presumably increasing sizes to media html
+      $mItem = '@media (max-width: '.$sizeArray['width'].'px) {'.PHP_EOL;
+      $mItem .= 'div#subheader {background-image:url("'.$imgPath.'");}'.PHP_EOL;
+      $mItem .= '}'.PHP_EOL;
+      $mHtml = $mItem . $mHtml; // Concatenate in reverse
+    }
     $largestImage = $imgPath; // Record last item as largest, the default in style block
   }
   
@@ -215,8 +512,9 @@ function qnrwp_get_subheader_html($widgetDefPageID) {
   $sHtml .= '</style>'.PHP_EOL;
   
   $rHtml = $sHtml . '<div id="subheader"'.$subheaderAttributes.'>'.PHP_EOL;
-  $rHtml .= '<div><p>'.$headerTitleText.'</p></div></div>'.PHP_EOL;
-  return $rHtml;
+  if ($wcContent) $rHtml .= $headerTitleText; // We already have all the code if $wcContent
+  else $rHtml .= '<div><p>'.$headerTitleText.'</p></div>'; // TODO simplify?
+  return $rHtml . '</div>' . PHP_EOL;
 }
 
 
@@ -546,6 +844,7 @@ function qnrwp_enqueue_styles() {
   // -------- Combine and minify stylesheets
   // Create ordered list of relative paths to stylesheets used
   $stylesL = array( '/res/css/qnr-interface.css', 
+                    '/res/css/contact.css',
                     '/style.css');
   // Create array of stylesheet file paths, theme files first
   $tF = get_template_directory();
@@ -598,6 +897,7 @@ function qnrwp_enqueue_scripts() {
   // ----------------------- Minify JS
   // List JS files
   $jsFilesL = array('/res/js/qnr-interface.js',
+                    '/res/js/contact.js',
                     '/qnrwp_a-main.js');
   // Create array of JS file paths
   $tF = get_template_directory();
@@ -754,7 +1054,7 @@ add_filter('dynamic_sidebar_params', 'qnrwp_dynamic_sidebar_params');
 
 // ----------------------- Title filter
 
-// Customize title with blog name, and take care of it on Home page
+// Customize title with blog name, and take care of it on Home page (no longer used)
 function qnrwp_title_filter($title) {
   if (empty($title) && (is_home() || is_front_page())) {
     $title = 'Home';
@@ -826,14 +1126,20 @@ add_filter('nav_menu_css_class', 'qnrwp_menu_classes', 10, 4);
 // ----------------------- Excerpt length and form filters
 
 function qnrwp_custom_excerpt_length($length) {
-	return 35; // On average there are 5 characters per word
+  $rN = 35; // On average there are 5 characters per word
+  if (isset($GLOBALS['MaxExcerptLength']))
+    $rN = intval(($GLOBALS['MaxExcerptLength']/5) + 5);
+	return $rN;
 }
 add_filter('excerpt_length', 'qnrwp_custom_excerpt_length', 999);
 
-add_filter('get_the_excerpt', function($excerpt) {
+// Used in both excerpt hook and custom calls (meta description)
+function qnrwp_get_pretty_excerpt($excerpt) {
   // Reduce length to max 110 chars
   $excerptDecode = wp_kses_decode_entities($excerpt); // Decode numerical entities, only for counting
   $eLen = 110;
+  // Consider the global limit (for the sake of generic use in meta description)
+  if (isset($GLOBALS['MaxExcerptLength'])) $eLen = $GLOBALS['MaxExcerptLength'];
   if (substr($excerptDecode, 0, $eLen) !== substr($excerpt, 0, $eLen)) {
     $eLen += strlen($excerpt) - strlen($excerptDecode);
   }
@@ -845,21 +1151,49 @@ add_filter('get_the_excerpt', function($excerpt) {
   // Remove closing punctuation (not including ; as it may end a char entity)
   $excerpt = preg_replace('/[,:.!?-]+$/', '', $excerpt);
   return $excerpt . '...';
-});
+}
+add_filter('get_the_excerpt', 'qnrwp_get_pretty_excerpt');
 
-// NOT USED: output too long for small tablet window size
-function qnrwp_get_news_first_para_excerpt() {
+// NOT USED for excerpt; output too long for small tablet window size
+function qnrwp_get_news_first_para_excerpt1() {
   // We get first paragraph from HTML content, as classed by content filter
   $htmlContent = apply_filters('the_content', get_the_content());
   $rc = preg_match('/<p[^>]+news-post-first-para[^>]+>(.+?)<\/p>/', $htmlContent, $matches);
   if ($rc) {
     $rT = wp_strip_all_tags($matches[1], true);
-    if (strlen($rT) < 250) {
+    if (strlen($rT) < 255) {
       return $rT;
     }
   }
   // If our excerpt too long, use reqular excerpt function
   return apply_filters('the_excerpt', get_the_excerpt());
+}
+
+// New version, working with $post global
+function qnrwp_get_news_first_para_excerpt() {
+  global $post;
+  // Remove HTML/PHP tags
+  $content = strip_tags($post->post_content);
+  // Remove shortcodes
+  // First convert double brackets to safe strings
+  $content = preg_replace('/\[\[/', '<<<qnr_gnfpe_s<<<', $content);
+  $content = preg_replace('/\]\]/', '>>>qnr_gnfpe_e>>>', $content);
+  $content = preg_replace('/\s*\[[^\]]*\]\s*/', ' ', $content);
+  $content = preg_replace('/<<<qnr_gnfpe_s<<</', '[', $content);
+  $content = preg_replace('/>>>qnr_gnfpe_e>>>/', ']', $content);
+  $cL = preg_split('/\s*\n\s*\n+/', $content);
+  if (isset($cL) && !empty($cL)) {
+    $rT = trim($cL[0]);
+    // Keep it sane, reduce to <= 255 chars
+    if (strlen($rT) > 255) {
+      $GLOBALS['MaxExcerptLength'] = 255;
+      $rT = qnrwp_get_pretty_excerpt($rT);
+      // Reset to usual 110 for excerpts
+      $GLOBALS['MaxExcerptLength'] = 110;
+    }
+    return $rT;
+  }
+  else return '';
 }
 
 
@@ -872,7 +1206,7 @@ add_filter('the_content', function($content) {
                   && !is_admin() && in_category(array('news', 'uncategorized'))) {
     // Class first paragraph as "news-post-first-para", perhaps after featured image possibly wrapped in A and P tags
     // Won't work if a carousel precedes the first paragraph, but that will be caught by CSS
-    qnrwp_debug_printout($content, $append=false);
+    //qnrwp_debug_printout($content, $append=false);
     $gP = '/^(\s*((<p>\s*<a[^>]+>\s*<img[^>]+>\s*<\/a>\s*<\/p>)|(<img[^>]+>))?\s*<p)>/';
     $content = preg_replace($gP, '$1 class="news-post-first-para">', $content);
   }
@@ -1007,7 +1341,9 @@ class QNRWP_Featured_News extends WP_Widget {
             $rHtml .= '<div class="featured-news-item-header" style="background-image:url(\''.$thumbUrl.'\')">&nbsp;</div>'.PHP_EOL;
             $rHtml .= '<div class="featured-news-item-text">'.PHP_EOL;
             $rHtml .= '<h1>'.get_the_title().'</h1>'.PHP_EOL;
+            $GLOBALS['MaxExcerptLength'] = 115;
             $rHtml .= '<div class="featured-news-item-excerpt">'.PHP_EOL.get_the_excerpt().PHP_EOL.'</div>'.PHP_EOL;
+            $GLOBALS['MaxExcerptLength'] = 110;
             $rHtml .= '</div>'.PHP_EOL.'</a>'.PHP_EOL; // Closing item
             $featuredCount += 1;
             if ($featuredCount == 2) $rHtml .= '</div><div><!-- No whitespace -->'.PHP_EOL; // Close first item-of-two, open next
@@ -1052,7 +1388,7 @@ class QNRWP_Samples_List extends WP_Widget {
 	public function widget($args, $instance) {
     if (is_front_page()) {
       // Params: name, categories, size
-      echo qnrwp_get_samples_html('Samples', array('sample-web-design', 'sample-website', 'sample-work'), 'medium');
+      echo qnrwp_get_samples_html('Samples', array('sample-web-design', 'sample-website', 'sample-work'), 'medium_large');
     } // If not on front page, do nothing
 	}
   
@@ -1121,7 +1457,7 @@ function qnrwp_widgets_init() {
   register_sidebar(array(
     'name'          => 'Right Sidebar',
     'id'            => 'qnrwp-sidebar-2',
-    'description'   => 'Widgets in this area will be shown on all  posts but not on pages.',
+    'description'   => 'Widgets in this area will be shown on all posts but not on pages.',
     'before_widget' => "<!-- Widget -->\n" . '<div id="%1$s" class="widget %2$s">'.PHP_EOL,
     'after_widget'  => "\n</div>\n",
     //'before_widget' => "<!-- Widget -->\n",
@@ -1152,6 +1488,9 @@ add_action('widgets_init', 'qnrwp_widgets_init');
 function qnrwp_setup() {
   // ----------------------- Post Thumbnails support
   add_theme_support('post-thumbnails');
+  
+  // ----------------------- Title tag support
+  add_theme_support('title-tag');
   
   // ----------------------- HTML5 support
 	add_theme_support('html5', array(
@@ -1189,7 +1528,6 @@ function qnrwp_featuredimage_shortcode($atts, $content = null) {
 }
 add_shortcode('featured-image', 'qnrwp_featuredimage_shortcode');
 
-
 // [include file='fileURL']
 function qnrwp_include_shortcode($atts, $content = null) {
   $a = shortcode_atts(array(
@@ -1197,10 +1535,44 @@ function qnrwp_include_shortcode($atts, $content = null) {
   ), $atts);
   if ($a['file'] !== '') {
     // Assume file parameter is relative to child theme directory, or theme if no child
-    return include(trailingslashit(get_stylesheet_directory()) . $a['file']);
+    //$e = include(trailingslashit(get_stylesheet_directory()) . $a['file']);
+    //return eval($e);
+    
+        ob_start();
+        //include $filename;
+        include(trailingslashit(get_stylesheet_directory()) . $a['file']);
+        return ob_get_clean();
   }
 }
 add_shortcode('include', 'qnrwp_include_shortcode');
+
+// [contact-form]
+// Used for mail contact and subscription without message/subject/name
+function qnrwp_contact_form_shortcode($atts, $content = null) {
+  // Email will be sent from wordpress@domain.com
+  // Reply-To header will be set to the user's email
+  // The 'warnings' parameter controls display of max chars and IP under 
+  //   message if message is used
+  
+  // Construct default subject-line
+  $subjectLine = (strlen(get_bloginfo('name')) > 50) 
+                        ? 'Enquiry from a website visitor' 
+                        : 'Enquiry from a '.sanitize_text_field(get_bloginfo('name')).' website visitor';
+  $a = shortcode_atts(array(
+    'subject' => 'yes',
+    'subject-line' => $subjectLine,
+    'sent-reply' => 'Your message has been sent. You should receive a reply within 2 working days.',
+    'fail-reply' => 'Sorry, your message could not be sent.',
+    'message' => 'yes',
+    'warnings' => 'yes',
+    'name' => 'no',
+    'form-class' => 'contact-form',
+  ), $atts); // As a minimum, email field required, for subscribing
+  ob_start();
+  qnrwp_contact_form($a);
+  return ob_get_clean();
+}
+add_shortcode('contact-form', 'qnrwp_contact_form_shortcode');
 
 // [menu name='menuName']
 function qnrwp_menu_shortcode($atts, $content = null) {
@@ -1243,7 +1615,7 @@ add_shortcode('carousel', 'qnrwp_carousel_shortcode');
 function qnrwp_samples_shortcode($atts, $content = null) {
   $a = shortcode_atts(array(
     'name' => 'Samples',
-    'size' => 'medium',
+    'size' => 'medium_large',
     'categories' => 'sample-web-design, sample-website, sample-work',
   ), $atts);
   $sCatsL = preg_split('/,\s+/', $a['categories']);

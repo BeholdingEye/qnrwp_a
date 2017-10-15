@@ -1,0 +1,180 @@
+/*
+  Contact Form Stylesheet
+*/
+
+input[type="button"]::-moz-focus-inner,
+button::-moz-focus-inner {
+    outline: none;
+    border: none;
+}
+
+div.contact-block,
+div.contact-block div {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+}
+div.contact-block {
+    margin: 2em auto;
+    padding: 0.5em 1em 1em;
+    width: 100%;
+    min-width: 280px;
+    max-width: 640px;
+    height: auto;
+    color: #555;
+    text-align: center;
+    border-radius: 0;
+    overflow: hidden;
+    opacity: 1;
+    box-shadow: 0 1px 3px 0 silver;
+    background-color: #EEE;
+}
+div.contact-block,
+div.contact-block * {
+    box-sizing: border-box;
+}
+/* Feedback versions for fail and sent */
+div.contact-block.fail-reply,
+div.contact-block.sent-reply {
+    padding: 1.5em;
+    padding-right: 3.2em;
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 1.4em;
+    text-align: left;
+}
+div.contact-block.fail-reply {
+    color: maroon;
+    background-color: #ffdddd;
+}
+div.contact-block.sent-reply {
+}
+/* X-icon to go back to Contact page sans POST */
+div.contact-block.fail-reply a,
+div.contact-block.sent-reply a {
+    display: block;
+    position: absolute;
+    right: 0.6em;
+    top: 0.8em;
+    font-weight: bold;
+    font-size: 1.6em;
+    text-decoration: none;
+    color: inherit;
+}
+div.contact-block.fail-reply a:hover,
+div.contact-block.sent-reply a:hover {
+    color: inherit;
+    opacity: 0.8;
+}
+
+.default-cursor {    /* Set by Javascript, overrides the hover */
+    cursor: text !important;
+    cursor: inherit !important;
+}
+
+/* Subframe block for each input / textarea  */
+div.contact-block div.contact-subframe {
+    margin-top: 1em;
+    text-align: left;
+    width: 100%;
+}
+/* Input labels */
+div.contact-block div.contact-subframe span.label {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: left;
+}
+div.contact-block .user-entry {   /* Input or textarea  */
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0.5em;
+    width: 100%;
+    font-size: 0.9em;
+    color: #333;
+    border: solid thin white;
+}
+div.contact-block .user-entry:focus {
+    border: solid thin silver;
+}
+div.contact-block textarea {
+    resize: none;
+}
+/* Warnings, max count in message and user IP */
+div.contact-block p.user-info {
+    display: block;
+    position: relative;
+    margin: 0.1em;
+    margin-bottom: 1em;
+    padding: 0;
+    width: 100%;
+    font-size: 1em;
+}
+div.contact-block span.textarea-count,
+div.contact-block span.client-ip {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    font-size: 0.8em;
+}
+div.contact-block span.textarea-count {
+    text-align: left;
+}
+div.contact-block span.client-ip {
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: right;
+    font-weight: bold;
+}
+
+div.contact-block div.contact-send-btn {
+    margin-top: 1em;
+    text-align: right;
+    box-sizing: border-box;
+}
+div.contact-block button.form-send {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 1em;
+    padding: 0.5em 1em;
+    width: 8em;
+    font-size: 1em;
+    font-weight: bold;
+    text-decoration: none;
+    font-stretch: normal;
+    text-transform: uppercase;
+    text-align: center;
+    color: white;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    box-shadow: 1px 1px 1px 1px gray;
+    background-color: gray;
+}
+div.contact-block button.form-send:hover {
+    cursor: pointer;
+    background-color: #666;
+}
+div.contact-block button.form-send:active {
+    top: 1px;
+    left: 1px;
+    box-shadow: none;
+    color: white;
+    border: none;
+    outline: none;
+    background-color: #666;
+}
+
+@media (max-width: 800px) {
+
+}
+@media (max-width: 400px) {
+
+}

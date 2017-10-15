@@ -13,8 +13,11 @@ This theme will be developed rapidly. No releases will be packaged - the latest 
 * Dashboard is not cluttered with theme settings. All custom widgets are defined in Pages and subpages or implemented with shortcodes.
 * For non-admin users, Dashboard allows only creation and editing of Posts, Pages and Media, the rest of the interface does not display. Pages that define widgets are not visible to non-admins either.
 * Semi-automated layout, no need for page building plugins. Presence of sidebar widgets controls the layout logically.
-* Page loading speed is optimized and scores well on Google Page Speed. Theme CSS and JS files are combined into one file each and minified. CSS stylesheet is linked from the head, and JS file in the foot of the page. JS minification is by the bundled JsMin.php file from <https://github.com/searchturbine/phpwee-php-minifier>.
+* Page loading speed is optimized and scores well on Google Page Speed. Theme CSS and JS files are combined into one file each and minified, automatically refreshing if changes are made to the source files. CSS stylesheet is linked from the head, and JS file in the foot of the page. JS minification is by the bundled JsMin.php file from <https://github.com/searchturbine/phpwee-php-minifier>.
 * If the ImageMagick PHP module is installed on the server, uploaded images will be better optimized.
+* Meta, OpenGraph and Twitter card tags are supported. Tags are generic on Pages, and individually constructed on Posts from their starting paragraphs and Featured Images.
+* "Featured News" and "Samples" sections are supported with custom widgets and shortcodes.
+* Contact forms are supported with a shortcode, offering comprehensive control of parameters. May also be used for mailing list subscription forms.
 
 ## Image sizes:
 
