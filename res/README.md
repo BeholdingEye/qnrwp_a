@@ -69,3 +69,11 @@ Included widgets are:
 
   New in version 1.5.0 is this widget, preserving the object's aspect ratio at different screen sizes. This helps prevent images and videos displaying "tall" when they should be "narrow", usually on mobile screens in portrait mode.
 
+15. **Button Toggle**
+
+  Button with two states, on / off. Callback functions may be defined for each state.
+
+16. **Popout Slider**
+
+  Container for UI items that are hidden on page load, but on click of a button slide out from a window edge. By default set up for revealing a mailing subscription form, but can be adjusted for menu drawers etc. Callbacks may be defined for showing and hiding.
+

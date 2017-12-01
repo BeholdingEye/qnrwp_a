@@ -1,31 +1,48 @@
 /* ==================================================================
  *
- *            QNRWP_A MAIN JAVASCRIPT 1.0.0
- *
- *            Copyright 2016 Karl Dolenc, beholdingeye.com.
- *            All rights reserved.
+ *            QNRWP_A MAIN JAVASCRIPT 
  * 
  * ================================================================== */
- 
-/* ----------------------- LICENSE ---------------------------------
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
- * 
- * -------------------------------------------------------------- */
+
+// Our theme global
+var QNRWP_GLOBAL = {};
+// .clientServerTimeDelta
 
 function afterLoad() {
+    // Obtain time delta between client and server, from ajax cookie value
+    var cV = getCookieValue("qnrwp_ajax_cookie");
+    var cT = parseInt(cV.split("T")[1]);
+    var secsNow = Math.ceil(Date.now()/1000);
+    QNRWP_GLOBAL.clientServerTimeDelta = secsNow - cT;
+    
     print("QNRWP_A themed page loaded OK");
+}
+
+// AJAX request using WP methodology and Ajax functions in QI
+// Data must be an object, with A-Za-z0-9-_ keys, actiontype and datajson
+// Remember to trigger the post-load event if inserting content into page
+function QNRWP_Ajax_Request(data, mode, callType) {
+    try {
+        if (data.actiontype === undefined || data.datajson === undefined) return "ERROR: Invalid data";
+        // Encode data as query string for POST
+        var dataString = "";
+        for (var key in data) {
+            dataString += key + "=" + encodeURIComponent(data[key]) + "&";
+        }
+        // Add ajax cookie to data (hex format (plus T and secs), no need to encode) as last data after final &
+        dataString += 'qnrwp_ajax_cookie=' + getCookieValue("qnrwp_ajax_cookie");
+        var xhr=new XMLHttpRequest();
+        // qnrwp_ajax_handler is defined in functions.php; qnrwp_global_enqueued_wp_object defined 
+        //   in script enqueue (buggy WP fuction call, but working for this)
+        if (mode == "sync") {
+            // AjaxSync(url, mode, request, contentTypeL, customHeaderL)
+            var aR = AjaxSync(qnrwp_global_enqueued_wp_object.ajaxurl + "?action=qnrwp_ajax_handler", 
+                                callType, dataString,
+                                ["Content-Type", "application/x-www-form-urlencoded"],
+                                null);
+            return decodeURIComponent(aR); // On error, will begin with "ERROR:", else "Success:"
+        }
+    } catch (e) {
+        return "ERROR: "+e.message;
+    }
 }

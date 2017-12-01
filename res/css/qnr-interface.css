@@ -16,10 +16,335 @@
 }
 
 
-/* HOVER REVEAL - TODO
+/* GENERIC ANIMATION
  * ----------------------------------------------------- */
 
-/* To be developed */
+/* Popout: slide out from window edge */
+
+@keyframes qnr-anim-popout-down {
+    from {
+        -webkit-transform: translateY(-100%);
+        -moz-transform: translateY(-100%);
+        -ms-transform: translateY(-100%);
+        -o-transform: translateY(-100%);
+        transform: translateY(-100%);
+    }
+    to {
+        -webkit-transform: translateY(0%);
+        -moz-transform: translateY(0%);
+        -ms-transform: translateY(0%);
+        -o-transform: translateY(0%);
+        transform: translateY(0%);
+    }
+}
+@keyframes qnr-anim-popout-down-back {
+    from {
+        -webkit-transform: translateY(0%);
+        -moz-transform: translateY(0%);
+        -ms-transform: translateY(0%);
+        -o-transform: translateY(0%);
+        transform: translateY(0%);
+    }
+    to {
+        -webkit-transform: translateY(-100%);
+        -moz-transform: translateY(-100%);
+        -ms-transform: translateY(-100%);
+        -o-transform: translateY(-100%);
+        transform: translateY(-100%);
+    }
+}
+@keyframes qnr-anim-popout-up {
+    from {
+        -webkit-transform: translateY(100%);
+        -moz-transform: translateY(100%);
+        -ms-transform: translateY(100%);
+        -o-transform: translateY(100%);
+        transform: translateY(100%);
+    }
+    to {
+        -webkit-transform: translateY(0%);
+        -moz-transform: translateY(0%);
+        -ms-transform: translateY(0%);
+        -o-transform: translateY(0%);
+        transform: translateY(0%);
+    }
+}
+@keyframes qnr-anim-popout-up-back {
+    from {
+        -webkit-transform: translateY(0%);
+        -moz-transform: translateY(0%);
+        -ms-transform: translateY(0%);
+        -o-transform: translateY(0%);
+        transform: translateY(0%);
+    }
+    to {
+        -webkit-transform: translateY(100%);
+        -moz-transform: translateY(100%);
+        -ms-transform: translateY(100%);
+        -o-transform: translateY(100%);
+        transform: translateY(100%);
+    }
+}
+@keyframes qnr-anim-popout-left {
+    from {
+        -webkit-transform: translateX(100%);
+        -moz-transform: translateX(100%);
+        -ms-transform: translateX(100%);
+        -o-transform: translateX(100%);
+        transform: translateX(100%);
+    }
+    to {
+        -webkit-transform: translateX(0%);
+        -moz-transform: translateX(0%);
+        -ms-transform: translateX(0%);
+        -o-transform: translateX(0%);
+        transform: translateX(0%);
+    }
+}
+@keyframes qnr-anim-popout-left-back {
+    from {
+        -webkit-transform: translateX(0%);
+        -moz-transform: translateX(0%);
+        -ms-transform: translateX(0%);
+        -o-transform: translateX(0%);
+        transform: translateX(0%);
+    }
+    to {
+        -webkit-transform: translateX(100%);
+        -moz-transform: translateX(100%);
+        -ms-transform: translateX(100%);
+        -o-transform: translateX(100%);
+        transform: translateX(100%);
+    }
+}
+@keyframes qnr-anim-popout-right {
+    from {
+        -webkit-transform: translateX(-100%);
+        -moz-transform: translateX(-100%);
+        -ms-transform: translateX(-100%);
+        -o-transform: translateX(-100%);
+        transform: translateX(-100%);
+    }
+    to {
+        -webkit-transform: translateX(0%);
+        -moz-transform: translateX(0%);
+        -ms-transform: translateX(0%);
+        -o-transform: translateX(0%);
+        transform: translateX(0%);
+    }
+}
+@keyframes qnr-anim-popout-right-back {
+    from {
+        -webkit-transform: translateX(0%);
+        -moz-transform: translateX(0%);
+        -ms-transform: translateX(0%);
+        -o-transform: translateX(0%);
+        transform: translateX(0%);
+    }
+    to {
+        -webkit-transform: translateX(-100%);
+        -moz-transform: translateX(-100%);
+        -ms-transform: translateX(-100%);
+        -o-transform: translateX(-100%);
+        transform: translateX(-100%);
+    }
+}
+@keyframes qnr-anim-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes qnr-anim-fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.qnr-anim-popout-down {
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-down;
+}
+.qnr-anim-popout-down-back {
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-down-back;
+}
+.qnr-anim-popout-up {
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-up;
+}
+.qnr-anim-popout-up-back {
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-up-back;
+}
+.qnr-anim-popout-left {
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-left;
+}
+.qnr-anim-popout-left-back {
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-left-back;
+}
+.qnr-anim-popout-right {
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-right;
+}
+.qnr-anim-popout-right-back {
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-right-back;
+}
+.qnr-anim-fade-in {
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-fade-in;
+}
+.qnr-anim-fade-out {
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-fade-out;
+}
+
+
+/* POPOUT SLIDER
+ * ----------------------------------------------------- */
+
+/* By default, styled as reveal of email subscription form */
+
+.qnr-popout-slider,
+.qnr-popout-slider * {
+    box-sizing: border-box;
+}
+
+.qnr-popout-slider {
+    display: block;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    top: 70px;
+    right: 0;
+    -webkit-transform: translateX(100%);
+    -moz-transform: translateX(100%);
+    -ms-transform: translateX(100%);
+    -o-transform: translateX(100%);
+    transform: translateX(100%); /* Place it offscreen by its width */
+    width: 100%;
+    min-width: 280px;
+    max-width: 400px;
+    height: auto;
+    background-color: white;
+    z-index: 99;
+}
+
+button.qnr-popout-slider-button-show {
+    display: block;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    padding-left: 0.5em;
+    top: 80px;
+    right: 0;
+    width: 2.2em;
+    height: 2.2em;
+    font-family: Quicknr;
+    font-size: 1.2em;
+    line-height: 0;
+    text-align: left;
+    color: #666;
+    border-radius: 0.5em 0 0 0.5em;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(1,1,1,0.4);
+    background-color: rgba(255,255,255,0.9); /* Partly transparent */
+    z-index: 99;
+}
+button.qnr-popout-slider-button-hide {
+    display: block;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    margin: 0;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    font-family: Quicknr;
+    font-size: 20px;
+    line-height: 0;
+    color: #666;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+@media (max-width: 500px) {
+    button.qnr-popout-slider-button-hide {
+        top: 8px;
+        right: 8px;
+    }
+}
+button.qnr-popout-slider-button-show > span::before {
+    content: "h"; /* Email icon */
+}
+button.qnr-popout-slider-button-hide > span::before {
+    content: "H"; /* X icon circle */
+}
+button.qnr-popout-slider-button-show:hover {
+    width: 2.6em;
+    color: black;
+    box-shadow: 0 0 12px rgba(1,1,1,0.2);
+    background-color: white;
+    transition: all 0.2s;
+}
+button.qnr-popout-slider-button-hide:hover {
+    color: black;
+}
+
+
+/* TOGGLE BUTTON
+ * ----------------------------------------------------- */
+
+.qnr-button-toggle {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0.5em;
+    width: auto;
+    height: auto;
+    cursor: pointer;
+    border: none;
+    /* Same as -up override */
+    border-right: solid thin silver;
+    border-bottom: solid thin silver;
+    background-color: #f0f0f0;
+    background-image: linear-gradient(#f0f0f0, #dadada);
+}
+.qnr-button-toggle-up {
+    border: none;
+    border-right: solid thin silver;
+    border-bottom: solid thin silver;
+    background-color: #f0f0f0;
+    background-image: linear-gradient(#f0f0f0, #dadada);
+}
+.qnr-button-toggle-down {
+    border: none;
+    border-left: solid thin silver;
+    border-top: solid thin silver;
+    background-color: #dadada;
+    background-image: linear-gradient(#dadada, #f0f0f0);
+}
 
 
 /* ARROW ANIM

@@ -3,8 +3,143 @@
  * QNRWP-A functions.php
  */
 
-// Load up functions-admin.php if on an Admin page
+// Load up functions-admin.php if on an Admin page (or calling admin-ajax.php?)
 if (is_admin()) require_once('functions-admin.php');
+
+
+// ===================== START =====================
+
+function qnrwp_muplugins_loaded() {
+  // First action in load sequence, may not fire
+  //qnrwp_debug_printout('Load sequence started, calling from muplugins_loaded.');
+}
+add_action('muplugins_loaded', 'qnrwp_muplugins_loaded');
+
+function qnrwp_plugins_loaded() {
+  // After 'muplugins_loaded' that may not always run, this is the
+  //   earliest hook in the load sequence, the starting point. May not fire
+  //   if no plugins activated
+  //qnrwp_debug_printout('Load sequence started, calling from plugins_loaded.');
+}
+add_action('plugins_loaded', 'qnrwp_plugins_loaded');
+
+function qnrwp_setup() {
+  // First action in load sequence guaranteed to run
+  /**
+   * Generally used to initialize theme settings/options. This is the first 
+   * action hook available to themes, triggered immediately after the active 
+   * theme's functions.php file is loaded. add_theme_support() should be 
+   * called here, since the init action hook is too late to add some features. 
+   * At this stage, the current user is not yet authenticated. 
+   */
+  
+  // Bail if no UA set, we need it for Ajax protection
+  if (!isset($_SERVER['HTTP_USER_AGENT']) || empty($_SERVER['HTTP_USER_AGENT'])) {
+    wp_die('ERROR: No user agent detected.');
+  }
+  
+  // ----------------------- Post Thumbnails support
+  add_theme_support('post-thumbnails');
+  
+  // ----------------------- Title tag support
+  add_theme_support('title-tag');
+  
+  // ----------------------- HTML5 support
+	add_theme_support('html5', array(
+		'search-form',
+		'comment-form',
+		'comment-list',
+		'gallery',
+		'caption',
+	));
+  
+  // ----------------------- Add new image sizes
+  add_image_size('qnrwp-larger', 1600, 0, false);
+  add_image_size('qnrwp-largest', 2000, 0, false);
+  add_image_size('qnrwp-extra', 2500, 0, false);
+}
+add_action('after_setup_theme', 'qnrwp_setup');
+
+
+// ===================== END =====================
+
+function qnrwp_wp_loaded() {
+  // Final action in load sequence?
+  //qnrwp_debug_printout('Load sequence ended, calling from wp_loaded.', $append=true);
+}
+add_action('wp_loaded', 'qnrwp_wp_loaded');
+
+function qnrwp_shutdown() {
+  // Fired just before PHP stops execution. This hook is called by 
+  // shutdown_action_hook(), which is defined in wp-includes/load.php, 
+  // and registered with PHP as a shutdown function by 
+  // register_shutdown_function() in wp-settings.php.
+  //qnrwp_debug_printout('Load sequence ended, calling from shutdown.', $append=true);
+}
+add_action('shutdown', 'qnrwp_shutdown');
+
+
+// ===================== AJAX =====================
+
+function qnrwp_ajax_handler() {
+  // Handle JS Ajax calls, securely, routing to different actions
+  try {
+    // $_POST will contain data passed in Ajax call, actiontype, cookie and datajson
+    // We also check for the site session cookie that should be set on first page load
+    if (!isset($_POST['actiontype']) 
+          || !isset($_POST['qnrwp_ajax_cookie'])
+          || !isset($_COOKIE['qnrwp_site_cookie'])
+          || !isset($_COOKIE['qnrwp_ajax_cookie'])
+          || !isset($_POST['datajson'])) {
+      echo 'ERROR: Invalid Ajax call';
+    } else {
+      // Security level is decided per device type below, but first we check the generics
+      if ($_POST['qnrwp_ajax_cookie'] !== $_COOKIE['qnrwp_ajax_cookie']) wp_die();
+      $ajaxTrans = get_transient('qnrwp_ajax_temp_salt_'.$_POST['qnrwp_ajax_cookie']);
+      // JS will have caught session expiry before we get here (with same message)
+      if (!$ajaxTrans) {
+        echo 'ERROR: Page session has expired. Reload the page to restart the session.';
+        wp_die();
+      }
+        
+      // Decide action according to actiontype; a bunch of conversions is required...
+      $actionType = stripslashes(rawurldecode($_POST['actiontype']));
+      
+      // ----------------------- Security check
+      // Get time component of cookie value (used for session timing client-side)
+      // If no UA, we would have exited on load in setup_theme
+      $timeComp = 'T' . preg_split('/T/', $_POST['qnrwp_ajax_cookie'])[1];
+      // NEW, the same for desktop and mobile
+      if ($_POST['qnrwp_ajax_cookie'] !== md5(crypt($_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR'], $ajaxTrans)).$timeComp) {
+        echo 'ERROR: Your IP or user agent has changed. Reload the page to restart the session.';
+        wp_die();
+      }
+      // OLD:
+      //if (qnrwp_deviceIsMobile()) {
+        //if ($_POST['qnrwp_ajax_cookie'] !== md5(crypt($_SERVER['HTTP_USER_AGENT'], $ajaxTrans)).$timeComp) wp_die();
+      //} else { // Desktop
+        //if ($_POST['qnrwp_ajax_cookie'] !== md5(crypt($_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR'], $ajaxTrans)).$timeComp) wp_die();
+      //}
+      
+      if ($actionType == 'email') {
+        // Echo returns to Ajax caller; encode again to be sure
+        // On error, returned string will begin with "ERROR:", else "Success:"
+        echo rawurlencode(qnrwp_send_email(stripslashes(rawurldecode($_POST['datajson']))));
+      } else {
+        echo 'Success: '.rawurlencode($actionType); // TEST TODO
+      }
+    }
+    
+    // ----------------------- End
+    wp_die(); // Must end like this
+  }
+  catch (Exception $e) {
+    echo rawurlencode('ERROR: ' . $e->getMessage());
+    wp_die();
+  }
+}
+add_action('wp_ajax_qnrwp_ajax_handler', 'qnrwp_ajax_handler');
+add_action('wp_ajax_nopriv_qnrwp_ajax_handler', 'qnrwp_ajax_handler');
 
 
 // ===================== GENERIC FUNCTIONS =====================
@@ -28,20 +163,20 @@ function qnrwp_debug_printout($valueToPrint, $append=false) { // Append must be 
   $tv = print_r($valueToPrint, $return=true) . PHP_EOL;
   // Limit printout to max 5000 chars
   if (strlen($tv) > 5000) $tv = 'DEBUG PRINTOUT ERROR: Length limit exceeded.';
-  // Limit printout text file size to 9K
-  if ($dpfSize !== false && $dpfSize < 10000) {
-    if ($append) file_put_contents($debugPrintFile, $tv, FILE_APPEND);
-    else {
-      //unlink(trailingslashit(dirname(__FILE__)) . 'debug-printout.txt'); // Needed
-      file_put_contents($debugPrintFile, $tv);
-    }
-  } // Else do nothing
+  // Limit printout text file size to 9K, useful for appending only
+  if ($append && $dpfSize !== false && $dpfSize < 10000) {
+    file_put_contents($debugPrintFile, $tv, FILE_APPEND);
+   
+  } else {
+    unlink(trailingslashit(dirname(__FILE__)) . 'debug-printout.txt'); // Needed
+    file_put_contents($debugPrintFile, $tv);
+  }
 }
 
 // ===================== TEST PRINTOUT ===================== TODO
 // Throws a circular reference error for var_export on News page
 
-//$GLOBALS['actionsAndFilters'] = '';
+//$GLOBALS['QNRWP_GLOBALS']['actionsAndFilters'] = '';
 ///* Hook to the 'all' action */
 //function backtrace_filters_and_actions() {
   ///* The arguments are not truncated, so we get everything */
@@ -52,11 +187,11 @@ function qnrwp_debug_printout($valueToPrint, $append=false) { // Append must be 
   //$backtrace = debug_backtrace();
   //$hook_type = $backtrace[3]['function'];
   
-  //$GLOBALS['actionsAndFilters'] .= "<i>$hook_type</i> <b>$tag</b>\n";
+  //$GLOBALS['QNRWP_GLOBALS']['actionsAndFilters'] .= "<i>$hook_type</i> <b>$tag</b>\n";
   //foreach ( $arguments as $argument ) {
-    //$GLOBALS['actionsAndFilters'] .= "\t\t" . htmlentities(var_export($argument, true)) . "\n";
+    //$GLOBALS['QNRWP_GLOBALS']['actionsAndFilters'] .= "\t\t" . htmlentities(var_export($argument, true)) . "\n";
   //}
-  //$GLOBALS['actionsAndFilters'] .= "\n";
+  //$GLOBALS['QNRWP_GLOBALS']['actionsAndFilters'] .= "\n";
 //}
 //add_action('all', 'backtrace_filters_and_actions');
 
@@ -86,105 +221,213 @@ function qnrwp_interpret_bool_input($bool) {
 }
 
 
+// ----------------------- Email, sent by Ajax
+
+function qnrwp_send_email($datajson) {
+  // Called by Ajax handler, using POST to pass datajson
+  $dataL = json_decode($datajson, $assoc = true);
+  // On error, returned string must begin with "ERROR:"
+  if (!isset($dataL) || empty($dataL)) return 'ERROR: No data to email';
+  
+  // Check transient records for count of all recent mailings by all users
+  $allMailingsCount = get_transient('qnrwp_mailings_count');
+  if ($allMailingsCount && $allMailingsCount > 10) { // Allow 11 mailings per 30 mins on whole site
+    return 'ERROR: Sorry, due to heavy traffic on the site, your message could not be sent. You may try again in 30 minutes.';
+  }
+  
+  // Check transient records for recent mailings by this client, per form class
+  $tlmsOldRecord = get_transient('qnrwp_last_mailing_'.$_COOKIE['qnrwp_site_cookie'].$dataL['formclass']);
+  if ($tlmsOldRecord !== false) { // Transient record exists, not expired, disallow email
+    $sitewideBlockingMinutesRemaining = max(0, 5 - intval(ceil((time() - $tlmsOldRecord)/60)));
+    if ($sitewideBlockingMinutesRemaining) {
+      // Return special error
+      $sitewideBlockingMinutesRemaining;
+      $minutesInResponse = ($sitewideBlockingMinutesRemaining == 1) ? ' minute' : ' minutes';
+      return 'ERROR: You have already sent a message using this form. '
+            .'You may try again in '.$sitewideBlockingMinutesRemaining.$minutesInResponse.'.';
+    }
+  }
+  if (!isset($sitewideBlockingMinutesRemaining) || !$sitewideBlockingMinutesRemaining) {
+    // Get options of the originating form
+    $nameBool = false;
+    $subjectBool = false;
+    $messageBool = false;
+    if (isset($dataL['options'])) {
+      switch (intval($dataL['options'])) {
+        case 1:
+          $nameBool = true;
+          break;
+        case 2:
+          $subjectBool = true;
+          break;
+        case 3:
+          $nameBool = true;
+          $subjectBool = true;
+          break;
+        case 4:
+          $messageBool = true;
+          break;
+        case 5:
+          $nameBool = true;
+          $messageBool = true;
+          break;
+        case 6:
+          $subjectBool = true;
+          $messageBool = true;
+          break;
+        case 7:
+          $nameBool = true;
+          $subjectBool = true;
+          $messageBool = true;
+          break;
+        default:
+      }
+    } else {
+      return 'ERROR: Email not sent due to invalid data'; // Return error if options not set (shouldn't happen)
+    }
+    $emailSent = false; // Almost redundant, but kept
+    // Test for adequate input to proceed
+    if (isset($dataL['email']) 
+          && isset($dataL['clientip'])
+          && isset($dataL['permalink'])
+          && (($messageBool && isset($dataL['message'])) || !$messageBool)) {
+      
+      // If data won't validate, $emailSent will remain false
+      // Using 'name' as an INPUT name doesn't work, we use 'emailname'
+      if (strlen($dataL['email']) < 100 
+            && is_email($dataL['email']) 
+            && strlen(get_bloginfo('admin_email')) < 100 
+            && is_email(get_bloginfo('admin_email')) 
+            && ((isset($dataL['emailname']) && mb_strlen($dataL['emailname']) < 100) || !isset($dataL['emailname'])) 
+            && ((isset($dataL['subject']) && mb_strlen($dataL['subject']) < 100) || !isset($dataL['subject'])) 
+            && (($messageBool && mb_strlen($dataL['message']) < 501) || !$messageBool)) {
+        // Construct the message
+        $emailAddress = $dataL['email'];
+        $emailSubject = ($subjectBool && isset($dataL['subject'])) ? $dataL['subject'] : '';
+        $emailMessage = ($messageBool && isset($dataL['message'])) ? $dataL['message'] : '';
+        $emailName = ($nameBool && isset($dataL['emailname'])) ? sanitize_text_field($dataL['emailname']) : '';
+        // If no subject (and no placeholder obtained by JS caller), create default, do not allow empty
+        if (!$emailSubject) {
+          $subjectFirstWord = (!$subjectBool && !$messageBool) ? 'Subscription' : 'Enquiry';
+          $emailSubject = (mb_strlen(get_bloginfo('name')) > 50) 
+                          ? $subjectFirstWord.' from a website visitor' 
+                          : $subjectFirstWord.' from a '.sanitize_text_field(get_bloginfo('name')).' website visitor';
+        }
+        // If no message, construct generic one, only email address submitted, probably for subscription
+        if (!$emailMessage) {
+          $emailMessage = 'Email contact details submitted via online form:' . PHP_EOL . PHP_EOL;
+          if ($emailName) $emailMessage .= 'Name: ' . $emailName . PHP_EOL . PHP_EOL;
+          $emailMessage .= 'Email address: ' . $emailAddress;
+        } else if ($emailName) { // Place the name in the message, for more reliable visibility than only in Reply-To
+          $emailMessage = 'Message from "' . $emailName . '":' . PHP_EOL . PHP_EOL . $emailMessage;
+        }
+        $mT = $emailMessage . PHP_EOL . PHP_EOL;
+        // Append a note about the message source
+        $mT .= '=========='.PHP_EOL;
+        $mT .= 'Message sent from IP '.$dataL['clientip'].PHP_EOL;
+        $mT .= 'using the online contact form at '.PHP_EOL;
+        $mT .= '<'. $dataL['permalink'].'>'.PHP_EOL;
+        $mT .= '=========='.PHP_EOL;
+        // Set Reply-To header to user's email, not WP
+        if ($emailName && !preg_match('/[^a-zA-Z\. -]+/',$emailName)) $headers = array('Reply-To: '.$emailName.' <'.$emailAddress.'>');
+        else $headers = array('Reply-To: <'.$emailAddress.'>');
+        
+        // Send the email, record transients and return
+        $emailSent = wp_mail(get_bloginfo('admin_email'), $emailSubject, $mT, $headers);
+        if ($emailSent) {
+          // Record mailing counter
+          if ($allMailingsCount === false) set_transient('qnrwp_mailings_count', 0, 30 * MINUTE_IN_SECONDS);
+          else set_transient('qnrwp_mailings_count', $allMailingsCount + 1, 30 * MINUTE_IN_SECONDS);
+          // Record last mailing time for this client
+          set_transient('qnrwp_last_mailing_'.$_COOKIE['qnrwp_site_cookie'].$dataL['formclass'], time(), 5 * MINUTE_IN_SECONDS);
+          return 'Success: Email sent';
+        }
+        else return 'ERROR: Email sending failed';
+      }
+    }
+    return 'ERROR: Email could not be sent';
+  }
+}
+
+
 // ----------------------- Contact Form generator, called by shortcode
 
 function qnrwp_contact_form($options) {
-  // $options = array('subject','subject-line','message','name','warnings' etc.)
-  // Convert string boolean inputs into booleans (subject-line etc. not boolean)
+  // $options = array('subject','message','name','warnings' etc.)
+  // Convert string boolean inputs into booleans (placeholders etc. not boolean)
+  $nameBool = qnrwp_interpret_bool_input($options['name']);
   $subjectBool = qnrwp_interpret_bool_input($options['subject']);
   $messageBool = qnrwp_interpret_bool_input($options['message']);
-  $nameBool = qnrwp_interpret_bool_input($options['name']);
+  $titleBool = qnrwp_interpret_bool_input($options['title']);
+  $introBool = qnrwp_interpret_bool_input($options['intro']);
+  $tooltipsBool = qnrwp_interpret_bool_input($options['tooltips']);
   $warningsBool = qnrwp_interpret_bool_input($options['warnings']);
-  $emailSent = false;
-  $emailSendAttempted = false;
-  // Test for adequate input to proceed
-  if ($_SERVER['REQUEST_METHOD'] === 'POST' 
-        && isset($_POST['email']) 
-        && isset($_POST['form-name-hidden'])
-        && isset($_POST['client-ip-hidden'])
-        && (($messageBool && isset($_POST['message'])) || !$messageBool)) {
-    $emailSendAttempted = true;
-    
-    // If data won't validate, $emailSent will remain false
-    // Using 'name' as an input name doesn't work, so we use 'emailname'
-    if (strlen($_POST['email']) < 100 
-          && is_email($_POST['email']) 
-          && strlen(get_bloginfo('admin_email')) < 100 
-          && is_email(get_bloginfo('admin_email')) 
-          && ((isset($_POST['emailname']) && strlen($_POST['emailname']) < 100) || !isset($_POST['emailname'])) 
-          && ((isset($_POST['subject']) && strlen($_POST['subject']) < 100) || !isset($_POST['subject'])) 
-          && (($messageBool && strlen($_POST['message']) < 501) || !$messageBool)) {
-      // Construct the message
-      $emailAddress = $_POST['email'];
-      $emailSubject = ($subjectBool && isset($_POST['subject'])) ? $_POST['subject'] : '';
-      $emailMessage = ($messageBool && isset($_POST['message'])) ? $_POST['message'] : '';
-      $emailName = ($nameBool && isset($_POST['emailname'])) ? sanitize_text_field($_POST['emailname']) : '';
-      // If no subject, pass the generic one constructed in caller or specified in shortcode
-      if (!$emailSubject) $emailSubject = $options['subject-line'];
-      // If no message, construct generic one, only email submitted, probably for subscription
-      if (!$emailMessage) {
-        $emailMessage = 'Email contact details submitted via online form:' . PHP_EOL . PHP_EOL;
-        if ($emailName) $emailMessage .= 'Name: ' . $emailName . PHP_EOL . PHP_EOL;
-        $emailMessage .= 'Email address: ' . $emailAddress;
-      } else if ($emailName) { // Place the name in the message, for more reliable visibility than only in Reply-To
-        $emailMessage = 'Message from "' . $emailName . '":' . PHP_EOL . PHP_EOL . $emailMessage;
-      }
-      $mT = $emailMessage . PHP_EOL . PHP_EOL;
-      // Append a note about the message source
-      $mT .= '=========='.PHP_EOL;
-      $mT .= 'Message sent from IP '.$_POST['client-ip-hidden'].', '.PHP_EOL;
-      $mT .= 'using the online contact form at '.PHP_EOL;
-      $mT .= '<'. get_permalink().'>.'.PHP_EOL;
-      $mT .= '=========='.PHP_EOL;
-      // Set Reply-To header to user's email, not WP
-      if ($emailName && !preg_match('/[^a-zA-Z\. -]+/',$emailName)) $headers = array('Reply-To: '.$emailName.' <'.$emailAddress.'>');
-      else $headers = array('Reply-To: <'.$emailAddress.'>');
-    
-      // Check transient records for recent mailings
-      // Control mailing times sitewide
-      $tlmsOldRecord = get_transient('qnrwp_last_mailing_sitewide');
-      if ($tlmsOldRecord !== false) { // Transient record exists, not expired, disallow email
-        $sitewideBlockingMinutesRemaining = max(0, 5 - intval(ceil((time() - $tlmsOldRecord)/60)));
-      }
-      if (!isset($sitewideBlockingMinutesRemaining) || !$sitewideBlockingMinutesRemaining) {
-        // Send the email
-        $emailSent = wp_mail(get_bloginfo('admin_email'), $emailSubject, $mT, $headers);
-        set_transient('qnrwp_last_mailing_sitewide', time(), 5 * MINUTE_IN_SECONDS);
-      }
-    }
-  } else { // Not sending email, but showing the form
-    // Set global count of contact forms, to set unique form names and IDs
-    if (isset($GLOBALS['QNRWP_GLOBALS']['ContactFormsCount'])) $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount'] += 1;
-    else $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount'] = 1;
-  }
+  $autofocusBool = qnrwp_interpret_bool_input($options['autofocus']);
+  $optionsInt = ($nameBool?1:0)+($subjectBool?2:0)+($messageBool?4:0); // Similar to 1,2,4 of Unix permissions
+  // Set global count of contact forms, to set unique form names and IDs
+  if (isset($GLOBALS['QNRWP_GLOBALS']['ContactFormsCount'])) $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount'] += 1;
+  else $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount'] = 1;
   ?>
-<?php if (!$emailSent && !$emailSendAttempted): // Show the form if not submitted yet ?>
-<div class="contact-block <?php echo $options['form-class']; ?>">
+<div class="contact-block <?php echo $options['form-class']; // No esc_attr needed, test done in shortcode caller ?>">
+  <?php if ($titleBool) echo '<p class="contact-title">'.$options['title-text'].'</p>' ?>
+  <?php if ($introBool) echo '<p class="contact-intro">'.$options['intro-text'].'</p>' ?>
   <form name="<?php echo 'contact-form' . $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount']; ?>" 
         id="<?php echo 'contact-form' . $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount']; ?>" 
-        action="<?php echo get_permalink(); ?>" method="post">
-    <input type="hidden" name="form-name-hidden" value="<?php echo 'contact-form' . $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount']; ?>">
-    <input type="hidden" name="client-ip-hidden" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>">
-    <div class="contact-emailframe contact-subframe">
-      <span class="label label-email">Your email address:</span>
-      <input type="email" name="email" class="email user-entry" maxlength="60" required autofocus>
-    </div>
+        action="" 
+        method="post"
+        onsubmit="SendEmail(this, event)">
+    <input type="hidden" name="form-name-hidden" class="form-name-hidden" value="<?php echo 'contact-form' . $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount']; ?>">
+    <input type="hidden" name="client-ip-hidden" class="client-ip-hidden" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>">
+    <input type="hidden" name="permalink-hidden" class="permalink-hidden" value="<?php echo esc_url(get_permalink()); ?>">
+    <input type="hidden" name="options-hidden" class="options-hidden" value="<?php echo $optionsInt; ?>">
+    <input type="hidden" name="sent-reply-hidden" class="sent-reply-hidden" value="<?php echo base64_encode($options['sent-reply']); ?>">
+    <input type="hidden" name="fail-reply-hidden" class="fail-reply-hidden" value="<?php echo base64_encode($options['fail-reply']); ?>">
+    <input type="hidden" name="form-class-hidden" class="form-class-hidden" value="<?php echo bin2hex($options['form-class']); ?>">
 <?php if ($nameBool): // Must use 'emailname' instead of 'name'... ?>
     <div class="contact-nameframe contact-subframe">
-      <span class="label label-name">Your name:</span>
-      <input type="text" name="emailname" class="name user-entry" maxlength="60">
+      <?php if ($options['label-name']): ?><span class="label label-name"><?php echo $options['label-name']; ?></span><?php endif; ?><input 
+                  type="text" 
+                  name="emailname" 
+                  placeholder="<?php echo $options['placeholder-name']; ?>" 
+                  class="name user-entry" 
+                  maxlength="60"<?php echo $autofocusBool?' autofocus':''; ?><?php echo $tooltipsBool?' title="Your name"':''; ?>>
     </div>
 <?php endif; ?>
+    <div class="contact-emailframe contact-subframe">
+      <!-- No whitespace -->
+      <?php if ($options['label-email']): ?><span class="label label-email"><?php echo $options['label-email']; ?></span><?php endif; ?><input 
+                  type="email" 
+                  name="email" 
+                  class="email user-entry" 
+                  maxlength="60" 
+                  required 
+                  placeholder="<?php echo $options['placeholder-email']; ?>" 
+                  <?php echo ($autofocusBool && !$nameBool)?'autofocus':''; ?><?php echo $tooltipsBool?' title="Your email address"':''; ?>>
+    </div>
 <?php if ($subjectBool): ?>
     <div class="contact-subjectframe contact-subframe">
-      <span class="label label-subject">Subject:</span>
-      <input type="text" name="subject" class="subject user-entry" maxlength="60" placeholder="<?php echo $options['subject-line']; ?>">
+      <?php if ($options['label-subject']): ?><span class="label label-subject"><?php echo $options['label-subject']; ?></span><?php endif; ?><input 
+                  type="text" 
+                  name="subject" 
+                  placeholder="<?php echo $options['placeholder-subject']; ?>" 
+                  class="subject user-entry" 
+                  maxlength="60">
     </div>
 <?php endif; ?>
 <?php if ($messageBool): ?>
     <div class="contact-textframe contact-subframe">
-      <span class="label label-message">Message:</span>
-      <textarea pattern=".{40,500}" required cols="20" name="message" class="message user-entry" rows="10" minlength="40" maxlength="500" onkeyup="CountTextarea(this,'count')" onblur="CountTextarea(this,'reset')"></textarea>
+      <?php if ($options['label-message']): ?><span class="label label-message"><?php echo $options['label-message']; ?></span><?php endif; ?><textarea 
+                  pattern=".{40,500}" 
+                  required 
+                  cols="20" 
+                  name="message" 
+                  placeholder="<?php echo $options['placeholder-message']; ?>" 
+                  class="message user-entry" 
+                  rows="10" 
+                  minlength="40" 
+                  maxlength="500" 
+                  onkeyup="CountTextarea(this,'count')" 
+                  onblur="CountTextarea(this,'reset')"></textarea>
 <?php if ($warningsBool): ?>
 <p class="user-info"><span class="textarea-count">Max 500 characters</span><span class="client-ip">Your IP: <?php echo $_SERVER['REMOTE_ADDR']; ?></span>
 </p>
@@ -192,31 +435,13 @@ function qnrwp_contact_form($options) {
     </div>
 <?php endif; ?>
     <div class="contact-send-btn">
-      <button type="submit" name="form-send" class="form-send" value="Send" onclick="SendEmail(event)">Send</button>
+      <button 
+                  type="submit" 
+                  name="form-send" 
+                  class="form-send" 
+                  value="Send" ><?php echo $options['label-submit']; ?></button>
     </div>
   </form>
-<?php endif; // End of outermost test for not email sent nor attempted ?>
-<?php
-if ($emailSendAttempted && !$emailSent) {
-  // Instruct number of minutes to wait if too many attempts sitewide
-  if (isset($sitewideBlockingMinutesRemaining) && $sitewideBlockingMinutesRemaining) {
-    // Call it a subscription if no message field present
-    $messOrSub = $messageBool ? 'message' : 'subscription';
-    $minutesInResponse = ($sitewideBlockingMinutesRemaining == 1) ? ' minute' : ' minutes';
-    echo '<div class="contact-block fail-reply '.$options['form-class'].'">'.PHP_EOL
-          .'Sorry, due to high level of traffic on the site your '.$messOrSub.' could not be sent. '
-          .'Please try again in '.$sitewideBlockingMinutesRemaining.$minutesInResponse.'.'.PHP_EOL;
-  } else { // Some other failure
-    echo '<div class="contact-block fail-reply '.$options['form-class'].'">'.PHP_EOL.$options['fail-reply'].PHP_EOL;
-  }
-}
-else if ($emailSendAttempted && $emailSent) 
-  echo '<div class="contact-block sent-reply '.$options['form-class'].'">'.PHP_EOL.$options['sent-reply'].PHP_EOL;
-if ($emailSendAttempted || $emailSent) {
-  // In either of the above cases, provide a close box on the block, to return to page sans POST
-  echo '<a href="'.get_permalink().'"><span class="qnr-glyph qnr-glyph-circle-xmark"></span></a>';
-}
-?>
 </div>
   <?php
 } // End of QNRWP Contact Form function
@@ -400,21 +625,21 @@ function qnrwp_meta_opengraph_twitter_tags() {
     //}
   //}
 
-  //if ($GLOBALS['isNews']) { // Create News header, for all News pages
+  //if ($GLOBALS['QNRWP_GLOBALS']['isNews']) { // Create News header, for all News pages
     //$headerTitleText = 'News';
     //$headerURL = $shOptionsL['News'];
   //}
-  //else if ($GLOBALS['postsAmount'] == 'single') { // Create Page header
-    //if ($GLOBALS['pageTitle'] == 'Home') {
+  //else if ($GLOBALS['QNRWP_GLOBALS']['postsAmount'] == 'single') { // Create Page header
+    //if ($GLOBALS['QNRWP_GLOBALS']['pageTitle'] == 'Home') {
       //// TODO use page content instead
       //$headerTitleText = '<b><big>'.get_bloginfo('name').'</big></b><br>'.PHP_EOL;
       //$headerTitleText .= get_bloginfo('description');
     //}
     //else {
-      //$headerTitleText = $GLOBALS['pageTitle'];
+      //$headerTitleText = $GLOBALS['QNRWP_GLOBALS']['pageTitle'];
     //}
     //try { // Match URLs to pages, named, or as assigned to *
-      //$headerURL = $shOptionsL[$GLOBALS['pageTitle']];
+      //$headerURL = $shOptionsL[$GLOBALS['QNRWP_GLOBALS']['pageTitle']];
     //}
     //catch (Exception $e) {
       //$headerURL = $shOptionsL['*'];
@@ -458,7 +683,7 @@ function qnrwp_get_subheader_html($widgetDefPageID) {
   if (count($widgetChildren) > 0) {
     foreach ($widgetChildren as $widgetChild) {
       // Get any content from child page for its matching named page
-      if ($widgetChild->post_title == $GLOBALS['pageTitle']) {
+      if ($widgetChild->post_title == $GLOBALS['QNRWP_GLOBALS']['pageTitle']) {
         $wcContent = apply_filters('the_content', get_post_field('post_content', $widgetChild->ID));
       }
       // Store name and img URL as key => value
@@ -468,15 +693,15 @@ function qnrwp_get_subheader_html($widgetDefPageID) {
     }
   }
   
-  $headerTitleText = $wcContent ? $wcContent : $GLOBALS['pageTitle']; // May be overriden below
+  $headerTitleText = $wcContent ? $wcContent : $GLOBALS['QNRWP_GLOBALS']['pageTitle']; // May be overriden below
   
-  if ($GLOBALS['isNews']) { // Create News header, for all News pages, if no content defined
+  if ($GLOBALS['QNRWP_GLOBALS']['isNews']) { // Create News header, for all News pages, if no content defined
     $headerTitleText = $wcContent ? $wcContent : 'News';
     $attID = $shOptionsL['News'];
   }
-  else if ($GLOBALS['postsAmount'] == 'single') { // Create Page header
-    if (isset($shOptionsL[$GLOBALS['pageTitle']]) && !empty($shOptionsL[$GLOBALS['pageTitle']])) {
-      $attID = $shOptionsL[$GLOBALS['pageTitle']];
+  else if ($GLOBALS['QNRWP_GLOBALS']['postsAmount'] == 'single') { // Create Page header
+    if (isset($shOptionsL[$GLOBALS['QNRWP_GLOBALS']['pageTitle']]) && !empty($shOptionsL[$GLOBALS['QNRWP_GLOBALS']['pageTitle']])) {
+      $attID = $shOptionsL[$GLOBALS['QNRWP_GLOBALS']['pageTitle']];
     } else {
       $attID = $shOptionsL['*'];
     }
@@ -879,7 +1104,7 @@ function qnrwp_enqueue_styles() {
     qnrwp_combine_stylesheets($stylesheetPathsL, $cfPath);
   }
   // Enqueue the combo file
-  wp_enqueue_style('combo-stylesheet', $cfURI, null, null);
+  wp_enqueue_style('qnrwp-combo-stylesheet', $cfURI, null, null);
 
   //wp_enqueue_style('qnr-interface-stylesheet', get_template_directory_uri() . '/res/css/qnr-interface.css', null, null);
   //wp_enqueue_style('qnr-hmenu-stylesheet', get_template_directory_uri() . '/res/css/qnr-hmenu.css', null, null);
@@ -928,15 +1153,59 @@ function qnrwp_enqueue_scripts() {
     $combo = JsMin::minify($combo);
     file_put_contents($cfPath, $combo);
   }
-  // Enqueue the combo file
-  wp_enqueue_script('combo-js', $cfURI, null, null, true); // In footer
+  if (!is_user_logged_in()) {
+    // Enqueue the combo file
+    wp_enqueue_script('qnrwp-combo-js', $cfURI, null, null, true); // In footer
+  } else {
+    wp_enqueue_script('qnr-interface-js', get_template_directory_uri() . '/res/js/qnr-interface.js', null, null, true); // In footer
+    wp_enqueue_script('qnr-contact-js', get_template_directory_uri() . '/res/js/contact.js', null, null, true);
+    wp_enqueue_script('qnr-main-js', get_template_directory_uri() . '/qnrwp_a-main.js', null, null, true);
+  }
   
   //wp_enqueue_script('qnr-interface-js', get_template_directory_uri() . '/res/js/qnr-interface.js', null, null, true); // In footer
   //wp_enqueue_script('qnr-hmenu-js', get_template_directory_uri() . '/res/js/qnr-hmenu.js', null, null, true);
   //wp_enqueue_script('qnrwp_a-main-js', get_template_directory_uri() . '/qnrwp_a-main.js', null, null, true);
+  
+  // ----------------------- Cookie / Ajax security setup
+  try {
+    // Create or use a site session cookie that will survive across page loads, unlike the Ajax cookie
+    if (!isset($_COOKIE['qnrwp_site_cookie']) || !$_COOKIE['qnrwp_site_cookie']) {
+      $siteCookieVal = md5(openssl_random_pseudo_bytes(30));
+      // Set session cookie, HTTP-Only
+      if ($_SERVER['HTTPS']) setCookie('qnrwp_site_cookie', $siteCookieVal, 0, '/', '', true, true);
+      else setCookie('qnrwp_site_cookie', $siteCookieVal, 0, '/', '', false, true);
+    }
+    // Ajax cookie
+    $ajaxSalt = bin2hex(openssl_random_pseudo_bytes(30)); // Create random salt
+    // We use cookie value as token; derived from UA on mobiles, UA and IP on desktop, plus T and secs from epoch start for JS control
+    $timeComp = 'T'.time();
+    // NEW, the same for desktop and mobile
+    $cookieAndTrans = md5(crypt($_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR'], $ajaxSalt)).$timeComp;
+    // OLD:
+    //if (qnrwp_deviceIsMobile()) $cookieAndTrans = md5(crypt($_SERVER['HTTP_USER_AGENT'], $ajaxSalt)).$timeComp;
+    //else $cookieAndTrans = md5(crypt($_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR'], $ajaxSalt)).$timeComp; // Desktop
+    if ($_SERVER['HTTPS']) setCookie('qnrwp_ajax_cookie', $cookieAndTrans, 0, '/', '', true, false); // Set session cookie, for JS Ajax caller to echo back to us
+    else setCookie('qnrwp_ajax_cookie', $cookieAndTrans, 0, '/', '', false, false);
+    set_transient('qnrwp_ajax_temp_salt_'.$cookieAndTrans, $ajaxSalt, 15 * MINUTE_IN_SECONDS); // Save salt for 15 mins (also used by JS)
+    // Create a global JS object to make useful data available to JS script (possible bug with other values, but url works)
+    if (!is_user_logged_in()) {
+      wp_localize_script('qnrwp-combo-js', 'qnrwp_global_enqueued_wp_object', 
+                          array('ajaxurl' => admin_url('admin-ajax.php')));
+    } else {
+      wp_localize_script('qnr-main-js', 'qnrwp_global_enqueued_wp_object', 
+                          array('ajaxurl' => admin_url('admin-ajax.php')));
+    }
+  } catch (Exception $e) {
+    wp_die($e->getMessage());
+  }
 }
 add_action('wp_enqueue_scripts', 'qnrwp_enqueue_scripts');
 
+function qnrwp_deviceIsMobile() {
+  // PHP version of the JS original
+  $isMobile = preg_match('/iPhone|iPad|iPod|Android|Blackberry|Nokia|Opera mini|Windows mobile|Windows phone|iemobile/i', $_SERVER['HTTP_USER_AGENT']);
+  return $isMobile;
+}
 
 // ----------------------- FILTERS
 
@@ -1127,8 +1396,8 @@ add_filter('nav_menu_css_class', 'qnrwp_menu_classes', 10, 4);
 
 function qnrwp_custom_excerpt_length($length) {
   $rN = 35; // On average there are 5 characters per word
-  if (isset($GLOBALS['MaxExcerptLength']))
-    $rN = intval(($GLOBALS['MaxExcerptLength']/5) + 5);
+  if (isset($GLOBALS['QNRWP_GLOBALS']['MaxExcerptLength']))
+    $rN = intval(($GLOBALS['QNRWP_GLOBALS']['MaxExcerptLength']/5) + 5);
 	return $rN;
 }
 add_filter('excerpt_length', 'qnrwp_custom_excerpt_length', 999);
@@ -1139,11 +1408,11 @@ function qnrwp_get_pretty_excerpt($excerpt) {
   $excerptDecode = wp_kses_decode_entities($excerpt); // Decode numerical entities, only for counting
   $eLen = 110;
   // Consider the global limit (for the sake of generic use in meta description)
-  if (isset($GLOBALS['MaxExcerptLength'])) $eLen = $GLOBALS['MaxExcerptLength'];
-  if (substr($excerptDecode, 0, $eLen) !== substr($excerpt, 0, $eLen)) {
-    $eLen += strlen($excerpt) - strlen($excerptDecode);
+  if (isset($GLOBALS['QNRWP_GLOBALS']['MaxExcerptLength'])) $eLen = $GLOBALS['QNRWP_GLOBALS']['MaxExcerptLength'];
+  if (mb_substr($excerptDecode, 0, $eLen) !== mb_substr($excerpt, 0, $eLen)) {
+    $eLen += mb_strlen($excerpt) - mb_strlen($excerptDecode);
   }
-  $excerpt = trim(substr($excerpt, 0, $eLen)); // Limit to 110 chars
+  $excerpt = trim(mb_substr($excerpt, 0, $eLen)); // Limit to 110 chars
   // Delete last, possibly truncated word
   $excerpt = preg_replace('/(\S+)\s+\S*$/', '$1', $excerpt);
   // Remove single closing word after sentence
@@ -1161,7 +1430,7 @@ function qnrwp_get_news_first_para_excerpt1() {
   $rc = preg_match('/<p[^>]+news-post-first-para[^>]+>(.+?)<\/p>/', $htmlContent, $matches);
   if ($rc) {
     $rT = wp_strip_all_tags($matches[1], true);
-    if (strlen($rT) < 255) {
+    if (mb_strlen($rT) < 255) {
       return $rT;
     }
   }
@@ -1185,11 +1454,11 @@ function qnrwp_get_news_first_para_excerpt() {
   if (isset($cL) && !empty($cL)) {
     $rT = trim($cL[0]);
     // Keep it sane, reduce to <= 255 chars
-    if (strlen($rT) > 255) {
-      $GLOBALS['MaxExcerptLength'] = 255;
+    if (mb_strlen($rT) > 255) {
+      $GLOBALS['QNRWP_GLOBALS']['MaxExcerptLength'] = 255;
       $rT = qnrwp_get_pretty_excerpt($rT);
       // Reset to usual 110 for excerpts
-      $GLOBALS['MaxExcerptLength'] = 110;
+      $GLOBALS['QNRWP_GLOBALS']['MaxExcerptLength'] = 110;
     }
     return $rT;
   }
@@ -1301,7 +1570,7 @@ class QNRWP_Content extends WP_Widget {
   
 	public function widget($args, $instance) {
 		// Echo global with pre-constructed page or post content HTML
-    echo $GLOBALS['contentHtml'];
+    echo $GLOBALS['QNRWP_GLOBALS']['contentHtml'];
 	}
 }
 
@@ -1341,9 +1610,9 @@ class QNRWP_Featured_News extends WP_Widget {
             $rHtml .= '<div class="featured-news-item-header" style="background-image:url(\''.$thumbUrl.'\')">&nbsp;</div>'.PHP_EOL;
             $rHtml .= '<div class="featured-news-item-text">'.PHP_EOL;
             $rHtml .= '<h1>'.get_the_title().'</h1>'.PHP_EOL;
-            $GLOBALS['MaxExcerptLength'] = 115;
+            $GLOBALS['QNRWP_GLOBALS']['MaxExcerptLength'] = 115;
             $rHtml .= '<div class="featured-news-item-excerpt">'.PHP_EOL.get_the_excerpt().PHP_EOL.'</div>'.PHP_EOL;
-            $GLOBALS['MaxExcerptLength'] = 110;
+            $GLOBALS['QNRWP_GLOBALS']['MaxExcerptLength'] = 110;
             $rHtml .= '</div>'.PHP_EOL.'</a>'.PHP_EOL; // Closing item
             $featuredCount += 1;
             if ($featuredCount == 2) $rHtml .= '</div><div><!-- No whitespace -->'.PHP_EOL; // Close first item-of-two, open next
@@ -1485,30 +1754,6 @@ function qnrwp_widgets_init() {
 add_action('widgets_init', 'qnrwp_widgets_init');
 
 
-function qnrwp_setup() {
-  // ----------------------- Post Thumbnails support
-  add_theme_support('post-thumbnails');
-  
-  // ----------------------- Title tag support
-  add_theme_support('title-tag');
-  
-  // ----------------------- HTML5 support
-	add_theme_support('html5', array(
-		'search-form',
-		'comment-form',
-		'comment-list',
-		'gallery',
-		'caption',
-	));
-  
-  // ----------------------- Add new image sizes
-  add_image_size('qnrwp-larger', 1600, 0, false);
-  add_image_size('qnrwp-largest', 2000, 0, false);
-  add_image_size('qnrwp-extra', 2500, 0, false);
-}
-add_action('after_setup_theme', 'qnrwp_setup');
-
-
 
 // ----------------------- Shortcodes definitions
 
@@ -1547,27 +1792,51 @@ function qnrwp_include_shortcode($atts, $content = null) {
 add_shortcode('include', 'qnrwp_include_shortcode');
 
 // [contact-form]
-// Used for mail contact and subscription without message/subject/name
+// Used for mail contact, and subscription without message/subject/name
 function qnrwp_contact_form_shortcode($atts, $content = null) {
   // Email will be sent from wordpress@domain.com
   // Reply-To header will be set to the user's email
   // The 'warnings' parameter controls display of max chars and IP under 
   //   message if message is used
+  // Chars not valid in HTML attributes, <>'"&, will throw an Exception
   
-  // Construct default subject-line
-  $subjectLine = (strlen(get_bloginfo('name')) > 50) 
+  // Construct default placeholder-subject
+  $subjectLine = (mb_strlen(get_bloginfo('name')) > 50) 
                         ? 'Enquiry from a website visitor' 
-                        : 'Enquiry from a '.sanitize_text_field(get_bloginfo('name')).' website visitor';
+                        : 'Enquiry from a '.esc_attr(sanitize_text_field(get_bloginfo('name'))).' website visitor';
   $a = shortcode_atts(array(
-    'subject' => 'yes',
-    'subject-line' => $subjectLine,
+    'subject' => 'yes', // Subject field
+    'message' => 'yes', // Message field
+    'warnings' => 'yes', // Warnings under message
+    'autofocus' => 'yes', // Autofocus in email or name input
+    'name' => 'no', // Name field
+    'title' => 'no',
+    'intro' => 'no',
+    'tooltips' => 'no',
+    'title-text' => 'Contact Form',
+    'intro-text' => 'Send us a message and we&rsquo;ll respond as soon as possible.',
+    'label-email' => 'Your email',
+    'label-name' => 'Your name',
+    'label-subject' => 'Subject',
+    'label-message' => 'Message',
+    'label-submit' => 'Send',
+    'placeholder-email' => 'you@domain.com',
+    'placeholder-name' => 'First Last',
+    'placeholder-subject' => $subjectLine,
+    'placeholder-message' => '',
     'sent-reply' => 'Your message has been sent. You should receive a reply within 2 working days.',
     'fail-reply' => 'Sorry, your message could not be sent.',
-    'message' => 'yes',
-    'warnings' => 'yes',
-    'name' => 'no',
-    'form-class' => 'contact-form',
+    'form-class' => 'contact-form', // Should be unique to each form on page, hex of it will be used to id / block repeats
   ), $atts); // As a minimum, email field required, for subscribing
+  // Don't accept values that would need escaping in HTML attributes, so no <>'"&
+  foreach ($a as $key => $value) {
+    if (esc_attr($value) != $value) 
+        wp_die('ERROR: Contact form parameter "'.esc_attr($key).'" contains characters invalid in HTML attributes.');
+    if (mb_strlen($value) > 100) 
+        wp_die('ERROR: Contact form parameter "'.esc_attr($key).'" is over 100 characters long.');
+  }
+  if ($a['form-class'] == '' || mb_strlen($a['form-class']) > 40)
+      wp_die('ERROR: Contact form parameter "form-class" must not be empty or over 40 characters long.');
   ob_start();
   qnrwp_contact_form($a);
   return ob_get_clean();
@@ -1938,14 +2207,14 @@ function qnrwp_regenerate_images_cron() {
           unset($imageFull); // Just in case...
         }
         // Save the options/record
-        if (!update_option('qnrwp_regenerate_images_record', $riSavedOptions)) throw new Exception('Database options during processing for Regenerate Images could not be saved.');
+        if (!update_option('qnrwp_regenerate_images_record', $riSavedOptions)) wp_die('Database options during processing for Regenerate Images could not be saved.');
       }
     }
     // Start-time was set by scheduler in functions-admin.php
     $riSavedOptions['last-update'] = time();
     $riSavedOptions['end-time'] = date('r');
     // Save the options/record
-    if (!update_option('qnrwp_regenerate_images_record', $riSavedOptions)) throw new Exception('Database options for Regenerate Images could not be saved.');
+    if (!update_option('qnrwp_regenerate_images_record', $riSavedOptions)) wp_die('Database options for Regenerate Images could not be saved.');
     //qnrwp_debug_printout(array('Regenerate Images cron run', date('r'), $riSavedOptions)); // TEST
   }
   catch (Exception $e) {

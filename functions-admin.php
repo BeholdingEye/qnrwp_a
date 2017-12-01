@@ -2,9 +2,10 @@
 /*
  * functions-admin.php
  * 
- * Functions for the Admin pages
+ * Functions for the Admin pages and Ajax
  * 
  */
+
 
 
 // ===================== ADMIN DASHBOARD SETTINGS =====================
@@ -535,7 +536,7 @@ if (!current_user_can('manage_options')) {
     // We do this here to avoid impossible recursion problem in pre_get_posts below,
     //   taking care to control the flow with state of the qnrwpWidgetPageIDs global
     if (strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/edit.php') !== false && strpos($_SERVER['QUERY_STRING'], 'post_type=page') !== false) {
-      if (!isset($GLOBALS['qnrwpWidgetPageIDs'])) {
+      if (!isset($GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'])) {
         // Get IDs of widget pages
         $allPages = get_posts(array(
                       'numberposts' => -1,
@@ -545,14 +546,14 @@ if (!current_user_can('manage_options')) {
                       'fields' => 'ids',
                       'suppress_filters' => true, // Doesn't seem to work...
                     ));
-        $GLOBALS['qnrwpWidgetPageIDs'] = [];
+        $GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'] = [];
         foreach ($allPages as $pageID) {
           $page = get_post($pageID);
           if (strpos(get_the_title($pageID), 'QNRWP-Widget-') !== false) {
-            $GLOBALS['qnrwpWidgetPageIDs'][] = $pageID;
+            $GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'][] = $pageID;
           } else if ($page->post_parent !== 0) {
             if (strpos(get_the_title($page->post_parent), 'QNRWP-Widget-') !== false) {
-              $GLOBALS['qnrwpWidgetPageIDs'][] = $pageID;
+              $GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'][] = $pageID;
             }
           }
         }
@@ -564,18 +565,18 @@ if (!current_user_can('manage_options')) {
   // $query is global $wp_query object passed by reference
   add_action('pre_get_posts', function($query) {
     if ($query->is_admin && !$query->in_the_loop && strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/edit.php') !== false 
-            && strpos($_SERVER['QUERY_STRING'], 'post_type=page') !== false && isset($GLOBALS['qnrwpWidgetPageIDs'])) {
+            && strpos($_SERVER['QUERY_STRING'], 'post_type=page') !== false && isset($GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'])) {
       // If we pass the test, we assume we're in WP_Posts_List_Table, can change query
-      $query->set('post__not_in', $GLOBALS['qnrwpWidgetPageIDs']);
+      $query->set('post__not_in', $GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs']);
     }
   });
   
   // ----------------------- Change posts count to actual
   add_filter('wp_count_posts', function($counts, $type='page', $perm='readable') {
     if (strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/edit.php') !== false && strpos($_SERVER['QUERY_STRING'], 'post_type=page') !== false 
-            && isset($GLOBALS['qnrwpWidgetPageIDs'])) {
+            && isset($GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'])) {
       //qnrwp_debug_printout($counts, $append=false);
-      $counts->publish -= count($GLOBALS['qnrwpWidgetPageIDs']); // We assume widget definition pages are published
+      $counts->publish -= count($GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs']); // We assume widget definition pages are published
     }
     return $counts;
   }, 10, 3);

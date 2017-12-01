@@ -17,7 +17,7 @@ This theme will be developed rapidly. No releases will be packaged - the latest 
 * If the ImageMagick PHP module is installed on the server, uploaded images will be better optimized.
 * Meta, OpenGraph and Twitter card tags are supported. Tags are generic on Pages, and individually constructed on Posts from their starting paragraphs and Featured Images.
 * "Featured News" and "Samples" sections are supported with custom widgets and shortcodes.
-* Contact forms are supported with a shortcode, offering comprehensive control of parameters. May also be used for mailing list subscription forms.
+* Contact forms are supported with a shortcode, offering comprehensive control of parameters. May also be used for mailing list subscription forms. These forms may be used in popout sliders. The mailing functionality is powered by secured Ajax. MailChimp integration is coming.
 
 ## Image sizes:
 

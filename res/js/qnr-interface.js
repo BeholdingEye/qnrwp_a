@@ -37,11 +37,11 @@ var QNR_INTER = {};
      *
      * Widgets are DIVs with a class beginning with "qnr-". In the case 
      * of X-icons, the widget may be any tag that can have child 
-     * elements
+     * elements.
      * 
      * All properties and methods of widgets are accessible in your own
      * code through the global "QNR_INTER" object. See the end of the
-     * Carousel section for an example
+     * Carousel section for an example.
      * 
      * 
      *                         Arrow Anim
@@ -50,17 +50,17 @@ var QNR_INTER = {};
      * display as a circle containing a downward pointing, animated 
      * arrow. The widget uses the "quicknr-interface.woff" font for the
      * glyph. The DIV must be empty and will have the arrow inserted as
-     * a SPAN element
+     * a SPAN element.
      * 
      * The direction of the arrow and its animation can be changed with
      * the dataset "data-qnr-arrow-dir" attribute set to "up", "left" or
-     * "right". Default is "down"
+     * "right". Default is "down".
      * 
      * Up and down arrows should also be winscroller widgets, see below.
-     * Left and right arrows should have an onclick function assigned
+     * Left and right arrows should have an onclick function assigned.
      * 
      * The arrow can be set to stop a carousel animating, with the 
-     * "data-qnr-stop-carousel" attribute set to the ID of the carousel
+     * "data-qnr-stop-carousel" attribute set to the ID of the carousel.
      * 
      * 
      *                         Font Resize
@@ -73,10 +73,10 @@ var QNR_INTER = {};
      * reduce the font size. The reference display area is 1,400x900px,
      * 1,260,000 square pixels. Larger areas have no effect. Smallest
      * area is considered to be 320x320px, 102400 square pixels, and
-     * will be the display area size with the minimum font size
+     * will be the display area size with the minimum font size.
      * 
      * The minimum percentage size can be specified with the dataset
-     * "data-qnr-font-min" attribute, default value being "80"
+     * "data-qnr-font-min" attribute, default value being "80".
      * 
      * 
      *                         Responsive
@@ -87,42 +87,42 @@ var QNR_INTER = {};
      * DIVs. The widget works well with 2 to 5 DIV items, not so well 
      * with more. For best results, the containing element of the widget
      * (BODY, if no other) should span the entire page and have padding 
-     * and margins set to 0
+     * and margins set to 0.
      * 
      * Item DIVs will be assigned the class of "qnr-responsive-item",
      * with margins of 0, and padding set to "0.5em 2em". In some use
      * cases, particularly at small display sizes, you may need to
-     * override this
+     * override this.
      * 
      * Further overrides may be needed when narrower minimum widths of
      * the item DIVs are desired, as in columns of links in a footer. In
      * this case, override the flex and width properties of the two 
-     * classes mentioned above
+     * classes mentioned above.
      * 
      * Remember that a responsive row of more than 4 blocks makes for 
-     * poor user experience (except for image galleries)
+     * poor user experience (except for image galleries).
      * 
      * 
      *                         Carousel
      * 
      * A carousel widget is a DIV with the class of "qnr-carousel". 
-     * Items may be DIVs or IMGs and require no additional classes
+     * Items may be DIVs or IMGs and require no additional classes.
      * 
      * If items are IMGs, the code will convert them to DIVs with 
      * background images. Items will be assigned the class of 
-     * "qnr-carousel-item"
+     * "qnr-carousel-item".
      * 
      * If the widget has an attribute of "data-qnr-captions" 
      * set to "on", ALT attribute values of item IMGs will be placed in 
      * a caption DIV under the carousel, created by the code. The DIV 
-     * will be assigned the class of "qnr-carousel-caption"
+     * will be assigned the class of "qnr-carousel-caption".
      * 
      * Three navigation arrow types are supported, set with the 
      * "data-qnr-arrow-type" attribute: "regular" for a thick arrow in 
      * a circle, "big" for bigger thin arrows without a circle 
      * background, and "sticky" for smaller thin arrows on rounded 
      * square backgrounds flush with the left and right edges of the 
-     * widget
+     * widget.
      * 
      * Arrows are assigned these classes:
      * 
@@ -134,17 +134,17 @@ var QNR_INTER = {};
      *              "qnr-carousel-stickyarrow-right"
      * 
      * The arrow glyphs are provided by the "quicknr-interface.woff" 
-     * font, derived from the open source "open-iconic" font
+     * font, derived from the open source "open-iconic" font.
      * 
      * The code creates a control strip in the widget, featuring tiny 
-     * selector circles for each slide that the user can click or tap
+     * selector circles for each slide that the user can click or tap.
      * 
      * The control strip will be assigned the class of 
-     * "qnr-carousel-controlstrip", and the circles "qnr-carousel-thumb"
+     * "qnr-carousel-controlstrip", and the circles "qnr-carousel-thumb".
      * 
      * If the user device is not mobile, the little selector circles on 
      * the control strip will on hover display small animated previews 
-     * and have an additional class of "qnr-carousel-thumb-preview"
+     * and have an additional class of "qnr-carousel-thumb-preview".
      * 
      * Selector circles can be set to display slide numbers. For styling
      * override these CSS declarations, where active is the shown slide:
@@ -165,13 +165,13 @@ var QNR_INTER = {};
      * 
      * If a "data-qnr-scroller" attribute is set to "on" (default "off")
      * slide item DIVs will receive the "qnr-scroller" class, making
-     * them Parallax Scroller widgets
+     * them Parallax Scroller widgets.
      * 
      * The time it takes between loading of the page and the start of 
      * play can be set with the "data-qnr-start-interval" 
      * attribute, set to "4" by default (in seconds). The interval 
      * between slides can be set with the "data-qnr-interval" 
-     * attribute, by default set to "3"
+     * attribute, by default set to "3".
      * 
      * Duration of transitions between slides may be controlled with the
      * "data-qnr-transition" attribute, default value of "1" 
@@ -188,28 +188,28 @@ var QNR_INTER = {};
      * "slidefade" - incoming slide moves over the previous, fading in 
      *                  as it does so
      * 
-     * Transition duration must be shorter than interval
+     * Transition duration must be shorter than interval.
      * 
      * If there is only one carousel widget on the page, keyboard 
-     * navigation is supported with left and right keys
+     * navigation is supported with left and right keys.
      * 
      * If the carousel is invisible due to page scrolling, its animation
      * will stop, and resume when back in view. The same when the 
-     * browser window loses and regains focus
+     * browser window loses and regains focus.
      * 
      * A scroll offset can be set with the "data-qnr-scroll-offset"
      * attribute, default is "0". Set it to a negative value if using
      * a fixed navbar, so that the slideshow will pause even though the
-     * carousel is not completely off screen
+     * carousel is not completely off screen.
      * 
      * When a slide has been selected by the user rather than shown 
      * automatically, its display time is doubled, then the show 
-     * continues
+     * continues.
      * 
      * To stop the slideshow when a slide is manually selected, set the
      * "data-qnr-resume-auto" attribute on the widget to "off". Default
      * is "on". This is useful if the slides are DIVs showing more than
-     * images, with the user being able to interact with the content
+     * images, with the user being able to interact with the content.
      * 
      * Slide fading is controlled with Javascript manipulation of CSS 
      * animations, using the following classes on the items:
@@ -225,7 +225,7 @@ var QNR_INTER = {};
      * If very large images are used, timing errors may occur, resulting
      * in flashes on fades and slides. There is no fix other than 
      * compressing images more and using fewer of them. Six images or 
-     * fewer, under 1MB each, should be fine
+     * fewer, under 1MB each, should be fine.
      * 
      * Advanced notes:
      * 
@@ -239,15 +239,15 @@ var QNR_INTER = {};
      * 
      *      QNR_INTER.carouselObjectsL[X].pauseCarousel()
      * 
-     * ...or resume play with the ".resumeCarousel()" method
+     * ...or resume play with the ".resumeCarousel()" method.
      * 
      * Scrolling the page, carousel in view, will resume play unless
-     * auto resume is off as detailed above
+     * auto resume is off as detailed above.
      * 
      * For a hard stop, "QNR_INTER.carouselObjectsL[X].stopCarousel()"
      * can be used. Subsequent navigation will only start the automatic 
      * sliding again after "QNR_INTER.carouselObjectsL[X].hardStop" is 
-     * set to false (and auto resume is on)
+     * set to false (and auto resume is on).
      * 
      * 
      *                         Stickybar
@@ -256,39 +256,39 @@ var QNR_INTER = {};
      * at a distance down from the top, perhaps after a header image, to
      * "stick" to the top of the window like a menu bar when the window
      * is scrolled down beyond it, mark the DIV with the "qnr-stickybar"
-     * class
+     * class.
      * 
      * The widget will be assigned the class of "qnr-stickybar-fixed" 
-     * for its fixed appearance
+     * for its fixed appearance.
      * 
      * 
      *                         Slider
      * 
      * A DIV marked with the class of "qnr-slider" is a non-looping,
      * introductory slider of one or more DIVs it contains. The top DIV 
-     * in HTML is the last item to play and will end the animation
+     * in HTML is the last item to play and will end the animation.
      * 
      * The widget supports the "data-qnr-slide-duration" attribute with
-     * a value of seconds, "4" being default
+     * a value of seconds, "4" being default.
      * 
      * Direction of the sliding can be set to "rtl" (default), "ltr", 
-     * "up" or "down" with the "data-qnr-slide-direction" attribute
+     * "up" or "down" with the "data-qnr-slide-direction" attribute.
      * 
      * If the direction is appended with "-stop", the animation will 
-     * stop as the slide is fully on screen, no off movement to follow
+     * stop as the slide is fully on screen, no off movement to follow.
      * 
      * By default the sliding will start on load, when the slider is
      * initialized. To prevent this, use the "data-qnr-auto-slide"
-     * attribute, set to "off"
+     * attribute, set to "off".
      * 
      * The item DIVs require no special markup, but "qnr-slide-none" is
      * available if a DIV needs to be hidden (perhaps to prevent it
-     * flashing on load)
+     * flashing on load).
      * 
      * The DIV items are marked with the class of "qnr-slide-item" by 
-     * the code
+     * the code.
      * 
-     * For more functionality, use a carousel
+     * For more functionality, use a carousel.
      * 
      * 
      *                         Image Animator
@@ -299,37 +299,37 @@ var QNR_INTER = {};
      *  - qnr-img-zoom-out  - zoom out and fade
      * 
      * An image animator is introductory, non-looping visual candy, "an
-     * image with movement", not a slideshow. Use with 3-6 images
+     * image with movement", not a slideshow. Use with 3-6 images.
      * 
      * For the sake of the bottom image of the stack (top IMG tag in 
      * HTML), "qnr-img-zoom-in-opaque" and "qnr-img-zoom-out-opaque"
-     * are also supported, with no fading
+     * are also supported, with no fading.
      * 
      * The following anchoring classes are supported on the IMG tags:
      * "qnr-centered", "qnr-topright", "qnr-topleft", "qnr-bottomright",
      * "qnr-bottomleft", "qnr-leftcenter", "qnr-rightcenter", top left 
-     * being the default
+     * being the default.
      * 
      * Animation timing function classes on the IMGs can also be used:
      * "qnr-ease", "qnr-ease-in", "qnr-ease-out", "qnr-linear", linear 
-     * being the default - ease-out should be used on last shown image
+     * being the default - ease-out should be used on last shown image.
      * 
      * The widget DIV containing the IMGs supports a data- attribute of
      * "data-qnr-anim-duration", with a value in seconds, like "4", the
-     * default. The duration is for each image layer
+     * default. The duration is for each image layer.
      * 
      * IMG tags may be followed by a DIV with the class of 
-     * "qnr-img-translucent-cover", to darken the images
+     * "qnr-img-translucent-cover", to darken the images.
      * 
      * The cover may be succeeded by any other element that is to appear
-     * over the image animation - it may require to be CSS positioned
+     * over the image animation - it may require to be CSS positioned.
      * 
      * The code converts the IMGs to DIVs, with the classes transferred,
-     * plus the class of "qnr-img-anim-div"
+     * plus the class of "qnr-img-anim-div".
      * 
      * Other animation parameters were coded but removed due to poor 
      * performance. If the present functionality is not sufficient, 
-     * consider creating a video instead
+     * consider creating a video instead.
      * 
      * 
      *                         Navmenu
@@ -340,99 +340,99 @@ var QNR_INTER = {};
      * but if their containing DIV is resized down to cause a line wrap
      * between items, they collapse into a menu icon with the class of
      * "qnr-navmenu-icon", using the "quicknr-interface.woff" font for
-     * the glyph
+     * the glyph.
      * 
      * The UL of a collapsed navmenu is taken out of the widget DIV by
      * the code and placed in a new DIV after the widget, the new DIV
      * classed as "qnr-navmenu-wrapper". This wrapper has CSS height
-     * of 0 and allows the contained UL to overflow
+     * of 0 and allows the contained UL to overflow.
      * 
      * When the navmenu is collapsed, clicking the icon reveals the menu.
      * The direction of the menu animation can be set with the 
      * "data-qnr-direction" attribute, either "vertical" (default) or 
-     * "horizontal". The menu appears over page content
+     * "horizontal". The menu appears over page content.
      * 
      * The UL menu is assigned the class of "qnr-navmenu-vertical" for
      * animation from the top, and "qnr-navmenu-vertical-horizontal" for
-     * horizontal animation. The menu is animated by pure CSS
+     * horizontal animation. The menu is animated by pure CSS.
      * 
      * The navmenu widget is expected to be the topmost object on the
      * page for vertical menu animation to work correctly. If the menu
-     * is placed further down the page, use the horizontal animation
+     * is placed further down the page, use the horizontal animation.
      * 
      * To position an element - such as a logo - to the left of the 
-     * menu, place it before the menu UL in the widget DIV and float it
+     * menu, place it before the menu UL in the widget DIV and float it.
      * 
      * Hierarchical menus from "qnr-hmenu.js" are now supported by the
-     * navmenu, and there is some cross-reference to both in the code
+     * navmenu, and there is some cross-reference to both in the code.
      * 
      * 
      *                         Scrollers
      * 
      * Scrollers are widgets that will be affected by scrolling in some
-     * way, and have the class "qnr-scroller"
+     * way, and have the class "qnr-scroller".
      * 
      * A scroller with a background-image applied will by default be 
      * parallax scrolled. The image should be larger in height than the 
-     * containing DIV, or it won't scroll
+     * containing DIV, or it won't scroll.
      * 
      * Other widgets that affect the window scroll must update the
-     * scrollers
+     * scrollers.
      * 
      *                         Winscroller
      * 
      * A clickable element with the class of "qnr-winscroller" is a
-     * widget that on click will scroll the window to a target object
+     * widget that on click will scroll the window to a target object.
      * 
      * The target ID is set on the widget with the "data-qnr-target" 
      * attribute; default target is the BODY object. A pixel scrolling 
-     * offset may also be set with "data-qnr-offset" and may be negative
+     * offset may also be set with "data-qnr-offset" and may be negative.
      * 
      * If the widget is an A tag, the preventDefault() method of the 
-     * event object will be used for the scroll to work
+     * event object will be used for the scroll to work.
      * 
      * If the widget is BODY, a SPAN object will be created and placed
      * as the first element in the BODY, with the class of 
      * "qnr-winscroller-arrow", appearing as an arrow fixed to the right
      * of the screen, that the user can click/tap to return to the top  
      * of the page. The "quicknr-interface.woff" font is used for the 
-     * arrow glyph
+     * arrow glyph.
      * 
      * Further, "data-qnr-winscroll-fraction" can be set on the BODY 
      * tag, a float controlling the proportion of the window that must 
      * be scrolled down before the arrow will be displayed; default 
-     * value is "0.25"
+     * value is "0.25".
      * 
-     * The scrolling is limited to 1 second before it cancels
+     * The scrolling is limited to 1 second before it cancels.
      * 
      * 
      *                         X-icons
      * 
      * X-icons are widgets with the class of "qnr-x-icon". The code will
-     * place a closing "x" on the widget that the user can click
+     * place a closing "x" on the widget that the user can click.
      * 
      * X-icons with additional class of "qnr-remove", will on click
-     * set display of the widget to "none" instead of merely hiding it
+     * set display of the widget to "none" instead of merely hiding it.
      * 
-     * The X-icon widget element must be CSS positioned
+     * The X-icon widget element must be CSS positioned.
      * 
      * X-icons cannot be used on other widgets (accordions), they are
      * meant for the closing of static elements like image boxes and
-     * notifications
+     * notifications.
      * 
      * 
      *                         Accordions
      * 
-     * Accordions are widgets with the class of "qnr-accordion"
+     * Accordions are widgets with the class of "qnr-accordion".
      * 
      * Accordions with additional class of "qnr-multi" will show more
-     * than one item at a time if more than one is clicked
+     * than one item at a time if more than one is clicked.
      * 
      * Accordion items consist of <P> questions and <DIV> answers. They
      * don't require any classes, and the DIVs may contain <P> and 
      * <DIV> tags, as well as others. Other tags such as headings 
      * may be placed between question-answer groups, but the question 
-     * <P> and answer <DIV> must be next to each other
+     * <P> and answer <DIV> must be next to each other.
      * 
      * 
      *                         Aspect Keeper
@@ -441,14 +441,43 @@ var QNR_INTER = {};
      * aspect ratio, 1.5 by default, and settable with the dataset
      * attribute "data-qnr-aspect-ratio". The aspect ratio is preserved 
      * by using the width as the base of calculation for the height. 
-     * Computed CSS values for min and max height are respected
+     * Computed CSS values for min and max height are respected.
+     * 
+     * 
+     *                         Button Toggle
+     * 
+     * Buttons with "qnr-button-toggle" class assigned may have a 
+     * callback function set, controlling action on Up and Down states
+     * of the button. The state of the button is controlled with CSS
+     * classes "qnr-button-toggle-up" and "qnr-button-toggle-down".
+     * 
+     * 
+     *                         Popout Slider
+     * 
+     * Elements, usually DIVs, with the "qnr-popout-slider" class will 
+     * have a button for showing of the animated slider created, and a
+     * button for hiding it, with class names "qnr-popout-slider-button
+     * -show" and "qnr-popout-slider-button-hide".
+     * 
+     * Dataset attributes may be set, controlling several aspects:
+     * 
+     * qnr-popout-slide-type: sliding direction; left,right,up,down
+     * qnr-popout-anim-duration: duration in seconds, default 0.4
+     * qnr-popout-title: title attribute of the show button
+     * qnr-popout-reset: non-empty value for resetting HTML content
+     * qnr-popout-show-callback: callback function to run on show
+     * qnr-popout-hide-callback: callback function to run on hide
+     * 
+     * By default, the slider is styled for presentation of an email
+     * subscription form, but can be adapted to other uses, such as
+     * a menu drawer.
      * 
      * 
      *                         Layout Helpers
      * 
      * The "qnr-interface.css" file contains a section of layout helper
      * style rules, with 2 items: ".center" and ".center-bottom". These
-     * are not widgets but can be applied to block elements
+     * are not widgets but can be applied to block elements.
      * 
      * -------------------------------------------------------------- */ 
 
@@ -555,13 +584,13 @@ var QNR_INTER = {};
     // ===================== STARTUP ===================== 
     
     // ----------------------- Create a list of widgets
-    QNR_INTER.accordionsL = null; // List of accordion elements in doc
+    QNR_INTER.accordionsL = []; // List of accordion elements in doc
     QNR_INTER.accordionObjectsL = []; // List of JS accordion objects
     
-    QNR_INTER.xiconsL = null;
+    QNR_INTER.xiconsL = [];
     QNR_INTER.xiconObjectsL = [];
     
-    QNR_INTER.scrollersL = null;
+    QNR_INTER.scrollersL = [];
     QNR_INTER.scrollerObjectsL = [];
     
     // Only one menu object, no list
@@ -569,41 +598,138 @@ var QNR_INTER = {};
     
     QNR_INTER.stickybarObject = null;
 
-    QNR_INTER.imageanimsL = null;
+    QNR_INTER.imageanimsL = [];
     QNR_INTER.imageanimObjectsL = [];
     
-    QNR_INTER.slidersL = null;
+    QNR_INTER.slidersL = [];
     QNR_INTER.sliderObjectsL = [];
     
-    QNR_INTER.carouselsL = null;
+    QNR_INTER.carouselsL = [];
     QNR_INTER.carouselObjectsL = [];
     
-    QNR_INTER.winscrollersL = null;
+    QNR_INTER.winscrollersL = [];
     QNR_INTER.winscrollerObjectsL = [];
     
-    QNR_INTER.responsivesL = null;
+    QNR_INTER.responsivesL = [];
     QNR_INTER.responsiveObjectsL = [];
     
-    QNR_INTER.fontresizesL = null;
+    QNR_INTER.fontresizesL = [];
     QNR_INTER.fontresizeObjectsL = [];
     
-    QNR_INTER.arrowanimsL = null;
+    QNR_INTER.arrowanimsL = [];
     QNR_INTER.arrowanimObjectsL = [];
     
-    QNR_INTER.aspectkeepersL = null;
+    QNR_INTER.aspectkeepersL = [];
     QNR_INTER.aspectkeeperObjectsL = [];
     
-    QNR_INTER.hoverRevealsL = null;
-    QNR_INTER.hoverRevealObjectsL = [];
+    QNR_INTER.btntogglesL = [];
+    QNR_INTER.btntoggleObjectsL = [];
+    
+    QNR_INTER.popoutSlidersL = [];
+    QNR_INTER.popoutSliderObjectsL = [];
     
     
-    // ----------------------- HOVER REVEAL
+    // ----------------------- BUTTON TOGGLE
     
-    function HoverRevealObject() {
-        this.object                 = null;
+    function ButtonToggleObject() {
+        this.object = null;
+        this.downCallback = null; // Set by consumer JS
+        this.upCallback = null;
     }
-    HoverRevealObject.prototype.initialize = function() {
-        // To be developed
+    // Initialize button toggle objects
+    ButtonToggleObject.prototype.initialize = function() {
+        // Set up onclick handlers
+        var this1 = this;
+        this.object.onclick = function(event) {
+            // Toggle up button to down state
+            if (!this1.object.classList.contains("qnr-button-toggle-down")) {
+                if (this1.object.classList.contains("qnr-button-toggle-up")) this1.object.classList.remove("qnr-button-toggle-up");
+                this1.object.classList.add("qnr-button-toggle-down");
+                this1.downAction(this1.downCallback);
+            } else if (!this1.object.classList.contains("qnr-button-toggle-up")) { // Toggle down to up state
+                if (this1.object.classList.contains("qnr-button-toggle-down")) this1.object.classList.remove("qnr-button-toggle-down");
+                this1.object.classList.add("qnr-button-toggle-up");
+                this1.upAction(this1.upCallback);
+            }
+        };
+    }
+    ButtonToggleObject.prototype.downAction = function(fn) {
+        fn();
+    }
+    ButtonToggleObject.prototype.upAction = function(fn) {
+        fn();
+    }
+    
+     
+    // ----------------------- POPOUT SLIDER
+    // TODO: dataset to control button creation, and bg overlay
+    
+    function PopoutSliderObject() {
+        this.object = null;
+        this.showButton = null;
+        this.hideButton = null;
+        this.slideType = "left"; // Default direction of anim
+        this.animDuration = 0.4; // Seconds
+        this.showCallback = null; // Set by consumer JS or dataset
+        this.hideCallback = null;
+        this.title = ""; // HTML title attribute on the show button
+        this.reset = false; // Reset HTML content of slider on hide
+        this.resetObject = ""; // HTML element stored for reset
+    }
+    PopoutSliderObject.prototype.initialize = function() {
+        if (this.object.dataset.qnrPopoutSlideType) this.slideType = this.object.dataset.qnrPopoutSlideType;
+        if (this.object.dataset.qnrPopoutAnimDuration) this.animDuration = this.object.dataset.qnrPopoutAnimDuration;
+        if (this.object.dataset.qnrPopoutTitle) this.title = this.object.dataset.qnrPopoutTitle;
+        if (this.object.dataset.qnrPopoutReset) this.reset = this.object.dataset.qnrPopoutReset;
+        if (this.object.dataset.qnrPopoutShowCallback) this.showCallback = this.object.dataset.qnrPopoutShowCallback;
+        if (this.object.dataset.qnrPopoutHideCallback) this.hideCallback = this.object.dataset.qnrPopoutHideCallback;
+        // Store HTML element for reset, if set so
+        if (this.reset) this.resetObject = this.object.cloneNode(true);
+        // Create the button to popout the slider, leaving it to CSS to set the content
+        this.showButton = document.createElement("button");
+        this.showButton.innerHTML = "<span></span>";
+        this.showButton.classList.add("qnr-popout-slider-button-show");
+        if (this.title) this.showButton.setAttribute("title", this.title);
+        var this1 = this;
+        this.showButton.onclick = function(event) {
+            this1.show();
+        }
+        this.object.parentNode.insertBefore(this.showButton, this.object);
+        // Create close icon on slider, leaving it to CSS to set the content
+        this.hideButton = document.createElement("button");
+        this.hideButton.innerHTML = "<span></span>";
+        this.hideButton.classList.add("qnr-popout-slider-button-hide");
+        var this1 = this;
+        this.hideButton.onclick = function(event) {
+            this1.hide();
+        }
+        this.object.appendChild(this.hideButton);
+    }
+    PopoutSliderObject.prototype.show = function() {
+        animObj(this.object, this.slideType, "", this.animDuration);
+        this.showAction(this.showCallback);
+    }
+    PopoutSliderObject.prototype.hide = function() {
+        animObj(this.object, "back", "", this.animDuration);
+        this.hideAction(this.hideCallback);
+        // Reset
+        window.setTimeout(function(self){
+            if (self.reset) {
+                var pN = self.object.parentNode;
+                pN.removeChild(self.showButton);
+                self.object.removeChild(self.hideButton);
+                pN.removeChild(self.object);
+                self.object = self.resetObject.cloneNode(true);
+                pN.appendChild(self.object);
+                self.initialize();
+            }
+        },1000 * this.animDuration, this);
+    }
+    PopoutSliderObject.prototype.showAction = function(fn) {
+        if (this.showCallback) fn();
+    }
+    PopoutSliderObject.prototype.hideAction = function(fn) {
+        if (this.hideCallback) fn();
     }
     
     
@@ -695,13 +821,13 @@ var QNR_INTER = {};
     
     function ResponsiveObject() {
         this.object                 = null;
-        this.divItems               = [];
+        this.divItemsL              = [];
     }
     ResponsiveObject.prototype.initialize = function() {
         var objChildren = this.object.children;
         for (var i = 0; i < objChildren.length; i++) {
             objChildren[i].classList.add("qnr-responsive-item");
-            this.divItems.push(objChildren[i]);
+            this.divItemsL.push(objChildren[i]);
         }
     }
     
@@ -1168,7 +1294,7 @@ var QNR_INTER = {};
         this.newObject.style.height = this.object.offsetHeight + "px";
         // Update scrollers, accounting for change of scroll
         // This is the only solution that works
-        if (QNR_INTER.scrollerObjectsL) {
+        if (QNR_INTER.scrollerObjectsL && QNR_INTER.scrollerObjectsL.length > 0) {
             for (var i = 0; i < QNR_INTER.scrollerObjectsL.length; i++) {
                 QNR_INTER.scrollerObjectsL[i].parallaxScroll();
             }
@@ -1215,7 +1341,7 @@ var QNR_INTER = {};
                 this.slideDivsL.push(childObjs[i]);
             }
         }
-        if (!this.slideDivsL) {
+        if (!this.slideDivsL.length > 0) {
             print("Error: At least one DIV is required for slider widget.");
             return;
         }
@@ -1554,7 +1680,7 @@ var QNR_INTER = {};
             this.menuUL.classList.add("qnr-navmenu-vertical-hide-left");
         }
         // Hide any hmenus
-        if (QNR_HMENU.hmenuObjectsL) {
+        if (QNR_HMENU.hmenuObjectsL.length > 0) {
             QNR_HMENU.hmenuObjectsL[0].hideMenus();
         }
     }
@@ -1648,7 +1774,7 @@ var QNR_INTER = {};
             animCallback(obj, intervalObj, [mode]);
             // Update scrollers, accounting for change of scroll
             // This is the only solution that works
-            if (QNR_INTER.scrollerObjectsL) {
+            if (QNR_INTER.scrollerObjectsL.length > 0) {
                 for (var i = 0; i < QNR_INTER.scrollerObjectsL.length; i++) {
                     QNR_INTER.scrollerObjectsL[i].parallaxScroll();
                 }
@@ -1665,14 +1791,14 @@ var QNR_INTER = {};
         if (eventType == "click") {
             // ----------------------- X-icon
             
-            if (clicked.classList.contains("qnr-x-icon-btn")) {
+            if (clicked.className && clicked.classList.contains("qnr-x-icon-btn")) {
                 widget.style.opacity = 0;
-                if (widget.classList.contains("qnr-remove")) {
+                if (widget.className && widget.classList.contains("qnr-remove")) {
                     window.setTimeout(function(){
                         widget.style.display = "none";
                         // Update scrollers, accounting for change of scroll
                         // This is the only solution that works
-                        if (QNR_INTER.scrollerObjectsL) {
+                        if (QNR_INTER.scrollerObjectsL.length > 0) {
                             for (var i = 0; i < QNR_INTER.scrollerObjectsL.length; i++) {
                                 QNR_INTER.scrollerObjectsL[i].parallaxScroll();
                             }
@@ -1687,8 +1813,8 @@ var QNR_INTER = {};
             
             // ----------------------- Accordion
             
-            if ((widget.nodeName == "DIV" && widget.classList.contains("qnr-accordion")) &&
-                (clicked.nodeName == "P" && clicked.parentNode.classList.contains("qnr-accordion"))) {
+            if ((widget.nodeName == "DIV" && widget.className && widget.classList.contains("qnr-accordion")) &&
+                (clicked.nodeName == "P" && clicked.parentNode.className && clicked.parentNode.classList.contains("qnr-accordion"))) {
                 // Identify the clicked widget object
                 var thisAccordion = QNR_INTER.accordionObjectsL[parseInt(widget.dataset.qnrAccordionId)];
                 // Next element after the P is assumed to be SPAN wrap
@@ -1723,25 +1849,40 @@ var QNR_INTER = {};
         window.scrollBy(0, 1);
         window.scrollBy(0, -1);
         
+        // ----------------------- Toggle Button JS objects
         
-        // ----------------------- Hover Reveals
-        QNR_INTER.hoverRevealsL = classObjs("qnr-hover-reveal");
-        if (QNR_INTER.hoverRevealsL) {
-            for (var i = 0; i < QNR_INTER.hoverRevealsL.length; i++) {
-                // Create a data- id attribute on the hover reveal
-                QNR_INTER.hoverRevealsL[i].dataset.qnrHoverRevealId = i;
-                // Create a new JS object for the hover reveal
-                QNR_INTER.hoverRevealObjectsL.push(new HoverRevealObject());
-                QNR_INTER.hoverRevealObjectsL[i].object = QNR_INTER.hoverRevealsL[i];
+        QNR_INTER.btntogglesL = classObjs("qnr-button-toggle");
+        if (QNR_INTER.btntogglesL.length > 0) {
+            for (var i = 0; i < QNR_INTER.btntogglesL.length; i++) {
+                // Create a data- id attribute on the button toggle widget
+                QNR_INTER.btntogglesL[i].dataset.qnrButtonToggleId = i;
+                // Create a new JS object for the button toggle
+                QNR_INTER.btntoggleObjectsL.push(new ButtonToggleObject());
+                QNR_INTER.btntoggleObjectsL[i].object = QNR_INTER.btntogglesL[i];
                 // Initialize object
-                QNR_INTER.hoverRevealObjectsL[i].initialize();
+                QNR_INTER.btntoggleObjectsL[i].initialize();
+            }
+        }
+        
+        
+        // ----------------------- Popout Sliders
+        QNR_INTER.popoutSlidersL = classObjs("qnr-popout-slider");
+        if (QNR_INTER.popoutSlidersL.length > 0) {
+            for (var i = 0; i < QNR_INTER.popoutSlidersL.length; i++) {
+                // Create a data- id attribute on the popout slider
+                QNR_INTER.popoutSlidersL[i].dataset.qnrPopoutSliderId = i;
+                // Create a new JS object for the popout slider
+                QNR_INTER.popoutSliderObjectsL.push(new PopoutSliderObject());
+                QNR_INTER.popoutSliderObjectsL[i].object = QNR_INTER.popoutSlidersL[i];
+                // Initialize object
+                QNR_INTER.popoutSliderObjectsL[i].initialize();
             }
         }
     
         
         // ----------------------- Aspect Keepers
         QNR_INTER.aspectkeepersL = classObjs("qnr-aspect-keeper");
-        if (QNR_INTER.aspectkeepersL) {
+        if (QNR_INTER.aspectkeepersL.length > 0) {
             for (var i = 0; i < QNR_INTER.aspectkeepersL.length; i++) {
                 // Create a data- id attribute on the aspect keeper
                 QNR_INTER.aspectkeepersL[i].dataset.qnrAspectkeeperId = i;
@@ -1756,7 +1897,7 @@ var QNR_INTER = {};
         
         // ----------------------- Arrow Anims
         QNR_INTER.arrowanimsL = classObjs("qnr-arrow-anim");
-        if (QNR_INTER.arrowanimsL) {
+        if (QNR_INTER.arrowanimsL.length > 0) {
             for (var i = 0; i < QNR_INTER.arrowanimsL.length; i++) {
                 // Create a data- id attribute on the arrow anim
                 QNR_INTER.arrowanimsL[i].dataset.qnrArrowanimId = i;
@@ -1771,7 +1912,7 @@ var QNR_INTER = {};
         
         // ----------------------- Responsives
         QNR_INTER.responsivesL = classObjs("qnr-responsive");
-        if (QNR_INTER.responsivesL) {
+        if (QNR_INTER.responsivesL.length > 0) {
             for (var i = 0; i < QNR_INTER.responsivesL.length; i++) {
                 // Create a data- id attribute on the responsive
                 QNR_INTER.responsivesL[i].dataset.qnrResponsiveId = i;
@@ -1786,7 +1927,7 @@ var QNR_INTER = {};
         
         // ----------------------- Winscrollers
         QNR_INTER.winscrollersL = classObjs("qnr-winscroller");
-        if (QNR_INTER.winscrollersL) {
+        if (QNR_INTER.winscrollersL.length > 0) {
             for (var i = 0; i < QNR_INTER.winscrollersL.length; i++) {
                 // Create a data- id attribute on the winscroller
                 QNR_INTER.winscrollersL[i].dataset.qnrWinscrollerId = i;
@@ -1801,7 +1942,7 @@ var QNR_INTER = {};
         // ----------------------- Carousel JS objects
         
         QNR_INTER.carouselsL = classObjs("qnr-carousel");
-        if (QNR_INTER.carouselsL) {
+        if (QNR_INTER.carouselsL.length > 0) {
             for (var i = 0; i < QNR_INTER.carouselsL.length; i++) {
                 // Create a data- id attribute on the carousel widget
                 QNR_INTER.carouselsL[i].dataset.qnrCarouselId = i;
@@ -1817,7 +1958,7 @@ var QNR_INTER = {};
         // ----------------------- Scrolling JS objects
         
         QNR_INTER.scrollersL = classObjs("qnr-scroller");
-        if (QNR_INTER.scrollersL) {
+        if (QNR_INTER.scrollersL.length > 0) {
             for (var i = 0; i < QNR_INTER.scrollersL.length; i++) {
                 // Create a data- id attribute on the scroller widget
                 QNR_INTER.scrollersL[i].dataset.qnrScrollerId = i;
@@ -1848,7 +1989,7 @@ var QNR_INTER = {};
         // ----------------------- Slider JS objects
         
         QNR_INTER.slidersL = classObjs("qnr-slider");
-        if (QNR_INTER.slidersL) {
+        if (QNR_INTER.slidersL.length > 0) {
             for (var i = 0; i < QNR_INTER.slidersL.length; i++) {
                 // Create a data- id attribute on the slider widget
                 QNR_INTER.slidersL[i].dataset.qnrSliderId = i;
@@ -1863,7 +2004,7 @@ var QNR_INTER = {};
         // ----------------------- Image animator JS objects
         
         QNR_INTER.imageanimsL = classObjs("qnr-img-anim");
-        if (QNR_INTER.imageanimsL) {
+        if (QNR_INTER.imageanimsL.length > 0) {
             for (var i = 0; i < QNR_INTER.imageanimsL.length; i++) {
                 // Create a data- id attribute on the imageanim widget
                 QNR_INTER.imageanimsL[i].dataset.qnrImageanimId = i;
@@ -1878,7 +2019,7 @@ var QNR_INTER = {};
         // ----------------------- X-icon JS objects
         
         QNR_INTER.xiconsL = classObjs("qnr-x-icon");
-        if (QNR_INTER.xiconsL) {
+        if (QNR_INTER.xiconsL.length > 0) {
             for (var i = 0; i < QNR_INTER.xiconsL.length; i++) {
                 // Create a data- id attribute on the x-icon widget
                 QNR_INTER.xiconsL[i].dataset.qnrXIconId = i;
@@ -1893,7 +2034,7 @@ var QNR_INTER = {};
         // ----------------------- Accordion JS objects
         
         QNR_INTER.accordionsL = classObjs("qnr-accordion");
-        if (QNR_INTER.accordionsL) {
+        if (QNR_INTER.accordionsL.length > 0) {
             for (var i = 0; i < QNR_INTER.accordionsL.length; i++) {
                 // Create a data- id attribute on the accordion widget
                 QNR_INTER.accordionsL[i].dataset.qnrAccordionId = i;
@@ -1910,7 +2051,7 @@ var QNR_INTER = {};
         
         // Make this one last...
         QNR_INTER.fontresizesL = classObjs("qnr-font-resize");
-        if (QNR_INTER.fontresizesL) {
+        if (QNR_INTER.fontresizesL.length > 0) {
             for (var i = 0; i < QNR_INTER.fontresizesL.length; i++) {
                 // Create a data- id attribute on the font resize
                 QNR_INTER.fontresizesL[i].dataset.qnrFontresizeId = i;
@@ -1952,21 +2093,20 @@ var QNR_INTER = {};
         
         // ----------------------- X-icon
         
-        if (clicked.classList.contains("qnr-x-icon-btn")) {
+        if (clicked.className && clicked.classList.contains("qnr-x-icon-btn")) {
             widget = clicked.parentNode;
             clickedWidget = true;
         }
         
         // ----------------------- Accordion
         
-        else {
+        else if (widget) {
             // Test if clicked in widget
-            while (widget.nodeName != "BODY" && widget.nodeName != "HTML") {
-                if (widget.classList.contains("qnr-accordion")) {
+            while (widget && widget.nodeName != "BODY" && widget.nodeName != "HTML") {
+                if (widget.className && widget.classList.contains("qnr-accordion")) {
                     clickedWidget = true;
                     break;
-                }
-                else {
+                } else {
                     widget = widget.parentNode;
                 }
             }
@@ -1990,7 +2130,7 @@ var QNR_INTER = {};
     // ----------------------- ONBLUR
     
     window.addEventListener("blur",function(event){
-        if (QNR_INTER.carouselObjectsL) {
+        if (QNR_INTER.carouselObjectsL.length > 0) {
             for (var i = 0; i < QNR_INTER.carouselObjectsL.length; i++) {
                 QNR_INTER.carouselObjectsL[i].pauseCarousel();
             }
@@ -2001,7 +2141,7 @@ var QNR_INTER = {};
     // ----------------------- ONFOCUS
     
     window.addEventListener("focus",function(event){
-        if (QNR_INTER.carouselObjectsL) {
+        if (QNR_INTER.carouselObjectsL.length > 0) {
             for (var i = 0; i < QNR_INTER.carouselObjectsL.length; i++) {
                 // Use the scroll pauser to start if not offscreen
                 QNR_INTER.carouselObjectsL[i].onScrollCarousel();
@@ -2015,17 +2155,17 @@ var QNR_INTER = {};
     window.addEventListener("resize", function(event) {
         if (QNR_INTER.navmenuObject) QNR_INTER.navmenuObject.stylemenu();
         if (QNR_INTER.stickybarObject && QNR_INTER.stickybarObject.madesticky) QNR_INTER.stickybarObject.sizePlaceholder();
-        if (QNR_INTER.aspectkeepersL) {
+        if (QNR_INTER.aspectkeepersL.length > 0) {
             for (var i = 0; i < QNR_INTER.aspectkeeperObjectsL.length; i++) {
                 QNR_INTER.aspectkeeperObjectsL[i].setHeight();
             }
         }
-        if (QNR_INTER.fontresizesL) {
+        if (QNR_INTER.fontresizesL.length > 0) {
             for (var i = 0; i < QNR_INTER.fontresizeObjectsL.length; i++) {
                 QNR_INTER.fontresizeObjectsL[i].resize();
             }
         }
-        if (QNR_INTER.carouselsL) {
+        if (QNR_INTER.carouselsL.length > 0) {
             for (var i = 0; i < QNR_INTER.carouselObjectsL.length; i++) {
                 QNR_INTER.carouselObjectsL[i].styleCarousel();
             }
@@ -2056,14 +2196,14 @@ var QNR_INTER = {};
         }
         
         // ----------------------- Carousels
-        if (QNR_INTER.carouselObjectsL) {
+        if (QNR_INTER.carouselObjectsL.length > 0) {
             for (var i = 0; i < QNR_INTER.carouselObjectsL.length; i++) {
                 QNR_INTER.carouselObjectsL[i].onScrollCarousel();
             }
         }
         
         // ----------------------- Scrollers (Parallax)
-        if (QNR_INTER.scrollerObjectsL) {
+        if (QNR_INTER.scrollerObjectsL.length > 0) {
             for (var i = 0; i < QNR_INTER.scrollerObjectsL.length; i++) {
                 QNR_INTER.scrollerObjectsL[i].parallaxScroll();
             }
@@ -2182,7 +2322,7 @@ var QNR_HMENU = {};
     // ===================== STARTUP ===================== 
     
     // ----------------------- Create a list of widgets
-    QNR_HMENU.hmenusL = null; // List of hierarchical menu elements in doc
+    QNR_HMENU.hmenusL = []; // List of hierarchical menu elements in doc
     QNR_HMENU.hmenuObjectsL = []; // List of JS hierarchical menu objects
     
     // ----------------------- HIERARCHICAL MENU
@@ -2192,8 +2332,8 @@ var QNR_HMENU = {};
         this.directionX = "down";
         this.directionY = "right";
         this.menu = null;
-        this.submenus = [];
-        this.parents = []; // Containers of submenus
+        this.submenusL = [];
+        this.parentsL = []; // Containers of submenus
         this.hoverOpen = "yes"; // Open on hover or only on click
         this.changeTime = 0; // Used for mouse event delays
         this.delayTime = 200; // Delay in ms before mouseouts have effect
@@ -2223,21 +2363,21 @@ var QNR_HMENU = {};
             this.menu.style.top = "-" + menuHeight + "px";
         }
         // Get submenus and their LI parents
-        this.submenus = tagObjs("ul", this.menu);
-        for (var i = 0; i < this.submenus.length; i++) {
-            this.submenus[i].classList.add("qnr-hmenu-submenu");
-            this.submenus[i].style.display = "none";
-            if (this.directionX == "left") this.submenus[i].classList.add("qnr-hmenu-submenu-left");
-            if (this.directionY == "up") this.submenus[i].classList.add("qnr-hmenu-submenu-up");
+        this.submenusL = tagObjs("ul", this.menu);
+        for (var i = 0; i < this.submenusL.length; i++) {
+            this.submenusL[i].classList.add("qnr-hmenu-submenu");
+            this.submenusL[i].style.display = "none";
+            if (this.directionX == "left") this.submenusL[i].classList.add("qnr-hmenu-submenu-left");
+            if (this.directionY == "up") this.submenusL[i].classList.add("qnr-hmenu-submenu-up");
             // Record parent LI objects
-            this.parents.push(this.submenus[i].parentNode);
-            this.parents[i].classList.add("qnr-hmenu-subholder");
-            this.parents[i].dataset.qnrSubmenuParentId = i; // Needed for event handler
+            this.parentsL.push(this.submenusL[i].parentNode);
+            this.parentsL[i].classList.add("qnr-hmenu-subholder");
+            this.parentsL[i].dataset.qnrSubmenuParentId = i; // Needed for event handler
             // Remove A tags around first element child of submenu holder
-            if (this.parents[i].firstElementChild && this.parents[i].firstElementChild.tagName == "A") {
-                var objAText = this.parents[i].firstElementChild.innerHTML; // TODO improve over innerHTML?
-                this.parents[i].removeChild(this.parents[i].firstElementChild);
-                this.parents[i].innerHTML = objAText + this.parents[i].innerHTML;
+            if (this.parentsL[i].firstElementChild && this.parentsL[i].firstElementChild.tagName == "A") {
+                var objAText = this.parentsL[i].firstElementChild.innerHTML; // TODO improve over innerHTML?
+                this.parentsL[i].removeChild(this.parentsL[i].firstElementChild);
+                this.parentsL[i].innerHTML = objAText + this.parentsL[i].innerHTML;
             }
         }
         
@@ -2283,7 +2423,7 @@ var QNR_HMENU = {};
                 liItemsL[i].addEventListener("click", function(event) {
                     // Prevent child LI objects in further submenus bubbling up to here and failing
                     if (event.target.dataset.qnrSubmenuParentId) {
-                        var sMenu = this1.submenus[parseInt(event.target.dataset.qnrSubmenuParentId)];
+                        var sMenu = this1.submenusL[parseInt(event.target.dataset.qnrSubmenuParentId)];
                         if (sMenu.style.display == "none") {
                             // Hide any other shown submenus, not in path of target (must be here, not above test)
                             this1.hideSubmenus(event, "others");
@@ -2308,7 +2448,7 @@ var QNR_HMENU = {};
                                     !this1.object.classList.contains("qnr-hmenu-in-collapsed")) {
                             // Hide any other shown submenus, not in path of target
                             this1.hideSubmenus(event, "others");
-                            var sMenu = this1.submenus[parseInt(event.target.dataset.qnrSubmenuParentId)];
+                            var sMenu = this1.submenusL[parseInt(event.target.dataset.qnrSubmenuParentId)];
                             sMenu.style.display = "block";
                             this1.positionSubmenu(sMenu);
                             sMenu.parentNode.classList.add("qnr-hmenu-sub-hover");
@@ -2341,10 +2481,10 @@ var QNR_HMENU = {};
         if (mPos + mW > cW) {
             this.menu.style.left = "-" + ((mPos + mW) - cW) + "px";
             // And style the submenus to open left
-            if (this.submenus !== []) {
-                for (var i = 0; i < this.submenus.length; i++) {
-                    if (!this.submenus[i].classList.contains("qnr-hmenu-submenu-left")) {
-                        this.submenus[i].classList.add("qnr-hmenu-submenu-left");
+            if (this.submenusL.length > 0) {
+                for (var i = 0; i < this.submenusL.length; i++) {
+                    if (!this.submenusL[i].classList.contains("qnr-hmenu-submenu-left")) {
+                        this.submenusL[i].classList.add("qnr-hmenu-submenu-left");
                     }
                 }
             }
@@ -2388,11 +2528,11 @@ var QNR_HMENU = {};
         // Hide any hmenus that are open
         for (var i = 0; i < QNR_HMENU.hmenuObjectsL.length; i++) {
             if (window.getComputedStyle(QNR_HMENU.hmenuObjectsL[i].menu, "").display != "none") {
-                if (QNR_HMENU.hmenuObjectsL[i].submenus) { // Hide any submenus
-                    for (var x = 0; x < QNR_HMENU.hmenuObjectsL[i].submenus.length; x++) {
-                        if (QNR_HMENU.hmenuObjectsL[i].submenus[x].style.display != "none") {
-                            QNR_HMENU.hmenuObjectsL[i].submenus[x].style.display = "none";
-                            QNR_HMENU.hmenuObjectsL[i].submenus[x].parentNode.classList.remove("qnr-hmenu-sub-hover");
+                if (QNR_HMENU.hmenuObjectsL[i].submenusL.length > 0) { // Hide any submenus
+                    for (var x = 0; x < QNR_HMENU.hmenuObjectsL[i].submenusL.length; x++) {
+                        if (QNR_HMENU.hmenuObjectsL[i].submenusL[x].style.display != "none") {
+                            QNR_HMENU.hmenuObjectsL[i].submenusL[x].style.display = "none";
+                            QNR_HMENU.hmenuObjectsL[i].submenusL[x].parentNode.classList.remove("qnr-hmenu-sub-hover");
                         }
                     }
                 }
@@ -2419,24 +2559,24 @@ var QNR_HMENU = {};
                 else break;
             }
         }
-        for (var i = 0; i < this.submenus.length; i++) {
+        for (var i = 0; i < this.submenusL.length; i++) {
             var continueOuter = false;
-            if (window.getComputedStyle(this.submenus[i], "").display != "none") {
+            if (window.getComputedStyle(this.submenusL[i], "").display != "none") {
                 if (allOrOthers == "all") {
-                    this.submenus[i].style.display = "none";
-                    this.submenus[i].parentNode.classList.remove("qnr-hmenu-sub-hover");
+                    this.submenusL[i].style.display = "none";
+                    this.submenusL[i].parentNode.classList.remove("qnr-hmenu-sub-hover");
                 }
                 else { // Hide the submenu if it isn't in the path of the event target
                     for (var x = 0; x < targetPathObjectsL.length; x++) {
                         // Continue upper loop if the submenu is in target path
-                        if (this.submenus[i] == targetPathObjectsL[x]) {
+                        if (this.submenusL[i] == targetPathObjectsL[x]) {
                             continueOuter = true;
                             break;
                         }
                     }
                     if (continueOuter) continue;
-                    this.submenus[i].style.display = "none";
-                    this.submenus[i].parentNode.classList.remove("qnr-hmenu-sub-hover");
+                    this.submenusL[i].style.display = "none";
+                    this.submenusL[i].parentNode.classList.remove("qnr-hmenu-sub-hover");
                 }
             }
         }
@@ -2452,7 +2592,7 @@ var QNR_HMENU = {};
         
         // ----------------------- Hierarchical menus
         QNR_HMENU.hmenusL = classObjs("qnr-hmenu");
-        if (QNR_HMENU.hmenusL) {
+        if (QNR_HMENU.hmenusL.length > 0) {
             for (var i = 0; i < QNR_HMENU.hmenusL.length; i++) {
                 // Create a data- id attribute on the hmenu
                 QNR_HMENU.hmenusL[i].dataset.qnrHmenuId = i;
@@ -2472,11 +2612,11 @@ var QNR_HMENU = {};
     window.addEventListener("click", function(event){
         //print("w");
         // Close any open menus and submenus, if click not in menu or submenu
-        if (QNR_HMENU.hmenuObjectsL) {
+        if (QNR_HMENU.hmenuObjectsL.length > 0) {
             var etp = event.target.parentNode;
             // If for some reason we reach beyond <HTML>, it will be undefined
             // <A> tags in <LI>s taken care of in LI handler
-            if ((event.target.tagName === undefined || etp.tagName === undefined) 
+            if ((!etp || event.target.tagName === undefined || etp.tagName === undefined) 
                                                     || (!event.target.classList.contains("qnr-hmenu") 
                                                     && !etp.classList.contains("qnr-hmenu-menu") 
                                                     && !etp.classList.contains("qnr-hmenu-submenu"))) {
@@ -2485,8 +2625,8 @@ var QNR_HMENU = {};
                         QNR_HMENU.hmenuObjectsL[i].menu.style.display = "none";
                         QNR_HMENU.hmenuObjectsL[i].object.classList.remove("qnr-hmenu-hover");
                         // Submenus of this menu
-                        if (QNR_HMENU.hmenuObjectsL[i].submenus) {
-                            var subms = QNR_HMENU.hmenuObjectsL[i].submenus;
+                        if (QNR_HMENU.hmenuObjectsL[i].submenusL.length > 0) {
+                            var subms = QNR_HMENU.hmenuObjectsL[i].submenusL;
                             for (var x = 0; x < subms.length; x++) {
                                 if (window.getComputedStyle(subms[x], "").display != "none") {
                                     subms[x].style.display = "none";
@@ -2506,7 +2646,7 @@ var QNR_HMENU = {};
         
         window.addEventListener("mouseout", function(event){
             // Close any open menus and submenus, if mouse not over menu or submenu
-            if (QNR_HMENU.hmenuObjectsL) {
+            if (QNR_HMENU.hmenuObjectsL.length > 0) {
                 var et = event.target;
                 var etp = et.parentNode;
                 // Test for mouseout from a (sub)menu item (taking care of <A> tags in <Li>s)
@@ -2570,7 +2710,7 @@ var QNR_HMENU = {};
         // ----------------------- ONKEYDOWN (only if not mobile)
         
         window.addEventListener("keydown", function(event){
-            if (QNR_HMENU.hmenuObjectsL) {
+            if (QNR_HMENU.hmenuObjectsL.length > 0) {
                 var keyCode = ('which' in event) ? event.which : event.keyCode;
                 if (keyCode == 27) { // Escape key
                     for (var i = 0; i < QNR_HMENU.hmenuObjectsL.length; i++) {
@@ -2599,8 +2739,38 @@ function deviceIsMobile() {
     return isMobile;
 }
 
+function deviceIsIOS() {
+    var isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    return isMobile;
+}
+
 function browserIsChrome() {
     return /Chrome/i.test(navigator.userAgent);
+}
+
+function browserIs(browser) {
+    switch (browser){
+        case "Firefox":
+            return /Firefox/i.test(navigator.userAgent);
+            break;
+        case "Safari":
+            return /Safari/i.test(navigator.userAgent);
+            break;
+        case "Chrome":
+            return /Chrome/i.test(navigator.userAgent);
+            break;
+        case "Internet Explorer":
+            return /MSIE|Trident/i.test(navigator.userAgent);
+            break;
+        case "MS Edge":
+            return /Edge/i.test(navigator.userAgent);
+            break;
+        case "Opera":
+            return /Opera|OPR/i.test(navigator.userAgent);
+            break;
+        default:
+            return false;
+    }
 }
 
 // ----------------------- File & Dir Path Getters
@@ -2632,7 +2802,7 @@ function rangeToPercent(number, min, max) {
 
 // ----------------------- Position functions
 
-// Returns Y position of element, with given offset
+// Returns Y position of element, with given offset (required)
 function getYPos(elem, offsetPos) {
     if (!offsetPos) offsetPos = 0;
     var oPos = offsetPos;
@@ -2644,7 +2814,7 @@ function getYPos(elem, offsetPos) {
     return oPos;
 }
 
-// Returns X position of element, with given offset
+// Returns X position of element, with given offset (required)
 function getXPos(elem, offsetPos) {
     oPos = offsetPos;
     if (elem.offsetParent) {
@@ -2677,6 +2847,9 @@ function print(args) {
 
 // ----------------------- Convenience object-getting functions
 
+/* NOTE: a jQuery like 'nodeGet' and 'getNodes' were attempted to replace
+ * the following functions, but abandoned because they required regex */
+
 function objHtml() {
     return document.documentElement;
 }
@@ -2684,8 +2857,7 @@ function objHtml() {
 function objClass(name, parent) {
     if (!parent) {
         return document.getElementsByClassName(name)[0];
-    }
-    else {
+    } else {
         return parent.getElementsByClassName(name)[0];
     }
 }
@@ -2693,27 +2865,39 @@ function objClass(name, parent) {
 function classObjs(name, parent) {
     if (!parent) {
         return document.getElementsByClassName(name);
-    }
-    else {
+    } else {
         return parent.getElementsByClassName(name);
+    }
+}
+
+function queryObjs(query, parent) {
+    if (!parent) {
+        return document.querySelectorAll(query);
+    } else {
+        return parent.querySelectorAll(query);
+    }
+}
+
+function objQuery(query, parent) {
+    if (!parent) {
+        return document.querySelector(query);
+    } else {
+        return parent.querySelector(query);
     }
 }
 
 function objID(id, parent) {
     if (!parent) {
         return document.getElementById(id);
-    }
-    else {
+    } else {
         return parent.getElementById(id);
     }
-    
 }
 
 function objTag(tag, parent) {
     if (!parent) {
         return document.getElementsByTagName(tag)[0];
-    }
-    else {
+    } else {
         return parent.getElementsByTagName(tag)[0];
     }
 }
@@ -2721,8 +2905,243 @@ function objTag(tag, parent) {
 function tagObjs(tag, parent) {
     if (!parent) {
         return document.getElementsByTagName(tag);
-    }
-    else {
+    } else {
         return parent.getElementsByTagName(tag);
     }
 }
+
+// getElementsByName available only on document, not used
+
+//function objName(name, parent) {
+    //if (!parent) {
+        //return document.getElementsByName(name)[0];
+    //} else {
+        //return parent.getElementsByName(name)[0];
+    //}
+//}
+
+//function nameObjs(name, parent) {
+    //if (!parent) {
+        //return document.getElementsByName(name);
+    //} else {
+        //return parent.getElementsByName(name);
+    //}
+//}
+
+
+// ----------------------- HTML HELPERS
+
+function wrapTag(insideText, outsideHTML) {
+    // Returns insideText wrapped between two items of outsideHTML array,
+    //   but can also construct closing tag if only opener is supplied,
+    //   as string or one-item array
+    try {
+        var openTag = "";
+        var closeTag = "";
+        if (objType(outsideHTML) == "string") {
+            // Create closing tag from the supplied opener
+            openTag = outsideHTML;
+            closeTag = "</" + outsideHTML.match(/^<\w+/)[0].slice(1) + ">";
+        } else if (objType(outsideHTML) == "array") {
+            openTag = outsideHTML[0];
+            if (outsideHTML[1] === undefined) closeTag = "</" + outsideHTML.match(/^<\w+/)[0].slice(1) + ">";
+            else closeTag = outsideHTML[1];
+        }
+    } catch (e) {console.error("Invalid HTML in call to wrapTag()");}
+    return openTag + insideText + closeTag + "\n";
+}
+
+
+// ----------------------- ERRORS
+
+function sayErrorExit(message) {
+    alert(message);
+    throw new Error(message);
+}
+
+function printErrorExit(message) {
+    throw new Error(message);
+}
+
+
+// ----------------------- AJAX
+
+function AjaxSync(url, mode, request, contentTypeL, customHeaderL) {
+    // request is query string for GET, data for POST
+    // contentTypeL is array of contentType key and value
+    // customHeaderL is array of header key and value
+    var xhr=new XMLHttpRequest();
+    if (mode == "GET") xhr.open("GET", url+request, false);
+    else if (mode == "DELETE") xhr.open("DELETE", url+request, false);
+    else if (mode == "POST") xhr.open("POST", url, false);
+    else if (mode == "PATCH") xhr.open("PATCH", url, false);
+    else if (mode == "PUT") xhr.open("PUT", url, false);
+    if (contentTypeL && contentTypeL.length > 0) {
+        // Headers must be set after open
+        xhr.setRequestHeader(contentTypeL[0], contentTypeL[1]);
+        //xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+        //xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+    }
+    if (customHeaderL && customHeaderL.length > 0) {
+        xhr.setRequestHeader(customHeaderL[0], customHeaderL[1]);
+    }
+    if (mode == "GET" || mode == "DELETE") xhr.send();
+    else if (mode == "POST" || mode == "PATCH" || mode == "PUT") xhr.send(request);
+    if (xhr.readyState == 4 && xhr.status == 200) {
+        return xhr.responseText;
+    }
+    return "ERROR: " + xhr.responseText;
+}
+
+function AjaxAsync(url, mode, request, contentTypeL, customHeaderL, timeOut, cb_timeout, cb_success, cb_error) {
+    // request is query string for GET, data for POST
+    // contentTypeL is array of contentType key and value
+    // customHeaderL is array of header key and value
+    // timeOut is in ms
+    // cb_timeout, cb_success, cb_error are callback functions for each type of result
+    var xhr=new XMLHttpRequest();
+    if (mode == "GET") xhr.open("GET", url+request, true);
+    else if (mode == "DELETE") xhr.open("DELETE", url+request, true);
+    else if (mode == "POST") xhr.open("POST", url, true);
+    else if (mode == "PATCH") xhr.open("PATCH", url, true);
+    else if (mode == "PUT") xhr.open("PUT", url, true);
+    if (contentTypeL && contentTypeL.length > 0) {
+        // Headers must be set after open
+        xhr.setRequestHeader(contentTypeL[0], contentTypeL[1]);
+        //xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+        //xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+    }
+    if (customHeaderL && customHeaderL.length > 0) {
+        xhr.setRequestHeader(customHeaderL[0], customHeaderL[1]);
+    }
+    // Callbacks
+    xhr.onload = function (e) {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) { // Success
+                cb_success(xhr, e);
+                //console.log(xhr.responseText);
+            } else { // Error
+                cb_error(xhr, e);
+                //console.error(xhr.statusText);
+                //console.error(xhr.responseText);
+            }
+        }
+    };
+    xhr.onerror = function (e) {
+        cb_error(xhr, e);
+        //console.error(xhr.statusText);
+    };
+    xhr.ontimeout = function () {
+        cb_timeout(xhr);
+        //console.warn("The request timed out.");
+    };
+    xhr.timeout = timeOut;
+    if (mode == "GET" || mode == "DELETE") xhr.send();
+    else if (mode == "POST" || mode == "PATCH" || mode == "PUT") xhr.send(request);
+    return 0;
+}
+
+
+// ----------------------- COOKIES
+
+function createOrUpdateCookie(cookieName, cookieValue, cookieDuration, cookieSecure) {
+    // cookieName = cookie name
+    // cookieValue = cookie value, unencoded
+    // cookieDuration = duration of the cookie in seconds
+    // cookieSecure = boolean for secure flag
+    // Chrome doesn't work with cookies correctly when using local "file:///" protocol, but works fine online
+    var cExpiry = cookieDuration ? "; expires="+new Date(Date.now() + (cookieDuration * 1000)).toGMTString() : "";
+    var cSecure = cookieSecure ? ";secure" : "";
+    document.cookie = cookieName+"="+encodeURIComponent(cookieValue)+cExpiry+cSecure;
+}
+
+function getCookieValue(cookieName) {
+    // Returns value of given cookie name, may return empty if no such cookie
+    if (document.cookie) {
+        var cookiesL = document.cookie.split("; ");
+        for (var i = 0; i < cookiesL.length; i++) {
+            if (cookiesL[i].split("=")[0] == cookieName) 
+                return decodeURIComponent(cookiesL[i].split("=")[1]);
+        }
+    }
+    return "";
+}
+
+function deleteCookie(cookieName) { // TODO may not work, missing parameters??
+    // Deletes cookie by nulling value and setting expiry in the past
+    if (document.cookie) document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+}
+  
+
+// ----------------------- GENERIC
+
+function keyValue(obj, key) {
+    // Returns value even if obj or key not defined or null, preventing 
+    //   errors and avoiding verbose code
+    if (obj === undefined || obj[key] === undefined) return undefined;
+    else if (obj === null || obj[key] === null) return null;
+    else return obj[key];
+}
+
+function objContainsValue(obj, val) {
+    // Returns number of times value appears in object, may be treated as boolean for yes/no
+    // ES6 equivalent to this function: Object.values(obj).includes(val)
+    return Object.keys(obj).filter(function(i){return obj[i]==val;}).length;
+}
+
+function objType(obj) {
+    // Returns type of object, more accurate than typeof and instanceof
+    try {var rT = Object.prototype.toString.call(obj).split(" ")[1].slice(0,-1).toLowerCase();}
+    catch (e) {var rT = "undefined"};
+    return rT;
+}
+
+
+// ----------------------- ANIMATION
+
+function animObj(obj, slideType, fadeType, animDuration) {
+    // Animates passed element, according to animation parameters
+    // slideType = up/down/left/right/back
+    // fadeType = in/out
+    // animDuration = seconds
+    
+    obj.style.animationDuration = animDuration + "s";
+    
+    if (slideType == "up") {
+        if (obj.className) obj.classList.remove("qnr-anim-popout-up-back");
+        obj.classList.add("qnr-anim-popout-up");
+    } else if (slideType == "down") {
+        if (obj.className) obj.classList.remove("qnr-anim-popout-down-back");
+        obj.classList.add("qnr-anim-popout-down");
+    } else if (slideType == "left") {
+        if (obj.className) obj.classList.remove("qnr-anim-popout-left-back");
+        obj.classList.add("qnr-anim-popout-left");
+    } else if (slideType == "right") {
+        if (obj.className) obj.classList.remove("qnr-anim-popout-right-back");
+        obj.classList.add("qnr-anim-popout-right");
+    } else if (slideType == "back") {
+        if (obj.className && obj.classList.contains("qnr-anim-popout-up")) {
+            obj.classList.remove("qnr-anim-popout-up");
+            obj.classList.add("qnr-anim-popout-up-back");
+        } else if (obj.className && obj.classList.contains("qnr-anim-popout-down")) {
+            obj.classList.remove("qnr-anim-popout-down");
+            obj.classList.add("qnr-anim-popout-down-back");
+        } else if (obj.className && obj.classList.contains("qnr-anim-popout-left")) {
+            obj.classList.remove("qnr-anim-popout-left");
+            obj.classList.add("qnr-anim-popout-left-back");
+        } else if (obj.className && obj.classList.contains("qnr-anim-popout-right")) {
+            obj.classList.remove("qnr-anim-popout-right");
+            obj.classList.add("qnr-anim-popout-right-back");
+        }
+    }
+    if (fadeType == "in") {
+        if (obj.className) obj.classList.remove("qnr-anim-fade-out");
+        obj.classList.add("qnr-anim-fade-in");
+    } else if (fadeType == "out") {
+        if (obj.className) obj.classList.remove("qnr-anim-fade-in");
+        obj.classList.add("qnr-anim-fade-out");
+    }
+}
+
+
+

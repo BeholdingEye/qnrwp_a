@@ -208,9 +208,9 @@ wp_head(); // Required
       echo '<div id="sub-header-row" class="sub-header-row widget-area">' .PHP_EOL;
       
       // Globals for Sub Header widget
-      $GLOBALS['isNews'] = $isNews;
-      $GLOBALS['postsAmount'] = $postsAmount;
-      $GLOBALS['pageTitle'] = $pageTitle;
+      $GLOBALS['QNRWP_GLOBALS']['isNews'] = $isNews;
+      $GLOBALS['QNRWP_GLOBALS']['postsAmount'] = $postsAmount;
+      $GLOBALS['QNRWP_GLOBALS']['pageTitle'] = $pageTitle;
       
       dynamic_sidebar('qnrwp-subrow-1'); // Sub Header
       echo '</div><!-- End of Sub Header Row -->'.PHP_EOL;
@@ -242,7 +242,7 @@ wp_head(); // Required
       echo '<div id="content-box" class="'.$contentBoxClass.'">'.PHP_EOL;
       
       //echo $rHtml; // Content
-      $GLOBALS['contentHtml'] = $rHtml; // Place in global for widget to echo
+      $GLOBALS['QNRWP_GLOBALS']['contentHtml'] = $rHtml; // Place in global for widget to echo
       wp_reset_postdata(); // Restore original Post Data
       
       dynamic_sidebar('qnrwp-row-2');
