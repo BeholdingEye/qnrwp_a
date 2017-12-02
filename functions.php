@@ -537,7 +537,8 @@ function qnrwp_meta_opengraph_twitter_tags() {
   //<meta name="twitter:image" content="">
   if (get_option('qnrwp_use_twitter_tags')) {
     $rHtml .= '<!-- Twitter Card -->'.PHP_EOL;
-    $rHtml .= '<meta name="twitter:card" content="summary">'.PHP_EOL;
+    if (get_option('qnrwp_use_twitter_largeimage')) $rHtml .= '<meta name="twitter:card" content="summary_large_image">'.PHP_EOL;
+    else $rHtml .= '<meta name="twitter:card" content="summary">'.PHP_EOL;
     if (get_option('qnrwp_twitter_site')) 
       $rHtml .= '<meta name="twitter:site" content="'.esc_attr(trim(get_option('qnrwp_twitter_site'))).'">'.PHP_EOL;
   
@@ -1103,18 +1104,21 @@ function qnrwp_enqueue_styles() {
   if (!$fX || $updateCombo) { // Create the combo file if it doesn't exist or must be updated
     qnrwp_combine_stylesheets($stylesheetPathsL, $cfPath);
   }
-  // Enqueue the combo file
-  wp_enqueue_style('qnrwp-combo-stylesheet', $cfURI, null, null);
+  if (!is_user_logged_in()) {
+    // Enqueue the combo file
+    wp_enqueue_style('qnrwp-combo-stylesheet', $cfURI, null, null);
+  } else { // TODO make contact loading conditional
+    wp_enqueue_style('qnr-interface-stylesheet', get_template_directory_uri() . '/res/css/qnr-interface.css', null, null);
+    wp_enqueue_style('qnr-contact-stylesheet', get_template_directory_uri() . '/res/css/contact.css', null, null);
+    // Load parent stylesheet before child's
+    // Retrieve parent theme dir: get_template_directory_uri()
+    // Retrieve child theme dir: get_stylesheet_directory_uri()
+    wp_enqueue_style('qnr-theme-stylesheet', get_template_directory_uri() . '/style.css', null, null);
+    if (is_child_theme()) {
+      wp_enqueue_style('qnr-child-stylesheet', get_stylesheet_uri(), null, null); // Child theme style.css
+    }
+  }
 
-  //wp_enqueue_style('qnr-interface-stylesheet', get_template_directory_uri() . '/res/css/qnr-interface.css', null, null);
-  //wp_enqueue_style('qnr-hmenu-stylesheet', get_template_directory_uri() . '/res/css/qnr-hmenu.css', null, null);
-  //// Load parent stylesheet before child's
-  //// Retrieve parent theme dir: get_template_directory_uri()
-  //// Retrieve child theme dir: get_stylesheet_directory_uri()
-  //wp_enqueue_style('theme-stylesheet', get_template_directory_uri() . '/style.css', null, null);
-  //if (is_child_theme()) {
-    //wp_enqueue_style('child-stylesheet', get_stylesheet_uri(), null, null); // Child theme style.css
-  //}
 }
 add_action('wp_enqueue_scripts', 'qnrwp_enqueue_styles');
 

@@ -24,6 +24,7 @@ function qnrwp_admin_settings() {
    *  Twitter title
    *  Twitter description
    *  Twitter image URL
+   *  Twitter large image
    * 
    */
   
@@ -135,6 +136,14 @@ function qnrwp_admin_settings() {
     'writing',                             // Admin page to use
     'qnrwp_metatags_section'               // Section to use
   );
+  // Use Twitter Large Image
+  add_settings_field(
+    'qnrwp_use_twitter_largeimage',         // ID attribute of tags
+    'Use Twitter Large Image',              // Field title
+    'qnrwp_use_twitter_largeimage',         // Callback to echo input control
+    'writing',                              // Admin page to use
+    'qnrwp_metatags_section'                // Section to use
+  );
   // Twitter Site
   add_settings_field(
     'qnrwp_twitter_site',                  // ID attribute of tags
@@ -171,6 +180,7 @@ function qnrwp_admin_settings() {
   register_setting('writing', 'qnrwp_twitter_title');
   register_setting('writing', 'qnrwp_twitter_description');
   register_setting('writing', 'qnrwp_twitter_imageurl');
+  register_setting('writing', 'qnrwp_use_twitter_largeimage');
   register_setting('writing', 'qnrwp_twitter_site');
   register_setting('writing', 'qnrwp_favicon_url');
   register_setting('writing', 'qnrwp_appleicon_url');
@@ -406,6 +416,14 @@ function qnrwp_twitter_imageurl() {
   <p>Enter the Twitter image URL. If left blank, this tag will not be used. On individual posts, a post image will be used as explained in the section introduction above.</p>
   <input type="text" name="qnrwp_twitter_imageurl" id="qnrwp_twitter_imageurl" 
                 maxlength="255" class="regular-text" value="<?php echo get_option('qnrwp_twitter_imageurl', $default=''); ?>">
+  <?php
+}
+
+function qnrwp_use_twitter_largeimage() {
+  // Echo the input control for this option
+  ?>
+  <p><label><input type="checkbox" value="1" <?php checked(1, get_option('qnrwp_use_twitter_largeimage'), true); ?>
+                name="qnrwp_use_twitter_largeimage" id="qnrwp_use_twitter_largeimage">Use 'summary_large_image' meta tag instead of 'summary', for a larger image.</label></p>
   <?php
 }
 
