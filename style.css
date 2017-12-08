@@ -242,11 +242,97 @@ div#content-box li {
 div.type-post {
     text-align: left;
 }
+div.type-post p {
+}
+div.type-post p::after {    /* Clearing trick for floats */
+    content: "";
+    clear: both;
+    display: block;
+}
+div.type-post img {
+    border: solid thin #EEE;
+}
+/* A filter moves the alignment classes from IMG to A, but when FIGURE
+ * is used, the class is alredy on the FIGURE, wrapping A */
+div.type-post a.alignleft,
+div.type-post figure.alignleft,
+div.type-post img.alignleft {
+    float: left;
+    clear: left;
+    vertical-align: top;
+    margin: 0 1em 0 0;
+}
+div.type-post a.alignright,
+div.type-post figure.alignright,
+div.type-post img.alignright {
+    float: right;
+    clear: right;
+    vertical-align: top;
+    margin: 0 0 0 1em;
+}
+div.type-post a.aligncenter,
+div.type-post figure.aligncenter,
+div.type-post img.aligncenter {     /* Same as img at top */
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    max-width: 100%; /* Prevent overflow */
+    height: auto; /* Prevent distortion */
+    clear: both;
+    vertical-align: top;
+}
+div.type-post figure figcaption.wp-caption-text {
+    text-align: center;
+    font-style: italic;
+    font-size: 0.85em;
+    color: #888;
+}
 div.type-post img.wp-post-image {
     margin: 1em auto;
     width: 100%;
     max-width: 100%;
-    border: solid thin #EEE;
+}
+/* Expandable, clickable image overlay */
+div.type-post a.news-post-expandable-image {
+    display: block;
+    position: relative;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    background-color: black; /* Fake 'overlay' for hover */
+}
+div.type-post a.news-post-expandable-image::after {
+    content: "\01a5"; /* Expand icon */
+    font-family: Quicknr;
+    font-weight: normal;
+    font-size: 1.4em;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 0.25em;
+    color: white;
+    background-color: rgba(1,1,1,0.1);
+    opacity: 0.8;
+    z-index: 99;
+}
+div.type-post a.news-post-expandable-image.news-post-image-link::after {
+    content: "I"; /* Magnifying glass icon */
+}
+div.type-post a.news-post-expandable-image:hover::after {
+    background-color: rgba(1,1,1,0.4);
+    color: white;
+    opacity: 1;
+}
+div.type-post a.news-post-expandable-image img {    /* Override img */
+    display: block;
+    position: relative;
+    float: none;
+    margin: 0;
+}
+div.type-post a.news-post-expandable-image img:hover {
+    opacity: 0.95; /* Revealing A bg */
 }
 div.post-date {
     font-size: 0.9em;
@@ -775,7 +861,7 @@ div#sub-header-row div.qnr-scroller div p { /* Home page overrride below */
 }
 
 
-/* SAMPLES - TODO transfer to QI?
+/* SAMPLES
  * ----------------------------------------------------- */
 
 div.samples-row,
@@ -908,6 +994,28 @@ div.samples-list-item-buttons {
 div.samples-list-item-buttons a {
     padding: 0.5em;
     margin: 0.5em;
+}
+
+/* Load more button */
+button.samples-load-more {
+    display: block;
+    position: relative;
+    margin: 1em auto;
+    padding: 0.5em 1em;
+    font-weight: normal;
+    color: #333;
+    border: solid thin #DDD;
+    outline: none;
+    cursor: pointer;
+    border-radius: 6px;
+    background-color: gray;
+    background-image: linear-gradient(#f0f0f0, #DDD);
+}
+button.samples-load-more:hover {
+    color: #666;
+    border: solid thin #EEE;
+    background-color: silver;
+    background-image: linear-gradient(#DDD, #f0f0f0);
 }
 
 

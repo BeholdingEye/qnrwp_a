@@ -21,197 +21,105 @@
 
 /* Popout: slide out from window edge */
 
-@keyframes qnr-anim-popout-down {
-    from {
-        -webkit-transform: translateY(-100%);
-        -moz-transform: translateY(-100%);
-        -ms-transform: translateY(-100%);
-        -o-transform: translateY(-100%);
-        transform: translateY(-100%);
-    }
-    to {
-        -webkit-transform: translateY(0%);
-        -moz-transform: translateY(0%);
-        -ms-transform: translateY(0%);
-        -o-transform: translateY(0%);
-        transform: translateY(0%);
-    }
-}
-@keyframes qnr-anim-popout-down-back {
-    from {
-        -webkit-transform: translateY(0%);
-        -moz-transform: translateY(0%);
-        -ms-transform: translateY(0%);
-        -o-transform: translateY(0%);
-        transform: translateY(0%);
-    }
-    to {
-        -webkit-transform: translateY(-100%);
-        -moz-transform: translateY(-100%);
-        -ms-transform: translateY(-100%);
-        -o-transform: translateY(-100%);
-        transform: translateY(-100%);
-    }
-}
-@keyframes qnr-anim-popout-up {
-    from {
-        -webkit-transform: translateY(100%);
-        -moz-transform: translateY(100%);
-        -ms-transform: translateY(100%);
-        -o-transform: translateY(100%);
-        transform: translateY(100%);
-    }
-    to {
-        -webkit-transform: translateY(0%);
-        -moz-transform: translateY(0%);
-        -ms-transform: translateY(0%);
-        -o-transform: translateY(0%);
-        transform: translateY(0%);
-    }
-}
-@keyframes qnr-anim-popout-up-back {
-    from {
-        -webkit-transform: translateY(0%);
-        -moz-transform: translateY(0%);
-        -ms-transform: translateY(0%);
-        -o-transform: translateY(0%);
-        transform: translateY(0%);
-    }
-    to {
-        -webkit-transform: translateY(100%);
-        -moz-transform: translateY(100%);
-        -ms-transform: translateY(100%);
-        -o-transform: translateY(100%);
-        transform: translateY(100%);
-    }
-}
-@keyframes qnr-anim-popout-left {
-    from {
-        -webkit-transform: translateX(100%);
-        -moz-transform: translateX(100%);
-        -ms-transform: translateX(100%);
-        -o-transform: translateX(100%);
-        transform: translateX(100%);
-    }
-    to {
-        -webkit-transform: translateX(0%);
-        -moz-transform: translateX(0%);
-        -ms-transform: translateX(0%);
-        -o-transform: translateX(0%);
-        transform: translateX(0%);
-    }
-}
-@keyframes qnr-anim-popout-left-back {
-    from {
-        -webkit-transform: translateX(0%);
-        -moz-transform: translateX(0%);
-        -ms-transform: translateX(0%);
-        -o-transform: translateX(0%);
-        transform: translateX(0%);
-    }
-    to {
-        -webkit-transform: translateX(100%);
-        -moz-transform: translateX(100%);
-        -ms-transform: translateX(100%);
-        -o-transform: translateX(100%);
-        transform: translateX(100%);
-    }
-}
-@keyframes qnr-anim-popout-right {
-    from {
-        -webkit-transform: translateX(-100%);
-        -moz-transform: translateX(-100%);
-        -ms-transform: translateX(-100%);
-        -o-transform: translateX(-100%);
-        transform: translateX(-100%);
-    }
-    to {
-        -webkit-transform: translateX(0%);
-        -moz-transform: translateX(0%);
-        -ms-transform: translateX(0%);
-        -o-transform: translateX(0%);
-        transform: translateX(0%);
-    }
-}
-@keyframes qnr-anim-popout-right-back {
-    from {
-        -webkit-transform: translateX(0%);
-        -moz-transform: translateX(0%);
-        -ms-transform: translateX(0%);
-        -o-transform: translateX(0%);
-        transform: translateX(0%);
-    }
-    to {
-        -webkit-transform: translateX(-100%);
-        -moz-transform: translateX(-100%);
-        -ms-transform: translateX(-100%);
-        -o-transform: translateX(-100%);
-        transform: translateX(-100%);
-    }
-}
-@keyframes qnr-anim-fade-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-@keyframes qnr-anim-fade-out {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}
+/* Webkit version */
+@-webkit-keyframes qnr-anim-popout-down { from { -webkit-transform: translateY(-100%); } to { -webkit-transform: translateY(0%); }  }
+@-webkit-keyframes qnr-anim-popout-down-back { from { -webkit-transform: translateY(0%); } to { -webkit-transform: translateY(-100%); }  }
+@-webkit-keyframes qnr-anim-popout-up { from { -webkit-transform: translateY(100%); } to { -webkit-transform: translateY(0%); }  }
+@-webkit-keyframes qnr-anim-popout-up-back { from { -webkit-transform: translateY(0%); } to { -webkit-transform: translateY(100%); }  }
+@-webkit-keyframes qnr-anim-popout-left { from { -webkit-transform: translateX(100%); } to { -webkit-transform: translateX(0%); }  }
+@-webkit-keyframes qnr-anim-popout-left-back { from { -webkit-transform: translateX(0%); } to { -webkit-transform: translateX(100%); }  }
+@-webkit-keyframes qnr-anim-popout-right { from { -webkit-transform: translateX(-100%); } to { -webkit-transform: translateX(0%); }  }
+@-webkit-keyframes qnr-anim-popout-right-back { from { -webkit-transform: translateX(0%); } to { -webkit-transform: translateX(-100%); }  }
+@-webkit-keyframes qnr-anim-fade-in { from { opacity: 0; } to { opacity: 1; }  }
+@-webkit-keyframes qnr-anim-fade-out { from { opacity: 1; } to { opacity: 0; } }
+/* Regular version */
+@keyframes qnr-anim-popout-down { from { transform: translateY(-100%); } to { transform: translateY(0%); }  }
+@keyframes qnr-anim-popout-down-back { from { transform: translateY(0%); } to { transform: translateY(-100%); }  }
+@keyframes qnr-anim-popout-up { from { transform: translateY(100%); } to { transform: translateY(0%); }  }
+@keyframes qnr-anim-popout-up-back { from { transform: translateY(0%); } to { transform: translateY(100%); }  }
+@keyframes qnr-anim-popout-left { from { transform: translateX(100%); } to { transform: translateX(0%); }  }
+@keyframes qnr-anim-popout-left-back { from { transform: translateX(0%); } to { transform: translateX(100%); }  }
+@keyframes qnr-anim-popout-right { from { transform: translateX(-100%); } to { transform: translateX(0%); }  }
+@keyframes qnr-anim-popout-right-back { from { transform: translateX(0%); } to { transform: translateX(-100%); }  }
+@keyframes qnr-anim-fade-in { from { opacity: 0; } to { opacity: 1; }  }
+@keyframes qnr-anim-fade-out { from { opacity: 1; } to { opacity: 0; } }
 
 .qnr-anim-popout-down {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-down;
     animation-fill-mode: both;
     animation-iteration-count: 1;
     animation-name: qnr-anim-popout-down;
 }
 .qnr-anim-popout-down-back {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-down-back;
     animation-fill-mode: both;
     animation-iteration-count: 1;
     animation-name: qnr-anim-popout-down-back;
 }
 .qnr-anim-popout-up {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-up;
     animation-fill-mode: both;
     animation-iteration-count: 1;
     animation-name: qnr-anim-popout-up;
 }
 .qnr-anim-popout-up-back {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-up-back;
     animation-fill-mode: both;
     animation-iteration-count: 1;
     animation-name: qnr-anim-popout-up-back;
 }
 .qnr-anim-popout-left {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-left;
     animation-fill-mode: both;
     animation-iteration-count: 1;
     animation-name: qnr-anim-popout-left;
 }
 .qnr-anim-popout-left-back {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-left-back;
     animation-fill-mode: both;
     animation-iteration-count: 1;
     animation-name: qnr-anim-popout-left-back;
 }
 .qnr-anim-popout-right {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-right;
     animation-fill-mode: both;
     animation-iteration-count: 1;
     animation-name: qnr-anim-popout-right;
 }
 .qnr-anim-popout-right-back {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-right-back;
     animation-fill-mode: both;
     animation-iteration-count: 1;
     animation-name: qnr-anim-popout-right-back;
 }
 .qnr-anim-fade-in {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-fade-in;
     animation-fill-mode: both;
     animation-iteration-count: 1;
     animation-name: qnr-anim-fade-in;
 }
 .qnr-anim-fade-out {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-fade-out;
     animation-fill-mode: both;
     animation-iteration-count: 1;
     animation-name: qnr-anim-fade-out;
@@ -236,9 +144,6 @@
     top: 70px;
     right: 0;
     -webkit-transform: translateX(100%);
-    -moz-transform: translateX(100%);
-    -ms-transform: translateX(100%);
-    -o-transform: translateX(100%);
     transform: translateX(100%); /* Place it offscreen by its width */
     width: 100%;
     min-width: 280px;
@@ -283,11 +188,12 @@ button.qnr-popout-slider-button-hide {
     font-family: Quicknr;
     font-size: 20px;
     line-height: 0;
-    color: #666;
+    color: #888;
     border-radius: 50%;
     border: none;
     outline: none;
     cursor: pointer;
+    background-color: white;
 }
 @media (max-width: 500px) {
     button.qnr-popout-slider-button-hide {

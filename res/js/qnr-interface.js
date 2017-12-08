@@ -1929,13 +1929,16 @@ var QNR_INTER = {};
         QNR_INTER.winscrollersL = classObjs("qnr-winscroller");
         if (QNR_INTER.winscrollersL.length > 0) {
             for (var i = 0; i < QNR_INTER.winscrollersL.length; i++) {
-                // Create a data- id attribute on the winscroller
-                QNR_INTER.winscrollersL[i].dataset.qnrWinscrollerId = i;
-                // Create a new JS object for the winscroller
-                QNR_INTER.winscrollerObjectsL.push(new WinscrollerObject());
-                QNR_INTER.winscrollerObjectsL[i].object = QNR_INTER.winscrollersL[i];
-                // Initialize object
-                QNR_INTER.winscrollerObjectsL[i].initialize();
+                // Prevent doubled winscroller by checking for dataset id...
+                if (QNR_INTER.winscrollersL[i].dataset.qnrWinscrollerId === undefined) {
+                    // Create a data- id attribute on the winscroller
+                    QNR_INTER.winscrollersL[i].dataset.qnrWinscrollerId = i;
+                    // Create a new JS object for the winscroller
+                    QNR_INTER.winscrollerObjectsL.push(new WinscrollerObject());
+                    QNR_INTER.winscrollerObjectsL[i].object = QNR_INTER.winscrollersL[i];
+                    // Initialize object
+                    QNR_INTER.winscrollerObjectsL[i].initialize();
+                }
             }
         }
         
@@ -2607,6 +2610,14 @@ var QNR_HMENU = {};
     }, false);
     
     
+    // ----------------------- ONUNLOAD
+    
+    window.addEventListener("unload", function(event) {
+        // It appears this needs to run, even if empty, to avoid loading 
+        //   problems on Back navigation, at least in Firefox
+    }, false);
+    
+    
     // ----------------------- ONCLICK
     
     window.addEventListener("click", function(event){
@@ -3104,7 +3115,7 @@ function animObj(obj, slideType, fadeType, animDuration) {
     // slideType = up/down/left/right/back
     // fadeType = in/out
     // animDuration = seconds
-    
+    obj.style.webkitAnimationDuration = animDuration + "s"; // iPhone
     obj.style.animationDuration = animDuration + "s";
     
     if (slideType == "up") {

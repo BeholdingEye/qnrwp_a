@@ -93,38 +93,48 @@ function qnrwp_ajax_handler() {
           || !isset($_POST['datajson'])) {
       echo 'ERROR: Invalid Ajax call';
     } else {
-      // Security level is decided per device type below, but first we check the generics
+      // Security level is decided per device type below (not any more), but first we check the generics
+      // This test may be considered redundant but we keep it
       if ($_POST['qnrwp_ajax_cookie'] !== $_COOKIE['qnrwp_ajax_cookie']) wp_die();
-      $ajaxTrans = get_transient('qnrwp_ajax_temp_salt_'.$_POST['qnrwp_ajax_cookie']);
-      // JS will have caught session expiry before we get here (with same message)
-      if (!$ajaxTrans) {
-        echo 'ERROR: Page session has expired. Reload the page to restart the session.';
-        wp_die();
-      }
         
       // Decide action according to actiontype; a bunch of conversions is required...
       $actionType = stripslashes(rawurldecode($_POST['actiontype']));
       
-      // ----------------------- Security check
-      // Get time component of cookie value (used for session timing client-side)
-      // If no UA, we would have exited on load in setup_theme
-      $timeComp = 'T' . preg_split('/T/', $_POST['qnrwp_ajax_cookie'])[1];
-      // NEW, the same for desktop and mobile
-      if ($_POST['qnrwp_ajax_cookie'] !== md5(crypt($_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR'], $ajaxTrans)).$timeComp) {
-        echo 'ERROR: Your IP or user agent has changed. Reload the page to restart the session.';
-        wp_die();
-      }
-      // OLD:
-      //if (qnrwp_deviceIsMobile()) {
-        //if ($_POST['qnrwp_ajax_cookie'] !== md5(crypt($_SERVER['HTTP_USER_AGENT'], $ajaxTrans)).$timeComp) wp_die();
-      //} else { // Desktop
-        //if ($_POST['qnrwp_ajax_cookie'] !== md5(crypt($_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR'], $ajaxTrans)).$timeComp) wp_die();
-      //}
-      
       if ($actionType == 'email') {
+        
+        // ----------------------- EMAIL
+        $ajaxTrans = get_transient('qnrwp_ajax_temp_salt_'.$_POST['qnrwp_ajax_cookie']);
+        // JS will have caught session expiry before we get here (with same message)
+        if (!$ajaxTrans) {
+          echo 'ERROR: Page session has expired. Reload the page to restart the session.';
+          wp_die();
+        }
+        
+        // ----------------------- Security check
+        // Get time component of cookie value (used for session timing client-side)
+        // If no UA, we would have exited on load in setup_theme
+        $timeComp = 'T' . preg_split('/T/', $_POST['qnrwp_ajax_cookie'])[1];
+        // NEW, the same for desktop and mobile
+        if ($_POST['qnrwp_ajax_cookie'] !== md5(crypt($_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR'], $ajaxTrans)).$timeComp) {
+          echo 'ERROR: Your IP or user agent has changed. Reload the page to restart the session.';
+          wp_die();
+        }
+        // OLD:
+        //if (qnrwp_deviceIsMobile()) {
+          //if ($_POST['qnrwp_ajax_cookie'] !== md5(crypt($_SERVER['HTTP_USER_AGENT'], $ajaxTrans)).$timeComp) wp_die();
+        //} else { // Desktop
+          //if ($_POST['qnrwp_ajax_cookie'] !== md5(crypt($_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR'], $ajaxTrans)).$timeComp) wp_die();
+        //}
+        
         // Echo returns to Ajax caller; encode again to be sure
         // On error, returned string will begin with "ERROR:", else "Success:"
         echo rawurlencode(qnrwp_send_email(stripslashes(rawurldecode($_POST['datajson']))));
+        
+      } else if ($actionType == 'samples') {
+        
+        // ----------------------- SAMPLES
+        echo rawurlencode(qnrwp_ajax_more_samples(stripslashes(rawurldecode($_POST['datajson']))));
+        
       } else {
         echo 'Success: '.rawurlencode($actionType); // TEST TODO
       }
@@ -369,8 +379,8 @@ function qnrwp_contact_form($options) {
   else $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount'] = 1;
   ?>
 <div class="contact-block <?php echo $options['form-class']; // No esc_attr needed, test done in shortcode caller ?>">
-  <?php if ($titleBool) echo '<p class="contact-title">'.$options['title-text'].'</p>' ?>
-  <?php if ($introBool) echo '<p class="contact-intro">'.$options['intro-text'].'</p>' ?>
+  <?php if ($titleBool) echo '<p class="contact-title">'.esc_html($options['title-text']).'</p>' ?>
+  <?php if ($introBool) echo '<p class="contact-intro">'.esc_html($options['intro-text']).'</p>' ?>
   <form name="<?php echo 'contact-form' . $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount']; ?>" 
         id="<?php echo 'contact-form' . $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount']; ?>" 
         action="" 
@@ -385,43 +395,43 @@ function qnrwp_contact_form($options) {
     <input type="hidden" name="form-class-hidden" class="form-class-hidden" value="<?php echo bin2hex($options['form-class']); ?>">
 <?php if ($nameBool): // Must use 'emailname' instead of 'name'... ?>
     <div class="contact-nameframe contact-subframe">
-      <?php if ($options['label-name']): ?><span class="label label-name"><?php echo $options['label-name']; ?></span><?php endif; ?><input 
+      <?php if ($options['label-name']): ?><span class="label label-name"><?php echo esc_html($options['label-name']); ?></span><?php endif; ?><input 
                   type="text" 
                   name="emailname" 
-                  placeholder="<?php echo $options['placeholder-name']; ?>" 
+                  placeholder="<?php echo esc_attr($options['placeholder-name']); ?>" 
                   class="name user-entry" 
                   maxlength="60"<?php echo $autofocusBool?' autofocus':''; ?><?php echo $tooltipsBool?' title="Your name"':''; ?>>
     </div>
 <?php endif; ?>
     <div class="contact-emailframe contact-subframe">
       <!-- No whitespace -->
-      <?php if ($options['label-email']): ?><span class="label label-email"><?php echo $options['label-email']; ?></span><?php endif; ?><input 
+      <?php if ($options['label-email']): ?><span class="label label-email"><?php echo esc_html($options['label-email']); ?></span><?php endif; ?><input 
                   type="email" 
                   name="email" 
                   class="email user-entry" 
                   maxlength="60" 
                   required 
-                  placeholder="<?php echo $options['placeholder-email']; ?>" 
+                  placeholder="<?php echo esc_attr($options['placeholder-email']); ?>" 
                   <?php echo ($autofocusBool && !$nameBool)?'autofocus':''; ?><?php echo $tooltipsBool?' title="Your email address"':''; ?>>
     </div>
 <?php if ($subjectBool): ?>
     <div class="contact-subjectframe contact-subframe">
-      <?php if ($options['label-subject']): ?><span class="label label-subject"><?php echo $options['label-subject']; ?></span><?php endif; ?><input 
+      <?php if ($options['label-subject']): ?><span class="label label-subject"><?php echo esc_html($options['label-subject']); ?></span><?php endif; ?><input 
                   type="text" 
                   name="subject" 
-                  placeholder="<?php echo $options['placeholder-subject']; ?>" 
+                  placeholder="<?php echo esc_attr($options['placeholder-subject']); ?>" 
                   class="subject user-entry" 
                   maxlength="60">
     </div>
 <?php endif; ?>
 <?php if ($messageBool): ?>
     <div class="contact-textframe contact-subframe">
-      <?php if ($options['label-message']): ?><span class="label label-message"><?php echo $options['label-message']; ?></span><?php endif; ?><textarea 
+      <?php if ($options['label-message']): ?><span class="label label-message"><?php echo esc_html($options['label-message']); ?></span><?php endif; ?><textarea 
                   pattern=".{40,500}" 
                   required 
                   cols="20" 
                   name="message" 
-                  placeholder="<?php echo $options['placeholder-message']; ?>" 
+                  placeholder="<?php echo esc_attr($options['placeholder-message']); ?>" 
                   class="message user-entry" 
                   rows="10" 
                   minlength="40" 
@@ -439,7 +449,7 @@ function qnrwp_contact_form($options) {
                   type="submit" 
                   name="form-send" 
                   class="form-send" 
-                  value="Send" ><?php echo $options['label-submit']; ?></button>
+                  value="Send" ><?php echo esc_html($options['label-submit']); ?></button>
     </div>
   </form>
 </div>
@@ -909,58 +919,195 @@ function qnrwp_get_carousel_html($widgetDefPageID, $imageSize = 'large') {
 //}
 
 
-// ----------------------- Samples HTML getter TODO
+// ----------------------- Custom Widget samples options & HTML getter from defining page ID
 
-function qnrwp_get_samples_html($samplesName, $sampleCategories, $sampleSize) {
-  // ----------------------- Custom Query
-  $the_query = new WP_Query(array('post_type' => 'post', 'nopaging' => true));
-  if ($the_query->have_posts()) {
+function qnrwp_get_samples_options_html($widgetDefPageID) {
+  // $widgetDefPageID - ID of the page defining the subheader
+  
+  // Get subheader attributes from the defining page
+  $subheaderAttributes = '';
+  // No validation, we trust the settings text to be untampered
+  $rawS = get_post_field('post_content', $widgetDefPageID);
+  if (stripos($rawS, '{samples-options') !== false) { // TODO make it JSON compliant and use functions
+    $rawS = preg_replace('@\s*//.*?(?:\n+|$)@i', ' ', $rawS); // Remove comments
+    $rawS = preg_replace('@\s*\{samples-options\s*@i', '', $rawS); // Remove "{subheader=options"
+    $rawS = preg_replace('@\s*\}@i', '', $rawS); // Remove ending "}"
+    $rawS = preg_replace('@\s+@i', ' ', $rawS); // Convert whitespace to a space
+    $subheaderAttributes = ' '.$rawS; // Add a space to place attributes in tag
+  }
+  
+  $rHtml = '';
+  $wcContent = ''; // Widget child page content for display in subheader on matching named page
+  $shOptionsL = array(); // Array of page name => image attachment ID
+  $shOptionsL['*'] = ''; // Avoid an error later if key/value not set
+  $shOptionsL['News'] = ''; // Likewise, prefer no-URL if News not present
+  
+  // Get Featured Image from definition page, as default for pages not defined by child pages
+  if (has_post_thumbnail($widgetDefPageID)) {
+    $shOptionsL['*'] = get_post_thumbnail_id($widgetDefPageID);
+  }
+
+  // Get child pages and their Featured Images / content
+  $widgetChildren = get_page_children($widgetDefPageID, get_pages());
+  if (count($widgetChildren) > 0) {
+    foreach ($widgetChildren as $widgetChild) {
+      // Get any content from child page for its matching named page
+      if ($widgetChild->post_title == $GLOBALS['QNRWP_GLOBALS']['pageTitle']) {
+        $wcContent = apply_filters('the_content', get_post_field('post_content', $widgetChild->ID));
+      }
+      // Store name and img URL as key => value
+      if (has_post_thumbnail($widgetChild)) {
+        $shOptionsL[$widgetChild->post_title] = get_post_thumbnail_id($widgetChild);
+      }
+    }
+  }
+  
+  $headerTitleText = $wcContent ? $wcContent : $GLOBALS['QNRWP_GLOBALS']['pageTitle']; // May be overriden below
+  
+  if ($GLOBALS['QNRWP_GLOBALS']['isNews']) { // Create News header, for all News pages, if no content defined
+    $headerTitleText = $wcContent ? $wcContent : 'News';
+    $attID = $shOptionsL['News'];
+  }
+  else if ($GLOBALS['QNRWP_GLOBALS']['postsAmount'] == 'single') { // Create Page header
+    if (isset($shOptionsL[$GLOBALS['QNRWP_GLOBALS']['pageTitle']]) && !empty($shOptionsL[$GLOBALS['QNRWP_GLOBALS']['pageTitle']])) {
+      $attID = $shOptionsL[$GLOBALS['QNRWP_GLOBALS']['pageTitle']];
+    } else {
+      $attID = $shOptionsL['*'];
+    }
+  }
+  
+  // Get different sizes of image
+  $attMeta = wp_get_attachment_metadata($attID);
+  $mHtml = ''; // CSS media rules
+  $upload_dir = wp_upload_dir(); // Full path upload dir array for present YYYY/MM, may not be that of image
+  $uploaded_image_location = $upload_dir['baseurl'] . '/' . $attMeta['file']; // Note the 'baseurl', not 'basedir'
+  if (is_ssl()) $uploaded_image_location = set_url_scheme($uploaded_image_location, 'https'); // Convert to HTTPS if used
+  $image_subdir = substr($attMeta['file'], 0, strrpos($attMeta['file'], '/'));
+  $largestImage = $uploaded_image_location; // Just in case, we fall back on full size file
+  foreach ($attMeta['sizes'] as $size => $sizeArray) {
+    // Create file path for intermediate size image
+    $imgPath = $upload_dir['baseurl'] . '/' . $image_subdir . '/' . $sizeArray['file'];
+    if (is_ssl()) $imgPath = set_url_scheme($imgPath, 'https');
+    // Limit to min 600px width or height to avoid stretching low res on mobiles
+    if ($sizeArray['width'] > 600 && $sizeArray['height'] > 600) {
+      // Prepend presumably increasing sizes to media html
+      $mItem = '@media (max-width: '.$sizeArray['width'].'px) {'.PHP_EOL;
+      $mItem .= 'div#subheader {background-image:url("'.$imgPath.'");}'.PHP_EOL;
+      $mItem .= '}'.PHP_EOL;
+      $mHtml = $mItem . $mHtml; // Concatenate in reverse
+    }
+    $largestImage = $imgPath; // Record last item as largest, the default in style block
+  }
+  
+  // Prepare style block for responsive bg image size
+  $sHtml = '<style>'.PHP_EOL;
+  $sHtml .= 'div#subheader {background-image:url("'.$largestImage.'");}'.PHP_EOL;
+  $sHtml .= $mHtml;
+  $sHtml .= '</style>'.PHP_EOL;
+  
+  $rHtml = $sHtml . '<div id="subheader"'.$subheaderAttributes.'>'.PHP_EOL;
+  if ($wcContent) $rHtml .= $headerTitleText; // We already have all the code if $wcContent
+  else $rHtml .= '<div><p>'.$headerTitleText.'</p></div>'; // TODO simplify?
+  return $rHtml . '</div>' . PHP_EOL;
+}
+
+
+// ----------------------- Samples HTML getter
+
+function qnrwp_get_samples_html($sampleName, $sampleCategories, $sampleSize, $samplesNumber, $pageNumber) {
+  // May be called from shortcode or Ajax request
+  $rHtml = '';
+  // Get posts matching criteria
+  $thePosts = get_posts(array(
+                              'post_type' => 'post',
+                              'nopaging' => false,
+                              'posts_per_page' => $samplesNumber,
+                              'paged' => $pageNumber,
+                              'category_name' => $sampleCategories,
+                              ));
+  if ($thePosts) {
+    // Get the next page of results to see if there are any
+    $thePosts1 = get_posts(array(
+                                'post_type' => 'post',
+                                'nopaging' => false,
+                                'posts_per_page' => $samplesNumber,
+                                'paged' => $pageNumber + 1,
+                                'category_name' => $sampleCategories,
+                                ));
     $samplesCount = 0;
-    $rHtml = '<!-- Samples Row -->'.PHP_EOL;
-    $rHtml .= '<div class="samples-row">'.PHP_EOL;
-    $rHtml .= '<h2 class="samples-list-title">'.$samplesName.'</h2>'.PHP_EOL; // Place before the block
-    $rHtml .= '<!-- Samples List -->'.PHP_EOL;
-    $rHtml .= '<div class="samples-list-block">'.PHP_EOL; // Opening Samples List block
-    // ----------------------- The Loop
-    while ($the_query->have_posts()) {
-      $the_query->the_post();
-      if (in_category($sampleCategories) && has_post_thumbnail()) { // TODO      
+    if ($pageNumber == 1) {
+      $rHtml .= '<!-- Samples Row -->'.PHP_EOL;
+      $rHtml .= '<div class="samples-row">'.PHP_EOL;
+      $rHtml .= '<h2 class="samples-list-title">'.$sampleName.'</h2>'.PHP_EOL; // Place before the block
+      $rHtml .= '<!-- Samples List -->'.PHP_EOL;
+      $rHtml .= '<div class="samples-list-block">'.PHP_EOL; // Opening Samples List block
+    }
+    // Loop over posts
+    foreach ($thePosts as $key => $thePost) {
+      if (has_post_thumbnail($thePost->ID)) {
         // Custom meta values for the post
         // WP has tricky meta functions with multi-dimensional arrays,
         //   we use a relatively simple one
-        $sampleInfo = get_post_custom_values('Sample-Info') ? get_post_custom_values('Sample-Info')[0] : '';
-        $sampleLink = get_post_custom_values('Sample-Link') ? get_post_custom_values('Sample-Link')[0] : '';
+        $sampleInfo = get_post_custom_values('Sample-Info', $thePost->ID) ? get_post_custom_values('Sample-Info', $thePost->ID)[0] : '';
+        $sampleLink = get_post_custom_values('Sample-Link', $thePost->ID) ? get_post_custom_values('Sample-Link', $thePost->ID)[0] : '';
         if (!$sampleInfo && !$sampleLink) continue;
         // Construct item HTML
         $imageLink = $sampleLink ? $sampleLink : $sampleInfo;
         $rHtml .= '<!-- Samples List Item -->'.PHP_EOL;
         $rHtml .= '<div class="samples-list-item">'.PHP_EOL;
-        $rHtml .= '<a href="'.$imageLink.'">';
-        $rHtml .= get_the_post_thumbnail(get_the_ID(), $sampleSize, array('class' => 'samples-list-item-img'));
+        $rHtml .= '<a href="'.filter_var($imageLink, FILTER_VALIDATE_URL).'">';
+        $rHtml .= get_the_post_thumbnail($thePost->ID, $sampleSize, array('class' => 'samples-list-item-img'));
         $rHtml .= '</a>';
         $rHtml .= '<div class="samples-list-item-text">'.PHP_EOL;
-        $rHtml .= '<h3>'.get_the_title().'</h3>'.PHP_EOL;
-        $rHtml .= apply_filters('the_content', get_the_content());
+        $rHtml .= '<h3>'.get_the_title($thePost->ID).'</h3>'.PHP_EOL;
+        $rHtml .= apply_filters('the_content', $thePost->post_content);
         $rHtml .= '</div>'.PHP_EOL; // End of item text
         $rHtml .= '<div class="samples-list-item-buttons">'.PHP_EOL;
         if ($sampleInfo) {
-          $rHtml .= '<a href="'.$sampleInfo.'" title="More info"><span class="qnr-glyph qnr-glyph-info"></span></a>';
+          $rHtml .= '<a href="'.filter_var($sampleInfo, FILTER_VALIDATE_URL).'" title="More info"><span class="qnr-glyph qnr-glyph-info"></span></a>';
         }
         if ($sampleLink) {
-          $rHtml .= '<a href="'.$sampleLink.'" title="View the sample"><span class="qnr-glyph qnr-glyph-openpage"></span></a>'.PHP_EOL;
+          $rHtml .= '<a href="'.filter_var($sampleLink, FILTER_VALIDATE_URL).'" title="View the sample"><span class="qnr-glyph qnr-glyph-openpage"></span></a>'.PHP_EOL;
         }
         $rHtml .= '</div></div><!-- End of Samples List Item -->'.PHP_EOL; // 
         $samplesCount += 1;
       }
     }
-    // Restore original Post Data
-    wp_reset_postdata();
     if ($samplesCount > 0) {
-      $rHtml .= '</div></div><!-- End of Samples List and Row -->'.PHP_EOL; // Closing Samples List block
+      if (!$thePosts1) $rHtml .= '<!-- All samples items displayed -->'.PHP_EOL; // For JS Ajax caller to know when to delete 'Load more' button
+      if ($pageNumber == 1) {
+        $rHtml .= '</div><!-- End of Samples List -->'.PHP_EOL;
+        if ($thePosts1) {
+          // If another page of results is available, insert "Load more" button into row, after List flex
+          $rHtml .= '<button class="samples-load-more" 
+                        onclick="SamplesLoadMore(this,event,'
+                        .'\''.$sampleName.'\','
+                        .'\''.$sampleCategories.'\','
+                        .'\''.$sampleSize.'\','
+                        .$samplesNumber.','
+                        .($pageNumber+1)
+                        .')">Load more</button>'.PHP_EOL;
+        }
+        $rHtml .= '</div><!-- End of Samples Row -->'.PHP_EOL;
+      }
       return $rHtml; // Return nothing if no Samples List items obtained
     }
   }
   return ''; // Either no posts found or no samples
+}
+
+function qnrwp_ajax_more_samples($datajson) {
+  // Called by Ajax handler, using POST to pass datajson
+  $dataL = json_decode($datajson, $assoc = true);
+  // On error, returned string must begin with "ERROR:"
+  if (!isset($dataL) || empty($dataL)) return 'ERROR: No request parameters sent';
+  $rT = qnrwp_get_samples_html(esc_attr($dataL['sampleName']),
+                                esc_attr($dataL['sampleCategories']),
+                                esc_attr($dataL['sampleSize']),
+                                esc_attr($dataL['samplesNumber']),
+                                esc_attr($dataL['pageNumber']));
+  if (!$rT) return 'ERROR: No samples found';
+  else return $rT;
 }
 
 
@@ -1170,7 +1317,7 @@ function qnrwp_enqueue_scripts() {
   //wp_enqueue_script('qnr-hmenu-js', get_template_directory_uri() . '/res/js/qnr-hmenu.js', null, null, true);
   //wp_enqueue_script('qnrwp_a-main-js', get_template_directory_uri() . '/qnrwp_a-main.js', null, null, true);
   
-  // ----------------------- Cookie / Ajax security setup
+  // ----------------------- Cookie / Ajax security setup (not relevant to all action types)
   try {
     // Create or use a site session cookie that will survive across page loads, unlike the Ajax cookie
     if (!isset($_COOKIE['qnrwp_site_cookie']) || !$_COOKIE['qnrwp_site_cookie']) {
@@ -1472,19 +1619,42 @@ function qnrwp_get_news_first_para_excerpt() {
 
 // ----------------------- News Post first paragraph classing filter
 
-add_filter('the_content', function($content) {
+function qnrwp_filter_news_post($content) {
   // Test if inside the main loop, a news post
   // Test for 'is_single()' removed, so that qnrwp_get_news_first_para_excerpt() will work (reinstated)
   if (is_single() && in_the_loop() && is_main_query() && get_post_type() == 'post' 
                   && !is_admin() && in_category(array('news', 'uncategorized'))) {
+    
+    // ----------------------- CSS first paragraph markup for excerpts
     // Class first paragraph as "news-post-first-para", perhaps after featured image possibly wrapped in A and P tags
     // Won't work if a carousel precedes the first paragraph, but that will be caught by CSS
     //qnrwp_debug_printout($content, $append=false);
     $gP = '/^(\s*((<p>\s*<a[^>]+>\s*<img[^>]+>\s*<\/a>\s*<\/p>)|(<img[^>]+>))?\s*<p)>/';
     $content = preg_replace($gP, '$1 class="news-post-first-para">', $content);
+    
+    // ----------------------- Clickable images
+    // Add an "expand image" overlay (for external links; for image links, see last regex)
+    $gP = '/(<a [^>]+)(>\s*<img[^>]+>\s*<\/a>)/';
+    $content = preg_replace($gP, '$1 class="news-post-expandable-image"$2', $content);
+    // Transfer alignleft class from img to a
+    $gP = '/(<a [^>]+class=")([^>]+>\s*<img[^>]+) alignleft([^>]+>\s*<\/a>)/';
+    $content = preg_replace($gP, '$1alignleft $2$3', $content);
+    // Transfer alignright class from img to a
+    $gP = '/(<a [^>]+class=")([^>]+>\s*<img[^>]+) alignright([^>]+>\s*<\/a>)/';
+    $content = preg_replace($gP, '$1alignright $2$3', $content);
+    // Transfer aligncenter class from img to a
+    $gP = '/(<a [^>]+class=")([^>]+>\s*<img[^>]+) aligncenter([^>]+>\s*<\/a>)/';
+    $content = preg_replace($gP, '$1aligncenter $2$3', $content);
+    // Copy width from img to a
+    $gP = '/(<a [^>]+)(>\s*<img[^>]+width=")([^\"]+)("[^>]*>\s*<\/a>)/';
+    $content = preg_replace($gP, '$1 style="width:$3px;"$2$3$4', $content);
+    // Add image link class (for different expansion icon) if linking to an image (note the order href/class)
+    $gP = '/(<a [^>]*href="[^\"]+(?:\.png|\.svg|\.jpg|\.jpeg|\.gif)"[^>]+class="[^\"]+)(")/';
+    $content = preg_replace($gP, '$1 news-post-image-link$2', $content);
   }
   return $content;
-}, 999); // Run late so we're working with complete HTML after shortcodes
+}
+add_filter('the_content', 'qnrwp_filter_news_post', 999); // Run late so we're working with complete HTML after shortcodes
 
 
 // ----------------------- WIDGETS
@@ -1492,12 +1662,14 @@ add_filter('the_content', function($content) {
 // ----------------------- Custom Widget definition
 
 class QNRWP_Custom_Widget extends WP_Widget {
+  // The point of the custom widget is to create HTML for display on more than one page,
+  //   otherwise shortcodes are a better option
   
 	public function __construct() {
 		// Instantiate the parent object
 		$widget_ops = array( 
 			'classname'   => 'qnrwp_custom_widget',
-			'description' => 'Custom Widget to display.',
+			'description' => 'Custom Widget to display, with choice of pages to display on. Custom widgets are defined in pages titled "QNRWP-Widget-WidgetType", where "WidgetType" is either "Carousel" or "SubHeader".',
 		);
 		parent::__construct('qnrwp_custom_widget', 'QNRWP Custom Widget', $widget_ops);
 	}
@@ -1645,36 +1817,6 @@ class QNRWP_Featured_News extends WP_Widget {
 }
 
 
-// ----------------------- Samples List widget definition TODO
-
-class QNRWP_Samples_List extends WP_Widget {
-  
-	public function __construct() {
-		// Instantiate the parent object
-		$widget_ops = array( 
-			'classname'   => 'qnrwp_samples_list',
-			'description' => 'List of sample links with Featured Images, to appear on the static Home page.',
-		);
-		parent::__construct('qnrwp_samples_list', 'QNRWP Samples List', $widget_ops);
-	}
-  
-	public function widget($args, $instance) {
-    if (is_front_page()) {
-      // Params: name, categories, size
-      echo qnrwp_get_samples_html('Samples', array('sample-web-design', 'sample-website', 'sample-work'), 'medium_large');
-    } // If not on front page, do nothing
-	}
-  
-	public function form($instance) {
-		// Output widget admin options form
-    ?>
-		<p>List of sample links with Featured Images, to appear on the static Home page.</p>
-		<?php 
-	}
-  
-}
-
-
 // ----------------------- Sidebar & Widget registration
 
 function qnrwp_widgets_init() {
@@ -1753,7 +1895,6 @@ function qnrwp_widgets_init() {
   register_widget('QNRWP_Custom_Widget');
   register_widget('QNRWP_Content');
   register_widget('QNRWP_Featured_News');
-  register_widget('QNRWP_Samples_List');
 }
 add_action('widgets_init', 'qnrwp_widgets_init');
 
@@ -1889,10 +2030,12 @@ function qnrwp_samples_shortcode($atts, $content = null) {
   $a = shortcode_atts(array(
     'name' => 'Samples',
     'size' => 'medium_large',
-    'categories' => 'sample-web-design, sample-website, sample-work',
+    'number' => 6, // For best display, let this be a multiple of 6 (divisible by 3 and 2)
+    'categories' => 'sample-work', // Comma separated string of categories to show
   ), $atts);
-  $sCatsL = preg_split('/,\s+/', $a['categories']);
-  $rHtml = qnrwp_get_samples_html($a['name'], $sCatsL, $a['size']);
+  //$sCatsL = preg_split('/,\s+/', $a['categories']);
+  //qnrwp_get_samples_html($sampleName, $sampleCategories, $sampleSize, $samplesNumber, $pageNumber)
+  $rHtml = qnrwp_get_samples_html(esc_attr($a['name']), esc_attr($a['categories']), esc_attr($a['size']), esc_attr($a['number']), 1);
   return $rHtml; // Could be empty
 }
 add_shortcode('samples', 'qnrwp_samples_shortcode');

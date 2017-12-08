@@ -464,11 +464,9 @@ function qnrwp_appleicon_url() {
 function qnrwp_pre_update_option_qnrwp_regenerate_images($value, $old_value, $option) {
   // We use this hook instead of 'updated_option' because the latter does not catch unchanged values
   // Test for Regenerate Images checkbox being ticked
-  //qnrwp_debug_printout(array('Regenerate images value in pre update call::',$value), $append=false); // TEST TODO
   if ($value === 1 || $value === true || $value === 'on' || $value === '1') {
     // Get the saved options/record array from database, assumed already created as part of UI code
     $riSavedOptions = get_option('qnrwp_regenerate_images_record');
-    //qnrwp_debug_printout(array('Regenerate images saved options/record in pre update call::',$riSavedOptions)); // TEST TODO
     // Return if RI cron is already running (this should be redundant, checkbox should be disabled)
     if ($riSavedOptions['start-time'] && !$riSavedOptions['end-time'] && time() - intval($riSavedOptions['last-update']) < 1800) return 0;
     // Get the image attachments from database
