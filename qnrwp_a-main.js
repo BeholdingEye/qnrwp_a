@@ -9,6 +9,17 @@ var QNRWP_GLOBAL = {};
 // .clientServerTimeDelta
 
 function afterLoad() {
+    // Display footer, but not show it yet
+    objID("footer-row").style.display = "block";
+    // Calculate content height accounting for footer
+    objID("content-row").style.minHeight = "calc(100% - 56px - "+objID("footer-row").getBoundingClientRect().height+"px)";
+    // Show footer row, completing layout
+    objID("footer-row").style.visibility = "visible";
+    // Also on resize
+    window.addEventListener("resize", function(event) {
+        objID("content-row").style.minHeight = "calc(100% - 56px - "+objID("footer-row").getBoundingClientRect().height+"px)";
+    }, false);
+    
     // Obtain time delta between client and server, from ajax cookie value
     var cV = getCookieValue("qnrwp_ajax_cookie");
     var cT = parseInt(cV.split("T")[1]);

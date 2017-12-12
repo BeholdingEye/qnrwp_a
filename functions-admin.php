@@ -29,6 +29,12 @@ function qnrwp_admin_settings() {
    */
   
   add_settings_section(
+    'qnrwp_layout_section',       // ID attribute of tags
+    'QNRWP Layout Settings',      // Section title
+    'qnrwp_layout_section',       // Callback to echo section content
+    'writing'                     // Admin page to use
+  );
+  add_settings_section(
     'qnrwp_metatags_section',      // ID attribute of tags
     'QNRWP Meta Tag Settings',     // Section title
     'qnrwp_metatags_section',      // Callback to echo section content
@@ -40,6 +46,16 @@ function qnrwp_admin_settings() {
     'qnrwp_favicon_section',      // Callback to echo section content
     'writing'                     // Admin page to use
   );
+  
+  // Use Fixed Header
+  add_settings_field(
+    'qnrwp_use_fixed_header',         // ID attribute of tags
+    'Use Fixed Header',               // Field title
+    'qnrwp_use_fixed_header',         // Callback to echo input control
+    'writing',                        // Admin page to use
+    'qnrwp_layout_section'            // Section to use
+  );
+  
   // Use Meta Tags
   add_settings_field(
     'qnrwp_use_meta_tags',          // ID attribute of tags
@@ -152,6 +168,7 @@ function qnrwp_admin_settings() {
     'writing',                             // Admin page to use
     'qnrwp_metatags_section'               // Section to use
   );
+  
   // Favicon URL
   add_settings_field(
     'qnrwp_favicon_url',                  // ID attribute of tags
@@ -168,6 +185,7 @@ function qnrwp_admin_settings() {
     'writing',                               // Admin page to use
     'qnrwp_favicon_section'                  // Section to use
   );
+  
   register_setting('writing', 'qnrwp_use_meta_tags');
   register_setting('writing', 'qnrwp_use_opengraph_tags');
   register_setting('writing', 'qnrwp_use_twitter_tags');
@@ -184,6 +202,7 @@ function qnrwp_admin_settings() {
   register_setting('writing', 'qnrwp_twitter_site');
   register_setting('writing', 'qnrwp_favicon_url');
   register_setting('writing', 'qnrwp_appleicon_url');
+  register_setting('writing', 'qnrwp_use_fixed_header');
   
   /**
    * ----------------------- QNRWP settings on Media page
@@ -225,7 +244,7 @@ function qnrwp_admin_settings() {
 add_action('admin_init', 'qnrwp_admin_settings');
 
 
-// ----------------------- Media
+// ----------------------- MEDIA
 
 function qnrwp_media_section() {
   // Callback function for the section; display info about additional sizes
@@ -296,7 +315,17 @@ function qnrwp_regenerate_images() {
 }
 
 
-// ----------------------- Writing
+// ----------------------- WRITING
+
+// ----------------------- Sections
+
+function qnrwp_layout_section() {
+  // Callback function for the section
+  ?>
+  <div style="font-size:1.1em"><p>Layout options for this theme.</p>
+  </div>
+  <?php
+}
 
 function qnrwp_metatags_section() {
   // Callback function for the section; display info about meta tags
@@ -311,6 +340,16 @@ function qnrwp_favicon_section() {
   ?>
   <div style="font-size:1.1em"><p>This theme does not support the Site Icon API, offering a simpler, lighter solution. The small favicon and the larger Apple icon are supported. They should be uploaded to the Media Library and their URLs entered in the fields below.</p>
   </div>
+  <?php
+}
+
+// ----------------------- Options
+
+function qnrwp_use_fixed_header() {
+  // Echo the input control for this option
+  ?>
+  <p><label><input type="checkbox" value="1" <?php checked(1, get_option('qnrwp_use_fixed_header'), true); ?>
+                name="qnrwp_use_fixed_header" id="qnrwp_use_fixed_header">Fix header to top of window, not moving up out of view on scroll.</label></p>
   <?php
 }
 
@@ -438,7 +477,6 @@ function qnrwp_twitter_site() {
 
 function qnrwp_favicon_url() {
   // Echo the input control for this option
-  // Use a HR for separation from the meta tag settings
   ?>
   <p>Enter the favicon.ico URL. If left blank, a favicon will not be used. Dimensions should be 32px x 32px.</p>
   <input type="text" name="qnrwp_favicon_url" id="qnrwp_favicon_url" 

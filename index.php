@@ -193,13 +193,15 @@ wp_head(); // Required
     
     if (is_active_sidebar('qnrwp-row-1')) {
       echo '<!-- Header Row -->'.PHP_EOL;
-      echo '<div id="header-row" class="header-row widget-area">' .PHP_EOL;
+      echo '<div id="header-row" class="header-row widget-area'
+              .(get_option('qnrwp_use_fixed_header', $default=0)?' qnrwp-has-fixed-header':'').'">' .PHP_EOL;
       dynamic_sidebar('qnrwp-row-1'); // Navigation menu & intro header usually
       echo '</div><!-- End of Header -->'.PHP_EOL;
     }
     // ----------------------- Content Row
     
-    echo '<!-- Content Row -->'.PHP_EOL.'<div id="content-row">'.PHP_EOL; // Open content row
+    echo '<!-- Content Row -->'.PHP_EOL.'<div id="content-row"'
+              .(get_option('qnrwp_use_fixed_header', $default=0)?' class="qnrwp-has-fixed-header"':'').'>'.PHP_EOL; // Open content row
     
     // ----------------------- Sub Header Row (may be narrower than header as it is in Content Row)
     

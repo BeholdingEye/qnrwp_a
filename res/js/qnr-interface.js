@@ -345,7 +345,8 @@ var QNR_INTER = {};
      * The UL of a collapsed navmenu is taken out of the widget DIV by
      * the code and placed in a new DIV after the widget, the new DIV
      * classed as "qnr-navmenu-wrapper". This wrapper has CSS height
-     * of 0 and allows the contained UL to overflow.
+     * of 0 and allows the contained UL to overflow, when the header is
+     * positioned relative, or matches viewport height if header fixed.
      * 
      * When the navmenu is collapsed, clicking the icon reveals the menu.
      * The direction of the menu animation can be set with the 
@@ -1273,7 +1274,7 @@ var QNR_INTER = {};
     
     // ----------------------- STICKYBAR
     
-    function StickybarObject() {
+    function StickybarObject() { // TODO needs work
         this.object = null;
         this.newObject = null;
         this.madesticky = false;
@@ -1281,7 +1282,7 @@ var QNR_INTER = {};
     }
     StickybarObject.prototype.initialize = function() {
         this.objYPos = getYPos(this.object, 0);
-        // Clone object, without child nodes, as placeholder
+        // Clone object, without child nodes, as placeholder TODO
         this.newObject = this.object.cloneNode(false);
         // Size the placeholder height the same as actual widget height
         // Used independently on window resize
@@ -1526,6 +1527,7 @@ var QNR_INTER = {};
         this.menuIcon       = null;
         this.direction      = "vertical";
         this.menuWrapper    = null;
+        this.fixedHeader    = false;
         // Record of window scroll when wrapper shown
         this.winScroll      = 0;
     }
@@ -1535,6 +1537,8 @@ var QNR_INTER = {};
         this.menuItemsL = this.object.querySelectorAll("ul:first-child > li"); // Not a live collection...
         // Get dimensions of first LI item (traversing all does not work)
         this.itemHeight = this.menuItemsL[0].offsetHeight;
+        // Is header fixed? Check for special class in doc (used in QNRWP-A on header and content rows)
+        if (objClass("qnrwp-has-fixed-header")) this.fixedHeader = true;
         // Style menu, expanded or collapsed
         this.stylemenu();
         // Make the menu DIV visible (from hidden, in CSS file)
@@ -1570,6 +1574,12 @@ var QNR_INTER = {};
             }
             this.object.removeChild(this.menuIcon);
             this.menuIcon = null;
+            if (this.fixedHeader) {
+                // Reset height & overflow of navmenu
+                this.menuUL.style.height = "";
+                this.menuUL.style.maxHeight = "";
+                this.menuUL.style.overflow = "";
+            }
         }
         for (var i = 0; i < this.menuItemsL.length; i++) {
             // Test for line wrap in nav menu, and collapse it
@@ -1595,9 +1605,19 @@ var QNR_INTER = {};
                     // Wrap menu UL in new DIV to place it in DOM after widget DIV
                     this.menuWrapper = document.createElement("div");
                     this.menuWrapper.className = "qnr-navmenu-wrapper";
+                    if (this.fixedHeader) this.menuWrapper.classList.add("qnr-navmenu-wrapper-fixed");
+                    else this.menuWrapper.classList.add("qnr-navmenu-wrapper-absolute");
+                    if (this.fixedHeader) this.menuWrapper.style.visibility = "hidden";
                     this.menuWrapper.appendChild(this.object.removeChild(this.menuUL));
-                    // Place wrapped menu after menu DIV
-                    this.object.parentNode.insertBefore(this.menuWrapper, this.object.nextSibling);
+                    if (this.fixedHeader) {
+                        // Place wrapped menu after menu DIV
+                        this.object.parentNode.insertBefore(this.menuWrapper, this.object.nextSibling);
+                    } else {
+                        // Place wrapped menu as first object in BODY so that the menu will drop down from under header
+                        objTag("body").insertBefore(this.menuWrapper, objTag("body").firstChild);
+                        // Place wrapper after navmenu (assumed same height as containing header)
+                        this.menuWrapper.style.top = this.object.offsetHeight+"px";
+                    }
                 }
                 if (this.direction == "vertical") {
                     this.menuUL.classList.add("qnr-navmenu-vertical");
@@ -1607,6 +1627,14 @@ var QNR_INTER = {};
                     this.menuUL.classList.add("qnr-navmenu-vertical-horizontal");
                     this.menuUL.classList.add("qnr-navmenu-vertical-hidden-left");
                 }
+                if (this.fixedHeader) {
+                    // Adjust height & overflow of vertical navmenu to max of window - widget (assumed same height as containing header)
+                    var headerHeight = this.object.offsetHeight;
+                    this.menuUL.style.height = "auto";
+                    this.menuUL.style.maxHeight = (objHtml().clientHeight - headerHeight) + "px";
+                    this.menuUL.style.overflow = "auto";
+                }
+                // Create icon
                 if (!this.menuIcon) this.createMenuIcon();
                 break;
             }
@@ -1622,7 +1650,7 @@ var QNR_INTER = {};
                     this1.showVerticalMenu();
                 }
                 else { // Closed
-                    this1.hideVerticalMenu();
+                    this1.hideVerticalMenu(event);
                 }
                 event.stopPropagation();
             }
@@ -1633,20 +1661,37 @@ var QNR_INTER = {};
         this.object.appendChild(this.menuIcon);
     }
     NavmenuObject.prototype.showVerticalMenu = function() {
+        if (this.fixedHeader && deviceIsMobile()) {
+            this.menuWrapper.style.transition = "none";
+            this.menuWrapper.style.background = "#333";
+            // Disable scroll on BODY
+            this.winScroll = window.pageYOffset;
+            objTag("html").style.overflow = "hidden";
+            objTag("body").style.overflow = "hidden";
+            //alert("inscroll");
+        }
         // Change the icon to close
         this.menuIcon.classList.remove("qnr-navmenu-icon-open");
         this.menuIcon.classList.add("qnr-navmenu-icon-close");
-        // Set top of menu wrapper (absolute positioned) to after widget
-        if (this.menuWrapper && window.getComputedStyle(this.object, "").position == "fixed") {
-            this.menuWrapper.style.top = (this.object.offsetTop + this.object.offsetHeight + window.pageYOffset) + "px";
-            // Record window scroll for later comparison on scrolling
-            this.winScroll = window.pageYOffset;
-        }
-        else if (this.menuWrapper) { // Widget positioned relative or absolute
-            this.menuWrapper.style.top = (this.object.offsetTop + this.object.offsetHeight) + "px";
-        }
+        //// Set top of menu wrapper (absolute positioned) to after widget
+        //if (this.menuWrapper && window.getComputedStyle(this.object, "").position == "fixed") {
+            //this.menuWrapper.style.top = (this.object.offsetTop + this.object.offsetHeight + window.pageYOffset) + "px";
+            //// Record window scroll for later comparison on scrolling
+            //this.winScroll = window.pageYOffset;
+        //}
+        //else if (this.menuWrapper) { // Widget positioned relative or absolute
+            //this.menuWrapper.style.top = (this.object.offsetTop + this.object.offsetHeight) + "px"; // TODO, offsetTop??
+        //}
         // Show vertical menu list
         if (this.direction == "vertical") {
+            if (this.fixedHeader) {
+                // Adjust overflow & visibility & top of wrapper
+                var headerHeight = this.object.offsetHeight;
+                this.menuWrapper.style.top = headerHeight + "px";
+                this.menuWrapper.style.overflow = "hidden";
+                this.menuWrapper.style.visibility = "visible";
+            }
+            
             this.menuUL.classList.remove("qnr-navmenu-vertical-hide");
             this.menuUL.classList.remove("qnr-navmenu-vertical-hidden");
             this.menuUL.classList.add("qnr-navmenu-vertical");
@@ -1659,48 +1704,102 @@ var QNR_INTER = {};
             this.menuUL.classList.add("qnr-navmenu-vertical-show-right");
         }
     }
-    NavmenuObject.prototype.hideVerticalMenu = function() {
+    NavmenuObject.prototype.hideVerticalMenu = function(event) {
+        if (this.fixedHeader && deviceIsMobile()) {
+            // Enable scroll on BODY
+            objTag("html").style.overflow = "";
+            objTag("body").style.overflow = "";
+            window.scrollBy(0, this.winScroll);
+        }
         // Change icon to open
         this.menuIcon.classList.remove("qnr-navmenu-icon-close");
         this.menuIcon.classList.add("qnr-navmenu-icon-open");
-        // Hide vertical menu list
-        if (this.direction == "vertical") {
-            this.menuUL.classList.remove("qnr-navmenu-vertical-show");
-            this.menuUL.classList.remove("qnr-navmenu-vertical-hidden");
-            this.menuUL.classList.add("qnr-navmenu-vertical-hide");
+        // Animate only if not clicked on link, not navigating to another page
+        if (event.target.tagName != "A") {
+            if (this.fixedHeader && deviceIsMobile()) {
+                this.menuWrapper.style.background = "transparent";
+                this.menuWrapper.style.transition = "all 0.4s";
+            }
+            // Hide vertical menu list
+            if (this.direction == "vertical") {
+                this.menuUL.classList.remove("qnr-navmenu-vertical-show");
+                this.menuUL.classList.remove("qnr-navmenu-vertical-hidden");
+                this.menuUL.classList.add("qnr-navmenu-vertical-hide");
+            } else {
+                this.menuUL.classList.remove("qnr-navmenu-vertical-show-right");
+                this.menuUL.classList.remove("qnr-navmenu-vertical-hidden-left");
+                this.menuUL.classList.add("qnr-navmenu-vertical-hide-left");
+            }
             var that = this;
             window.setTimeout(function(){
-                that.menuUL.classList.add("qnr-navmenu-vertical-hidden");
-                that.menuUL.classList.remove("qnr-navmenu-vertical-hide");
-            },1000);
-        }
-        else {
-            this.menuUL.classList.remove("qnr-navmenu-vertical-show-right");
-            this.menuUL.classList.remove("qnr-navmenu-vertical-hidden-left");
-            this.menuUL.classList.add("qnr-navmenu-vertical-hide-left");
+                if (that.direction == "vertical") {
+                    that.menuUL.classList.add("qnr-navmenu-vertical-hidden");
+                    that.menuUL.classList.remove("qnr-navmenu-vertical-hide");
+                } else {
+                    that.menuUL.classList.add("qnr-navmenu-vertical-hidden-left");
+                    that.menuUL.classList.remove("qnr-navmenu-vertical-hide-left");
+                }
+                if (that.fixedHeader) {
+                    // Reset height of wrapper & overflow
+                    that.menuWrapper.style.top = "";
+                    that.menuWrapper.style.overflow = "";
+                    that.menuWrapper.style.visibility = "hidden";
+                }
+            },600); // Assuming 0.8s animation
+        } else { // Clicked out, no anim
+            var that = this;
+            // Delay destruction of menu, prevent flash of present page before moving on
+            window.setTimeout(function(){
+                if (that.fixedHeader && deviceIsMobile()) {
+                    that.menuWrapper.style.background = "transparent";
+                    that.menuWrapper.style.transition = "none";
+                }
+                if (that.direction == "vertical") {
+                    that.menuUL.classList.remove("qnr-navmenu-vertical-show");
+                    that.menuUL.classList.remove("qnr-navmenu-vertical-hide");
+                    that.menuUL.classList.add("qnr-navmenu-vertical-hidden");
+                } else {
+                    that.menuUL.classList.remove("qnr-navmenu-vertical-show-right");
+                    that.menuUL.classList.remove("qnr-navmenu-vertical-hide-left");
+                    that.menuUL.classList.add("qnr-navmenu-vertical-hidden-left");
+                }
+                if (that.fixedHeader) {
+                    // Reset height of wrapper & overflow
+                    that.menuWrapper.style.top = "";
+                    that.menuWrapper.style.overflow = "";
+                    that.menuWrapper.style.visibility = "hidden";
+                }
+            },100);
         }
         // Hide any hmenus
         if (QNR_HMENU.hmenuObjectsL.length > 0) {
             QNR_HMENU.hmenuObjectsL[0].hideMenus();
         }
     }
-    NavmenuObject.prototype.onWinScroll = function() {
-        // Move the wrapper up with scrolling if it was shown at scroll > 0, used when widget is "fixed"
-        if (this.menuWrapper && window.pageYOffset < this.winScroll) {
-            this.menuWrapper.style.top = (this.menuWrapper.offsetTop - (this.winScroll - window.pageYOffset)) + "px";
-            this.winScroll = window.pageYOffset;
-        }
-        // Hide vertical menu if scrolled down to its last item
-        else if (this.menuWrapper && window.getComputedStyle(this.object,"").position == "fixed" && 
-                                                                window.pageYOffset > this.winScroll) {
-            if (this.menuIcon.classList.contains("qnr-navmenu-icon-close")) {
-                // getYPos required instead of offsetTop
-                if (getYPos(this.menuItemsL[this.menuItemsL.length-1],0) <= 
-                                getYPos(this.object,0) + this.object.offsetHeight + window.pageYOffset) {
-                    this.hideVerticalMenu();
-                }
-            }
-        }
+    NavmenuObject.prototype.onWinScroll = function(event) {
+        //if (this.fixedHeader && this.menuWrapper.style.visibility == "visible") {
+        //console.log("On scroll");
+            //event.stopImmediatePropagation();
+            //event.stopPropagation();
+            //event.preventDefault();
+        //}
+        
+        //// Move the wrapper up with scrolling if it was shown at scroll > 0, used when widget is "fixed"
+        //if (this.menuWrapper && window.pageYOffset < this.winScroll) {
+            //this.menuWrapper.style.top = (this.menuWrapper.offsetTop - (this.winScroll - window.pageYOffset)) + "px";
+            //this.winScroll = window.pageYOffset;
+        //}
+        //// Hide vertical menu if scrolled down to its last item
+        //else if (this.menuWrapper && window.getComputedStyle(this.object,"").position == "fixed" && 
+                                                                //window.pageYOffset > this.winScroll) {
+            //if (this.menuIcon.classList.contains("qnr-navmenu-icon-close")) {
+                //// getYPos required instead of offsetTop
+                //if (getYPos(this.menuItemsL[this.menuItemsL.length-1],0) <= 
+                                //getYPos(this.object,0) + this.object.offsetHeight + window.pageYOffset) {
+                    //this.hideVerticalMenu();
+                //}
+            //}
+        //}
     }
     
     
@@ -2091,7 +2190,7 @@ var QNR_INTER = {};
         //else if (QNR_INTER.navmenuObject && document.querySelector("div.qnr-navmenu-icon-close")) {
         if (QNR_INTER.navmenuObject && document.querySelector("div.qnr-navmenu-icon-close") &&
                         !clicked.classList.contains("qnr-hmenu")) { // Don't close on click on hmenu widget
-            QNR_INTER.navmenuObject.hideVerticalMenu();
+            QNR_INTER.navmenuObject.hideVerticalMenu(event);
         }
         
         // ----------------------- X-icon
@@ -2195,7 +2294,7 @@ var QNR_INTER = {};
         
         // ----------------------- Navmenu
         if (QNR_INTER.navmenuObject) {
-            QNR_INTER.navmenuObject.onWinScroll();
+            QNR_INTER.navmenuObject.onWinScroll(event);
         }
         
         // ----------------------- Carousels
@@ -2469,7 +2568,7 @@ var QNR_HMENU = {};
                     // If part of a collapsed navmenu, close that as well
                     if (this1.object.classList.contains("qnr-hmenu-in-collapsed")) {
                         // To id the navmenu we rely on the fact only one can exist
-                        QNR_INTER.navmenuObject.hideVerticalMenu();
+                        QNR_INTER.navmenuObject.hideVerticalMenu(event);
                     }
                     event.stopPropagation();
                 }, true);

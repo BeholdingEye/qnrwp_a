@@ -1517,11 +1517,12 @@ function qnrwp_nav_menu_args($args) {
   if($args['menu'] == wp_get_nav_menu_object('QNRWP Main Nav Menu')) {
     //$args['depth'] = -1; // Make it flat, no submenus
     // Cannot concatenate to default container class...
-    $args['container_class'] = 'widget qnr-navmenu';
+    // We no longer include 'widget', as that's already in wrapping DIV by WP
+    $args['container_class'] = 'qnr-navmenu';
   }
   // Class footer menu
   else if($args['menu'] == wp_get_nav_menu_object('QNRWP Footer Menu')) {
-    $args['container_class'] = 'widget qnr-footer-menu';
+    $args['container_class'] = 'qnr-footer-menu';
   }
   //// Class test menu - Doesn't work from shortcode...
   //else if($args['menu'] == wp_get_nav_menu_object('Test_Menu')) {

@@ -847,6 +847,7 @@ span.qnr-carousel-bigarrow-right:active {
 /* STICKY BAR
  * ----------------------------------------------------- */
 
+/* TODO needs work */
 div.qnr-stickybar {
     display: block;
     position: relative;
@@ -859,7 +860,7 @@ div.qnr-stickybar {
 div.qnr-stickybar-fixed {
     position: fixed;
     top: 0;
-    z-index: 1000;  /* All other z-index settings should be lower */
+    z-index: 9999;  /* All other z-index settings should be lower */
 }
 
 
@@ -1332,7 +1333,7 @@ li.qnr-hmenu-subholder::before {
 div.qnr-navmenu {
     display: block;
     position: relative;
-    margin: 0;
+    margin: 0 0 0 auto; /* Align right in container */
     padding: 0;
     width: 100%;                /* Default */
     width: calc(100% - 15em);   /* Allow for the logo to the left */
@@ -1408,22 +1409,37 @@ div.qnr-navmenu > ul > li:last-child.qnr-hmenu {
 /* Wrapper created by code, for positioning, may contain hmenu */
 div.qnr-navmenu-wrapper {
     display: block;
-    position: absolute;
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 0;      /* Wrapper itself not taking any space */
     font-size: 1.14em; /* Must be here */
     font-weight: bold;
-    overflow: visible;
+    overflow: visible; /* Overriden in JS for fixed */
+    background-color: transparent; /* New */
     z-index: 999;
+}
+div.qnr-navmenu-wrapper-absolute {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    z-index: 998; /* A notch under the header, assumed to be at least 999 */
+}
+div.qnr-navmenu-wrapper-fixed {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0; /* Overriden in code */
+    bottom: 0;
+/*
+    background-color: rgba(1,1,1,0.9);
+*/
+    /* No bg color... */
 }
 div.qnr-navmenu-wrapper * {
     box-sizing: border-box;
 }
 /* Space the main UL */
 div.qnr-navmenu-wrapper > ul {
-    padding-top: 2em;
+    padding-top: 1em; /* Reduced from 2em TODO?? */
     padding-bottom: 2em;
     padding-left: 10%;
     padding-right: 10%;
@@ -1482,7 +1498,7 @@ div.qnr-navmenu-wrapper > ul > li a {
 div.qnr-navmenu-wrapper > ul > li.qnr-hmenu {
     padding-left: 0;
     padding-top: 1.4em;
-    padding-bottom: 0.8em;
+    padding-bottom: 2em; /* 0.8em originally TODO?? */
     padding-right: 0;
     border-bottom: dotted thin silver;
 }
@@ -1567,7 +1583,7 @@ div.qnr-navmenu-wrapper > ul > li.qnr-hmenu::after {
 div.qnr-navmenu > ul > li.qnr-hmenu::after {
     right: 0;
 }
-/* Increaset to 0.5em if in last item */
+/* Increase to 0.5em if in last item */
 div.qnr-navmenu > ul > li:last-child.qnr-hmenu::after {
     right: 0.5em;
 }
@@ -1643,12 +1659,12 @@ ul.qnr-navmenu-vertical-show-right {    /* Left/right */
 }
 ul.qnr-navmenu-vertical-hide {
     animation-name: qnr-navmenu-slide-up;
-    animation-duration: 1s;
+    animation-duration: 0.8s;
     top: -500px;
 }
 ul.qnr-navmenu-vertical-hide-left {
     animation-name: qnr-navmenu-slide-left;
-    animation-duration: 1s;
+    animation-duration: 0.8s;
     top: 0;
     left: -500px;
 }
