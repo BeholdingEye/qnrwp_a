@@ -1,3 +1,23 @@
 
 /* ----------------------------- WP ADMIN OVERRIDES */
 
+
+/* Wider menus to account for post submenus */
+
+#adminmenu, #adminmenu .wp-submenu, #adminmenuback, #adminmenuwrap {
+    width: 200px;
+}
+
+#wpcontent, #wpfooter {
+    margin-left: 200px;
+}
+
+#adminmenu .wp-submenu {
+    left: 200px;
+}
+
+#adminmenu .wp-submenu li {
+    width: auto;
+    word-wrap: normal;
+    white-space: nowrap;
+}

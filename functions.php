@@ -1638,13 +1638,13 @@ function qnrwp_filter_news_post($content) {
     $gP = '/(<a [^>]+)(>\s*<img[^>]+>\s*<\/a>)/';
     $content = preg_replace($gP, '$1 class="news-post-expandable-image"$2', $content);
     // Transfer alignleft class from img to a
-    $gP = '/(<a [^>]+class=")([^>]+>\s*<img[^>]+) alignleft([^>]+>\s*<\/a>)/';
+    $gP = '/(<a [^>]*class=")([^>]+>\s*<img[^>]+)\s*alignleft([^>]+>\s*<\/a>)/';
     $content = preg_replace($gP, '$1alignleft $2$3', $content);
     // Transfer alignright class from img to a
-    $gP = '/(<a [^>]+class=")([^>]+>\s*<img[^>]+) alignright([^>]+>\s*<\/a>)/';
+    $gP = '/(<a [^>]*class=")([^>]+>\s*<img[^>]+)\s*alignright([^>]+>\s*<\/a>)/';
     $content = preg_replace($gP, '$1alignright $2$3', $content);
     // Transfer aligncenter class from img to a
-    $gP = '/(<a [^>]+class=")([^>]+>\s*<img[^>]+) aligncenter([^>]+>\s*<\/a>)/';
+    $gP = '/(<a [^>]*class=")([^>]+>\s*<img[^>]+)\s*aligncenter([^>]+>\s*<\/a>)/';
     $content = preg_replace($gP, '$1aligncenter $2$3', $content);
     // Copy width from img to a
     $gP = '/(<a [^>]+)(>\s*<img[^>]+width=")([^\"]+)("[^>]*>\s*<\/a>)/';

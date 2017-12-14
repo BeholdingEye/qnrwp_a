@@ -569,6 +569,92 @@ add_action('admin_enqueue_scripts', function($hook) {
 });
 
 
+// ===================== ADMIN MENUS =====================
+
+function qnrwp_edit_posts_menus() {
+  //qnrwp_debug_printout(get_categories(), $append=false);
+  // Get categories for main menus
+  $cats = get_categories();
+  $catCount = 0;
+  foreach ($cats as $key => $cat) {
+    // Use only categories with no parent and some posts assigned
+    if (!$cat->parent && $cat->count) {
+      // Get posts matching category
+      $catPosts = get_posts(array(
+                                  'post_type' => 'post',
+                                  'post_status' => 'publish,future,draft,pending,private',
+                                  'nopaging' => false,
+                                  'posts_per_page' => 20,
+                                  'paged' => 1,
+                                  'category_name' => $cat->slug,
+                                  ));
+      // Create main menu for this category
+      $catCount += 1;
+      //add_menu_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '', string $icon_url = '', int $position = null )
+      add_menu_page('Edit '.esc_attr($cat->name).' Posts', // Page title
+                    esc_attr($cat->name).' Posts', // Menu title (no 'Edit')
+                    'edit_posts',
+                    'edit.php?category_name='.$cat->slug, '', 'dashicons-edit', 5+$catCount);
+      foreach ($catPosts as $key => $catPost) {
+        if ($key == 0) {
+          // Account for the first submenu-as-duplicate of new top menu problem, neatly solving as "All CAT Posts"
+          add_submenu_page('edit.php?category_name='.$cat->slug, 
+                            'Posts', 
+                            'All '.esc_attr($cat->name).' Posts', 
+                            'edit_posts', 
+                            'edit.php?category_name='.$cat->slug, '');
+        }
+        add_submenu_page('edit.php?category_name='.$cat->slug, 
+                          'Edit Post', 
+                          esc_attr($catPost->post_title), 
+                          'edit_posts', 
+                          'post.php?post='.$catPost->ID.'&action=edit', '');
+      }
+    }
+  }
+}
+add_action('admin_menu', 'qnrwp_edit_posts_menus');
+
+function qnrwp_edit_pages_menus() {
+  $pages = get_posts(array(
+                              'post_type' => 'page',
+                              'post_status' => 'publish,future,draft,pending,private',
+                              'nopaging' => true,
+                              ));
+  $pageCount = 0;
+  foreach ($pages as $key => $page) {
+    // Omit widget-defining pages
+    if ($pageCount < 20 && stripos($page->post_title, 'QNRWP-Widget-') === false 
+            && ($page->post_parent == 0 || stripos(get_post($page->post_parent)->post_title, 'QNRWP-Widget-') === false)) {
+      add_submenu_page('edit.php?post_type=page', 
+                        'Edit Page', 
+                        esc_attr($page->post_title), 
+                        'edit_pages', 
+                        'post.php?post='.$page->ID.'&action=edit', '');
+      $pageCount += 1;
+    }
+  }
+}
+add_action('admin_menu', 'qnrwp_edit_pages_menus');
+
+// Filter submenu NOT USED as it only affects highlighting of submenu item, see: TODO
+// https://stackoverflow.com/questions/2308569/manually-highlight-wordpress-admin-menu-item
+add_filter('submenu_file', function($submenu_file, $parent_file) {
+  //qnrwp_debug_printout('Submenus debug');
+  //qnrwp_debug_printout($submenu_file, $append=true);
+  //qnrwp_debug_printout($parent_file, $append=true);
+  //$submenu_file = 'edit-tags.php?taxonomy=post_tag';
+  //qnrwp_debug_printout("geting", $append=false);
+  //qnrwp_debug_printout($_GET, $append=true);
+  if (isset($_GET['post']) && isset($_GET['action']) && $_GET['action'] == 'edit') {
+    $submenu_file = 'post.php?post='.$_GET['post'].'&action=edit';
+  } else if (isset($_GET['category_name'])) {
+    $submenu_file = 'edit.php?category_name='.$_GET['category_name'];
+  }
+  return $submenu_file;
+}, 10, 2);
+
+
 // ===================== SIMPLIFY DASHBOARD FOR NON-ADMINS =====================
 
 if (!current_user_can('manage_options')) {
