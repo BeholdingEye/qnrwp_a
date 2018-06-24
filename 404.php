@@ -1,1 +1,4 @@
-404 - Not found
+<?php
+
+wp_redirect(home_url('/?status=404'));
+exit;

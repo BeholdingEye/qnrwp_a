@@ -5,16 +5,23 @@ Theme URI: http://github.com/beholdingeye
 Author: Karl Dolenc, beholdingeye.com
 Author URI: http://www.beholdingeye.com
 Description: qnrwp_a is the first Quicknr WordPress theme.
-Version: 1.0.1
+Version: 2.0.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: basic, blank
-Text Domain: qnrwp_a
+Text Domain: qnrwp
 */
 
 /*
   QNRWP_A Stylesheet 
 */
+
+/* 
+ * Colours:
+ * 
+ * dark blue #1e6594
+ * 
+ *  */
 
 /* EM sizes / font pixel sizes
  * 
@@ -31,15 +38,130 @@ Text Domain: qnrwp_a
  * 
  *  */
 
+/* ----------------------------- Corrections */
+
 * {
     box-sizing: border-box;
 }
 
-input[type="button"]::-moz-focus-inner {
-    outline: none;
-    border: none;
+button, input {
+    overflow: visible;
 }
-                                             /* Layout */
+button, select {
+    text-transform: none;
+}
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+    -webkit-appearance: button;
+}
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+    border: none;
+    outline: none;
+    padding: 0;
+}
+
+sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+sub {
+    bottom: -0.25em;
+}
+sup {
+    top: -0.5em;
+}
+
+code, kbd, samp, pre {
+    font-size: 1em;
+}
+
+small {
+    font-size: 80%;
+}
+
+abbr[title] {
+    border-bottom: none;
+    text-decoration: underline;
+    text-decoration: underline dotted;
+}
+
+legend {
+    color: inherit;
+    display: table;
+    max-width: 100%;
+    white-space: normal;
+}
+
+progress {
+    vertical-align: baseline;
+}
+
+textarea {
+    overflow: auto;
+}
+
+[type="checkbox"],
+[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+    height: auto;
+}
+
+[type="search"] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+}
+
+[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    font: inherit;
+}
+
+details {
+    display: block;
+}
+
+summary {
+    display: list-item;
+}
+
+template {
+    display: none;
+}
+
+[hidden] {
+    display: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    line-height: initial;
+}
+h1 {
+    font-size: 1.8em;
+}
+
+/* ----------------------------- Layout */
+
+html {
+    width: 100%;
+    height: 100%;
+}
 
 body {
     display: block;
@@ -63,9 +185,7 @@ body {
     text-align: center;
     vertical-align: top;
     background-color: #FFF;
-    
     /* Font rendering settings from Google */
-    
     /* Support for all WebKit browsers. */
     -webkit-font-smoothing: antialiased;
     /* Support for Safari and Chrome. */
@@ -74,15 +194,8 @@ body {
     -moz-osx-font-smoothing: grayscale;
     /* Support for IE. */
     font-feature-settings: "liga";
-    
-    /* Possible solution for Chrome text rendering? */
-/*
-    -webkit-text-stroke: 0.23px;
-*/
-
     /* iPhone inconsistent text sizing fix */
     -webkit-text-size-adjust: 100%;
-
 }
 
 a {
@@ -105,7 +218,7 @@ img {
     border: none;
 }
 
-div {
+div, header, main, section, article, footer {
     display: block;
     position: relative;
     margin: 0;
@@ -113,53 +226,17 @@ div {
     width: 100%;
 }
 
-/* Style Headers as they are used in Edit screens */
-h1, h2, h3, h4, h5, h6 {
-    font-weight: bold;
-    margin: 2em auto 1em; /* More spacing at top, overriden as needed */
-}
-h1 {
-    font-size: 1.3em;
-}
-h2 {
-    font-size: 1.2em;
-}
-h3 {
-    font-size: 1.1em;
-}
-h4 {
-    font-size: 1em;
-}
-h5 {
-    font-size: 0.9em;
-}
-h6 {
-    font-size: 0.9em;
-}
-
-
-/* NAV MENU
- * ----------------------------------------------------- */
-div.qnr-navmenu li.current-menu-item a,
-div.qnr-navmenu li.current_page_parent a,
-div.qnr-navmenu li.current-menu-parent,
-div.qnr-navmenu-wrapper li.current-menu-item a,
-div.qnr-navmenu-wrapper li.current_page_parent a,
-div.qnr-navmenu-wrapper li.current-menu-parent {
-    color: black;
-}
-
 
 /* HEADER
  * ----------------------------------------------------- */
 
 /* Relative positioned, scrolling with view */
-div#header-row {
+.header-row {
     display: block;
     margin: 0 auto;
     min-width: 320px;
     max-width: 1600px;
-    height: 56px;           /* Matching navmenu height */
+    height: auto;           /* Matching navmenu height */
     text-align: right;
     color: white;
     overflow: visible;
@@ -170,7 +247,7 @@ div#header-row {
     z-index: 999;          /* Higher index than vertical navmenu */
 }
 /* Override for fixed to window (class set conditionally in WP) */
-div#header-row.qnrwp-has-fixed-header {
+.header-row.qnrwp-has-fixed-header {
     position: fixed;
     top:0;
     /* Left right and auto margin to center */
@@ -182,12 +259,67 @@ div#header-row.qnrwp-has-fixed-header {
     border-bottom: solid thin #EEE;
 }
 
+/* ----------------------------- Header nav row (logo and nav menu) */
+
+.header-nav-row {
+    padding: 0.75em 1em 0.5em;
+}
+
+/* ----------------------------- Logo */
+
+.header-site-logo {
+    display: block;
+    position: relative;
+    float: left;
+    margin-right: 2em;
+    width: auto;
+    font-family: QNRWP;
+    font-size: 2em;
+    font-stretch: condensed;
+    font-weight: normal;
+    text-align: left;
+    color: #1e6594;
+}
+
+/* Clickable logo */
+.header-site-logo a {
+    display: block;
+    position: relative;
+    width: auto;
+    height: 100%;
+    text-decoration: none;
+    z-index: 99;
+}
+.header-site-logo a:hover {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* ----------------------------- Header main nav menu */
+
+.header-main-nav-menu, /* Theme menu in its location */
+.header-row .widget_nav_menu { /* Widget menu, if used */
+    height: auto;
+    padding-top: 1em;
+    overflow: visible;  /* So that collapsed nav menu will show */
+}
+
+.qnr-navmenu li.current-menu-item a,
+.qnr-navmenu li.current_page_parent a,
+.qnr-navmenu li.current-menu-parent,
+.qnr-navmenu-wrapper li.current-menu-item a,
+.qnr-navmenu-wrapper li.current_page_parent a,
+.qnr-navmenu-wrapper li.current-menu-parent {
+    color: black;
+}
+
 /* CONTENT
  * ----------------------------------------------------- */
 
 /* Assumes relative positioned header */
-div#content-row {   /* May contain sub header before middle row */
+.content-row {   /* May contain sub header before middle row */
     margin: 0 auto;
+    padding-bottom: 1em;
     min-width: 320px;
     max-width: 1600px;
     height: auto;
@@ -197,19 +329,73 @@ div#content-row {   /* May contain sub header before middle row */
     z-index: 2;
 }
 /* Override for fixed header (class set conditionally in WP) */
-div#content-row.qnrwp-has-fixed-header {
-    margin-top: 56px;   /* Account for fixed header */
+.content-row.qnrwp-has-fixed-header {
 }
 
-div#content-row div.sub-header-row {
+
+/* SUB-HEADER
+ * ----------------------------------------------------- */
+
+.content-row .sub-header-row {
     display: block;
     margin: 0 auto;
     text-align: center; /* Required for its content */
 }
 
+/* ----------------------------- QNR scroller override */
+    
+.sub-header-row .qnr-scroller {   /* ID 'subheader' */
+    height: 200px;  /* Required for the following */
+    opacity: 1;
+}
+.sub-header-row .qnr-scroller div {
+    height: 100%;
+    text-align: center;
+    vertical-align: baseline;
+    background-image: linear-gradient(rgba(50,50,50,0.5), rgba(50,50,50,0.5));
+}
+/* TODO refactor for QNRWP_A site child style */
+.sub-header-row .qnr-scroller div p { /* Home page overrride below */
+    display: inline-block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0.1em;
+    padding-top: 10%;
+    padding-bottom: 0.25em;
+    width: auto;
+    height: auto;
+    font-size: 1.8em;
+    font-weight: normal;
+    text-align: left;
+    text-transform: lowercase;
+    color: white;
+    opacity: 0.8;
+    border-bottom: dotted thin white;
+    box-sizing: border-box;
+}
+
+/* ----------------------------- QNR aspect-keeper override */
+
+/* Brought in from child style */
+.content-row .sub-header-row .qnr-aspect-keeper {  /* ID 'subheader' */
+    min-height: 200px;
+    max-height: 600px;
+}
+
+/* Override on Home page (other overrides in child theme style.css) TODO refactor as above */
+body.home .sub-header-row .qnr-scroller div p {
+    font-weight: normal;
+    font-size: 1.8em;
+    line-height: 1.2em;
+    padding-top: 8%;
+    text-transform: none;
+    border-bottom: none;
+}
+
+
 /* Middle row after sub-header, containing one to three columns, flex displayed */
 
-div#middle-row {
+.middle-row {
     display: -webkit-inline-flex;
     display: inline-flex;
     -webkit-flex-flow: row wrap;
@@ -228,7 +414,7 @@ div#middle-row {
 
 /* Content box, optionally between sidebars */
 
-div#content-box {
+.content-box {
     -webkit-flex: 2 1 0;
     flex: 2 1 0;
     display: inline-block;
@@ -237,65 +423,72 @@ div#content-box {
     min-width: 320px;
     max-width: 1600px;
     height: auto;
+/*
     min-height: 500px;
+*/
     text-align: center;
     background-color: white;
 }
-div#content-box.single-col-content {
+.content-box.single-col-content {
     width: 100%;
-    padding: 0; /* Possibly overriden in child style */
 }
-div#content-box.three-col-content {
+.content-box.three-col-content {
     width: 40%;
 }
-div#content-box.two-col-content-left {
+.content-box.two-col-content-left {
     width: 70%;
 }
-div#content-box.two-col-content-right {
+.content-box.two-col-content-right {
     width: 70%;
 }
 /* Limit changed LI to the content box */
-div#content-box li {
+.content-box li {
     margin-top: 1em;
     padding-right: 3em; /* Overriden in @media */
 }
 
-/* News Post Type, in Content box */
+/* Page Type, in Content box */
 
-div.type-post {
+.type-page {
     text-align: left;
 }
-div.type-post p {
+
+/* News Post Type, in Content box */
+
+.type-post {
+    text-align: left;
 }
-div.type-post p::after {    /* Clearing trick for floats */
+.type-post p {
+}
+.type-post p::after {    /* Clearing trick for floats */
     content: "";
     clear: both;
     display: block;
 }
-div.type-post img {
+.type-post img {
     border: solid thin #EEE;
 }
 /* A filter moves the alignment classes from IMG to A, but when FIGURE
  * is used, the class is alredy on the FIGURE, wrapping A */
-div.type-post a.alignleft,
-div.type-post figure.alignleft,
-div.type-post img.alignleft {
+.type-post a.alignleft,
+.type-post figure.alignleft,
+.type-post img.alignleft {
     float: left;
     clear: left;
     vertical-align: top;
     margin: 0 1em 0 0;
 }
-div.type-post a.alignright,
-div.type-post figure.alignright,
-div.type-post img.alignright {
+.type-post a.alignright,
+.type-post figure.alignright,
+.type-post img.alignright {
     float: right;
     clear: right;
     vertical-align: top;
     margin: 0 0 0 1em;
 }
-div.type-post a.aligncenter,
-div.type-post figure.aligncenter,
-div.type-post img.aligncenter {     /* Same as img at top */
+.type-post a.aligncenter,
+.type-post figure.aligncenter,
+.type-post img.aligncenter {     /* Same as img at top */
     display: block;
     position: relative;
     margin: 0 auto;
@@ -305,19 +498,19 @@ div.type-post img.aligncenter {     /* Same as img at top */
     clear: both;
     vertical-align: top;
 }
-div.type-post figure figcaption.wp-caption-text {
+.type-post figure figcaption.wp-caption-text {
     text-align: center;
     font-style: italic;
     font-size: 0.85em;
     color: #888;
 }
-div.type-post img.wp-post-image {
+.type-post img.wp-post-image {
     margin: 1em auto;
     width: 100%;
     max-width: 100%;
 }
 /* Expandable, clickable image overlay */
-div.type-post a.news-post-expandable-image {
+.type-post a.news-post-expandable-image {
     display: block;
     position: relative;
     width: auto;
@@ -325,7 +518,7 @@ div.type-post a.news-post-expandable-image {
     height: auto;
     background-color: black; /* Fake 'overlay' for hover */
 }
-div.type-post a.news-post-expandable-image::after {
+.type-post a.news-post-expandable-image::after {
     content: "\01a5"; /* Expand icon */
     font-family: Quicknr;
     font-weight: normal;
@@ -340,34 +533,36 @@ div.type-post a.news-post-expandable-image::after {
     opacity: 0.8;
     z-index: 99;
 }
-div.type-post a.news-post-expandable-image.news-post-image-link::after {
+.type-post a.news-post-expandable-image.news-post-image-link::after {
     content: "I"; /* Magnifying glass icon */
 }
-div.type-post a.news-post-expandable-image:hover::after {
+.type-post a.news-post-expandable-image:hover::after {
     background-color: rgba(1,1,1,0.4);
     color: white;
     opacity: 1;
 }
-div.type-post a.news-post-expandable-image img {    /* Override img */
+.type-post a.news-post-expandable-image img {    /* Override img */
     display: block;
     position: relative;
     float: none;
     margin: 0;
 }
-div.type-post a.news-post-expandable-image img:hover {
+.type-post a.news-post-expandable-image img:hover {
     opacity: 0.95; /* Revealing A bg */
 }
-div.post-date {
+.post-date {
     font-size: 0.9em;
     font-style: normal;
     color: #888;
 }
-div.type-post h1.page-title {
-    margin: 1em auto;
+.type-post h1.page-title {
+    margin: 0.5em auto;
     text-align: left;
+    font-size: 2em;
+    font-weight: normal;
 }
 /* Style first paragraph of news posts */
-div.type-post > p:first-of-type,
+.type-post > p:first-of-type,
 p.news-post-first-para { /* Set by filter, perhaps after Featured Image */
     margin-top: 1.5em;
     font-weight: bold;
@@ -375,15 +570,15 @@ p.news-post-first-para { /* Set by filter, perhaps after Featured Image */
 
 /* Previous and Next post links */
 
-div.post-nav-links {
+.post-nav-links {
     margin-top: 0;
     padding-top: 0.5em;
     margin-bottom: 1em;
     text-align: justify;
     border-top: solid thin #EEE;
 }
-div.post-nav-links span.post-newer,
-div.post-nav-links span.post-older {
+.post-nav-links span.post-newer,
+.post-nav-links span.post-older {
     display: inline-block;
     position: relative;
     margin: 0;
@@ -394,10 +589,11 @@ div.post-nav-links span.post-older {
     vertical-align: top;
     color: #444;
 }
-div.post-nav-links span.post-newer {
+.post-nav-links span.post-newer,
+.post-nav-links span.post-newer p {
     text-align: right;
 }
-div.post-nav-links span.post-older {
+.post-nav-links span.post-older {
     text-align: left;
 }
 span.post-newer p,
@@ -412,11 +608,19 @@ span.post-older p:first-child { /* Prev and Next labels above titles */
     color: #888;
 }
 
+@media (max-width: 1280px) {
+    /* Reduce pre/next links in smaller windows */
+    .post-nav-links span.post-newer,
+    .post-nav-links span.post-older {
+        font-size: 0.9em;
+    }
+}
+
 
 /* SIDEBARS
  * ----------------------------------------------------- */
 
-div.sidebar {
+.sidebar {
     display: inline-block;
     -webkit-flex: 1 2 0;
     flex: 1 2 0;
@@ -428,10 +632,10 @@ div.sidebar {
     background-color: white;
 }
 
-div#sidebar-left {
+.sidebar-left {
     width: 30%;     /* Here for sizing later */
 }
-div#sidebar-right {
+.sidebar-right {
     width: 30%;
 }
 
@@ -439,29 +643,16 @@ div#sidebar-right {
 /* WIDGET
  * ----------------------------------------------------- */
 
-div.widget {
-    display: inline-block;
-    overflow: hidden;
-}
-
-div#header-row div.widget {
-    overflow: visible;  /* So that collapsed nav menu will show */
-}
-div#header-row div.widget_nav_menu {
-    display: block;
-    height: 100%;
-    max-height: 100%; /* No larger than containing header */
-}
-
 /* Footer widgets are in Footer section */
 
-div.sidebar div.widget {
+.sidebar .widget {
+    display: inline-block;
     margin: 1em auto;
     padding: 0 1em;
     width: 100%;
     text-align: center;
 }
-div.sidebar h2.widget-title {
+.sidebar h2.widget-title {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -474,7 +665,7 @@ div.sidebar h2.widget-title {
 
 /* Calendar */
 
-div.calendar_wrap {
+.calendar_wrap {
     display: inline-block;
     padding-top: 1em;
     text-align: center;
@@ -496,7 +687,7 @@ table#wp-calendar tbody td a {
 
 /* Recent Posts */
 
-div.widget_recent_entries ul {
+.widget_recent_entries ul {
     display: inline-block;
     position: relative;
     margin: 0;
@@ -505,19 +696,19 @@ div.widget_recent_entries ul {
     text-align: left;
     list-style-type: none;
 }
-div.widget_recent_entries span.post-date {
+.widget_recent_entries span.post-date {
     font-size: 0.85em;
     font-style: normal;
     color: #888;
 }
-div.widget_recent_entries li {
+.widget_recent_entries li {
     margin-top: 1em;
     margin-bottom: 1em;
 }
-div.widget_recent_entries li a {
+.widget_recent_entries li a {
     font-weight: normal;
 }
-div.widget_recent_entries li a + span {
+.widget_recent_entries li a + span {
     display: block;
     position: relative;
     margin: 0;
@@ -527,7 +718,7 @@ div.widget_recent_entries li a + span {
 /* FOOTER
  * ----------------------------------------------------- */
 
-div#footer-row {
+.footer-row {
     display: none; /* Code will change to 'block' after load */
     visibility: hidden; /* Ditto */
     margin: 0 auto;
@@ -537,51 +728,48 @@ div#footer-row {
     text-align: center;
     background-color: #666;
 }
-div#footer-row a,
-div#footer-row a:hover {
+.footer-row a,
+.footer-row a:hover {
     font-weight: normal;
     text-decoration: none;
     border: none;
 }
-div#footer-row a:hover {
+.footer-row a:hover {
     text-decoration: underline;
     color: white;
 }
 
-div#footer-row div.widget,
-div#footer-row div.textwidget {
+/* Middle row of columns */
+
+.footer-row-middle {
+    display: -webkit-flex;
+    display: flex;
+
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+
+    /* Vertical align content */
+    -webkit-align-items: center; /* Single line */
+    align-items: center;
+    -webkit-align-content: center; /* Multi line */
+    align-content: center;
+
+    /* Horizontal align content */
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+.footer-row-middle .widget { /* Column, flex item */
     display: inline-block;
-    margin-top: 1em;
-    padding-bottom: 1em;
-    width: 200px;
-    text-align: center;
-    vertical-align: top;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1em;
+    width: 300px;
+    max-width: 360px;
 }
 
-/* Copyright Notice (Text Widget) */
+/* Menus */
 
-div#footer-row div.textwidget:last-child {
-    display: block;
-    width: 100%;
-    margin-top: 2em;
-    padding-bottom: 1em;
-    text-align: center;
-}
-div#footer-row div.textwidget div.qnrwp-copyright {
-    display: inline-block;
-    width: auto;
-    font-size: 0.9em;
-    text-align: center;
-    border-top: dotted thin silver;
-    opacity: 0.6;
-}
-div#footer-row div.qnrwp-copyright p:first-child {
-    width: auto;
-}
-
-/* Menus (not used any more) */
-
-div#footer-row ul {
+.footer-row ul {
     display: inline-block;
     position: relative;
     margin: 0;
@@ -591,18 +779,18 @@ div#footer-row ul {
     text-align: left;
     vertical-align: top;
 }
-div#footer-row li {
+.footer-row li {
     margin-top: 1em;
 }
-div#footer-row div.qnrwp-social-links ul { /* Not used any more */
+.footer-row .qnrwp-social-links ul { /* Not used any more */
     margin: 0 1em;
 }
-div#footer-row div.qnrwp-social-links li {
+.footer-row .qnrwp-social-links li {
     margin-top: 1em;
     font-size: 2em;
     list-style-type: none;
 }
-div#footer-row div.qnrwp-social-links a:hover {
+.footer-row .qnrwp-social-links a:hover {
     text-decoration: none;
 }
 
@@ -611,8 +799,9 @@ div#footer-row div.qnrwp-social-links a:hover {
  * ----------------------------------------------------- */
 
 /* 4-item rows, responsively adjusting to 2-item, then singles */
+/* TODO refactor so that the layout is independent */
 
-div.featured-news-block {
+.qnrwp-featured-news-block {
     display: block;
     position: relative;
     margin: 0 auto;
@@ -623,7 +812,7 @@ div.featured-news-block {
     vertical-align: top;
     text-align: center;
 }
-div.featured-news-block > div {
+.qnrwp-featured-news-block > div {
     display: inline-block;
     position: relative;
     margin: 0;
@@ -634,13 +823,13 @@ div.featured-news-block > div {
     vertical-align: top;
     text-align: center;
 }
-div.featured-news-block > div:first-child {
+.qnrwp-featured-news-block > div:first-child {
     text-align: right;
 }
-div.featured-news-block > div:last-child {
+.qnrwp-featured-news-block > div:last-child {
     text-align: left;
 }
-a.featured-news-item {
+a.qnrwp-featured-news-item {
     display: inline-block;
     position: relative;
     margin: 8px;
@@ -661,19 +850,19 @@ a.featured-news-item {
     
     box-shadow: 0 1px 6px rgba(1,1,1,0.26);
 }
-a.featured-news-item:hover {
+a.qnrwp-featured-news-item:hover {
     box-shadow: 0 1px 12px rgba(1,1,1,0.4);
     background-color: #f8f8f8;
 }
-a.featured-news-item:hover div.featured-news-item-header {
+a.qnrwp-featured-news-item:hover .qnrwp-featured-news-item-header {
 /*
     background-size: 105%;
 */
 }
-a.featured-news-item:hover div.featured-news-item-text {
+a.qnrwp-featured-news-item:hover .qnrwp-featured-news-item-text {
     color: black;
 }
-div.featured-news-item-header {
+.qnrwp-featured-news-item-header {
     display: block;
     position: relative;
     margin: 0;
@@ -686,7 +875,7 @@ div.featured-news-item-header {
     background-repeat: no-repeat;
     opacity: 1;
 }
-div.featured-news-item-text {
+.qnrwp-featured-news-item-text {
     display: block;
     position: relative;
     margin: 0;
@@ -696,17 +885,39 @@ div.featured-news-item-text {
     text-align: left;
     color: #333;
 }
-div.featured-news-item-text h1 {
+.qnrwp-featured-news-item-text h1 {
     font-size: 1.1em;
     font-weight: bold;
     margin: 1em auto;
 }
 
+@media (max-width: 1320px) {
+    .qnrwp-featured-news-block > div {
+        padding: 0;
+        min-width: 320px;
+        max-width: 100%;
+        width: 100%;
+    }
+    .qnrwp-featured-news-block > div:first-child {
+        text-align: center;
+    }
+    .qnrwp-featured-news-block > div:last-child {
+        text-align: center;
+    }
+}
+@media (max-width: 650px) {
+    a.qnrwp-featured-news-item {
+        margin: 16px;
+        min-width: 288px;
+        width: 70%;
+        max-width: 70%;
+    }
+}
 
 /* NEWS EXCERPTS
  * ----------------------------------------------------- */
 
-a.excerpt-item {
+a.qnrwp-excerpt-item {
     display: block;
     position: relative;
     margin: 0 auto;
@@ -720,12 +931,12 @@ a.excerpt-item {
     color: #333;
     box-sizing: border-box;
 }
-a.excerpt-item:hover {
+a.qnrwp-excerpt-item:hover {
     text-decoration: none;
     color: black;
     background-color: #F2F2F2;
 }
-a.excerpt-item img.qnrwp-post-featured-img {
+a.qnrwp-excerpt-item img.qnrwp-post-featured-img {
     display: inline-block;
     position: relative;
     float: left;
@@ -736,12 +947,12 @@ a.excerpt-item img.qnrwp-post-featured-img {
     box-sizing: border-box;
     border: solid thin #EEE;
 }
-a.excerpt-item:hover img.qnrwp-post-featured-img {
+a.qnrwp-excerpt-item:hover img.qnrwp-post-featured-img {
 /*
     opacity: 0.9;
 */
 }
-a.excerpt-item > div.excerpt-item-block {
+a.qnrwp-excerpt-item > .qnrwp-excerpt-item-block {
     display: block;
     padding: 0 1em;
     width: auto;
@@ -749,21 +960,21 @@ a.excerpt-item > div.excerpt-item-block {
     vertical-align: top;
     overflow: hidden;
 }
-a.excerpt-item p.excerpt-date {
+a.qnrwp-excerpt-item p.qnrwp-excerpt-date {
     margin-top: 0;
     padding: 0;
     font-size: 0.9em;
     font-style: normal;
     color: #888;
 }
-a.excerpt-item h1 {
+a.qnrwp-excerpt-item h1 {
     padding: 0;
     font-size: 1.1em;
     font-weight: bold;
     /* Override margins set above */
     margin: 0 auto;
 }
-a.excerpt-item div.excerpt-text {
+a.qnrwp-excerpt-item .qnrwp-excerpt-text {
     margin: 0;
     padding: 0;
     line-height: 1.53em;
@@ -771,15 +982,15 @@ a.excerpt-item div.excerpt-text {
 
 /* Previous and Next pages links */
 
-div.excerpts-pages-links {
+.qnrwp-excerpts-pages-links {
     margin-top: 2em;
     padding-top: 1em;
     margin-bottom: 1em;
     text-align: justify;
     border-top: solid thin #EEE;
 }
-div.excerpts-pages-links span.excerpts-newer,
-div.excerpts-pages-links span.excerpts-older {
+.qnrwp-excerpts-pages-links span.qnrwp-excerpts-newer,
+.qnrwp-excerpts-pages-links span.qnrwp-excerpts-older {
     display: inline-block;
     position: relative;
     width: 50%; /* Assume no whitespace between items */
@@ -787,22 +998,32 @@ div.excerpts-pages-links span.excerpts-older {
     font-size: 1em;
     color: #444;
 }
-div.excerpts-pages-links span.excerpts-newer {
+.qnrwp-excerpts-pages-links span.qnrwp-excerpts-newer {
     text-align: right;
 }
-div.excerpts-pages-links span.excerpts-older {
+.qnrwp-excerpts-pages-links span.qnrwp-excerpts-older {
     text-align: left;
 }
 
+@media (max-width: 460px) {
+    a.qnrwp-excerpt-item img.qnrwp-post-featured-img {
+        width: 50px;
+        height: 50px;
+    }
+    a.qnrwp-excerpt-item,
+    a.qnrwp-excerpt-item > .qnrwp-excerpt-item-block {
+        height: auto;
+    }
+}
 
 /* GALLERY
  * ----------------------------------------------------- */
 
-div.gallery {
+.gallery {
     text-align: left;
     line-height: 0;
 }
-div.gallery figure {
+.gallery figure {
     display: inline-block;
     position: relative;
     margin: 0.1em;
@@ -841,6 +1062,7 @@ form.search-form input.search-submit {
     font-size: 1.4em;
     color: white;
     line-height: 0;
+    text-align: center;
     vertical-align: middle;
     box-sizing: border-box;
     border: none;
@@ -852,65 +1074,46 @@ form.search-form input.search-submit:hover {
     cursor: pointer;
     background-color: #666;
 }
-div.search-results {
+.search-results {
     padding: 0 2em 2em 0;
     font-weight: bold;
     text-align: left;
 }
 
-/* QNR SCROLLER OVERRIDE
- * ----------------------------------------------------- */
-    
-div#sub-header-row div.qnr-scroller {   /* Also classed as 'subheader' */
-    height: 200px;  /* Required for the following */
-    opacity: 1;
-}
-div#sub-header-row div.qnr-scroller div {
-    height: 100%;
-    background-image: linear-gradient(rgba(50,50,50,0.5), rgba(50,50,50,0.5));
-}
-/* TODO refactor for QNRWP_A site child style */
-div#sub-header-row div.qnr-scroller div p { /* Home page overrride below */
-    display: block;
-    position: absolute;
-    bottom: 1em;
-    left: 50%;
-    margin: 0 auto;
-    padding: 0.1em;
-    width: auto;
-    height: auto;
-    padding-top: 100px;
-    font-size: 1.6em;
-    font-weight: normal;
-    text-align: left;
-    text-transform: lowercase;
-    color: white;
-    opacity: 0.8;
-    border-bottom: dotted thin white;
-    box-sizing: border-box;
+@media (max-width: 480px) { /* iPhone */
+    form.search-form input.search-field {
+        -webkit-appearance: none;
+        -webkit-border-radius: 0;
+        border-radius: 0;
+    }
+    form.search-form input.search-submit {
+        -webkit-appearance: none;
+        -webkit-border-radius: 0;
+        border-radius: 0;
+    }
 }
 
 
 /* SAMPLES
  * ----------------------------------------------------- */
 
-div.samples-row,
-div.samples-list-block,
-div.samples-list-block div,
-div.samples-list-block img {
+.qnrwp-samples-row,
+.qnrwp-samples-list-block,
+.qnrwp-samples-list-block div,
+.qnrwp-samples-list-block img {
     position: relative;
     box-sizing: border-box;
 }
-div.samples-row,
-div.samples-list-block,
-div.samples-list-block img {
+.qnrwp-samples-row,
+.qnrwp-samples-list-block,
+.qnrwp-samples-list-block img {
     display: block;
     margin: 0;
     padding: 0;
     width: 100%;
     vertical-align: top;
 }
-div.samples-list-block {    
+.qnrwp-samples-list-block {    
 /*
     -moz-column-count: 4;
     -moz-column-width: 260px;
@@ -944,11 +1147,11 @@ div.samples-list-block {
     height: auto;
     text-align: center;
 }
-div.samples-row {
+.qnrwp-samples-row {
     padding: 1em 1em 0;
     text-align: center;
 }
-h2.samples-list-title { /* Outside the block */
+h2.qnrwp-samples-list-title { /* Outside the block */
     margin: 0 auto;
     margin-top: 1em;
     padding-top: 0.5em;
@@ -968,7 +1171,7 @@ h2.samples-list-title { /* Outside the block */
     border-bottom: solid thin #DDD;
 */
 }
-div.samples-list-item {
+.qnrwp-samples-list-item {
     display: inline-block;
     
 /*
@@ -996,24 +1199,24 @@ div.samples-list-item {
     box-shadow: 0 1px 4px rgba(1,1,1,0.4);
     background-color: #f8f8f8;
 }
-div.samples-list-item div {
+.qnrwp-samples-list-item div {
     width: 100%;
 }
-div.samples-list-item-text {
+.qnrwp-samples-list-item-text {
     display: block;
     padding: 0 1em;
     height: 5em;
     text-align: left;
     box-sizing: border-box;
 }
-div.samples-list-item-text h3 {
+.qnrwp-samples-list-item-text h3 {
     margin: 1em auto 0;
 }
 /* Reduce the space between title and text in blurb */
-div.samples-list-item-text p:first-of-type {
+.qnrwp-samples-list-item-text p:first-of-type {
     margin-top: 0.5em;
 }
-div.samples-list-item-buttons {
+.qnrwp-samples-list-item-buttons {
     display: block;
     width: 100%;
     font-size: 1.2em;
@@ -1021,13 +1224,13 @@ div.samples-list-item-buttons {
     padding: 0.5em;
     padding-bottom: 1em;
 }
-div.samples-list-item-buttons a {
+.qnrwp-samples-list-item-buttons a {
     padding: 0.5em;
     margin: 0.5em;
 }
 
 /* Load more button */
-button.samples-load-more {
+button.qnrwp-samples-load-more {
     display: block;
     position: relative;
     margin: 1em auto;
@@ -1041,7 +1244,7 @@ button.samples-load-more {
     background-color: gray;
     background-image: linear-gradient(#f0f0f0, #DDD);
 }
-button.samples-load-more:hover {
+button.qnrwp-samples-load-more:hover {
     color: #666;
     border: solid thin #EEE;
     background-color: silver;
@@ -1049,14 +1252,44 @@ button.samples-load-more:hover {
 }
 
 
-/* ----------------------------- PAGE OVERRIDES */
+/* ----------------------------- Cookie notice */
 
-/* Override on Home page (other overrides in child theme style.css) TODO refactor as above */
-body.home div#sub-header-row div.qnr-scroller div p {
-    bottom: 0.5em;
-    line-height: 1.2em;
-    text-transform: none;
-    border-bottom: none;
+.qnrwp-cookie-notice {
+    display: none; /* Changed by JS code */
+    position: relative;
+    margin: 0 auto;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    box-sizing: border-box;
+    border-radius: 0 0 3px 3px;
+    background-color: #1e6594;
+    clear: both;
+}
+.qnrwp-cookie-notice p {
+    margin: 0;
+    margin-right: 2em;
+    padding: 0;
+    text-align: left;
+    background-color: transparent;
+}
+.qnrwp-cookie-notice p a {
+    text-decoration: underline;
+}
+.qnrwp-cookie-notice p a:hover {
+    color: inherit;
+    opacity: 0.7;
+}
+.qnrwp-cookie-notice .qnr-glyph-xicon {
+    display: block;
+    position: absolute;
+    top: 1.2em;
+    right: 1em;
+    line-height: 0;
+}
+.qnrwp-cookie-notice .qnr-glyph-xicon:hover {
+    cursor: pointer;
 }
 
 
@@ -1081,42 +1314,8 @@ body.home div#sub-header-row div.qnr-scroller div p {
 
 /* Width */
 
-@media (max-width: 1320px) {
-    div.featured-news-block > div {
-        padding: 0;
-        min-width: 320px;
-        max-width: 100%;
-        width: 100%;
-    }
-    div.featured-news-block > div:first-child {
-        text-align: center;
-    }
-    div.featured-news-block > div:last-child {
-        text-align: center;
-    }
-}
-@media (max-width: 1280px) {
-    body {
-/*
-        font-size: 14px;
-*/
-    }
-    /* Reduce pre/next links in smaller windows */
-    div.post-nav-links span.post-newer,
-    div.post-nav-links span.post-older {
-        font-size: 0.9em;
-    }
-}
 @media (max-width: 910px) {
-/*
-    div#sidebar-left {
-        order: 1;
-    }
-    div#sidebar-right {
-        order: 2;
-    }
-*/
-    div#sidebar-right {
+    .sidebar-right {
         display: block;
         -webkit-flex: none;
         flex: none;
@@ -1125,22 +1324,22 @@ body.home div#sub-header-row div.qnr-scroller div p {
     }
 }
 @media (max-width: 710px) {
-    div#content-box {
+    .content-box {
         display: block;
         -webkit-flex: none; /* iPhone */
         min-width: 100%; /* Changed from 90% to remove the extra margin */
         width: 100%;
     }
-    div#content-box li {
+    .content-box li {
         padding-right: 2em;
     }
-    div#sidebar-left {
+    .sidebar-left {
         -webkit-order: 1;
         order: 1;
         -webkit-flex: 1 1 320px; /* iPhone */
         width: 50%;
     }
-    div#sidebar-right {
+    .sidebar-right {
         -webkit-order: 2;
         order: 2;
         display: inline-block;
@@ -1151,61 +1350,14 @@ body.home div#sub-header-row div.qnr-scroller div p {
         max-width: 400px;
     }
 }
-@media (max-width: 650px) {
-    /* Too narrow to support three columns */
-/*
-    div#middle-row {
-        flex-flow: column;
-    }
-    div.sidebar {
-        width: 100%;
-    }
-    div#sidebar-left {
-        order: 1;
-        border-right: none;
-    }
-    div#sidebar-right {
-        order: 2;
-        border-left: none;
-    }
-*/
-    a.featured-news-item {
-        margin: 16px;
-        min-width: 288px;
-        width: 70%;
-        max-width: 70%;
-    }
-}
-@media (max-width: 480px) { /* iPhone */
-    form.search-form input.search-field {
-        -webkit-appearance: none;
-        -webkit-border-radius: 0;
-        border-radius: 0;
-    }
-    form.search-form input.search-submit {
-        -webkit-appearance: none;
-        -webkit-border-radius: 0;
-        border-radius: 0;
-    }
-}
-@media (max-width: 460px) {
-    a.excerpt-item img.qnrwp-post-featured-img {
-        width: 50px;
-        height: 50px;
-    }
-    a.excerpt-item,
-    a.excerpt-item > div.excerpt-item-block {
-        height: auto;
-    }
-}
 @media (max-width: 320px) { /* iPhone */
-    div#content-row,
-    div#middle-row {
+    .content-row,
+    .middle-row {
         width: 320px;
     }
-    div.sidebar,
-    div#sidebar-left,
-    div#sidebar-right {
+    .sidebar,
+    .sidebar-left,
+    .sidebar-right {
         -webkit-flex: 1 1 320px;
         width: 320px;
     }

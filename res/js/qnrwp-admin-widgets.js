@@ -1,12 +1,14 @@
 /* ==================================================================
  *
- *            QNRWP_A ADMIN WIDGETS JAVASCRIPT 1.0.0
+ *            QNRWP ADMIN WIDGETS JAVASCRIPT
  * 
  * ================================================================== */
 
 
+/**
+ * Any checked input boxes will have value sent to hidden output field on click
+ */
 function qnrwp_collect_pages_options_for_widget(event) {
-    // Any checked input boxes will have value sent to output field on click
     var eT = event.target;
     // Labels contain the inputs, under the DIV...
     var eTP = eT.parentNode.parentNode;

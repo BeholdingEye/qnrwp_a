@@ -78,6 +78,14 @@ var QNR_INTER = {};
      * The minimum percentage size can be specified with the dataset
      * "data-qnr-font-min" attribute, default value being "80".
      * 
+     * If the "data-qnr-obj-max-width" dataset attribute is used and set
+     * to a positive integer, the width of the widget element will be
+     * used for calculating font size instead of total display area. The
+     * dataset sets the maximum width that will activate font resizing.
+     * 
+     * Likewise, if the "data-qnr-win-max-width" attribute is used in 
+     * the same way, the sizing will be according to window width.
+     * 
      * 
      *                         Responsive
      * 
@@ -340,15 +348,55 @@ var QNR_INTER = {};
      * but if their containing DIV is resized down to cause a line wrap
      * between items, they collapse into a menu icon with the class of
      * "qnr-navmenu-icon", using the "quicknr-interface.woff" font for
-     * the glyph.
+     * the glyph. When the navmenu is collapsed, clicking the icon 
+     * reveals the menu.
+     * 
+     * The icon will be classed "qnr-navmenu-icon-open" in default state
+     * and "qnr-navmenu-icon-close" when collapsed menu is shown.
+     * 
+     * If the "data-qnr-menu-icon-still" attribute is present and not
+     * set to "false", the icon will not change on toggle. This is 
+     * useful when the collapsed menu is of type "drawer" (see below).
      * 
      * The UL of a collapsed navmenu is taken out of the widget DIV by
      * the code and placed in a new DIV after the widget, the new DIV
-     * classed as "qnr-navmenu-wrapper". This wrapper has CSS height
-     * of 0 and allows the contained UL to overflow, when the header is
-     * positioned relative, or matches viewport height if header fixed.
+     * classed as "qnr-navmenu-wrapper".
      * 
-     * When the navmenu is collapsed, clicking the icon reveals the menu.
+     * To position an element - such as a logo - to the left of the 
+     * menu, place it before the menu UL in the widget DIV and float it.
+     * 
+     * Hierarchical menus from "qnr-hmenu.js" are supported by the 
+     * navmenu, and there is some cross-reference to both in the code.
+     * 
+     * Two types of the collapsed navmenu are available: the newer
+     * "drawer" and the older "list", and can be set with the dataset
+     * attribute "data-qnr-navmenu-type".
+     * 
+     * Drawer is default and recommended, as the list type is fragile 
+     * due to the fact that for this type 1) the height of the widget 
+     * DIV is assumed to be the same as the height of the containing 
+     * header and 2) it is assumed that height is unchanging.
+     * 
+     * DRAWER TYPE:
+     * 
+     * The menu wrapper as drawer, classed "qnr-navmenu-wrapper-drawer",
+     * will slide in from the left, over a dynamically created shim with
+     * the class of "qnr-background-shim".
+     * 
+     * The menu wrapper is classed "qnr-navmenu-vertical-hidden-left" 
+     * initially, while "qnr-navmenu-vertical-horizontal-drawer" is 
+     * added to the UL in the wrapper.
+     * 
+     * The class "qnr-navmenu-vertical-show-right" is added to the menu
+     * wrapper when drawer is shown, "qnr-navmenu-vertical-hide-left"
+     * while being hidden.
+     * 
+     * LIST TYPE:
+     * 
+     * The wrapper has CSS height of 0 and allows the contained UL to 
+     * overflow, when the header is positioned relative, or matches 
+     * viewport height if header fixed.
+     * 
      * The direction of the menu animation can be set with the 
      * "data-qnr-direction" attribute, either "vertical" (default) or 
      * "horizontal". The menu appears over page content.
@@ -357,15 +405,15 @@ var QNR_INTER = {};
      * animation from the top, and "qnr-navmenu-vertical-horizontal" for
      * horizontal animation. The menu is animated by pure CSS.
      * 
+     * If an element with the class of "qnrwp-has-fixed-header" is found
+     * in the document, the header containing the navmenu is assumed to
+     * have fixed CSS positioning by the code, and the menu wrapper will
+     * be classed "qnr-navmenu-wrapper-fixed". Otherwise the wrapper is 
+     * classed with "qnr-navmenu-wrapper-absolute".
+     * 
      * The navmenu widget is expected to be the topmost object on the
      * page for vertical menu animation to work correctly. If the menu
      * is placed further down the page, use the horizontal animation.
-     * 
-     * To position an element - such as a logo - to the left of the 
-     * menu, place it before the menu UL in the widget DIV and float it.
-     * 
-     * Hierarchical menus from "qnr-hmenu.js" are now supported by the
-     * navmenu, and there is some cross-reference to both in the code.
      * 
      * 
      *                         Scrollers
@@ -387,7 +435,7 @@ var QNR_INTER = {};
      * 
      * The target ID is set on the widget with the "data-qnr-target" 
      * attribute; default target is the BODY object. A pixel scrolling 
-     * offset may also be set with "data-qnr-offset" and may be negative.
+     * offset may also be set with "data-qnr-offset", may be negative.
      * 
      * If the widget is an A tag, the preventDefault() method of the 
      * event object will be used for the scroll to work.
@@ -447,10 +495,18 @@ var QNR_INTER = {};
      * 
      *                         Button Toggle
      * 
-     * Buttons with "qnr-button-toggle" class assigned may have a 
-     * callback function set, controlling action on Up and Down states
-     * of the button. The state of the button is controlled with CSS
-     * classes "qnr-button-toggle-up" and "qnr-button-toggle-down".
+     * Buttons with "qnr-button-toggle" class assigned may have callback
+     * functions set, controlling action on Up and Down states of the 
+     * button. The callback is set with the dataset attribute
+     * "data-qnr-button-toggle-up" / "data-qnr-button-toggle-down".
+     * 
+     * By default, the widget will send a custom event when toggled, 
+     * "QIEvent_ButtonToggle". This can be prevented with the dataset
+     * attribute "data-qnr-button-toggle-events" set to "no". The event
+     * will have its message property set to "up"/"down" as appropriate.
+     * 
+     * The state of the button is controlled with CSS classes 
+     * "qnr-button-toggle-up" and "qnr-button-toggle-down".
      * 
      * 
      *                         Popout Slider
@@ -472,6 +528,41 @@ var QNR_INTER = {};
      * By default, the slider is styled for presentation of an email
      * subscription form, but can be adapted to other uses, such as
      * a menu drawer.
+     * 
+     * 
+     *                         Thumb Strip
+     * 
+     * Elements, usually DIVs, with the "qnr-thumb-strip" class will 
+     * function as a scrolling strip of thumb cells, bounded by 
+     * navigation left and right arrows if there are more cells than
+     * would fit in the strip bounded by its container.
+     * 
+     * If the widget also contains the "qnr-thumb-strip-vertical" class,
+     * the strip will be vertical.
+     * 
+     * With addition of the "qnr-thumb-strip-noanim" class, animation 
+     * can be turned off, useful when thumb cells link to pages.
+     * 
+     * The cells are assigned the "qnr-thumb-strip-cell" class if strip
+     * is horizontal, otherwise "qnr-thumb-strip-cell-vertical".
+     * 
+     * The left/right margin to accommodate navigation arrows and their
+     * spacing is by default 70px (30px per nav arrow + 5px margin). 
+     * This can be changed with the dataset attribute taking an integer 
+     * value, "data-qnr-thumb-strip-margin".
+     * 
+     * Navigation arrows are assigned the "qnr-thumb-strip-nav-left" /
+     * "-right" / "-top" / "-bottom" class as appropriate.
+     * 
+     * A nav arrow will have the "qnr-thumb-strip-nav-disabled" class
+     * applied when no further content is available to be scrolled.
+     * 
+     * Parent object of this widget is assumed to have no horizontal 
+     * padding.
+     * 
+     * At least three cells of the strip must be displayed for the strip
+     * to work correctly. If only one cell is shown it won't work. (The
+     * number of shown cells is always odd.)
      * 
      * 
      *                         Layout Helpers
@@ -629,16 +720,265 @@ var QNR_INTER = {};
     QNR_INTER.popoutSlidersL = [];
     QNR_INTER.popoutSliderObjectsL = [];
     
+    QNR_INTER.thumbstripsL = [];
+    QNR_INTER.thumbstripObjectsL = [];
+    
+    
+    // ----------------------- THUMB STRIP
+    
+    function ThumbStripObject() {
+        this.object = null;
+        this.orientation = "horizontal";
+        this.animate = true; // Cell animation can be turned off, useful when cells link to pages
+        this.arrowsSizePlusMargin = 70; // Assuming 30px per nav arrow + 5px margin (may be set by user)
+        this.cellItemsL = [];
+        this.cellsTotalSize = 0;
+        this.objectWrap = null;
+        this.resizeTimer = null;
+    }
+    ThumbStripObject.prototype.initialize = function() {
+        if (this.object.classList.contains("qnr-thumb-strip-vertical")) this.orientation = "vertical";
+        if (this.object.classList.contains("qnr-thumb-strip-noanim")) this.animate = false;
+        if (this.object.dataset.qnrThumbStripMargin) this.arrowsSizePlusMargin = this.object.dataset.qnrThumbStripMargin;
+        var objCells = this.object.children;
+        for (var i = 0; i < objCells.length; i++) {
+            if (this.orientation == "horizontal") objCells[i].classList.add("qnr-thumb-strip-cell");
+            else objCells[i].classList.add("qnr-thumb-strip-cell-vertical");
+            this.cellItemsL.push(objCells[i]);
+            if (this.animate) {
+                var this1 = this;
+                // We define onclick handlers on cells even if not interactive as then no effect
+                objCells[i].addEventListener("click", function(event) {
+                    this1.thumbCellClicked(event);
+                }, false);
+            }
+            if (this.orientation == "horizontal") {
+                this.cellsTotalSize += objCells[i].offsetWidth;
+            } else { // Vertical
+                this.cellsTotalSize += objCells[i].offsetHeight;
+            }
+        }
+        //if ((this.orientation == "horizontal" && this.cellsTotalSize > this.object.offsetWidth) 
+                //|| (this.orientation != "horizontal" && this.cellsTotalSize > this.object.offsetHeight)) {
+            this.wrapObject();
+            this.disableArrows();
+        //}
+    }
+    ThumbStripObject.prototype.wrapObject = function() {
+        if (this.orientation == "horizontal") {
+            var oWrap = document.createElement("div");
+            oWrap.className = "qnr-thumb-strip-wrap";
+            // Make object width odd number of visible cell widths
+            var objWidth = this.object.offsetWidth;
+            var newObjW = objWidth - this.arrowsSizePlusMargin;
+            var numVisCells = Math.floor(newObjW/this.cellItemsL[0].offsetWidth);
+            newObjW = numVisCells * this.cellItemsL[0].offsetWidth;
+            if (numVisCells/2 == Math.floor(numVisCells/2)) newObjW -= this.cellItemsL[0].offsetWidth;
+            oWrap.style.width = (newObjW + this.arrowsSizePlusMargin) + "px";
+            this.object.style.width = newObjW + "px";
+            // Insert object in wrap
+            this.object.parentNode.insertBefore(oWrap, this.object);
+            oWrap.appendChild(this.object.parentNode.removeChild(this.object));
+            // Create navigation arrows
+            var aLeft = document.createElement("span");
+            aLeft.className = "qnr-thumb-strip-nav-left";
+            this.object.parentNode.insertBefore(aLeft, this.object);
+            var aRight = document.createElement("span");
+            aRight.className = "qnr-thumb-strip-nav-right";
+            this.object.parentNode.appendChild(aRight);
+            this.objectWrap = oWrap;
+            var this2 = this;
+            aLeft.addEventListener("click", function(event) {
+                this2.navClicked(event, "left");
+            }, false);
+            var this3 = this;
+            aRight.addEventListener("click", function(event) {
+                this3.navClicked(event, "right");
+            }, false);
+            if (newObjW >= this.cellsTotalSize) {
+                aLeft.style.visibility = "hidden";
+                aRight.style.visibility = "hidden";
+            } else {
+                aLeft.style.visibility = "visible";
+                aRight.style.visibility = "visible";
+            }
+        } else { // Vertical
+            var oWrap = document.createElement("div");
+            oWrap.className = "qnr-thumb-strip-wrap-vertical";
+            // Make object height odd number of visible cell heights
+            var objHeight = this.object.offsetHeight;
+            var newObjH = objHeight - this.arrowsSizePlusMargin;
+            var numVisCells = Math.floor(newObjH/this.cellItemsL[0].offsetHeight);
+            newObjH = numVisCells * this.cellItemsL[0].offsetHeight;
+            if (numVisCells/2 == Math.floor(numVisCells/2)) newObjH -= this.cellItemsL[0].offsetHeight;
+            oWrap.style.height = (newObjH + this.arrowsSizePlusMargin) + "px";
+            this.object.style.height = newObjH + "px";
+            // Insert object in wrap
+            this.object.parentNode.insertBefore(oWrap, this.object);
+            oWrap.appendChild(this.object.parentNode.removeChild(this.object));
+            // Create navigation arrows
+            var aTop = document.createElement("span");
+            aTop.className = "qnr-thumb-strip-nav-top";
+            this.object.parentNode.insertBefore(aTop, this.object);
+            var aBottom = document.createElement("span");
+            aBottom.className = "qnr-thumb-strip-nav-bottom";
+            this.object.parentNode.appendChild(aBottom);
+            this.objectWrap = oWrap;
+            var this2 = this;
+            aTop.addEventListener("click", function(event) {
+                this2.navClicked(event, "top");
+            }, false);
+            var this3 = this;
+            aBottom.addEventListener("click", function(event) {
+                this3.navClicked(event, "bottom");
+            }, false);
+            if (newObjH >= this.cellsTotalSize) {
+                aTop.style.visibility = "hidden";
+                aBottom.style.visibility = "hidden";
+            } else {
+                aTop.style.visibility = "visible";
+                aBottom.style.visibility = "visible";
+            }
+        }
+    }
+    ThumbStripObject.prototype.navClicked = function(event, side) {
+        if (this.orientation == "horizontal") {
+            cellWidth = this.cellItemsL[0].offsetWidth;
+            contWidth = this.object.offsetWidth;
+            if (side == "left") {
+                // Scroll the whole strip, except for starting and ending cells
+                this.scrollObject(this.object, -1 * contWidth + (cellWidth*1));
+            } else { // Right
+                this.scrollObject(this.object, contWidth - (cellWidth*1));
+            }
+        } else { // Vertical
+            cellHeight = this.cellItemsL[0].offsetHeight;
+            contHeight = this.object.offsetHeight;
+            if (side == "top") {
+                // Scroll the whole strip, except for starting and ending cells
+                this.scrollObject(this.object, -1 * contHeight + (cellHeight*1));
+            } else { // Bottom
+                this.scrollObject(this.object, contHeight - (cellHeight*1));
+            }
+        }
+    }
+    ThumbStripObject.prototype.thumbCellClicked = function(event) {
+        if (this.orientation == "horizontal") {
+            var cell = event.currentTarget; // Current target always the cell, even if child clicked
+            var cellCont = this.object;
+            var cellContWidth = cellCont.offsetWidth;
+            var cellContHalfWidth = Math.round(cellContWidth/2);
+            
+            var cellPos = cell.offsetLeft;
+            var cellWidth = cell.offsetWidth;
+            var cellCenterPos = Math.round(cellPos + cellWidth/2) - cellCont.scrollLeft;
+            
+            var amountToScroll = cellCenterPos - cellContHalfWidth;
+        } else { // Vertical
+            var cell = event.currentTarget;
+            var cellCont = this.object;
+            var cellContHeight = cellCont.offsetHeight;
+            var cellContHalfHeight = Math.round(cellContHeight/2);
+            
+            var cellPos = cell.offsetTop;
+            var cellHeight = cell.offsetHeight;
+            var cellCenterPos = Math.round(cellPos + cellHeight/2) - cellCont.scrollTop;
+            
+            var amountToScroll = cellCenterPos - cellContHalfHeight;
+        }
+        this.scrollObject(cellCont, amountToScroll);
+    }
+    ThumbStripObject.prototype.scrollObject = function(obj, amount) {
+        var aYet = Math.abs(amount);
+        var timer = null;
+        clearTimeout(timer);
+        var this5 = this;
+
+        function step() {
+            sA = Math.round(amount/22);
+            amount = sA*20;
+            if (this5.orientation == "horizontal") {
+                obj.scrollLeft = obj.scrollLeft + sA;
+            } else { // Vertical
+                obj.scrollTop = obj.scrollTop + sA;
+            }
+            aYet -= Math.abs(sA);
+            if (aYet > 1) {
+                timer = setTimeout(step, 10);
+            }
+            else {
+                clearTimeout(timer);
+                this5.disableArrows();
+            }
+        }
+
+        timer = setTimeout(step, 10);
+    }
+    ThumbStripObject.prototype.disableArrows = function() {
+        if (this.orientation == "horizontal") {
+            objQuery("span.qnr-thumb-strip-nav-left", this.objectWrap).classList.remove("qnr-thumb-strip-nav-disabled");
+            objQuery("span.qnr-thumb-strip-nav-right", this.objectWrap).classList.remove("qnr-thumb-strip-nav-disabled");
+            if (this.object.scrollLeft == 0) {
+                objQuery("span.qnr-thumb-strip-nav-left", this.objectWrap).classList.add("qnr-thumb-strip-nav-disabled");
+            } else if (this.object.scrollLeft >= this.cellsTotalSize - this.object.offsetWidth) {
+                objQuery("span.qnr-thumb-strip-nav-right", this.objectWrap).classList.add("qnr-thumb-strip-nav-disabled");
+            }
+        } else { // Vertical 
+            objQuery("span.qnr-thumb-strip-nav-top", this.objectWrap).classList.remove("qnr-thumb-strip-nav-disabled");
+            objQuery("span.qnr-thumb-strip-nav-bottom", this.objectWrap).classList.remove("qnr-thumb-strip-nav-disabled");
+            if (this.object.scrollTop == 0) {
+                objQuery("span.qnr-thumb-strip-nav-top", this.objectWrap).classList.add("qnr-thumb-strip-nav-disabled");
+            } else if (this.object.scrollTop >= this.cellsTotalSize - this.object.offsetHeight) {
+                objQuery("span.qnr-thumb-strip-nav-bottom", this.objectWrap).classList.add("qnr-thumb-strip-nav-disabled");
+            }
+        }
+    }
+    ThumbStripObject.prototype.resize = function(event) {
+        // Wrap-removing code did not work because the object does not resize when wrap removed,
+        //   therefore we let the wrap always be there but invisible if not needed
+        if (this.orientation == "horizontal") {
+            if (deviceIsMobile()) { // TODO eliminate reload...
+                window.setTimeout(function(){
+                    window.location.reload(false);
+                },10);
+            } else this.resizeWrapH();
+        } // No action needed on vertical
+    }
+    ThumbStripObject.prototype.resizeWrapH = function() {
+        // Parent object of wrap assumed to have no horizontal padding
+        var objectWrapParent = this.objectWrap.parentNode;
+        if (this.objectWrap.offsetWidth != objectWrapParent.offsetWidth) {
+            var newObjW = objectWrapParent.offsetWidth - this.arrowsSizePlusMargin;
+            var numVisCells = Math.floor(newObjW/this.cellItemsL[0].offsetWidth);
+            newObjW = numVisCells * this.cellItemsL[0].offsetWidth;
+            newObjW = Math.min(newObjW, this.cellsTotalSize);
+            if (newObjW < this.cellsTotalSize && numVisCells/2 == Math.floor(numVisCells/2)) newObjW -= this.cellItemsL[0].offsetWidth;
+            this.objectWrap.style.width = (newObjW + this.arrowsSizePlusMargin) + "px";
+            this.object.style.width = newObjW + "px";
+            if (newObjW >= this.cellsTotalSize) {
+                objClass("qnr-thumb-strip-nav-left", this.objectWrap).style.visibility = "hidden";
+                objClass("qnr-thumb-strip-nav-right", this.objectWrap).style.visibility = "hidden";
+            } else {
+                objClass("qnr-thumb-strip-nav-left", this.objectWrap).style.visibility = "visible";
+                objClass("qnr-thumb-strip-nav-right", this.objectWrap).style.visibility = "visible";
+            }
+        }
+    }
+
     
     // ----------------------- BUTTON TOGGLE
     
     function ButtonToggleObject() {
         this.object = null;
-        this.downCallback = null; // Set by consumer JS
-        this.upCallback = null;
+        this.downCallback = "";
+        this.upCallback = "";
+        this.events = "yes";
     }
     // Initialize button toggle objects
     ButtonToggleObject.prototype.initialize = function() {
+        if (this.object.dataset.qnrButtonToggleDown) this.downCallback = this.object.dataset.qnrButtonToggleDown;
+        if (this.object.dataset.qnrButtonToggleUp) this.upCallback = this.object.dataset.qnrButtonToggleUp;
+        if (this.object.dataset.qnrButtonToggleEvents) this.events = this.object.dataset.qnrButtonToggleEvents;
         // Set up onclick handlers
         var this1 = this;
         this.object.onclick = function(event) {
@@ -646,19 +986,27 @@ var QNR_INTER = {};
             if (!this1.object.classList.contains("qnr-button-toggle-down")) {
                 if (this1.object.classList.contains("qnr-button-toggle-up")) this1.object.classList.remove("qnr-button-toggle-up");
                 this1.object.classList.add("qnr-button-toggle-down");
-                this1.downAction(this1.downCallback);
+                this1.downAction();
             } else if (!this1.object.classList.contains("qnr-button-toggle-up")) { // Toggle down to up state
                 if (this1.object.classList.contains("qnr-button-toggle-down")) this1.object.classList.remove("qnr-button-toggle-down");
                 this1.object.classList.add("qnr-button-toggle-up");
-                this1.upAction(this1.upCallback);
+                this1.upAction();
             }
         };
     }
-    ButtonToggleObject.prototype.downAction = function(fn) {
-        fn();
+    ButtonToggleObject.prototype.downAction = function() {
+        if (this.events == "yes") this.sendEvent("down");
+        eval(this.downCallback);
     }
-    ButtonToggleObject.prototype.upAction = function(fn) {
-        fn();
+    ButtonToggleObject.prototype.upAction = function() {
+        if (this.events == "yes") this.sendEvent("up");
+        eval(this.upCallback);
+    }
+    ButtonToggleObject.prototype.sendEvent = function(mode) {
+        var e = document.createEvent("MessageEvent");
+        var message = mode;
+        e.initMessageEvent("QIEvent_ButtonToggle", true, true, message, "", "", null, []);
+        this.object.dispatchEvent(e);
     }
     
      
@@ -794,27 +1142,45 @@ var QNR_INTER = {};
     
     function FontresizeObject() {
         this.object                 = null;
-        this.origSize               = 0; // Original size
+        this.origSize               = 0; // Original font size
         this.min                    = 80.0;
         this.rangeF                 = 20.0; // Inverse of min
         // The difference between min and max area that is considered
         this.rangeA                 = 1106400;
+        this.objMaxWidth            = 0; // If set (integer in px), object bounds will be used instead of whole page
+        this.winMaxWidth            = 0; // Win bounds instead
     }
     FontresizeObject.prototype.initialize = function() {
         if (this.object.dataset.qnrFontMin) this.min = parseFloat(this.object.dataset.qnrFontMin);
+        if (this.object.dataset.qnrObjMaxWidth) this.objMaxWidth = parseInt(this.object.dataset.qnrObjMaxWidth);
+        if (this.object.dataset.qnrWinMaxWidth) this.winMaxWidth = parseInt(this.object.dataset.qnrWinMaxWidth);
         this.origSize = parseFloat(window.getComputedStyle(this.object, "").fontSize.replace("px",""));
         this.rangeF = 100.0 - this.min;
         this.resize();
     }
     FontresizeObject.prototype.resize = function() {
-        // Resize according to display area
-        var area = objHtml().clientWidth * objHtml().clientHeight;
-        if (102400 <= area && area <= 1260000) {
-            var delta = 1260000 - area;
-            var factor = delta/this.rangeA;
-            this.object.style.fontSize = (((100.0 - (this.rangeF * factor))/100.0) * this.origSize) + "px";
+        if (!this.objMaxWidth && !this.winMaxWidth) {
+            // Resize according to display area
+            var area = objHtml().clientWidth * objHtml().clientHeight;
+            if (102400 <= area && area <= 1260000) {
+                var delta = 1260000 - area;
+                var factor = delta/this.rangeA;
+                this.object.style.fontSize = (((100.0 - (this.rangeF * factor))/100.0) * this.origSize) + "px";
+            }
+            else if (area > 1260000) this.object.style.fontSize = this.origSize + "px";
+        } else if (this.objMaxWidth) { // Use object bounds
+            if (this.object.offsetWidth < this.objMaxWidth) {
+                var factor = this.object.offsetWidth / this.objMaxWidth;
+                var newSize = (((100.0 - (this.rangeF * (1.0 - factor)))/100.0) * this.origSize) + "px";
+                this.object.style.fontSize = newSize;
+            } else this.object.style.fontSize = this.origSize + "px";
+        } else if (this.winMaxWidth) { // Use window bounds
+            if (objHtml().clientWidth < this.winMaxWidth) {
+                var factor = objHtml().clientWidth / this.winMaxWidth;
+                var newSize = (((100.0 - (this.rangeF * (1.0 - factor)))/100.0) * this.origSize) + "px";
+                this.object.style.fontSize = newSize;
+            } else this.object.style.fontSize = this.origSize + "px";
         }
-        else if (area > 1260000) this.object.style.fontSize = this.origSize + "px";
     }
     
     
@@ -863,8 +1229,12 @@ var QNR_INTER = {};
             var intervalObj = null;
             var obj = that.targetObj;
             var off = that.offset;
-            window.setTimeout(function() {window.clearInterval(intervalObj);}, 1000);
-            intervalObj = window.setInterval(function() {animCallback(obj, intervalObj, ["window scroll",off]);}, 16);
+            window.setTimeout(function() {
+                window.clearInterval(intervalObj);
+            }, 1000);
+            intervalObj = window.setInterval(function() {
+                animCallback(obj, intervalObj, ["window scroll", off]);
+            }, 16);
             if (that.object.tagName == "A") event.preventDefault();
         },true);
     }
@@ -880,7 +1250,7 @@ var QNR_INTER = {};
         this.captionItemsL          = [];
         this.navArrows              = "on";
         this.navStrip               = "on";
-        this.navPreviews            = "on"; // Note thumbPreviews also
+        this.navPreviews            = "off"; // Note thumbPreviews also
         this.cStripDiv              = null;
         this.captions               = "off";
         this.captionDiv             = null;
@@ -910,7 +1280,9 @@ var QNR_INTER = {};
     }
     CarouselObject.prototype.initialize = function() {
         if (!this.object.hasChildNodes() || this.object.children.length < 2) {
-            print("Error: Carousel requires at least 2 DIV or IMG items.");
+            var error1 = "Carousel requires at least 2 DIV or IMG items.";
+            try {error1 = QNRWP_JS_Global.i18n.interface.error1;} catch (e) {}
+            print("Error: "+error1);
             return;
         }
         
@@ -1343,7 +1715,9 @@ var QNR_INTER = {};
             }
         }
         if (!this.slideDivsL.length > 0) {
-            print("Error: At least one DIV is required for slider widget.");
+            var error2 = "At least one DIV is required for slider widget.";
+            try {error2 = QNRWP_JS_Global.i18n.interface.error2;} catch (e) {}
+            print("Error: "+error2);
             return;
         }
         // Get auto slide preference
@@ -1429,7 +1803,9 @@ var QNR_INTER = {};
         // Convert IMG tags to DIVs, with image background
         var imgTagsL = tagObjs("img", this.object);
         if (!imgTagsL || imgTagsL.length < 2) {
-            print("Error: At least two IMG tags required for image animator widget.");
+            var error3 = "At least two IMG tags required for image animator widget.";
+            try {error3 = QNRWP_JS_Global.i18n.interface.error3;} catch (e) {}
+            print("Error: "+error3);
             return;
         }
         // Get animation duration from widget dataset
@@ -1525,13 +1901,18 @@ var QNR_INTER = {};
         this.menuItemsL     = [];
         this.itemHeight     = 0;
         this.menuIcon       = null;
+        this.menuIconStill  = "false"; // Will icon change on toggle?
         this.direction      = "vertical";
         this.menuWrapper    = null;
+        this.bgShim         = null; // Shim used for drawer type
+        this.navmenuType    = "drawer"; // Or "list"
         this.fixedHeader    = false;
         // Record of window scroll when wrapper shown
         this.winScroll      = 0;
     }
     NavmenuObject.prototype.initialize = function() {
+        if (this.object.dataset.qnrMenuIconStill) this.menuIconStill = this.object.dataset.qnrMenuIconStill;
+        if (this.object.dataset.qnrNavmenuType) this.navmenuType = this.object.dataset.qnrNavmenuType;
         if (this.object.dataset.qnrDirection) this.direction = this.object.dataset.qnrDirection;
         this.menuUL = this.object.querySelector("ul");
         this.menuItemsL = this.object.querySelectorAll("ul:first-child > li"); // Not a live collection...
@@ -1553,6 +1934,11 @@ var QNR_INTER = {};
                 this.menuItemsL[x].classList.remove("qnr-hmenu-in-collapsed");
             }
         }
+        if (this.bgShim) {
+            // Remove BG shim
+            this.bgShim.parentNode.removeChild(this.bgShim);
+            this.bgShim = null;
+        }
         if (this.menuWrapper) {
             // Remove wrapper and place menu list back in widget DIV
             this.object.appendChild(this.menuWrapper.removeChild(this.menuUL));
@@ -1560,25 +1946,27 @@ var QNR_INTER = {};
             this.menuWrapper = null;
         }
         if (this.menuIcon) {
-            this.menuUL.classList.remove("qnr-navmenu-vertical");
-            this.menuUL.classList.remove("qnr-navmenu-vertical-horizontal");
-            if (this.direction == "vertical") {
-                this.menuUL.classList.remove("qnr-navmenu-vertical-show");
-                this.menuUL.classList.remove("qnr-navmenu-vertical-hide");
-                this.menuUL.classList.remove("qnr-navmenu-vertical-hidden");
-            }
-            else {
-                this.menuUL.classList.remove("qnr-navmenu-vertical-show-right");
-                this.menuUL.classList.remove("qnr-navmenu-vertical-hide-left");
-                this.menuUL.classList.remove("qnr-navmenu-vertical-hidden-left");
-            }
             this.object.removeChild(this.menuIcon);
             this.menuIcon = null;
-            if (this.fixedHeader) {
-                // Reset height & overflow of navmenu
-                this.menuUL.style.height = "";
-                this.menuUL.style.maxHeight = "";
-                this.menuUL.style.overflow = "";
+            this.menuUL.classList.remove("qnr-navmenu-vertical");
+            this.menuUL.classList.remove("qnr-navmenu-vertical-horizontal");
+            this.menuUL.classList.remove("qnr-navmenu-vertical-horizontal-drawer");
+            if (this.navmenuType != "drawer") {
+                if (this.direction == "vertical") {
+                    this.menuUL.classList.remove("qnr-navmenu-vertical-show");
+                    this.menuUL.classList.remove("qnr-navmenu-vertical-hide");
+                    this.menuUL.classList.remove("qnr-navmenu-vertical-hidden");
+                } else {
+                    this.menuUL.classList.remove("qnr-navmenu-vertical-show-right");
+                    this.menuUL.classList.remove("qnr-navmenu-vertical-hide-left");
+                    this.menuUL.classList.remove("qnr-navmenu-vertical-hidden-left");
+                }
+                if (this.fixedHeader) {
+                    // Reset height & overflow of navmenu
+                    this.menuUL.style.height = "";
+                    this.menuUL.style.maxHeight = "";
+                    this.menuUL.style.overflow = "";
+                }
             }
         }
         for (var i = 0; i < this.menuItemsL.length; i++) {
@@ -1603,36 +1991,48 @@ var QNR_INTER = {};
                 // Create vertical menu, and hide it, up/down or left/right
                 if (!this.menuWrapper) {
                     // Wrap menu UL in new DIV to place it in DOM after widget DIV
+                    if (this.navmenuType == "drawer" && !this.bgShim) {
+                        // BG shim
+                        this.bgShim = document.createElement("div");
+                        this.bgShim.className = "qnr-background-shim";
+                        //objTag("body").insertBefore(this.bgShim, objTag("body").firstChild);
+                        objTag("body").appendChild(this.bgShim);
+                    }
                     this.menuWrapper = document.createElement("div");
                     this.menuWrapper.className = "qnr-navmenu-wrapper";
-                    if (this.fixedHeader) this.menuWrapper.classList.add("qnr-navmenu-wrapper-fixed");
+                    if (this.navmenuType == "drawer") this.menuWrapper.classList.add("qnr-navmenu-wrapper-drawer");
+                    else if (this.fixedHeader) this.menuWrapper.classList.add("qnr-navmenu-wrapper-fixed");
                     else this.menuWrapper.classList.add("qnr-navmenu-wrapper-absolute");
-                    if (this.fixedHeader) this.menuWrapper.style.visibility = "hidden";
+                    if (this.fixedHeader && this.navmenuType != "drawer") this.menuWrapper.style.visibility = "hidden";
                     this.menuWrapper.appendChild(this.object.removeChild(this.menuUL));
-                    if (this.fixedHeader) {
+                    if (this.fixedHeader && this.navmenuType != "drawer") {
                         // Place wrapped menu after menu DIV
                         this.object.parentNode.insertBefore(this.menuWrapper, this.object.nextSibling);
                     } else {
-                        // Place wrapped menu as first object in BODY so that the menu will drop down from under header
+                        // Place wrapped menu as first object in BODY so that the menu will drop down from under header (or over it if drawer)
                         objTag("body").insertBefore(this.menuWrapper, objTag("body").firstChild);
-                        // Place wrapper after navmenu (assumed same height as containing header)
-                        this.menuWrapper.style.top = this.object.offsetHeight+"px";
+                        // Position wrapper after navmenu (assumed same height as containing header)
+                        if (this.navmenuType != "drawer") this.menuWrapper.style.top = this.object.offsetHeight+"px";
                     }
                 }
-                if (this.direction == "vertical") {
-                    this.menuUL.classList.add("qnr-navmenu-vertical");
-                    this.menuUL.classList.add("qnr-navmenu-vertical-hidden");
-                }
-                else {
-                    this.menuUL.classList.add("qnr-navmenu-vertical-horizontal");
-                    this.menuUL.classList.add("qnr-navmenu-vertical-hidden-left");
-                }
-                if (this.fixedHeader) {
-                    // Adjust height & overflow of vertical navmenu to max of window - widget (assumed same height as containing header)
-                    var headerHeight = this.object.offsetHeight;
-                    this.menuUL.style.height = "auto";
-                    this.menuUL.style.maxHeight = (objHtml().clientHeight - headerHeight) + "px";
-                    this.menuUL.style.overflow = "auto";
+                if (this.navmenuType != "drawer") {
+                    if (this.direction == "vertical") {
+                        this.menuUL.classList.add("qnr-navmenu-vertical");
+                        this.menuUL.classList.add("qnr-navmenu-vertical-hidden");
+                    } else {
+                        this.menuUL.classList.add("qnr-navmenu-vertical-horizontal");
+                        this.menuUL.classList.add("qnr-navmenu-vertical-hidden-left");
+                    }
+                    if (this.fixedHeader) {
+                        // Adjust height & overflow of vertical navmenu to max of window - widget (assumed same height as containing header)
+                        var headerHeight = this.object.offsetHeight;
+                        this.menuUL.style.height = "auto";
+                        this.menuUL.style.maxHeight = (objHtml().clientHeight - headerHeight) + "px";
+                        this.menuUL.style.overflow = "auto";
+                    }
+                } else {
+                    this.menuUL.classList.add("qnr-navmenu-vertical-horizontal-drawer");
+                    this.menuWrapper.classList.add("qnr-navmenu-vertical-hidden-left");
                 }
                 // Create icon
                 if (!this.menuIcon) this.createMenuIcon();
@@ -1661,18 +2061,20 @@ var QNR_INTER = {};
         this.object.appendChild(this.menuIcon);
     }
     NavmenuObject.prototype.showVerticalMenu = function() {
-        if (this.fixedHeader && deviceIsMobile()) {
-            this.menuWrapper.style.transition = "none";
-            this.menuWrapper.style.background = "#333";
-            // Disable scroll on BODY
-            this.winScroll = window.pageYOffset;
-            objTag("html").style.overflow = "hidden";
-            objTag("body").style.overflow = "hidden";
-            //alert("inscroll");
+        if (this.navmenuType != "drawer") {
+            if (this.fixedHeader && deviceIsMobile()) {
+                this.menuWrapper.style.transition = "none";
+                this.menuWrapper.style.background = "#333";
+                // Disable scroll on BODY
+                this.winScroll = window.pageYOffset;
+                objTag("html").style.overflow = "hidden";
+                objTag("body").style.overflow = "hidden";
+            }
         }
         // Change the icon to close
         this.menuIcon.classList.remove("qnr-navmenu-icon-open");
         this.menuIcon.classList.add("qnr-navmenu-icon-close");
+        if (this.menuIconStill != "false") this.menuIcon.classList.add("qnr-navmenu-icon-close-still");
         //// Set top of menu wrapper (absolute positioned) to after widget
         //if (this.menuWrapper && window.getComputedStyle(this.object, "").position == "fixed") {
             //this.menuWrapper.style.top = (this.object.offsetTop + this.object.offsetHeight + window.pageYOffset) + "px";
@@ -1683,91 +2085,129 @@ var QNR_INTER = {};
             //this.menuWrapper.style.top = (this.object.offsetTop + this.object.offsetHeight) + "px"; // TODO, offsetTop??
         //}
         // Show vertical menu list
-        if (this.direction == "vertical") {
-            if (this.fixedHeader) {
-                // Adjust overflow & visibility & top of wrapper
-                var headerHeight = this.object.offsetHeight;
-                this.menuWrapper.style.top = headerHeight + "px";
-                this.menuWrapper.style.overflow = "hidden";
-                this.menuWrapper.style.visibility = "visible";
-            }
-            
-            this.menuUL.classList.remove("qnr-navmenu-vertical-hide");
-            this.menuUL.classList.remove("qnr-navmenu-vertical-hidden");
-            this.menuUL.classList.add("qnr-navmenu-vertical");
-            this.menuUL.classList.add("qnr-navmenu-vertical-show");
+        if (this.fixedHeader && this.navmenuType != "drawer") {
+            // Adjust overflow & visibility & top of wrapper
+            var headerHeight = this.object.offsetHeight;
+            this.menuWrapper.style.top = headerHeight + "px";
+            this.menuWrapper.style.overflow = "hidden";
+            this.menuWrapper.style.visibility = "visible";
         }
-        else {
-            this.menuUL.classList.remove("qnr-navmenu-vertical-hide-left");
-            this.menuUL.classList.remove("qnr-navmenu-vertical-hidden-left");
-            this.menuUL.classList.add("qnr-navmenu-vertical-horizontal");
-            this.menuUL.classList.add("qnr-navmenu-vertical-show-right");
+        if (this.navmenuType != "drawer") {
+            if (this.direction == "vertical") {
+                this.menuUL.classList.remove("qnr-navmenu-vertical-hide");
+                this.menuUL.classList.remove("qnr-navmenu-vertical-hidden");
+                this.menuUL.classList.add("qnr-navmenu-vertical");
+                this.menuUL.classList.add("qnr-navmenu-vertical-show");
+            } else {
+                this.menuUL.classList.remove("qnr-navmenu-vertical-hide-left");
+                this.menuUL.classList.remove("qnr-navmenu-vertical-hidden-left");
+                this.menuUL.classList.add("qnr-navmenu-vertical-horizontal");
+                this.menuUL.classList.add("qnr-navmenu-vertical-show-right");
+            }
+        } else {
+            this.bgShim.style.display = "block";
+            var that = this;
+            window.setTimeout(function(){
+                that.bgShim.style.transition = "all 0.3s";
+                that.bgShim.style.opacity = 1;
+            },10);
+            this.menuWrapper.classList.remove("qnr-navmenu-vertical-hide-left");
+            this.menuWrapper.classList.remove("qnr-navmenu-vertical-hidden-left");
+            this.menuUL.classList.add("qnr-navmenu-vertical-horizontal-drawer");
+            this.menuWrapper.classList.add("qnr-navmenu-vertical-show-right");
         }
     }
     NavmenuObject.prototype.hideVerticalMenu = function(event) {
-        if (this.fixedHeader && deviceIsMobile()) {
-            // Enable scroll on BODY
-            objTag("html").style.overflow = "";
-            objTag("body").style.overflow = "";
-            window.scrollBy(0, this.winScroll);
+        if (this.navmenuType != "drawer") {
+            if (this.fixedHeader && deviceIsMobile()) {
+                // Enable scroll on BODY
+                objTag("html").style.overflow = "";
+                objTag("body").style.overflow = "";
+                window.scrollBy(0, this.winScroll);
+            }
         }
         // Change icon to open
         this.menuIcon.classList.remove("qnr-navmenu-icon-close");
+        if (this.menuIconStill != "false") this.menuIcon.classList.remove("qnr-navmenu-icon-close-still");
         this.menuIcon.classList.add("qnr-navmenu-icon-open");
         // Animate only if not clicked on link, not navigating to another page
         if (event.target.tagName != "A") {
             if (this.fixedHeader && deviceIsMobile()) {
-                this.menuWrapper.style.background = "transparent";
+                this.menuWrapper.style.background = "transparent"; // TODO remove for drawer?
                 this.menuWrapper.style.transition = "all 0.4s";
             }
             // Hide vertical menu list
-            if (this.direction == "vertical") {
-                this.menuUL.classList.remove("qnr-navmenu-vertical-show");
-                this.menuUL.classList.remove("qnr-navmenu-vertical-hidden");
-                this.menuUL.classList.add("qnr-navmenu-vertical-hide");
+            if (this.navmenuType != "drawer") {
+                if (this.direction == "vertical") {
+                    this.menuUL.classList.remove("qnr-navmenu-vertical-show");
+                    this.menuUL.classList.remove("qnr-navmenu-vertical-hidden");
+                    this.menuUL.classList.add("qnr-navmenu-vertical-hide");
+                } else {
+                    this.menuUL.classList.remove("qnr-navmenu-vertical-show-right");
+                    this.menuUL.classList.remove("qnr-navmenu-vertical-hidden-left");
+                    this.menuUL.classList.add("qnr-navmenu-vertical-hide-left");
+                }
             } else {
-                this.menuUL.classList.remove("qnr-navmenu-vertical-show-right");
-                this.menuUL.classList.remove("qnr-navmenu-vertical-hidden-left");
-                this.menuUL.classList.add("qnr-navmenu-vertical-hide-left");
+                this.menuWrapper.classList.remove("qnr-navmenu-vertical-show-right");
+                this.menuWrapper.classList.remove("qnr-navmenu-vertical-hidden-left");
+                this.menuWrapper.classList.add("qnr-navmenu-vertical-hide-left");
+                var that = this;
+                window.setTimeout(function(){
+                    that.bgShim.style.transition = "all 0.3s";
+                    that.bgShim.style.opacity = 0;
+                },10);
             }
             var that = this;
             window.setTimeout(function(){
-                if (that.direction == "vertical") {
-                    that.menuUL.classList.add("qnr-navmenu-vertical-hidden");
-                    that.menuUL.classList.remove("qnr-navmenu-vertical-hide");
+                if (that.navmenuType != "drawer") {
+                    if (that.direction == "vertical") {
+                        that.menuUL.classList.add("qnr-navmenu-vertical-hidden");
+                        that.menuUL.classList.remove("qnr-navmenu-vertical-hide");
+                    } else {
+                        that.menuUL.classList.add("qnr-navmenu-vertical-hidden-left");
+                        that.menuUL.classList.remove("qnr-navmenu-vertical-hide-left");
+                    }
+                    if (that.fixedHeader) {
+                        // Reset height of wrapper & overflow
+                        that.menuWrapper.style.top = "";
+                        that.menuWrapper.style.overflow = "";
+                        that.menuWrapper.style.visibility = "hidden";
+                    }
                 } else {
-                    that.menuUL.classList.add("qnr-navmenu-vertical-hidden-left");
-                    that.menuUL.classList.remove("qnr-navmenu-vertical-hide-left");
-                }
-                if (that.fixedHeader) {
-                    // Reset height of wrapper & overflow
-                    that.menuWrapper.style.top = "";
-                    that.menuWrapper.style.overflow = "";
-                    that.menuWrapper.style.visibility = "hidden";
+                    that.menuWrapper.classList.add("qnr-navmenu-vertical-hidden-left");
+                    that.menuWrapper.classList.remove("qnr-navmenu-vertical-hide-left");
+                    that.bgShim.style.display = "none";
                 }
             },600); // Assuming 0.8s animation
         } else { // Clicked out, no anim
             var that = this;
             // Delay destruction of menu, prevent flash of present page before moving on
             window.setTimeout(function(){
-                if (that.fixedHeader && deviceIsMobile()) {
-                    that.menuWrapper.style.background = "transparent";
-                    that.menuWrapper.style.transition = "none";
-                }
-                if (that.direction == "vertical") {
-                    that.menuUL.classList.remove("qnr-navmenu-vertical-show");
-                    that.menuUL.classList.remove("qnr-navmenu-vertical-hide");
-                    that.menuUL.classList.add("qnr-navmenu-vertical-hidden");
+                if (that.navmenuType != "drawer") {
+                    if (that.fixedHeader && deviceIsMobile()) {
+                        that.menuWrapper.style.background = "transparent";
+                        that.menuWrapper.style.transition = "none";
+                    }
+                    if (that.direction == "vertical") {
+                        that.menuUL.classList.remove("qnr-navmenu-vertical-show");
+                        that.menuUL.classList.remove("qnr-navmenu-vertical-hide");
+                        that.menuUL.classList.add("qnr-navmenu-vertical-hidden");
+                    } else {
+                        that.menuUL.classList.remove("qnr-navmenu-vertical-show-right");
+                        that.menuUL.classList.remove("qnr-navmenu-vertical-hide-left");
+                        that.menuUL.classList.add("qnr-navmenu-vertical-hidden-left");
+                    }
+                    if (that.fixedHeader) {
+                        // Reset height of wrapper & overflow
+                        that.menuWrapper.style.top = "";
+                        that.menuWrapper.style.overflow = "";
+                        that.menuWrapper.style.visibility = "hidden";
+                    }
                 } else {
-                    that.menuUL.classList.remove("qnr-navmenu-vertical-show-right");
-                    that.menuUL.classList.remove("qnr-navmenu-vertical-hide-left");
-                    that.menuUL.classList.add("qnr-navmenu-vertical-hidden-left");
-                }
-                if (that.fixedHeader) {
-                    // Reset height of wrapper & overflow
-                    that.menuWrapper.style.top = "";
-                    that.menuWrapper.style.overflow = "";
-                    that.menuWrapper.style.visibility = "hidden";
+                    that.bgShim.style.display = "none";
+                    that.menuWrapper.classList.remove("qnr-navmenu-vertical-show-right");
+                    that.menuWrapper.classList.remove("qnr-navmenu-vertical-hide-left");
+                    that.menuWrapper.classList.add("qnr-navmenu-vertical-hidden-left");
                 }
             },100);
         }
@@ -1868,7 +2308,9 @@ var QNR_INTER = {};
     }
     AccordionObject.prototype.itemWrapAnim = function(obj, mode) {
         var intervalObj = null;
-        window.setTimeout(function(){window.clearInterval(intervalObj);}, 1000);
+        window.setTimeout(function(){
+            window.clearInterval(intervalObj);
+        }, 1000);
         intervalObj = window.setInterval(function(){
             animCallback(obj, intervalObj, [mode]);
             // Update scrollers, accounting for change of scroll
@@ -1947,8 +2389,23 @@ var QNR_INTER = {};
         // Needed for accurate element position measurement on load
         window.scrollBy(0, 1);
         window.scrollBy(0, -1);
+    
         
-        // ----------------------- Toggle Button JS objects
+        // ----------------------- Thumb Strip
+        QNR_INTER.thumbstripsL = classObjs("qnr-thumb-strip");
+        if (QNR_INTER.thumbstripsL.length > 0) {
+            for (var i = 0; i < QNR_INTER.thumbstripsL.length; i++) {
+                // Create a data- id attribute on the thumb strip
+                QNR_INTER.thumbstripsL[i].dataset.qnrThumbStripId = i;
+                // Create a new JS object for the thumb strip
+                QNR_INTER.thumbstripObjectsL.push(new ThumbStripObject());
+                QNR_INTER.thumbstripObjectsL[i].object = QNR_INTER.thumbstripsL[i];
+                // Initialize object
+                QNR_INTER.thumbstripObjectsL[i].initialize();
+            }
+        }
+        
+        // ----------------------- Toggle Button
         
         QNR_INTER.btntogglesL = classObjs("qnr-button-toggle");
         if (QNR_INTER.btntogglesL.length > 0) {
@@ -2255,8 +2712,12 @@ var QNR_INTER = {};
     // ----------------------- ONRESIZE
     
     window.addEventListener("resize", function(event) {
-        if (QNR_INTER.navmenuObject) QNR_INTER.navmenuObject.stylemenu();
         if (QNR_INTER.stickybarObject && QNR_INTER.stickybarObject.madesticky) QNR_INTER.stickybarObject.sizePlaceholder();
+        if (QNR_INTER.thumbstripsL.length > 0) {
+            for (var i = 0; i < QNR_INTER.thumbstripObjectsL.length; i++) {
+                QNR_INTER.thumbstripObjectsL[i].resize();
+            }
+        }
         if (QNR_INTER.aspectkeepersL.length > 0) {
             for (var i = 0; i < QNR_INTER.aspectkeeperObjectsL.length; i++) {
                 QNR_INTER.aspectkeeperObjectsL[i].setHeight();
@@ -2272,6 +2733,7 @@ var QNR_INTER = {};
                 QNR_INTER.carouselObjectsL[i].styleCarousel();
             }
         }
+        if (QNR_INTER.navmenuObject) QNR_INTER.navmenuObject.stylemenu(); // Must be after font resize, so let it be last
     }, false);
     
             
@@ -2688,7 +3150,7 @@ var QNR_HMENU = {};
     // ----------------------- ONLOAD
     
     window.addEventListener("load", function(){
-        // Needed for accurate element position measurement on load
+        // Needed for accurate element position measurement on load TODO ??
         window.scrollBy(0, 1);
         window.scrollBy(0, -1);
         
@@ -2980,19 +3442,19 @@ function classObjs(name, parent) {
     }
 }
 
-function queryObjs(query, parent) {
-    if (!parent) {
-        return document.querySelectorAll(query);
-    } else {
-        return parent.querySelectorAll(query);
-    }
-}
-
 function objQuery(query, parent) {
     if (!parent) {
         return document.querySelector(query);
     } else {
         return parent.querySelector(query);
+    }
+}
+
+function queryObjs(query, parent) {
+    if (!parent) {
+        return document.querySelectorAll(query);
+    } else {
+        return parent.querySelectorAll(query);
     }
 }
 
@@ -3018,6 +3480,22 @@ function tagObjs(tag, parent) {
     } else {
         return parent.getElementsByTagName(tag);
     }
+}
+
+function ancestorObj(obj, queryTag, queryClass) {
+    // Returns first ancestor of given object, with given tag and/or class
+    if (!(queryTag || queryClass) || !obj) return null;
+    var ancestor = obj;
+    do {
+        ancestor = ancestor.parentNode;
+        if (ancestor) {
+            if (queryTag && !ancestor.tagName(queryTag.toUpperCase())) continue;
+            if (!queryClass || (queryClass && ancestor.className && ancestor.classList.contains(queryClass))) {
+                return ancestor;
+            }
+        }
+    } while (ancestor);
+    return null;
 }
 
 // getElementsByName available only on document, not used
@@ -3057,7 +3535,11 @@ function wrapTag(insideText, outsideHTML) {
             if (outsideHTML[1] === undefined) closeTag = "</" + outsideHTML.match(/^<\w+/)[0].slice(1) + ">";
             else closeTag = outsideHTML[1];
         }
-    } catch (e) {console.error("Invalid HTML in call to wrapTag()");}
+    } catch (e) {
+        var error4 = "Invalid HTML.";
+        try {error4 = QNRWP_JS_Global.i18n.interface.error4;} catch (e) {}
+        console.error(error4);
+    }
     return openTag + insideText + closeTag + "\n";
 }
 
@@ -3162,7 +3644,7 @@ function createOrUpdateCookie(cookieName, cookieValue, cookieDuration, cookieSec
     // Chrome doesn't work with cookies correctly when using local "file:///" protocol, but works fine online
     var cExpiry = cookieDuration ? "; expires="+new Date(Date.now() + (cookieDuration * 1000)).toGMTString() : "";
     var cSecure = cookieSecure ? ";secure" : "";
-    document.cookie = cookieName+"="+encodeURIComponent(cookieValue)+cExpiry+cSecure;
+    document.cookie = cookieName+"="+encodeURIComponent(cookieValue)+cExpiry+"; path=/"+cSecure;
 }
 
 function getCookieValue(cookieName) {
@@ -3201,9 +3683,15 @@ function objContainsValue(obj, val) {
 
 function objType(obj) {
     // Returns type of object, more accurate than typeof and instanceof
+    // This won't work if the object (rather than its member) is undefined, an error will result
     try {var rT = Object.prototype.toString.call(obj).split(" ")[1].slice(0,-1).toLowerCase();}
-    catch (e) {var rT = "undefined"};
+    catch (e) {var rT = "undefined";}
     return rT;
+}
+
+function microtime() {
+    // Returns microseconds, a combination of milliseconds and a random number
+    return parseInt(Date.now().toString()+(Math.random()*100000).toString().split(".")[0]);
 }
 
 

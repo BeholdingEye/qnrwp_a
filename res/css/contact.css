@@ -414,7 +414,7 @@ div.subscription-popout.contact-block {
     border-radius: 0;
     overflow: hidden;
     opacity: 1;
-    box-shadow: 0 1px 4px 0 rgba(1,1,1,0.4);
+    box-shadow: 4px 1px 4px 0 rgba(1,1,1,0.4); /* X axis offset so the shadow won't show when popout is hidden */
     background-color: #EEE;
 }
 div.subscription-popout.contact-block,

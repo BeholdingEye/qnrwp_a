@@ -7,7 +7,6 @@
  */
 
 
-
 // ===================== ADMIN DASHBOARD SETTINGS =====================
 
 function qnrwp_admin_settings() {
@@ -30,19 +29,19 @@ function qnrwp_admin_settings() {
   
   add_settings_section(
     'qnrwp_layout_section',       // ID attribute of tags
-    'QNRWP Layout Settings',      // Section title
+    __('QNRWP Layout Settings', 'qnrwp'),      // Section title
     'qnrwp_layout_section',       // Callback to echo section content
     'writing'                     // Admin page to use
   );
   add_settings_section(
     'qnrwp_metatags_section',      // ID attribute of tags
-    'QNRWP Meta Tag Settings',     // Section title
+    __('QNRWP Meta Tag Settings', 'qnrwp'),     // Section title
     'qnrwp_metatags_section',      // Callback to echo section content
     'writing'                      // Admin page to use
   );
   add_settings_section(
     'qnrwp_favicon_section',      // ID attribute of tags
-    'QNRWP Favicon Settings',     // Section title
+    __('QNRWP Favicon Settings', 'qnrwp'),     // Section title
     'qnrwp_favicon_section',      // Callback to echo section content
     'writing'                     // Admin page to use
   );
@@ -50,7 +49,7 @@ function qnrwp_admin_settings() {
   // Use Fixed Header
   add_settings_field(
     'qnrwp_use_fixed_header',         // ID attribute of tags
-    'Use Fixed Header',               // Field title
+    __('Use Fixed Header', 'qnrwp'),               // Field title
     'qnrwp_use_fixed_header',         // Callback to echo input control
     'writing',                        // Admin page to use
     'qnrwp_layout_section'            // Section to use
@@ -59,7 +58,7 @@ function qnrwp_admin_settings() {
   // Use Meta Tags
   add_settings_field(
     'qnrwp_use_meta_tags',          // ID attribute of tags
-    'Use Meta Tags',                // Field title
+    __('Use Meta Tags', 'qnrwp'),                // Field title
     'qnrwp_use_meta_tags',          // Callback to echo input control
     'writing',                      // Admin page to use
     'qnrwp_metatags_section'        // Section to use
@@ -67,7 +66,7 @@ function qnrwp_admin_settings() {
   // Meta Description
   add_settings_field(
     'qnrwp_meta_description',       // ID attribute of tags
-    'Meta Description',             // Field title
+    __('Meta Description', 'qnrwp'),             // Field title
     'qnrwp_meta_description',       // Callback to echo input control
     'writing',                      // Admin page to use
     'qnrwp_metatags_section'        // Section to use
@@ -75,7 +74,7 @@ function qnrwp_admin_settings() {
   // Meta Keywords
   add_settings_field(
     'qnrwp_meta_keywords',         // ID attribute of tags
-    'Meta Keywords',               // Field title
+    __('Meta Keywords', 'qnrwp'),               // Field title
     'qnrwp_meta_keywords',         // Callback to echo input control
     'writing',                     // Admin page to use
     'qnrwp_metatags_section'       // Section to use
@@ -83,7 +82,7 @@ function qnrwp_admin_settings() {
   // Meta Author
   add_settings_field(
     'qnrwp_meta_author',           // ID attribute of tags
-    'Meta Author',                 // Field title
+    __('Meta Author', 'qnrwp'),                 // Field title
     'qnrwp_meta_author',           // Callback to echo input control
     'writing',                     // Admin page to use
     'qnrwp_metatags_section'       // Section to use
@@ -91,7 +90,7 @@ function qnrwp_admin_settings() {
   // Use OpenGraph Tags
   add_settings_field(
     'qnrwp_use_opengraph_tags',          // ID attribute of tags
-    'Use OpenGraph Tags',                // Field title
+    __('Use OpenGraph Tags', 'qnrwp'),                // Field title
     'qnrwp_use_opengraph_tags',          // Callback to echo input control
     'writing',                           // Admin page to use
     'qnrwp_metatags_section'             // Section to use
@@ -99,7 +98,7 @@ function qnrwp_admin_settings() {
   // OpenGraph Title
   add_settings_field(
     'qnrwp_opengraph_title',         // ID attribute of tags
-    'OpenGraph Title',               // Field title
+    __('OpenGraph Title', 'qnrwp'),               // Field title
     'qnrwp_opengraph_title',         // Callback to echo input control
     'writing',                       // Admin page to use
     'qnrwp_metatags_section'         // Section to use
@@ -107,7 +106,7 @@ function qnrwp_admin_settings() {
   // OpenGraph Description
   add_settings_field(
     'qnrwp_opengraph_description',         // ID attribute of tags
-    'OpenGraph Description',               // Field title
+    __('OpenGraph Description', 'qnrwp'),               // Field title
     'qnrwp_opengraph_description',         // Callback to echo input control
     'writing',                             // Admin page to use
     'qnrwp_metatags_section'               // Section to use
@@ -115,7 +114,7 @@ function qnrwp_admin_settings() {
   // OpenGraph Image URL
   add_settings_field(
     'qnrwp_opengraph_imageurl',            // ID attribute of tags
-    'OpenGraph Image URL',                 // Field title
+    __('OpenGraph Image URL', 'qnrwp'),                 // Field title
     'qnrwp_opengraph_imageurl',            // Callback to echo input control
     'writing',                             // Admin page to use
     'qnrwp_metatags_section'               // Section to use
@@ -123,7 +122,7 @@ function qnrwp_admin_settings() {
   // Use Twitter Tags
   add_settings_field(
     'qnrwp_use_twitter_tags',          // ID attribute of tags
-    'Use Twitter Tags',                // Field title
+    __('Use Twitter Tags', 'qnrwp'),                // Field title
     'qnrwp_use_twitter_tags',          // Callback to echo input control
     'writing',                         // Admin page to use
     'qnrwp_metatags_section'           // Section to use
@@ -131,7 +130,7 @@ function qnrwp_admin_settings() {
   // Twitter Title
   add_settings_field(
     'qnrwp_twitter_title',           // ID attribute of tags
-    'Twitter Title',                 // Field title
+    __('Twitter Title', 'qnrwp'),                 // Field title
     'qnrwp_twitter_title',           // Callback to echo input control
     'writing',                       // Admin page to use
     'qnrwp_metatags_section'         // Section to use
@@ -139,7 +138,7 @@ function qnrwp_admin_settings() {
   // Twitter Description
   add_settings_field(
     'qnrwp_twitter_description',           // ID attribute of tags
-    'Twitter Description',                 // Field title
+    __('Twitter Description', 'qnrwp'),                 // Field title
     'qnrwp_twitter_description',           // Callback to echo input control
     'writing',                             // Admin page to use
     'qnrwp_metatags_section'               // Section to use
@@ -147,7 +146,7 @@ function qnrwp_admin_settings() {
   // Twitter Image URL
   add_settings_field(
     'qnrwp_twitter_imageurl',              // ID attribute of tags
-    'Twitter Image URL',                   // Field title
+    __('Twitter Image URL', 'qnrwp'),                   // Field title
     'qnrwp_twitter_imageurl',              // Callback to echo input control
     'writing',                             // Admin page to use
     'qnrwp_metatags_section'               // Section to use
@@ -155,7 +154,7 @@ function qnrwp_admin_settings() {
   // Use Twitter Large Image
   add_settings_field(
     'qnrwp_use_twitter_largeimage',         // ID attribute of tags
-    'Use Twitter Large Image',              // Field title
+    __('Use Twitter Large Image', 'qnrwp'),              // Field title
     'qnrwp_use_twitter_largeimage',         // Callback to echo input control
     'writing',                              // Admin page to use
     'qnrwp_metatags_section'                // Section to use
@@ -163,7 +162,7 @@ function qnrwp_admin_settings() {
   // Twitter Site
   add_settings_field(
     'qnrwp_twitter_site',                  // ID attribute of tags
-    'Twitter Site',                        // Field title
+    __('Twitter Site', 'qnrwp'),                        // Field title
     'qnrwp_twitter_site',                  // Callback to echo input control
     'writing',                             // Admin page to use
     'qnrwp_metatags_section'               // Section to use
@@ -172,7 +171,7 @@ function qnrwp_admin_settings() {
   // Favicon URL
   add_settings_field(
     'qnrwp_favicon_url',                  // ID attribute of tags
-    'Favicon URL',                        // Field title
+    __('Favicon URL', 'qnrwp'),                        // Field title
     'qnrwp_favicon_url',                  // Callback to echo input control
     'writing',                            // Admin page to use
     'qnrwp_favicon_section'               // Section to use
@@ -180,7 +179,7 @@ function qnrwp_admin_settings() {
   // Apple Icon URL
   add_settings_field(
     'qnrwp_appleicon_url',                   // ID attribute of tags
-    'Apple Icon URL',                        // Field title
+    __('Apple Icon URL', 'qnrwp'),                        // Field title
     'qnrwp_appleicon_url',                   // Callback to echo input control
     'writing',                               // Admin page to use
     'qnrwp_favicon_section'                  // Section to use
@@ -218,14 +217,14 @@ function qnrwp_admin_settings() {
   
   add_settings_section(
     'qnrwp_media_section',      // ID attribute of tags
-    'QNRWP Media Settings',     // Section title
+    __('QNRWP Media Settings', 'qnrwp'),     // Section title
     'qnrwp_media_section',      // Callback to echo section content
     'media'                     // Admin page to use
   );
   // JPEG Quality
   add_settings_field(
     'qnrwp_jpeg_quality',       // ID attribute of tags
-    'JPEG Quality',             // Field title
+    __('JPEG Quality', 'qnrwp'),             // Field title
     'qnrwp_jpeg_quality',       // Callback to echo input control
     'media',                    // Admin page to use
     'qnrwp_media_section'       // Section to use
@@ -233,7 +232,7 @@ function qnrwp_admin_settings() {
   // Regenerate Images
   add_settings_field(
     'qnrwp_regenerate_images',  // ID attribute of tags
-    'Regenerate Images',        // Field title
+    __('Regenerate Images', 'qnrwp'),        // Field title
     'qnrwp_regenerate_images',  // Callback to echo input control
     'media',                    // Admin page to use
     'qnrwp_media_section'       // Section to use
@@ -246,39 +245,45 @@ add_action('admin_init', 'qnrwp_admin_settings');
 
 // ----------------------- MEDIA
 
+/**
+ * Callback function for the section; display info about additional sizes
+ */
 function qnrwp_media_section() {
-  // Callback function for the section; display info about additional sizes
   ?>
-  <div style="font-size:1.1em"><p>This theme defines and makes available three additional sizes not listed above:</p>
+  <div style="font-size:1.1em"><p><?php esc_html_e('This theme defines and makes available three additional sizes not listed above:', 'qnrwp'); ?></p>
   <ul>
-  <li><b>QNRWP-Larger</b> - 1600px width, height proportional</li>
-  <li><b>QNRWP-Largest</b> - 2000px width, height proportional</li>
-  <li><b>QNRWP-Extra</b> - 2500px width, height proportional</li>
+  <li><b><?php esc_html_e('QNRWP-Larger', 'qnrwp'); ?></b> - <?php esc_html_e('1600px width, height proportional', 'qnrwp'); ?></li>
+  <li><b><?php esc_html_e('QNRWP-Largest', 'qnrwp'); ?></b> - <?php esc_html_e('2000px width, height proportional', 'qnrwp'); ?></li>
+  <li><b><?php esc_html_e('QNRWP-Extra', 'qnrwp'); ?></b> - <?php esc_html_e('2500px width, height proportional', 'qnrwp'); ?></li>
   </ul>
-  <p>In addition, this theme exposes to the user the fixed and "hidden" <b>Medium Large</b> size, 768px width, height proportional.</p>
+  <p><?php _e('In addition, this theme exposes to the user the fixed and "hidden" <b>Medium Large</b> size, 768px width, height proportional.', 'qnrwp'); ?></p>
   </div>
   <?php
 }
 
+/**
+ * Echos the input control for this option
+ */
 function qnrwp_jpeg_quality() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the JPEG quality setting (1-100) to use when Wordpress generates thumbnails and intermediate image sizes from the upload.</p>
+  <p><?php esc_html_e('Enter the JPEG quality setting (1-100) to use when Wordpress generates thumbnails and intermediate image sizes from the upload.', 'qnrwp'); ?></p>
   <label><input type="number" name="qnrwp_jpeg_quality" id="qnrwp_jpeg_quality" min="1" max="100" required 
                 maxlength="3" size="4" class="small-text" value="<?php echo get_option('qnrwp_jpeg_quality', $default='60'); ?>"></label>
   <?php
 }
 
+/**
+ * Echos the UI, the work is done by regenerate_images_cron() in QNRWP_Imaging
+ */
 function qnrwp_regenerate_images() {
-  // Echo the UI, the work is done by qnrwp_regenerate_images_cron
   ?>
-  <p>Tick the checkbox below so that when you press the <code>Save Changes</code> button, a Wordpress cron job will be started, working in the background on the server, regenerating thumbnail and intermediate size images from their JPEG, PNG and GIF full-size originals, using the settings on this page. Existing images of same sizes as specified on this page will be overwritten, but any other sizes will be left untouched.</p>
+  <p><?php _e('Tick the checkbox below so that when you press the <code>Save Changes</code> button, a Wordpress cron job will be started, working in the background on the server, regenerating thumbnail and intermediate size images from their JPEG, PNG and GIF full-size originals, using the settings on this page. Existing images of same sizes as specified on this page will be overwritten, but any other sizes will be left untouched.', 'qnrwp'); ?></p>
   <hr>
-  <p>In addition, JPEG, PNG and GIF full-size originals wider than 2500px will be reduced and overwritten, matching the QNRWP-Extra size - 2500px width, height proportional. To ensure higher JPEG quality, compression quality will be at the half point between the setting on this page and 100. For example, if the JPEG Quality setting on this page is 60, then 80 will be used for the reduction of full-size originals. This reduction also happens during image upload.</p>
+  <p><?php esc_html_e('In addition, JPEG, PNG and GIF full-size originals wider than 2500px will be reduced and overwritten, matching the QNRWP-Extra size - 2500px width, height proportional. To ensure higher JPEG quality, compression quality will be at the half point between the setting on this page and 100. For example, if the JPEG Quality setting on this page is 60, then 80 will be used for the reduction of full-size originals. This reduction also happens during image upload.', 'qnrwp'); ?></p>
   <hr>
-  <p><span style="color:red;">Processing cannot be cancelled or undone, and depending on the size and number of images, may take up to several hours or days.</span> The website will continue to function normally during this time. Processing may fail if your server employs a timeout preventing long-running scripts - check your server configuration before proceeding. If processing fails part way through, it will start where it left off on the next run, provided that the settings on this page are unchanged; otherwise processing will start again from the beginning. If starting from the beginning after a failed partial run, the previously achieved tally will be shown below for a few minutes before starting from 0 again. Any plugins that change how Wordpress cron jobs work may interfere with image regeneration.</p>
+  <p><span style="color:red;"><?php _e('Processing cannot be cancelled or undone, and depending on the size and number of images, may take up to several hours or days.</span> The website will continue to function normally during this time. Processing may fail if your server employs a timeout preventing long-running scripts - check your server configuration before proceeding. If processing fails part way through, it will start where it left off on the next run, provided that the settings on this page are unchanged; otherwise processing will start again from the beginning. If starting from the beginning after a failed partial run, the previously achieved tally will be shown below for a few minutes before starting from 0 again. Any plugins that change how Wordpress cron jobs work may interfere with image regeneration.', 'qnrwp'); ?></p>
   <hr>
-  <p id="regenerate-images-last">Details of the most recent regeneration will be shown here when the cron job is started.</p>
+  <p id="regenerate-images-last"><?php esc_html_e('Details of the most recent regeneration will be shown here when the cron job is started.', 'qnrwp'); ?></p>
   <p style="margin-left:2em;">
   <?php
   // Get the saved options array from database, or create it
@@ -297,9 +302,15 @@ function qnrwp_regenerate_images() {
   if ($riSavedOptions['start-time'] || $riSavedOptions['error']) {
     $rio = '';
     if ($riSavedOptions['start-time']) {
-      $rio .= 'Last regeneration started: ' . $riSavedOptions['start-time'] . '<br>' . PHP_EOL;
-      $rio .= 'Last regeneration ended: ' . (($riSavedOptions['end-time']) ? $riSavedOptions['end-time'] : ((time() - intval($riSavedOptions['last-update']) >= 1800) ? '<em>image regeneration has stopped prematurely</em>' : '<em>image regeneration is in progress</em>')) . '<br>' . PHP_EOL;
-      $rio .= 'Processed ' . count($riSavedOptions['processed-ids']) . ' of ' . $riSavedOptions['images-count'] . ' full-size original images';
+      $rio .= esc_html__('Last regeneration started', 'qnrwp').': ' . $riSavedOptions['start-time'] . '<br>' . PHP_EOL;
+      $rio .= esc_html__('Last regeneration ended', 'qnrwp').': ' 
+              . (($riSavedOptions['end-time']) 
+              ? $riSavedOptions['end-time'] 
+              : ((time() - intval($riSavedOptions['last-update']) >= 1800) 
+              ? '<em>'.esc_html__('image regeneration has stopped prematurely', 'qnrwp').'</em>' 
+              : '<em>'.esc_html__('image regeneration is in progress', 'qnrwp').'</em>')) . '<br>' . PHP_EOL;
+      $rio .= sprintf(esc_html__('Processed %d of %d full-size original images', 'qnrwp'), count($riSavedOptions['processed-ids']), $riSavedOptions['images-count']);
+      //$rio .= 'Processed ' . count($riSavedOptions['processed-ids']) . ' of ' . $riSavedOptions['images-count'] . ' full-size original images';
       if ($riSavedOptions['error']) $rio .= '<br>' . PHP_EOL; // Prepare the error line if needed
     }
     if ($riSavedOptions['error']) $rio .= '<strong style="color:red;">ERROR: ' . $riSavedOptions['error'] . '</strong>';
@@ -309,8 +320,8 @@ function qnrwp_regenerate_images() {
   ?>
   </p>
   <hr>
-  <p><em>Note that the checkbox is always saved in its unchecked state<?php echo ($riSavedOptions['start-time'] && !$riSavedOptions['end-time'] && time() - intval($riSavedOptions['last-update']) < 1800) ? '. The checkbox is disabled during image regeneration.' : ''; ?></em></p>
-  <p><label><input type="checkbox" value="1" <?php checked(get_option('qnrwp_regenerate_images', $default=0), 1); echo ($riSavedOptions['start-time'] && !$riSavedOptions['end-time'] && time() - intval($riSavedOptions['last-update']) < 1800) ? ' disabled' : ''; ?> name="qnrwp_regenerate_images" id="qnrwp_regenerate_images">Regenerate thumbnails and intermediate image sizes, and reduce originals</label></p>
+  <p><em><?php esc_html_e('Note that the checkbox is always saved in its unchecked state', 'qnrwp'); ?><?php echo ($riSavedOptions['start-time'] && !$riSavedOptions['end-time'] && time() - intval($riSavedOptions['last-update']) < 1800) ? '. '.esc_html__('The checkbox is disabled during image regeneration.', 'qnrwp') : ''; ?></em></p>
+  <p><label><input type="checkbox" value="1" <?php checked(get_option('qnrwp_regenerate_images', $default=0), 1); echo ($riSavedOptions['start-time'] && !$riSavedOptions['end-time'] && time() - intval($riSavedOptions['last-update']) < 1800) ? ' disabled' : ''; ?> name="qnrwp_regenerate_images" id="qnrwp_regenerate_images"><?php esc_html_e('Regenerate thumbnails and intermediate image sizes, and reduce originals', 'qnrwp'); ?></label></p>
   <?php
 }
 
@@ -319,175 +330,216 @@ function qnrwp_regenerate_images() {
 
 // ----------------------- Sections
 
+/**
+ * Callback function for the layout section
+ */
 function qnrwp_layout_section() {
-  // Callback function for the section
   ?>
-  <div style="font-size:1.1em"><p>Layout options for this theme.</p>
+  <div style="font-size:1.1em"><p><?php esc_html_e('Layout options for this theme.', 'qnrwp'); ?></p>
   </div>
   <?php
 }
 
+/**
+ * Callback function for the meta tags section; display info about meta tags
+ */
 function qnrwp_metatags_section() {
-  // Callback function for the section; display info about meta tags
   ?>
-  <div style="font-size:1.1em"><p>This theme supports dynamic generation of meta and OpenGraph / Twitter card tags in the HTML head of every page and post. The settings below define the defaults for the site. On individual posts, the title, description and URL tags will be derived from the post and its Featured Image. If the user prefers to use another image for the tags, a Custom Field may be created in the post interface, named "OpenGraph-Twitter-Card-Image", with the image URL as its value.</p>
+  <div style="font-size:1.1em"><p><?php esc_html_e('This theme supports dynamic generation of meta and OpenGraph / Twitter card tags in the HTML head of every page and post. The settings below define the defaults for the site. On individual posts, the title, description and URL tags will be derived from the post and its Featured Image. If the user prefers to use another image for the tags, a Custom Field may be created in the post interface, named "OpenGraph-Twitter-Card-Image", with the image URL as its value.', 'qnrwp'); ?></p>
   </div>
   <?php
 }
 
+/**
+ * Callback function for the favicon section
+ */
 function qnrwp_favicon_section() {
-  // Callback function for the section
   ?>
-  <div style="font-size:1.1em"><p>This theme does not support the Site Icon API, offering a simpler, lighter solution. The small favicon and the larger Apple icon are supported. They should be uploaded to the Media Library and their URLs entered in the fields below.</p>
+  <div style="font-size:1.1em"><p><?php esc_html_e('This theme does not support the Site Icon API, offering a simpler, lighter solution. The small favicon and the larger Apple icon are supported. They should be uploaded to the Media Library and their URLs entered in the fields below.', 'qnrwp'); ?></p>
   </div>
   <?php
 }
+
 
 // ----------------------- Options
 
+/**
+ * Echoes the input control for fixed header option
+ */
 function qnrwp_use_fixed_header() {
-  // Echo the input control for this option
   ?>
   <p><label><input type="checkbox" value="1" <?php checked(1, get_option('qnrwp_use_fixed_header'), true); ?>
-                name="qnrwp_use_fixed_header" id="qnrwp_use_fixed_header">Fix header to top of window, not moving up out of view on scroll.</label></p>
+                name="qnrwp_use_fixed_header" id="qnrwp_use_fixed_header"><?php esc_html_e('Fix header to top of window, not moving up out of view on scroll', 'qnrwp'); ?></label></p>
   <?php
 }
 
+/**
+ * Echoes the input control for meta tags option
+ */
 function qnrwp_use_meta_tags() {
-  // Echo the input control for this option
   ?>
   <p><label><input type="checkbox" value="1" <?php checked(1, get_option('qnrwp_use_meta_tags'), true); ?>
-                name="qnrwp_use_meta_tags" id="qnrwp_use_meta_tags">Enable the use of meta tags. If unchecked, the following meta tag settings will have no effect, except that they may be used in OpenGraph / Twitter card tags as defined below.</label></p>
+                name="qnrwp_use_meta_tags" id="qnrwp_use_meta_tags"><?php esc_html_e('Enable the use of meta tags. If unchecked, the following meta tag settings will have no effect, except that they may be used in OpenGraph / Twitter card tags as defined below.', 'qnrwp'); ?></label></p>
   <?php
 }
 
+/**
+ * Echoes the input control for OpenGraph tags option
+ */
 function qnrwp_use_opengraph_tags() {
-  // Echo the input control for this option
   ?>
   <p><label><input type="checkbox" value="1" <?php checked(1, get_option('qnrwp_use_opengraph_tags'), true); ?>
-                name="qnrwp_use_opengraph_tags" id="qnrwp_use_opengraph_tags">Enable the use of OpenGraph tags. If unchecked, the following OpenGraph settings will have no effect.</label></p>
+                name="qnrwp_use_opengraph_tags" id="qnrwp_use_opengraph_tags"><?php esc_html_e('Enable the use of OpenGraph tags. If unchecked, the following OpenGraph settings will have no effect.', 'qnrwp'); ?></label></p>
   <?php
 }
 
+/**
+ * Echoes the input control for Twitter tags option
+ */
 function qnrwp_use_twitter_tags() {
-  // Echo the input control for this option
   ?>
   <p><label><input type="checkbox" value="1" <?php checked(1, get_option('qnrwp_use_twitter_tags'), true); ?>
-                name="qnrwp_use_twitter_tags" id="qnrwp_use_twitter_tags">Enable the use of Twitter tags. If unchecked, the following Twitter settings will have no effect.</label></p>
+                name="qnrwp_use_twitter_tags" id="qnrwp_use_twitter_tags"><?php esc_html_e('Enable the use of Twitter tags. If unchecked, the following Twitter settings will have no effect.', 'qnrwp'); ?></label></p>
   <?php
 }
 
+/**
+ * Echoes the input control for meta description tag
+ */
 function qnrwp_meta_description() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the site description for use in the meta description tag. If left blank, the Tagline from General Settings will be used. On individual posts, this tag will be set to the opening paragraph of the post, up to 255 characters in length.</p>
+  <p><?php esc_html_e('Enter the site description for use in the meta description tag. If left blank, the Tagline from General Settings will be used. On individual posts, this tag will be set to the opening paragraph of the post, up to 255 characters in length.', 'qnrwp'); ?></p>
   <textarea id="qnrwp_meta_description" name="qnrwp_meta_description" 
                 class="large-text code" rows="2"><?php echo get_option('qnrwp_meta_description', $default=''); ?></textarea>
   <?php
 }
 
+/**
+ * Echoes the input control for meta keywords tag
+ */
 function qnrwp_meta_keywords() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the keywords for use in the meta keywords tag, up to 255 characters in total, comma separated. If left blank, a keywords meta tag will not be used.</p>
+  <p><?php esc_html_e('Enter the keywords for use in the meta keywords tag, up to 255 characters in total, comma separated. If left blank, a keywords meta tag will not be used.', 'qnrwp'); ?></p>
   <textarea id="qnrwp_meta_keywords" name="qnrwp_meta_keywords" 
                 class="large-text code" rows="2"><?php echo get_option('qnrwp_meta_keywords', $default=''); ?></textarea>
   <?php
 }
 
+/**
+ * Echoes the input control for meta author tag
+ */
 function qnrwp_meta_author() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the author name for use in the meta author tag. If left blank, an author meta tag will not be used.</p>
+  <p><?php esc_html_e('Enter the author name for use in the meta author tag. If left blank, an author meta tag will not be used.', 'qnrwp'); ?></p>
   <input type="text" name="qnrwp_meta_author" id="qnrwp_meta_author" 
                 maxlength="100" class="regular-text" value="<?php echo get_option('qnrwp_meta_author', $default=''); ?>">
   <?php
 }
 
+/**
+ * Echoes the input control for OpenGraph title tag
+ */
 function qnrwp_opengraph_title() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the site title for the OpenGraph title tag. If left blank, Site Title from General Settings will be used. On individual posts, this tag will be set to the title of the post.</p>
+  <p><?php esc_html_e('Enter the site title for the OpenGraph title tag. If left blank, Site Title from General Settings will be used. On individual posts, this tag will be set to the title of the post.', 'qnrwp'); ?></p>
   <input type="text" name="qnrwp_opengraph_title" id="qnrwp_opengraph_title" 
                 maxlength="100" class="regular-text" value="<?php echo get_option('qnrwp_opengraph_title', $default=''); ?>">
   <?php
 }
 
+/**
+ * Echoes the input control for OpenGraph description
+ */
 function qnrwp_opengraph_description() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the site description for use in the OpenGraph description tag. If left blank, the meta description will be used, if it is set above, otherwise the Tagline from General Settings will be used. On individual posts, this tag will be set to the opening paragraph of the post.</p>
+  <p><?php esc_html_e('Enter the site description for use in the OpenGraph description tag. If left blank, the meta description will be used, if it is set above, otherwise the Tagline from General Settings will be used. On individual posts, this tag will be set to the opening paragraph of the post.', 'qnrwp'); ?></p>
   <textarea id="qnrwp_opengraph_description" name="qnrwp_opengraph_description" 
                 class="large-text code" rows="2"><?php echo get_option('qnrwp_opengraph_description', $default=''); ?></textarea>
   <?php
 }
 
+/**
+ * Echoes the input control for OpenGraph image URL
+ */
 function qnrwp_opengraph_imageurl() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the OpenGraph image URL. If left blank, this tag will not be used. On individual posts, a post image will be used as explained in the section introduction above.</p>
+  <p><?php esc_html_e('Enter the OpenGraph image URL. If left blank, this tag will not be used. On individual posts, a post image will be used as explained in the section introduction above.', 'qnrwp'); ?></p>
   <input type="text" name="qnrwp_opengraph_imageurl" id="qnrwp_opengraph_imageurl" 
                 maxlength="255" class="regular-text" value="<?php echo get_option('qnrwp_opengraph_imageurl', $default=''); ?>">
   <?php
 }
 
+/**
+ * Echoes the input control for Twitter title tag
+ */
 function qnrwp_twitter_title() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the site title for the Twitter title tag. If left blank, Site Title from General Settings will be used. On individual posts, this tag will be set to the title of the post.</p>
+  <p><?php esc_html_e('Enter the site title for the Twitter title tag. If left blank, Site Title from General Settings will be used. On individual posts, this tag will be set to the title of the post.', 'qnrwp'); ?></p>
   <input type="text" name="qnrwp_twitter_title" id="qnrwp_twitter_title" 
                 maxlength="100" class="regular-text" value="<?php echo get_option('qnrwp_twitter_title', $default=''); ?>">
   <?php
 }
 
+/**
+ * Echoes the input control for Twitter site description
+ */
 function qnrwp_twitter_description() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the site description for use in the Twitter description tag. If left blank, the meta description will be used, if it is set, otherwise the Tagline from General Settings will be used. On individual posts, this tag will be set to the opening paragraph of the post.</p>
+  <p><?php esc_html_e('Enter the site description for use in the Twitter description tag. If left blank, the meta description will be used, if it is set, otherwise the Tagline from General Settings will be used. On individual posts, this tag will be set to the opening paragraph of the post.', 'qnrwp'); ?></p>
   <textarea id="qnrwp_twitter_description" name="qnrwp_twitter_description" 
                 class="large-text code" rows="2"><?php echo get_option('qnrwp_twitter_description', $default=''); ?></textarea>
   <?php
 }
 
+/**
+ * Echoes the input control for Twitter image URL
+ */
 function qnrwp_twitter_imageurl() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the Twitter image URL. If left blank, this tag will not be used. On individual posts, a post image will be used as explained in the section introduction above.</p>
+  <p><?php esc_html_e('Enter the Twitter image URL. If left blank, this tag will not be used. On individual posts, a post image will be used as explained in the section introduction above.', 'qnrwp'); ?></p>
   <input type="text" name="qnrwp_twitter_imageurl" id="qnrwp_twitter_imageurl" 
                 maxlength="255" class="regular-text" value="<?php echo get_option('qnrwp_twitter_imageurl', $default=''); ?>">
   <?php
 }
 
+/**
+ * Echoes the input control for Twitter large image option
+ */
 function qnrwp_use_twitter_largeimage() {
-  // Echo the input control for this option
   ?>
   <p><label><input type="checkbox" value="1" <?php checked(1, get_option('qnrwp_use_twitter_largeimage'), true); ?>
-                name="qnrwp_use_twitter_largeimage" id="qnrwp_use_twitter_largeimage">Use 'summary_large_image' meta tag instead of 'summary', for a larger image.</label></p>
+                name="qnrwp_use_twitter_largeimage" id="qnrwp_use_twitter_largeimage"><?php esc_html_e('Use "summary_large_image" meta tag instead of "summary", for a larger image', 'qnrwp'); ?></label></p>
   <?php
 }
 
+/**
+ * Echoes the input control for Twitter account handle
+ */
 function qnrwp_twitter_site() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the Twitter account handle (like "@twitter", without the quotes) to associate with this website. If left blank, this tag will not be used.</p>
+  <p><?php esc_html_e('Enter the Twitter account handle (like "@twitter", without the quotes) to associate with this website. If left blank, this tag will not be used.', 'qnrwp'); ?></p>
   <input type="text" name="qnrwp_twitter_site" id="qnrwp_twitter_site" 
                 maxlength="100" class="regular-text" value="<?php echo get_option('qnrwp_twitter_site', $default=''); ?>">
   <?php
 }
 
+/**
+ * Echoes the input control for the favicon URL
+ */
 function qnrwp_favicon_url() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the favicon.ico URL. If left blank, a favicon will not be used. Dimensions should be 32px x 32px.</p>
+  <p><?php esc_html_e('Enter the favicon.ico URL. If left blank, a favicon will not be used. Dimensions should be 32px x 32px.', 'qnrwp'); ?></p>
   <input type="text" name="qnrwp_favicon_url" id="qnrwp_favicon_url" 
                 maxlength="255" class="regular-text" value="<?php echo get_option('qnrwp_favicon_url', $default=''); ?>">
   <?php
 }
 
+/**
+ * Echoes the input control for the Apple icon URL
+ */
 function qnrwp_appleicon_url() {
-  // Echo the input control for this option
   ?>
-  <p>Enter the Apple icon URL. If left blank, an Apple icon will not be used. Dimensions should be 256px x 256px, and the file in PNG format.</p>
+  <p><?php esc_html_e('Enter the Apple icon URL. If left blank, an Apple icon will not be used. Dimensions should be 256px x 256px, and the file in PNG format.', 'qnrwp'); ?></p>
   <input type="text" name="qnrwp_appleicon_url" id="qnrwp_appleicon_url" 
                 maxlength="255" class="regular-text" value="<?php echo get_option('qnrwp_appleicon_url', $default=''); ?>">
   <?php
@@ -496,81 +548,25 @@ function qnrwp_appleicon_url() {
 
 // ===================== FILTERS =====================
 
-
-// ----------------------- Regenerate Images
-
-function qnrwp_pre_update_option_qnrwp_regenerate_images($value, $old_value, $option) {
-  // We use this hook instead of 'updated_option' because the latter does not catch unchanged values
-  // Test for Regenerate Images checkbox being ticked
-  if ($value === 1 || $value === true || $value === 'on' || $value === '1') {
-    // Get the saved options/record array from database, assumed already created as part of UI code
-    $riSavedOptions = get_option('qnrwp_regenerate_images_record');
-    // Return if RI cron is already running (this should be redundant, checkbox should be disabled)
-    if ($riSavedOptions['start-time'] && !$riSavedOptions['end-time'] && time() - intval($riSavedOptions['last-update']) < 1800) return 0;
-    // Get the image attachments from database
-    $images_query = new WP_Query(array( 'post_type' => 'attachment', 
-                                        'post_status' => 'any', 
-                                        'nopaging' => true, 
-                                        'post_mime_type' => array('image/gif','image/jpeg','image/png')));
-    $amL = []; // List post IDs
-    foreach ($images_query->posts as $post) {
-      $amL[] = $post->ID;
-    }
-    unset($images_query); // Get rid of the query object, no longer needed
-    // Set the error if no attachments found
-    if (count($amL) == 0) {
-      $riSavedOptions['error'] = 'No images found';
-    } else { // Images found
-      // Set up the Regenerate Images cron
-      if (!wp_next_scheduled('qnrwp_regenerate_images_hook')) { // Hooked function declared in functions.php
-        $rSched = wp_schedule_single_event(time() + 10, 'qnrwp_regenerate_images_hook');
-        if ($rSched === false) {
-          $riSavedOptions['error'] = 'Regenerate Images cron job could not be scheduled';
-        } else {
-          // Successfully scheduled, update options record for the cron job
-          $riSavedOptions['start-time'] = date('r');
-          if ($riSavedOptions['end-time']) $riSavedOptions['processed-ids'] = 0; // Reset processed-ids if previous run ended fully
-          $riSavedOptions['end-time'] = 0; // Now we can reset end-time as well
-          $riSavedOptions['images-count'] = count($amL);
-          $riSavedOptions['last-update'] = time();
-          $riSavedOptions['error'] = 0;
-        }
-      } else { // Hook already scheduled
-        $riSavedOptions['error'] = 'A Regenerate Images cron job is already scheduled';
-      }
-    }
-    // Save the options/record
-    if (!update_option('qnrwp_regenerate_images_record', $riSavedOptions)) wp_die('ERROR: Database options for Regenerate Images could not be saved.');
-  } // Else checkbox not ticked, do nothing
-  // Always save checkbox unchecked
-  return 0;
+/**
+ * Remove the annoying admin footer parts
+ */
+function qnrwp_remove_admin_footer_text($text) {
+  return '';
 }
-add_filter('pre_update_option_qnrwp_regenerate_images', 'qnrwp_pre_update_option_qnrwp_regenerate_images', 10, 3);
+add_filter('admin_footer_text', 'qnrwp_remove_admin_footer_text', 11);
+function qnrwp_remove_update_footer($content) {
+  return '';
+}
+add_filter('update_footer', 'qnrwp_remove_update_footer', 11);
 
-
-// ----------------------- Other filters
-
-// Empty the annoying admin footer
-add_filter('admin_footer_text', function($text){return '';}, 11);
-add_filter('update_footer', function($content){return '';}, 11);
-
-
-// ===================== ENQUEUE =====================
-
-// ----------------------- Admin stylesheet and script
-add_action('admin_enqueue_scripts', function($hook) {
-  // Enqueue admin stylesheet
-  wp_enqueue_style('qnrwp_a-admin-stylesheet', get_template_directory_uri() . '/qnrwp_a-admin-style.css', null, null);
-  // Media Screen JS (as this is an admin page, we don't bother placing the script at end of page)
-  $currentScreen = get_current_screen();
-  if($currentScreen->id == 'options-media') {
-    wp_enqueue_script('qnrwp_a-admin-media-js', get_template_directory_uri() . '/qnrwp_a-admin-media.js', null, null);
-  }
-});
 
 
 // ===================== ADMIN MENUS =====================
 
+/**
+ * Edit posts menus
+ */
 function qnrwp_edit_posts_menus() {
   //qnrwp_debug_printout(get_categories(), $append=false);
   // Get categories for main menus
@@ -591,30 +587,36 @@ function qnrwp_edit_posts_menus() {
       // Create main menu for this category
       $catCount += 1;
       //add_menu_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '', string $icon_url = '', int $position = null )
-      add_menu_page('Edit '.esc_attr($cat->name).' Posts', // Page title
-                    esc_attr($cat->name).' Posts', // Menu title (no 'Edit')
+      add_menu_page(sprintf(__('Edit %s Posts', 'qnrwp'), esc_attr($cat->name)), // Page title
+                    sprintf(__('%s Posts', 'qnrwp'), esc_attr($cat->name)), // Menu title (no 'Edit')
                     'edit_posts',
                     'edit.php?category_name='.$cat->slug, '', 'dashicons-edit', 5+$catCount);
       foreach ($catPosts as $key => $catPost) {
         if ($key == 0) {
           // Account for the first submenu-as-duplicate of new top menu problem, neatly solving as "All CAT Posts"
           add_submenu_page('edit.php?category_name='.$cat->slug, 
-                            'Posts', 
-                            'All '.esc_attr($cat->name).' Posts', 
+                            __('Posts', 'qnrwp'), 
+                            sprintf(__('All %s Posts', 'qnrwp'), esc_attr($cat->name)), 
                             'edit_posts', 
-                            'edit.php?category_name='.$cat->slug, '');
+                            'edit.php?category_name='.$cat->slug, 
+                            '');
         }
         add_submenu_page('edit.php?category_name='.$cat->slug, 
-                          'Edit Post', 
+                          __('Edit Post', 'qnrwp'), 
                           esc_attr($catPost->post_title), 
                           'edit_posts', 
-                          'post.php?post='.$catPost->ID.'&action=edit', '');
+                          'post.php?post='.$catPost->ID.'&action=edit', 
+                          '');
       }
     }
   }
 }
 add_action('admin_menu', 'qnrwp_edit_posts_menus');
 
+
+/**
+ * Edit pages menus
+ */
 function qnrwp_edit_pages_menus() {
   $pages = get_posts(array(
                               'post_type' => 'page',
@@ -626,20 +628,29 @@ function qnrwp_edit_pages_menus() {
     // Omit widget-defining pages
     if ($pageCount < 20 && stripos($page->post_title, 'QNRWP-Widget-') === false 
             && ($page->post_parent == 0 || stripos(get_post($page->post_parent)->post_title, 'QNRWP-Widget-') === false)) {
-      add_submenu_page('edit.php?post_type=page', 
-                        'Edit Page', 
-                        esc_attr($page->post_title), 
-                        'edit_pages', 
-                        'post.php?post='.$page->ID.'&action=edit', '');
+      add_submenu_page(
+                        'edit.php?post_type=page',                  // Parent menu slug
+                        __('Edit Page', 'qnrwp'),                   // Page title
+                        esc_attr($page->post_title),                // Submenu title
+                        'edit_pages',                               // User capability
+                        'post.php?post='.$page->ID.'&action=edit',  // Submenu slug
+                        ''                                          // Callback
+                        );
       $pageCount += 1;
     }
   }
 }
 add_action('admin_menu', 'qnrwp_edit_pages_menus');
 
-// Filter submenu NOT USED as it only affects highlighting of submenu item, see: TODO
-// https://stackoverflow.com/questions/2308569/manually-highlight-wordpress-admin-menu-item
-add_filter('submenu_file', function($submenu_file, $parent_file) {
+
+/**
+ * Filter submenu NOT USED as it only affects highlighting of submenu item
+ * 
+ * TODO
+ * 
+ * https://stackoverflow.com/questions/2308569/manually-highlight-wordpress-admin-menu-item
+ */
+function qnrwp_filter_submenu($submenu_file, $parent_file) {
   //qnrwp_debug_printout('Submenus debug');
   //qnrwp_debug_printout($submenu_file, $append=true);
   //qnrwp_debug_printout($parent_file, $append=true);
@@ -652,26 +663,27 @@ add_filter('submenu_file', function($submenu_file, $parent_file) {
     $submenu_file = 'edit.php?category_name='.$_GET['category_name'];
   }
   return $submenu_file;
-}, 10, 2);
+}
+add_filter('submenu_file', 'qnrwp_filter_submenu', 10, 2);
 
 
 // ===================== SIMPLIFY DASHBOARD FOR NON-ADMINS =====================
 
-if (!current_user_can('manage_options')) {
-
-  add_action('admin_init', function() {
-    
+if (!current_user_can('manage_options') && (isset(get_option('qnrwp_settings_array')['admin-simplify']) && get_option('qnrwp_settings_array')['admin-simplify'] == 1)) {
+  
+  /**
+   * Simplify admin for non-admins
+   */
+  function qnrwp_admin_simplify() {
     // ----------------------- Redirect from Dashboard to Posts
     if (strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/index.php') !== false) {
       wp_redirect('edit.php');
       exit;
     }
-    
     // ----------------------- Remove 'Drag boxes here' on Dashboard
     // NOT USED, as we now redirect from Dashboard (and this spoils collapse bars generally)
     // Disable the feature by deregistering script
     //wp_deregister_script('postbox');
-    
     // ----------------------- Prepare global for hiding widget definition pages
     // We do this here to avoid impossible recursion problem in pre_get_posts below,
     //   taking care to control the flow with state of the qnrwpWidgetPageIDs global
@@ -699,30 +711,42 @@ if (!current_user_can('manage_options')) {
         }
       } // Else do nothing, the global is set
     }
-  }); // End of admin_init
+  }
+  add_action('admin_init', 'qnrwp_admin_simplify');
   
-  // ----------------------- Hide Pages defining QNRWP Widgets
-  // $query is global $wp_query object passed by reference
-  add_action('pre_get_posts', function($query) {
+  
+  /**
+   * Hide Pages defining QNRWP Widgets
+   */
+  function qnrwp_hide_widget_pages($query) {
+    // $query is global $wp_query object passed by reference
     if ($query->is_admin && !$query->in_the_loop && strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/edit.php') !== false 
             && strpos($_SERVER['QUERY_STRING'], 'post_type=page') !== false && isset($GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'])) {
       // If we pass the test, we assume we're in WP_Posts_List_Table, can change query
       $query->set('post__not_in', $GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs']);
     }
-  });
+  }
+  add_action('pre_get_posts', 'qnrwp_hide_widget_pages');
   
-  // ----------------------- Change posts count to actual
-  add_filter('wp_count_posts', function($counts, $type='page', $perm='readable') {
+  
+  /**
+   * Change posts count to actual
+   */
+  function qnrwp_posts_count_to_actual($counts, $type='page', $perm='readable') {
     if (strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/edit.php') !== false && strpos($_SERVER['QUERY_STRING'], 'post_type=page') !== false 
             && isset($GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'])) {
       //qnrwp_debug_printout($counts, $append=false);
       $counts->publish -= count($GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs']); // We assume widget definition pages are published
     }
     return $counts;
-  }, 10, 3);
+  }
+  add_filter('wp_count_posts', 'qnrwp_posts_count_to_actual', 10, 3);
   
-  // ----------------------- Remove from vertical menu on the left
-  add_action('admin_menu', function() {
+  
+  /**
+   * Remove from vertical menu on the left
+   */
+  function qnrwp_remove_admin_menu_items() {
     remove_menu_page('index.php');                  // Dashboard
     remove_menu_page('jetpack');                    // Jetpack*
     //remove_menu_page('edit.php');                   // Posts
@@ -739,10 +763,14 @@ if (!current_user_can('manage_options')) {
     remove_submenu_page('edit.php', 'edit-tags.php?taxonomy=category');
     // Remove Tags submenu under Posts
     remove_submenu_page('edit.php', 'edit-tags.php?taxonomy=post_tag');
-  }, 999);
-    
-  // ----------------------- Edit top Toolbar
-  add_action('admin_bar_menu', function($wp_admin_bar) {
+  }
+  add_action('admin_menu', 'qnrwp_remove_admin_menu_items', 999);
+  
+  
+  /**
+   * Edit top Toolbar
+   */
+  function qnrwp_edit_top_toolbar($wp_admin_bar) {
     // Remove comments item as we don't use comments
     $wp_admin_bar->remove_node('comments');
     // Remove new-user item from New menu
@@ -750,16 +778,24 @@ if (!current_user_can('manage_options')) {
     $wp_admin_bar->remove_node('user-info');
     // Edit 'Howdy,' on the right
     $my_account = $wp_admin_bar->get_node('my-account');
-    $newtitle = str_replace('Howdy,', 'Logged in as', $my_account->title);
+    $newtitle = str_replace('Howdy,', __('Logged in as', 'qnrwp'), $my_account->title);
     // add_node() will update existing
     $wp_admin_bar->add_node(array('id' => 'my-account', 'title' => $newtitle));
-  }, 999);
+  }
+  add_action('admin_bar_menu', 'qnrwp_edit_top_toolbar', 999);
 
   // ----------------------- Edit At a Glance in Dashboard (not needed any more)
   // Return empty to get rid of 'WordPress xx running xx theme'
   //add_filter('update_right_now_text', function() {return '';});
   
-  // ----------------------- Remove Screen Options tab
-  add_filter('screen_options_show_screen', function() {return false;});
+  
+  /**
+   * Remove Screen Options tab
+   */
+  function qnrwp_remove_screen_options_tab() {
+    return false;
+  }
+  add_filter('screen_options_show_screen', 'qnrwp_remove_screen_options_tab');
+  
 } // End of simplifying
 
