@@ -9,10 +9,17 @@ final class QNRWP {
   
   use QNRWP_Singleton_Trait;
   
+  
   /**
-   * QNRWP_Imaging instance
+   * QNRWP_Admin_Options instance
    */
-  public $imaging = null;
+  public $admin = null;
+  
+  
+  /**
+   * QNRWP_Widgets instance
+   */
+  public $widgets = null;
   
   
   /**
@@ -22,15 +29,21 @@ final class QNRWP {
   
   
   /**
-   * QNRWP_Admin_Options instance
-   */
-  public $admin = null;
-  
-  
-  /**
    * QNRWP_Shortcodes instance
    */
   public $shortcodes = null;
+  
+  
+  /**
+   * QNRWP_Imaging instance
+   */
+  public $imaging = null;
+  
+  
+  /**
+   * QNRWP_Metabox_User_Class instance
+   */
+  public $metabox_user_class = null;
   
   
   /**
@@ -76,6 +89,7 @@ final class QNRWP {
     $this->constants();
     $this->set_JS_i18n();
     $this->set_JS_Global();
+    $this->global_settings();
     $this->includes();
     $this->hooks();
   }
@@ -149,6 +163,15 @@ final class QNRWP {
   
   
   /**
+   * Sets our global of theme settings
+   */
+  private function global_settings() {
+    $themeSettings = get_option('qnrwp_settings_array');
+    if ($themeSettings) $GLOBALS['QNRWP_GLOBALS']['settingsArray'] = $themeSettings; 
+  }
+  
+  
+  /**
    * Includes code files, instantiates classes
    */
   public function includes() {
@@ -178,7 +201,7 @@ final class QNRWP {
     // Widgets
     if (!class_exists('QNRWP_Widgets')) {
       require_once QNRWP_DIR . 'inc/classes/class-qnrwp-widgets.php';
-      $this->news = QNRWP_Widgets::instance();
+      $this->widgets = QNRWP_Widgets::instance();
     }
     
     // News
@@ -202,7 +225,7 @@ final class QNRWP {
     // Metaboxes
     if (!class_exists('QNRWP_Metabox_User_Class')) {
       require_once QNRWP_DIR . 'inc/classes/class-qnrwp-metabox-user-class.php';
-      $this->shortcodes = QNRWP_Metabox_User_Class::instance();
+      $this->metabox_user_class = QNRWP_Metabox_User_Class::instance();
     }
   }
   
@@ -722,7 +745,7 @@ final class QNRWP {
     
     add_filter('emoji_svg_url', '__return_false');
   }
-  
+
   
   /**
    * Layout type getter

@@ -27,7 +27,7 @@ set_error_handler('exception_error_handler');
 <meta charset="<?php bloginfo('charset'); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <?php
-// Create meta tags, per post or generic
+
 echo QNRWP_Meta_Tags::meta_opengraph_twitter_tags();
 // Debugging printout block for testing
 //qnrwp_debug_printout(array('have posts: ' => have_posts(),
@@ -42,15 +42,12 @@ echo QNRWP_Meta_Tags::meta_opengraph_twitter_tags();
                             //'single post title: ' => single_post_title('', $display=false),
                             //'wp title: ' => wp_title('', $display=false),
                             //'title: ' => get_the_title()),$append=false);
-// Favicon and Apple icon
-if (get_option('qnrwp_favicon_url')) { // From Writing Settings page
-  echo '<!-- Favicon -->' . PHP_EOL;
-  echo '<link rel="shortcut icon" type="image/x-icon" href="' . esc_attr(esc_url(trim(get_option('qnrwp_favicon_url')))) . '">' . PHP_EOL;
-}
-if (get_option('qnrwp_appleicon_url'))
-  echo '<link rel="apple-touch-icon" href="' . esc_attr(esc_url(trim(get_option('qnrwp_appleicon_url')))) . '">' . PHP_EOL;
+
+QNRWP_UI_Parts::favicon_appleicon();
+
 // Title is handled by the title-tag feature
 wp_head(); // Required
+
 ?>
 </head>
 <body <?php body_class('qnr-winscroller'); ?> data-qnr-offset="-4" style="visibility:hidden;opacity:0;">
@@ -205,8 +202,12 @@ wp_head(); // Required
     // ----------------------- Header Row
     
     echo '<!-- Header Row -->'.PHP_EOL;
+    $headerFixed = isset($GLOBALS['QNRWP_GLOBALS']['settingsArray']['header-fixed'])?$GLOBALS['QNRWP_GLOBALS']['settingsArray']['header-fixed']:1;
     echo '<div id="header-row" class="header-row widget-area'
-            .(get_option('qnrwp_use_fixed_header', $default=0)?' qnrwp-has-fixed-header':'').'">' .PHP_EOL;
+            .($headerFixed
+            ?' qnrwp-has-fixed-header'
+            :'')
+            .'">' .PHP_EOL;
     QNRWP_UI_Parts::cookie_notice();
     if (QNRWP_Widgets::is_active_sidebar_widgets('qnrwp-row-header')) {
       dynamic_sidebar('qnrwp-row-header');

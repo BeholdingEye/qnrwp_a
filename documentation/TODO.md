@@ -4,9 +4,6 @@ TODO
 
 Still to get done:
 
-
-* No Tags on Post edit page.
-
 * No custom meta field.
 
 * Fix submenu styling.
@@ -32,8 +29,6 @@ Still to get done:
 * Contact form Mailchimp integration.
 
 * get_search_query()
-
-* Customizer selective_refresh_widgets
 
 * Add swipe to QI carousel.
 

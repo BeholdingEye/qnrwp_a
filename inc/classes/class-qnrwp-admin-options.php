@@ -101,6 +101,11 @@ final class QNRWP_Admin_Options {
     $cookieNoticePostid = isset($input['cookie-notice-postid']) ? $input['cookie-notice-postid'] : 0;
     $cookieNoticeLinkText = isset($input['cookie-notice-linktext']) ? $input['cookie-notice-linktext'] : '';
     
+    $faviconURL = isset($input['favicon-url']) ? $input['favicon-url'] : '';
+    $appleiconURL = isset($input['appleicon-url']) ? $input['appleicon-url'] : '';
+    
+    $headerFixed = isset($input['header-fixed']) ? $input['header-fixed'] : 0;
+    
     $codeCombine = isset($input['code-combine']) ? $input['code-combine'] : 0;
     
     $newsFeaturedImage = isset($input['news-featured-image']) ? $input['news-featured-image'] : 0;
@@ -116,6 +121,11 @@ final class QNRWP_Admin_Options {
     $valArray['cookie-notice-postid'] = $cookieNoticePostid;
     $valArray['cookie-notice-linktext'] = $cookieNoticeLinkText;
     
+    $valArray['favicon-url'] = $faviconURL;
+    $valArray['appleicon-url'] = $appleiconURL;
+    
+    $valArray['header-fixed'] = $headerFixed;
+    
     $valArray['code-combine'] = $codeCombine;
     
     $valArray['news-featured-image'] = $newsFeaturedImage;
@@ -124,7 +134,6 @@ final class QNRWP_Admin_Options {
     
     $valArray['widget-visibility'] = $widgetVisibility;
     return $valArray;
-    return $input;
   }
 
 } // End QNRWP_Admin_Options

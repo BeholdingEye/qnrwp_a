@@ -130,12 +130,68 @@
                                       value="<?php 
                                         if (isset(get_option('qnrwp_settings_array')['cookie-notice-linktext'])
                                                   && !empty(get_option('qnrwp_settings_array')['cookie-notice-linktext']))
-                                          echo esc_html(get_option('qnrwp_settings_array')['cookie-notice-linktext']); 
-                                        else echo esc_html('Details');
+                                          echo esc_attr(get_option('qnrwp_settings_array')['cookie-notice-linktext']); 
+                                        else echo esc_attr('Details');
                                         ?>"></td>
           </tr>
           
         </table>
+        
+        <hr>
+        
+        <h2 class="title"><?php esc_html_e('Favicon', 'qnrwp'); ?></h2>
+        <p><?php esc_html_e('This theme does not support the Site Icon API, offering a simpler, lighter solution. The small favicon and the larger Apple icon are supported. They should be uploaded to the Media Library and their URLs entered in the fields below.', 'qnrwp'); ?></p>
+        
+        <table class="form-table">
+          <!-- Favicon URL -->
+          <tr valign="top">
+            <th scope="row"><?php esc_html_e('Favicon URL', 'qnrwp') ?></th>
+            <td><p><?php esc_html_e('Enter the favicon.ico URL. If left blank, a favicon will not be used. Dimensions should be 32px x 32px.', 'qnrwp') ?></p>
+            <input type="text" name="qnrwp_settings_array[favicon-url]" id="qnrwp_settings_array_favicon-url" 
+                                      style="width:100%;max-width:700px;"
+                                      value="<?php 
+                                        if (isset(get_option('qnrwp_settings_array')['favicon-url'])
+                                                  && !empty(get_option('qnrwp_settings_array')['favicon-url']))
+                                          echo esc_attr(get_option('qnrwp_settings_array')['favicon-url']); 
+                                        ?>"></td>
+          </tr>
+          
+          <!-- Apple icon URL -->
+          <tr valign="top">
+            <th scope="row"><?php esc_html_e('Apple icon URL', 'qnrwp') ?></th>
+            <td><p><?php esc_html_e('Enter the Apple icon URL. If left blank, an Apple icon will not be used. Dimensions should be 256px x 256px, and the file in PNG format.', 'qnrwp') ?></p>
+            <input type="text" name="qnrwp_settings_array[appleicon-url]" id="qnrwp_settings_array_appleicon-url" 
+                                      style="width:100%;max-width:700px;"
+                                      value="<?php 
+                                        if (isset(get_option('qnrwp_settings_array')['appleicon-url'])
+                                                  && !empty(get_option('qnrwp_settings_array')['appleicon-url']))
+                                          echo esc_attr(get_option('qnrwp_settings_array')['appleicon-url']); 
+                                        ?>"></td>
+          </tr>
+          
+        </table>
+        
+        <hr>
+    
+        <h2 class="title"><?php esc_html_e('Layout options', 'qnrwp'); ?></h2>
+        <p><?php esc_html_e('Layout preferences.', 'qnrwp'); ?></p>
+        
+        <table class="form-table">
+          <!-- Checkbox: Fixed header -->
+          <tr valign="top">
+            <th scope="row"><?php esc_html_e('Fixed header', 'qnrwp'); ?></th>
+            <td><label><input type="checkbox" name="qnrwp_settings_array[header-fixed]" id="qnrwp_settings_array_header-fixed" 
+                                    value="1" <?php 
+                                      echo isset(get_option('qnrwp_settings_array')['header-fixed'])
+                                      ? checked(1, get_option('qnrwp_settings_array')['header-fixed'], false)
+                                      : 'checked="checked"';
+                                      ?>> 
+                                    <?php esc_html_e('Fix header to top of window, not moving up out of view on scroll', 'qnrwp'); ?></label></td>
+          </tr>
+          
+        </table>
+        
+        <hr>
           
         <h2 class="title"><?php esc_html_e('Widgets', 'qnrwp'); ?></h2>
         <p><?php esc_html_e('Widgets preferences.', 'qnrwp'); ?></p>
@@ -155,6 +211,8 @@
           </tr>
           
         </table>
+        
+        <hr>
           
         <h2 class="title"><?php esc_html_e('News posts', 'qnrwp'); ?></h2>
         <p><?php esc_html_e('News posting preferences.', 'qnrwp'); ?></p>
@@ -174,6 +232,8 @@
           </tr>
           
         </table>
+        
+        <hr>
     
         <h2 class="title"><?php esc_html_e('Code options', 'qnrwp'); ?></h2>
         <p><?php esc_html_e('Coding preferences.', 'qnrwp'); ?></p>
@@ -193,6 +253,8 @@
           </tr>
           
         </table>
+        
+        <hr>
           
         <h2 class="title"><?php esc_html_e('Admin interface', 'qnrwp'); ?></h2>
         <p><?php esc_html_e('Admin interface preferences.', 'qnrwp'); ?></p>
@@ -212,6 +274,8 @@
           </tr>
           
         </table>
+        
+        <hr>
 
         <?php submit_button(); ?>
       </form>

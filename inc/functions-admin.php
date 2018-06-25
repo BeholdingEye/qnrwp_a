@@ -28,31 +28,10 @@ function qnrwp_admin_settings() {
    */
   
   add_settings_section(
-    'qnrwp_layout_section',       // ID attribute of tags
-    __('QNRWP Layout Settings', 'qnrwp'),      // Section title
-    'qnrwp_layout_section',       // Callback to echo section content
-    'writing'                     // Admin page to use
-  );
-  add_settings_section(
     'qnrwp_metatags_section',      // ID attribute of tags
     __('QNRWP Meta Tag Settings', 'qnrwp'),     // Section title
     'qnrwp_metatags_section',      // Callback to echo section content
     'writing'                      // Admin page to use
-  );
-  add_settings_section(
-    'qnrwp_favicon_section',      // ID attribute of tags
-    __('QNRWP Favicon Settings', 'qnrwp'),     // Section title
-    'qnrwp_favicon_section',      // Callback to echo section content
-    'writing'                     // Admin page to use
-  );
-  
-  // Use Fixed Header
-  add_settings_field(
-    'qnrwp_use_fixed_header',         // ID attribute of tags
-    __('Use Fixed Header', 'qnrwp'),               // Field title
-    'qnrwp_use_fixed_header',         // Callback to echo input control
-    'writing',                        // Admin page to use
-    'qnrwp_layout_section'            // Section to use
   );
   
   // Use Meta Tags
@@ -168,23 +147,6 @@ function qnrwp_admin_settings() {
     'qnrwp_metatags_section'               // Section to use
   );
   
-  // Favicon URL
-  add_settings_field(
-    'qnrwp_favicon_url',                  // ID attribute of tags
-    __('Favicon URL', 'qnrwp'),                        // Field title
-    'qnrwp_favicon_url',                  // Callback to echo input control
-    'writing',                            // Admin page to use
-    'qnrwp_favicon_section'               // Section to use
-  );
-  // Apple Icon URL
-  add_settings_field(
-    'qnrwp_appleicon_url',                   // ID attribute of tags
-    __('Apple Icon URL', 'qnrwp'),                        // Field title
-    'qnrwp_appleicon_url',                   // Callback to echo input control
-    'writing',                               // Admin page to use
-    'qnrwp_favicon_section'                  // Section to use
-  );
-  
   register_setting('writing', 'qnrwp_use_meta_tags');
   register_setting('writing', 'qnrwp_use_opengraph_tags');
   register_setting('writing', 'qnrwp_use_twitter_tags');
@@ -199,9 +161,6 @@ function qnrwp_admin_settings() {
   register_setting('writing', 'qnrwp_twitter_imageurl');
   register_setting('writing', 'qnrwp_use_twitter_largeimage');
   register_setting('writing', 'qnrwp_twitter_site');
-  register_setting('writing', 'qnrwp_favicon_url');
-  register_setting('writing', 'qnrwp_appleicon_url');
-  register_setting('writing', 'qnrwp_use_fixed_header');
   
   /**
    * ----------------------- QNRWP settings on Media page
@@ -331,16 +290,6 @@ function qnrwp_regenerate_images() {
 // ----------------------- Sections
 
 /**
- * Callback function for the layout section
- */
-function qnrwp_layout_section() {
-  ?>
-  <div style="font-size:1.1em"><p><?php esc_html_e('Layout options for this theme.', 'qnrwp'); ?></p>
-  </div>
-  <?php
-}
-
-/**
  * Callback function for the meta tags section; display info about meta tags
  */
 function qnrwp_metatags_section() {
@@ -350,28 +299,8 @@ function qnrwp_metatags_section() {
   <?php
 }
 
-/**
- * Callback function for the favicon section
- */
-function qnrwp_favicon_section() {
-  ?>
-  <div style="font-size:1.1em"><p><?php esc_html_e('This theme does not support the Site Icon API, offering a simpler, lighter solution. The small favicon and the larger Apple icon are supported. They should be uploaded to the Media Library and their URLs entered in the fields below.', 'qnrwp'); ?></p>
-  </div>
-  <?php
-}
-
 
 // ----------------------- Options
-
-/**
- * Echoes the input control for fixed header option
- */
-function qnrwp_use_fixed_header() {
-  ?>
-  <p><label><input type="checkbox" value="1" <?php checked(1, get_option('qnrwp_use_fixed_header'), true); ?>
-                name="qnrwp_use_fixed_header" id="qnrwp_use_fixed_header"><?php esc_html_e('Fix header to top of window, not moving up out of view on scroll', 'qnrwp'); ?></label></p>
-  <?php
-}
 
 /**
  * Echoes the input control for meta tags option
@@ -523,28 +452,6 @@ function qnrwp_twitter_site() {
   <?php
 }
 
-/**
- * Echoes the input control for the favicon URL
- */
-function qnrwp_favicon_url() {
-  ?>
-  <p><?php esc_html_e('Enter the favicon.ico URL. If left blank, a favicon will not be used. Dimensions should be 32px x 32px.', 'qnrwp'); ?></p>
-  <input type="text" name="qnrwp_favicon_url" id="qnrwp_favicon_url" 
-                maxlength="255" class="regular-text" value="<?php echo get_option('qnrwp_favicon_url', $default=''); ?>">
-  <?php
-}
-
-/**
- * Echoes the input control for the Apple icon URL
- */
-function qnrwp_appleicon_url() {
-  ?>
-  <p><?php esc_html_e('Enter the Apple icon URL. If left blank, an Apple icon will not be used. Dimensions should be 256px x 256px, and the file in PNG format.', 'qnrwp'); ?></p>
-  <input type="text" name="qnrwp_appleicon_url" id="qnrwp_appleicon_url" 
-                maxlength="255" class="regular-text" value="<?php echo get_option('qnrwp_appleicon_url', $default=''); ?>">
-  <?php
-}
-
 
 // ===================== FILTERS =====================
 
@@ -641,6 +548,24 @@ function qnrwp_edit_pages_menus() {
   }
 }
 add_action('admin_menu', 'qnrwp_edit_pages_menus');
+
+  
+/**
+ * Disable the Customizer
+ */
+function qnrwp_disable_customizer() {
+  global $submenu;
+  if (isset($submenu['themes.php'])) {
+    foreach ($submenu['themes.php'] as $index => $menu_item) {
+      foreach ($menu_item as $value) {
+        if (strpos($value,'customize') !== false) {
+          unset($submenu['themes.php'][$index]);
+        }
+      }
+    }
+  }
+}
+add_action('admin_menu', 'qnrwp_disable_customizer');
 
 
 /**
