@@ -58,18 +58,5 @@ class QNRWP_UI_Parts {
     <?php endif;
   }
   
-  
-  /**
-   * Renders favicon.ico and Apple icon as per theme options
-   */
-  public static function favicon_appleicon() {
-    if (isset($GLOBALS['QNRWP_GLOBALS']['settingsArray']['favicon-url']) && $GLOBALS['QNRWP_GLOBALS']['settingsArray']['favicon-url']) {
-      echo '<!-- Favicon -->' . PHP_EOL;
-      echo '<link rel="shortcut icon" type="image/x-icon" href="' . esc_attr(esc_url(trim($GLOBALS['QNRWP_GLOBALS']['settingsArray']['favicon-url']))) . '">' . PHP_EOL;
-    }
-    if (isset($GLOBALS['QNRWP_GLOBALS']['settingsArray']['appleicon-url']) && $GLOBALS['QNRWP_GLOBALS']['settingsArray']['appleicon-url'])
-      echo '<link rel="apple-touch-icon" href="' . esc_attr(esc_url(trim($GLOBALS['QNRWP_GLOBALS']['settingsArray']['appleicon-url']))) . '">' . PHP_EOL;
-  }
-  
 } // End QNRWP_UI_Parts class
 

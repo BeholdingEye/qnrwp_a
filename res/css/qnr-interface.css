@@ -1457,7 +1457,7 @@ div.qnr-img-translucent-cover {
     background-color: #EEE;
     background-image: linear-gradient(#EEE, #f0f0f0);
 }
-.qnr-hmenu li:hover a,
+.qnr-hmenu li:hover > a,
 .qnr-hmenu li a:hover {
     color: black;
 }
@@ -1478,10 +1478,12 @@ ul.qnr-hmenu-submenu {
     display: none;
     top: -0.2em;
     left: 11.6em;
+        left: 13.6em;
 }
 ul.qnr-hmenu-submenu-left {
     left: auto;
     right: 11.6em;
+        right: 13.6em;
 }
 ul.qnr-hmenu-submenu-up {
     top: auto;

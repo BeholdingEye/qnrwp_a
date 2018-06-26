@@ -69,7 +69,7 @@ final class QNRWP_News {
   
   
   /**
-   * Customizes parameters of main Loop query to get news posts only
+   * Filters parameters of main Loop query to get news posts only
    */
   public function main_query_filter($query) {
     if ($query->is_main_query() && !is_page() && !is_admin()) { // Not in Admin screens...

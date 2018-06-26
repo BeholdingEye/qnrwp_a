@@ -549,24 +549,6 @@ function qnrwp_edit_pages_menus() {
 }
 add_action('admin_menu', 'qnrwp_edit_pages_menus');
 
-  
-/**
- * Disable the Customizer
- */
-function qnrwp_disable_customizer() {
-  global $submenu;
-  if (isset($submenu['themes.php'])) {
-    foreach ($submenu['themes.php'] as $index => $menu_item) {
-      foreach ($menu_item as $value) {
-        if (strpos($value,'customize') !== false) {
-          unset($submenu['themes.php'][$index]);
-        }
-      }
-    }
-  }
-}
-add_action('admin_menu', 'qnrwp_disable_customizer');
-
 
 /**
  * Filter submenu NOT USED as it only affects highlighting of submenu item
@@ -620,6 +602,7 @@ if (!current_user_can('manage_options') && (isset(get_option('qnrwp_settings_arr
                       'nopaging' => true,
                       'no_found_rows' => true,
                       'post_type' => 'page',
+                      'post_status' => 'publish,future,draft,pending,private',
                       'fields' => 'ids',
                       'suppress_filters' => true, // Doesn't seem to work...
                     ));

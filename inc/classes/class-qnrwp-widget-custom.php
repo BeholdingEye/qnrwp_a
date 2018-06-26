@@ -60,7 +60,7 @@ class QNRWP_Widget_Custom extends WP_Widget {
    * No output field required, the Widget updating works with "selected" <option> in <select>
    */
   public static function get_widget_defs_menu($existingVal, $outputID, $outputName) {
-    $pages = get_pages();
+    $pages = get_pages(array('post_status' => 'private'));
     $rP = '';
     $selected = '';
     foreach ($pages as $page) {
@@ -112,7 +112,7 @@ class QNRWP_Widget_Custom extends WP_Widget {
     }
 
     // Get child pages and their Featured Images / content
-    $widgetChildren = get_page_children($widgetDefPageID, get_pages());
+    $widgetChildren = get_page_children($widgetDefPageID, get_pages(array('post_status' => 'private')));
     if (count($widgetChildren) > 0) {
       foreach ($widgetChildren as $widgetChild) {
         // Get any content from child page for its matching named page
@@ -208,7 +208,7 @@ class QNRWP_Widget_Custom extends WP_Widget {
     $attsSizesURLs = []; // List of attachment ID keys, values of size => URL array
     $slideIDs = []; // List of attachment IDs => timestamp DIV IDs for the slides
     
-    $widgetChildren = get_page_children($widgetDefPageID, get_pages());
+    $widgetChildren = get_page_children($widgetDefPageID, get_pages(array('post_status' => 'private')));
     if (count($widgetChildren) < 1) return ''; // Exit if no slides defined
     
     // Get child pages as content DIVs

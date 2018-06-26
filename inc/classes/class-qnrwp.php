@@ -259,6 +259,7 @@ final class QNRWP {
     
     // Disable WP emojis
     add_action('init', array($this, 'disable_wp_emojis'));
+    
   }
   
   

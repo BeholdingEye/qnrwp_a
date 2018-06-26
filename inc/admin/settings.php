@@ -138,40 +138,6 @@
         </table>
         
         <hr>
-        
-        <h2 class="title"><?php esc_html_e('Favicon', 'qnrwp'); ?></h2>
-        <p><?php esc_html_e('This theme does not support the Site Icon API, offering a simpler, lighter solution. The small favicon and the larger Apple icon are supported. They should be uploaded to the Media Library and their URLs entered in the fields below.', 'qnrwp'); ?></p>
-        
-        <table class="form-table">
-          <!-- Favicon URL -->
-          <tr valign="top">
-            <th scope="row"><?php esc_html_e('Favicon URL', 'qnrwp') ?></th>
-            <td><p><?php esc_html_e('Enter the favicon.ico URL. If left blank, a favicon will not be used. Dimensions should be 32px x 32px.', 'qnrwp') ?></p>
-            <input type="text" name="qnrwp_settings_array[favicon-url]" id="qnrwp_settings_array_favicon-url" 
-                                      style="width:100%;max-width:700px;"
-                                      value="<?php 
-                                        if (isset(get_option('qnrwp_settings_array')['favicon-url'])
-                                                  && !empty(get_option('qnrwp_settings_array')['favicon-url']))
-                                          echo esc_attr(get_option('qnrwp_settings_array')['favicon-url']); 
-                                        ?>"></td>
-          </tr>
-          
-          <!-- Apple icon URL -->
-          <tr valign="top">
-            <th scope="row"><?php esc_html_e('Apple icon URL', 'qnrwp') ?></th>
-            <td><p><?php esc_html_e('Enter the Apple icon URL. If left blank, an Apple icon will not be used. Dimensions should be 256px x 256px, and the file in PNG format.', 'qnrwp') ?></p>
-            <input type="text" name="qnrwp_settings_array[appleicon-url]" id="qnrwp_settings_array_appleicon-url" 
-                                      style="width:100%;max-width:700px;"
-                                      value="<?php 
-                                        if (isset(get_option('qnrwp_settings_array')['appleicon-url'])
-                                                  && !empty(get_option('qnrwp_settings_array')['appleicon-url']))
-                                          echo esc_attr(get_option('qnrwp_settings_array')['appleicon-url']); 
-                                        ?>"></td>
-          </tr>
-          
-        </table>
-        
-        <hr>
     
         <h2 class="title"><?php esc_html_e('Layout options', 'qnrwp'); ?></h2>
         <p><?php esc_html_e('Layout preferences.', 'qnrwp'); ?></p>

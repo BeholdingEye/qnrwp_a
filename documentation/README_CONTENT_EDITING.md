@@ -268,6 +268,9 @@ widget. Two attributes are supported in the shortcode:
         with the Featured Image assigned to the child page used as the
         background image for the slide.
         
+        The carousel defining page and its children must be published as
+        Private.
+        
         It is good practice to set the Order of the carousel defining
         page to a high value such as 9999 to push these pages to the
         bottom of the list on the Pages page.
@@ -410,6 +413,9 @@ is the unique identifier of the particular widget instance.
         content. The Featured Image of the widget defining page will be
         used as the subheader image on any page not represented by a 
         child page.
+        
+        The SubHeader defining page and its children must be published 
+        as Private.
 
 ### QNRWP Featured News                                            {#w3}
 

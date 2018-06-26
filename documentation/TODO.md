@@ -6,8 +6,6 @@ Still to get done:
 
 * No custom meta field.
 
-* Fix submenu styling.
-
 * To top arrow in Documentation.
 
 * PHP: delete temp variables & transients, set up code for it.
@@ -44,3 +42,11 @@ platform.
 * Simple page builder.
 
 * wp_add_inline_style() to add inline style.
+
+* Markdown option for include shortcode, obtaining parts of a file.
+
+* Generalize Featured News to Featured Posts.
+
+* Load text domain.
+
+* Replace 'get_option' with global for speed.

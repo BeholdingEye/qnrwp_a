@@ -43,8 +43,6 @@ echo QNRWP_Meta_Tags::meta_opengraph_twitter_tags();
                             //'wp title: ' => wp_title('', $display=false),
                             //'title: ' => get_the_title()),$append=false);
 
-QNRWP_UI_Parts::favicon_appleicon();
-
 // Title is handled by the title-tag feature
 wp_head(); // Required
 

@@ -63,12 +63,12 @@ class QNRWP_Widgets {
    * @param   string      $outputName Output field Name
    */
   public static function get_pages_form_for_widget($pagesVal, $pagesL, $outputID, $outputName) {
-    $pages = get_pages(); 
+    $pages = get_pages(); // 'publish' status only
     $rP = '';
     $pageCheckbox = '';
     $pageParentID = false;
     foreach ($pages as $page) {
-      // Omit pages set up as a widget's contents with "QNRWP-Widget-" prefix, and their children (one level only)
+      // Omit pages set up as a widget's contents with "QNRWP-Widget-" prefix, and their children (one level only); should be redundant if these pages are private
       $pageParentID = wp_get_post_parent_id($page->ID); // Returns 0 as false if no parent
       $pageParentTitle = $pageParentID ? get_post($pageParentID)->post_title : '';
       if (stripos($page->post_title, 'QNRWP-Widget-') === false && stripos($pageParentTitle, 'QNRWP-Widget-') === false) {
@@ -180,7 +180,7 @@ class QNRWP_Widgets {
   /**
    * Our more developed way of finding out if sidebar is active, considers widget visibility
    * 
-   * Called from QNRWP::get_layout()
+   * Called from QNRWP::get_layout() and from template
    */
   public static function is_active_sidebar_widgets($sidebar) {
     // The is_active_sidebar() call will fire the 'sidebars_widgets' hook, producing our $GLOBALS['QNRWP_GLOBALS']['sidebarsWidgets']

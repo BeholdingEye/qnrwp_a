@@ -198,7 +198,7 @@ final class QNRWP_Shortcodes {
       'name' => '',
       'size' => 'large',
     ), $atts);
-    $pages = get_pages();
+    $pages = get_pages(array('post_status' => 'private'));
     $rHtml = '';
     foreach ($pages as $page) {
       if ($page->post_title === $a['name']) {

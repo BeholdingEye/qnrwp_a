@@ -236,7 +236,7 @@ div, header, main, section, article, footer {
     margin: 0 auto;
     min-width: 320px;
     max-width: 1600px;
-    height: auto;           /* Matching navmenu height */
+    height: auto;
     text-align: right;
     color: white;
     overflow: visible;
