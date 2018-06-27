@@ -156,6 +156,17 @@ h1 {
     font-size: 1.8em;
 }
 
+/* ----------------------------- Content_width related styles */
+
+.size-auto, 
+.size-full,
+.size-large,
+.size-medium,
+.size-thumbnail {
+    max-width: 100%;
+    height: auto;
+}
+
 /* ----------------------------- Layout */
 
 html {

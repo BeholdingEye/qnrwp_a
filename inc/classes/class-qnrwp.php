@@ -163,10 +163,15 @@ final class QNRWP {
   
   
   /**
-   * Sets our global of theme settings
+   * Sets our global of theme settings, and $content_width
    */
   private function global_settings() {
-    $themeSettings = get_option('qnrwp_settings_array');
+    // Set the content width equivalent to the very largest supported image size
+    global $content_width;
+    if (!isset($content_width)) {
+      $content_width = 2500;
+    }
+    $themeSettings = get_option('qnrwp_settings_array'); // TODO theme mods
     if ($themeSettings) $GLOBALS['QNRWP_GLOBALS']['settingsArray'] = $themeSettings; 
   }
   
@@ -274,6 +279,13 @@ final class QNRWP {
       wp_die('ERROR: '.__('No user agent detected.', 'qnrwp'));
     }
     
+    // Load theme text domain. First-loaded translation file overrides any following
+    //   ones if the same translation is present
+    // wp-content/themes/child-theme/languages/it_IT.mo
+    load_theme_textdomain('qnrwp', get_stylesheet_directory() . '/languages');
+    // wp-content/themes/parent-theme/languages/it_IT.mo
+    load_theme_textdomain('qnrwp', get_template_directory() . '/languages');
+    
     add_theme_support('post-thumbnails');
     
     add_theme_support('title-tag');
@@ -285,6 +297,16 @@ final class QNRWP {
       'gallery',
       'caption',
     ));
+    
+    add_theme_support('custom-background'); // TODO
+    
+    add_theme_support('custom-header', array(
+      'header-text'   => false,
+      'flex-width'    => true,
+      'flex-height'   => true,
+    ));
+    
+    add_theme_support('custom-logo');
     
     // Theme menu (locations) support is automatically declared by this function
     register_nav_menu('header_nav_menu', __('Header main navigation menu', 'qnrwp'));
@@ -685,7 +707,7 @@ final class QNRWP {
     register_sidebar(array(
       'name'          => __('Footer Row Upper', 'qnrwp'),
       'id'            => 'qnrwp-row-footer-upper',
-      'description'   => __('Widgets in this area will be shown as the upper part of the last row on the page, the footer, and will be arranged in rows. If none of its widgets are set to appear on a page, this area will not render.', 'qnrwp'),
+      'description'   => __('The Footer will always render as the last row on the page, but may be empty of none of these Footer areas will appear. Widgets in this area will be shown as the upper part of the footer, and will be arranged in rows. If none of its widgets are set to appear on a page, this area will not render.', 'qnrwp'),
       'before_widget' => "<!-- Widget -->\n" . '<div id="%1$s" class="widget %2$s">'.PHP_EOL,
       'after_widget'  => "\n</div>\n",
       //'before_widget' => "<!-- Widget -->\n",
