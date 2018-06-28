@@ -17,7 +17,7 @@ QNRWP.CookieNotice.cookie_notice_dismissed = function () {
             // Do nothing
         }
     }
-}
+};
 
 
 /**
@@ -27,4 +27,4 @@ QNRWP.CookieNotice.close_cookie_notice = function (obj, event) {
     objClass('qnrwp-cookie-notice').style.display = 'none';
     createOrUpdateCookie("qnrwp-cookie-notice-dismissed", 1, 0, true); // Name, value, duration, secure (path automatic)
     QNRWP.Main.content_footer_sizer(); // Account for missing notice
-}
+};

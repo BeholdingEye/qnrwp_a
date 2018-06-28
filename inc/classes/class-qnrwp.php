@@ -279,6 +279,9 @@ final class QNRWP {
       wp_die('ERROR: '.__('No user agent detected.', 'qnrwp'));
     }
     
+    // Bail if WooCommerce is active
+    if (defined('WC_ABSPATH')) wp_die('ERROR: '.__('The QNRWP-A theme is not compatible with the WooCommerce plugin.', 'qnrwp'));
+    
     // Load theme text domain. First-loaded translation file overrides any following
     //   ones if the same translation is present
     // wp-content/themes/child-theme/languages/it_IT.mo
@@ -298,20 +301,18 @@ final class QNRWP {
       'caption',
     ));
     
-    add_theme_support('custom-background'); // TODO
+    //add_theme_support('custom-background'); // TODO
     
-    add_theme_support('custom-header', array(
-      'header-text'   => false,
-      'flex-width'    => true,
-      'flex-height'   => true,
-    ));
+    //add_theme_support('custom-header', array(
+      //'header-text'   => false,
+      //'flex-width'    => true,
+      //'flex-height'   => true,
+    //));
     
-    add_theme_support('custom-logo');
+    //add_theme_support('custom-logo');
     
     // Theme menu (locations) support is automatically declared by this function
     register_nav_menu('header_nav_menu', __('Header main navigation menu', 'qnrwp'));
-    
-    $this->woocommerce_theme_support();
   }
   
   
@@ -329,33 +330,6 @@ final class QNRWP {
       }
     }
     return $classes;
-  }
-  
-  
-  /**
-   * Declares WooCommerce support
-   */
-  public function woocommerce_theme_support() {
-    add_theme_support('woocommerce', apply_filters('qnrwp_woocommerce_args', array(
-      
-      //'single_image_width'    => 416,
-      //'thumbnail_image_width' => 324,
-
-      // Product grid theme settings
-      'product_grid'      => array(
-        'default_rows'    => 4,
-        'min_rows'        => 1,
-        'max_rows'        => 8,
-        
-        'default_columns' => 3,
-        'min_columns'     => 1,
-        'max_columns'     => 6,
-      ),
-    )));
-    
-    add_theme_support('wc-product-gallery-zoom');
-    add_theme_support('wc-product-gallery-lightbox');
-    add_theme_support('wc-product-gallery-slider');
   }
   
   
@@ -719,7 +693,7 @@ final class QNRWP {
     register_sidebar(array(
       'name'          => __('Footer Row Middle', 'qnrwp'),
       'id'            => 'qnrwp-row-footer-middle',
-      'description'   => __('Widgets in this area will be shown as the middle part of the footer, and will be arranged in columns. Up to 3 columns are supported. If more are needed, the widget(s) should create own sub-columns. If none of its widgets are set to appear on a page, this area will not render.', 'qnrwp'),
+      'description'   => __('Widgets in this area will be shown as the middle part of the footer, and will be arranged in columns. Up to 3 columns are supported. If more are needed, the widget(s) should create their own sub-columns. If none of its widgets are set to appear on a page, this area will not render.', 'qnrwp'),
       'before_widget' => "<!-- Widget -->\n" . '<div id="%1$s" class="widget %2$s">'.PHP_EOL,
       'after_widget'  => "\n</div>\n",
       //'before_widget' => "<!-- Widget -->\n",

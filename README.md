@@ -41,6 +41,7 @@ QNRWP-A is more fully featured than most themes, offering functionality usually 
 ### Caveats
 
 * This is a business theme, supporting News postings without support for comments. Not a theme for bloggers.
+* QNRWP-A is not compatible with heavy-duty plugins that take over the page templating, such as WooCommerce and possibly others.
 
 ### Documentation
 

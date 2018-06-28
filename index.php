@@ -20,11 +20,35 @@ function exception_error_handler($severity, $message, $file, $line) {
 }
 set_error_handler('exception_error_handler');
 
+?>
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+<meta charset="<?php bloginfo('charset'); ?>">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<?php
+echo QNRWP_Meta_Tags::meta_opengraph_twitter_tags();
+// Debugging printout block for testing
+//qnrwp_debug_printout(array('have posts: ' => have_posts(),
+                            //'is singular: ' => is_singular(),
+                            //'is home: ' => is_home(),
+                            //'is front page: ' => is_front_page(),
+                            //'is search: ' => is_search(),
+                            //'is archive: ' => is_archive(),
+                            //'is date: ' => is_date(),
+                            //'content: ' => $post,
+                            //'post type: ' => get_post_type(),
+                            //'single post title: ' => single_post_title('', $display=false),
+                            //'wp title: ' => wp_title('', $display=false),
+                            //'title: ' => get_the_title()),$append=false);
+
+wp_head(); // Required for title-tag and site icons
+?>
+</head>
+<body <?php body_class('qnr-winscroller'); ?> data-qnr-offset="-4" style="visibility:hidden;opacity:0;">
+<?php
+
 try {
-  
-  // ----------------------- Header
-  
-  get_header();
   
   // Show in source that we're reporting errors
   echo '<!-- Error reporting: ' . error_reporting().' -->'.PHP_EOL;
@@ -174,7 +198,28 @@ try {
   
   // ----------------------- Header Row
   
-  // This row is rendered by header.php
+  echo '<!-- Header Row -->'.PHP_EOL;
+  $headerFixed = isset($GLOBALS['QNRWP_GLOBALS']['settingsArray']['header-fixed'])?$GLOBALS['QNRWP_GLOBALS']['settingsArray']['header-fixed']:1;
+  echo '<div id="header-row" class="header-row widget-area'
+          .($headerFixed
+          ?' qnrwp-has-fixed-header'
+          :'')
+          .'">' .PHP_EOL;
+
+  QNRWP_UI_Parts::cookie_notice();
+
+  if (QNRWP_Widgets::is_active_sidebar_widgets('qnrwp-row-header')) {
+    dynamic_sidebar('qnrwp-row-header');
+  }
+
+  echo '<div id="header-nav-row" class="'.apply_filters('qnrwp_header_nav_row_class', 'header-nav-row flex-block flex-vertical-center-content').'">';
+
+  QNRWP_UI_Parts::site_logo();
+
+  QNRWP_UI_Parts::main_navigation_menu();
+
+  echo '</div>';
+  echo '</div><!-- End of Header -->'.PHP_EOL;
   
   // ----------------------- Content Row
   
@@ -203,7 +248,10 @@ try {
   // ----------------------- Left Sidebar
   
   if (($layout == 'three-cols' || $layout == 'left-sidebar') && QNRWP_Widgets::is_active_sidebar_widgets('qnrwp-sidebar-left')) { // TODO redundant active sidebar test??
-    get_sidebar('left');
+    echo '<!-- Left Sidebar -->'.PHP_EOL;
+    echo '<div id="sidebar-left" class="sidebar sidebar-left widget-area">' .PHP_EOL;
+    dynamic_sidebar('qnrwp-sidebar-left'); // Usually WP blogging widgets
+    echo '</div><!-- End of Left Sidebar -->'.PHP_EOL;
   }
   
   // ----------------------- Main Content
@@ -219,14 +267,15 @@ try {
   
   echo $rHtml; // Content
   
-  get_sidebar(); // Dummy for WooCommerce...
-  
   echo '</div><!-- End of Content Box -->'.PHP_EOL;
   
   // ----------------------- Right Sidebar
   
   if (($layout == 'three-cols' || $layout == 'right-sidebar') && QNRWP_Widgets::is_active_sidebar_widgets('qnrwp-sidebar-right')) {
-    get_sidebar('right');
+    echo '<!-- Right Sidebar -->'.PHP_EOL;
+    echo '<div id="sidebar-right" class="sidebar sidebar-right widget-area">'.PHP_EOL;
+    dynamic_sidebar('qnrwp-sidebar-right'); // Usually WP blogging widgets
+    echo '</div><!-- End of Right Sidebar -->'.PHP_EOL;
   }
   
   echo '</div><!-- End of Middle Row -->'.PHP_EOL; // Close row of content & sidebars
@@ -244,8 +293,34 @@ try {
   
   // ----------------------- Footer Row
   
-  get_footer();
-  
+  echo '<!-- Footer Row -->'.PHP_EOL;
+  echo '<div id="footer-row" class="footer-row">'.PHP_EOL;
+
+  $footerUpperActive = QNRWP_Widgets::is_active_sidebar_widgets('qnrwp-row-footer-upper');
+  $footerMiddleActive = QNRWP_Widgets::is_active_sidebar_widgets('qnrwp-row-footer-middle');
+  $footerLowerActive = QNRWP_Widgets::is_active_sidebar_widgets('qnrwp-row-footer-lower');
+  if ($footerUpperActive || $footerMiddleActive || $footerLowerActive) {
+    if ($footerUpperActive) {
+      echo '<div id="footer-row-upper" class="footer-row-upper widget-area">'.PHP_EOL;
+      dynamic_sidebar('qnrwp-row-footer-upper');
+      echo '</div>'.PHP_EOL;
+    }
+    if ($footerMiddleActive) {
+      echo '<div id="footer-row-middle" class="footer-row-middle widget-area">'.PHP_EOL;
+      dynamic_sidebar('qnrwp-row-footer-middle');
+      echo '</div>'.PHP_EOL;
+    }
+    if ($footerLowerActive) {
+      echo '<div id="footer-row-lower" class="footer-row-lower widget-area">'.PHP_EOL;
+      dynamic_sidebar('qnrwp-row-footer-lower');
+      echo '</div>'.PHP_EOL;
+    }
+  }
+
+  echo '</div><!-- End of Footer -->'.PHP_EOL;
+
+  print_late_styles();
+  wp_footer();
   
   //wp_reset_postdata(); // Restore original Post Data
   
@@ -254,3 +329,6 @@ catch (Exception $e) {
   echo 'Caught exception: ',  $e->getMessage(), "\n"; // ErrorException($message, 0, $severity, $file, $line)
   echo ' Line: ', $e->getLine(), "\n";
 }
+?>
+</body>
+</html>

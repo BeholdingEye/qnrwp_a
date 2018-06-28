@@ -6,7 +6,7 @@
 
 
 /**
- * Any checked input boxes will have value sent to hidden output field on click
+ * Any checked input boxes will have value sent to hidden output field on click TODO OOP
  */
 function qnrwp_collect_pages_options_for_widget(event) {
     var eT = event.target;

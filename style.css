@@ -249,7 +249,6 @@ div, header, main, section, article, footer {
     max-width: 1600px;
     height: auto;
     text-align: right;
-    color: white;
     overflow: visible;
     /* Provide a divider line, at least for any drop down menu */
     border: none;
@@ -304,6 +303,8 @@ div, header, main, section, article, footer {
 .header-site-logo a:hover {
     cursor: pointer;
     text-decoration: none;
+    color: inherit;
+    opacity: 0.8;
 }
 
 /* ----------------------------- Header main nav menu */

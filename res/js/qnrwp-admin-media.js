@@ -5,7 +5,7 @@
  * ================================================================== */
 
 /**
- * This script file will be loaded only on the options-media admin screen
+ * This script file will be loaded only on the options-media admin screen TODO OOP
  */
 
 (function(){
