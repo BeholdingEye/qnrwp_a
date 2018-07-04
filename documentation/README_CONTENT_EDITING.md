@@ -17,7 +17,7 @@ Table of Contents:
     
     :   [Menu](#s5)
     
-    :   [Samples](#s6)
+    :   [Sample Cards](#s6)
 
 * [Widgets](#w)
 
@@ -313,48 +313,35 @@ Example:
     [menu name='Test_Menu_Flat' id='test-menu-3' depth='-1']
 
 
-### Samples                                                        {#s6}
+### Sample Cards                                                   {#s6}
 
-The "samples" shortcode will place Material Design cards, with an image,
-title, short description, and a link to the sample. An additional link 
-to a news post about the work can also be set. With custom CSS styling, 
-presentation may be changed as needed.
+The "sample-cards" shortcode will place Material Design cards, with an 
+image, title, short description, and a link to the sample. An additional
+link to a news post about the sample can also be set. With custom CSS  
+styling, presentation may be changed as needed.
 
-Samples are created as posts, and distinguished by their assigned 
-category. Custom Fields are used for the links, while the displayed 
-image is the post’s assigned Featured Image.
-
-The content of the sample post will be the description in the card, 
-while the link to the info about the sample may be set in a custom field
-named "Sample-Info". The link to the actual sample to be set in the
-"Sample-Link" custom field.
-
-If more samples matching the specified categories are available, a 
-"Load more" button will appear.
+Sample Cards are created with their own custom post type. Detailed help
+on creating a Card is available in the Help drawer of the Card editing
+screen.
 
 Supported shortcode parameters:
 
 * name:
 
-    :   Title of the samples panel
+    :   Title of the samples panel, default "Samples"
 
 * size:
 
-    :   Image size name
+    :   Image size name, default "medium_large"
 
 * number:
 
     :   Number of cards to show. For best display, let this be a 
-        multiple of 6 (divisible by 3 and 2)
-
-* categories:
-
-    :   Comma-separated string of post categories to present as samples
+        multiple of 6 (divisible by 3 and 2), default is 6
 
 Example:
 
-    [samples name="Samples" size="medium_large" number=6 
-    categories="sample-work"]
+    [sample-cards name="Work Samples"]
 
 
 Widgets                                                             {#w}

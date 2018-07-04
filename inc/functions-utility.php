@@ -28,24 +28,24 @@ function qnrwp_debug_printout($valueToPrint, $append=false) { // Append must be 
 
 
 /**
- * Returns news categories (news, uncategorized) ids as a string, managing our global
+ * Returns news categories (news, uncategorized) ids as a string, managing our global DISABLED
  */
-function qnrwp_get_news_categories_ids() {
-  if (isset($GLOBALS['QNRWP_GLOBALS']['newsCategories'])) return $GLOBALS['QNRWP_GLOBALS']['newsCategories'];
-  else {
-    //$cats = get_categories(array('slug' => array('news', 'uncategorized'))); // Doesn't get 'uncategorized'
-    $cats = get_categories();
-    $catsIDs = '1'; // Uncategorized cat ID is always 1
-    foreach ($cats as $cat) {
-      if ($cat->slug == 'news') {
-        $catsIDs .= ','.$cat->term_id;
-        break;
-      }
-    }
-    $GLOBALS['QNRWP_GLOBALS']['newsCategories'] = $catsIDs;
-    return $catsIDs;
-  }
-}
+//function qnrwp_get_news_categories_ids() {
+  //if (isset($GLOBALS['QNRWP_GLOBALS']['newsCategories'])) return $GLOBALS['QNRWP_GLOBALS']['newsCategories'];
+  //else {
+    ////$cats = get_categories(array('slug' => array('news', 'uncategorized'))); // Doesn't get 'uncategorized'
+    //$cats = get_categories();
+    //$catsIDs = '1'; // Uncategorized cat ID is always 1
+    //foreach ($cats as $cat) {
+      //if ($cat->slug == 'news') {
+        //$catsIDs .= ','.$cat->term_id;
+        //break;
+      //}
+    //}
+    //$GLOBALS['QNRWP_GLOBALS']['newsCategories'] = $catsIDs;
+    //return $catsIDs;
+  //}
+//}
 
 
 /**

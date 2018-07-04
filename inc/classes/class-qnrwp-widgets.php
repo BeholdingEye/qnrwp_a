@@ -134,16 +134,16 @@ class QNRWP_Widgets {
     //qnrwp_debug_printout($args, $append=true);
     if (isset(get_option('qnrwp_settings_array')['widget-visibility']) && get_option('qnrwp_settings_array')['widget-visibility'] == 0) {
       // Offer child theme to control setting of our global required by query filter in our news class
-      if (apply_filters('qnrwp_widget_being_shown', true)) $GLOBALS['QNRWP_GLOBALS']['widgetBeingShown'] = $widget->id_base;
+      //if (apply_filters('qnrwp_widget_being_shown', true)) $GLOBALS['QNRWP_GLOBALS']['widgetBeingShown'] = $widget->id_base;
       // Child theme may use the same WP hook (at priority 11+) for its own functionality; returning false will prevent widget display
       return $instance;
     }
     $pagesL = explode(',', $instance['qnrwp_pages']);
     // Decide whether to show the widget on this page
     $showWidget = self::is_widget_visible($pagesL);
-    if ($showWidget) {
-      $GLOBALS['QNRWP_GLOBALS']['widgetBeingShown'] = $widget->id_base; // For query filter in our news class
-    }
+    //if ($showWidget) {
+      //$GLOBALS['QNRWP_GLOBALS']['widgetBeingShown'] = $widget->id_base; // For query filter in our news class
+    //}
     return ($showWidget !== false) ? $instance : false; // If false is returned, widget won't display
   }
   
@@ -156,23 +156,24 @@ class QNRWP_Widgets {
     $allNews = in_array('-1', $pagesL);
     $allCPT = in_array('-3', $pagesL);
     // News page has a different page ID from its post ID; search page is treated same as news page
-    $thisPage = (is_home() || is_search() || (is_archive() && is_date())) ? get_option('page_for_posts') : get_the_ID();
+    $thisPage = (is_home() || is_search() || is_archive()) ? get_option('page_for_posts') : get_the_ID();
     $showWidget = false;
     $postType = get_post_type();
     $customPostTypesL = get_post_types(array('public'=>true,'_builtin'=>false), 'names', 'and'); // Names of custom post types
     if ($customPostTypesL) {
       foreach ($customPostTypesL as $CPT) {
-        if (($postType == $CPT && ! (is_home() || is_search() || (is_archive() && is_date())) && $allCPT && ! $allExcept)
-              || ($postType == $CPT && ! (is_home() || is_search() || (is_archive() && is_date())) && ! $allCPT && $allExcept)) {
+        if (($postType == $CPT && ! (is_home() || is_search() || is_archive()) && $allCPT && ! $allExcept)
+              || ($postType == $CPT && ! (is_home() || is_search() || is_archive()) && ! $allCPT && $allExcept)) {
           $showWidget = true;
           break;
         }
       }
-    }
-    else if ($postType == 'post' && ! (is_home() || is_search() || (is_archive() && is_date())) && $allNews && ! $allExcept) $showWidget = true;
-    else if ($postType == 'post' && ! (is_home() || is_search() || (is_archive() && is_date())) && ! $allNews && $allExcept) $showWidget = true;
-    else if (($postType == 'page' || (is_home() || is_search() || (is_archive() && is_date()))) && in_array($thisPage, $pagesL) && ! $allExcept) $showWidget = true;
-    else if (($postType == 'page' || (is_home() || is_search() || (is_archive() && is_date()))) && ! in_array($thisPage, $pagesL) && $allExcept) $showWidget = true;
+    } // Careful with the ifs and $showWidget value...
+    if ($postType == 'post' && ! (is_home() || is_search() || is_archive()) && $allNews && ! $allExcept) $showWidget = true;
+    else if ($postType == 'post' && ! (is_home() || is_search() || is_archive()) && ! $allNews && $allExcept) $showWidget = true;
+    else if (($postType == 'page' || (is_home() || is_search() || is_archive())) && in_array($thisPage, $pagesL) && ! $allExcept) $showWidget = true;
+    else if (($postType == 'page' || (is_home() || is_search() || is_archive())) && ! in_array($thisPage, $pagesL) && $allExcept) $showWidget = true;
+    else if ($GLOBALS['QNRWP_GLOBALS']['pageTemplate'] == '404.php' && $allExcept) $showWidget = true;
     return $showWidget;
   }
   

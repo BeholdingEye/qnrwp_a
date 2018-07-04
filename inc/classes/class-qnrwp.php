@@ -47,6 +47,12 @@ final class QNRWP {
   
   
   /**
+   * QNRWP_Samples instance
+   */
+  public $samples = null;
+  
+  
+  /**
    * List JS files, in load order
    */
   public $jsFilesL = array( 
@@ -163,9 +169,10 @@ final class QNRWP {
   
   
   /**
-   * Sets our global of theme settings, and $content_width
+   * Sets our global of theme settings, and $content_width, and starting our global var
    */
   private function global_settings() {
+    $GLOBALS['QNRWP_GLOBALS']['pageTemplate'] = 'unknown'; // Avoid it being undefined TODO
     // Set the content width equivalent to the very largest supported image size
     global $content_width;
     if (!isset($content_width)) {
@@ -175,6 +182,15 @@ final class QNRWP {
     if ($themeSettings) $GLOBALS['QNRWP_GLOBALS']['settingsArray'] = $themeSettings; 
   }
   
+  
+  /**
+   * Returns a theme setting from our global, called statically
+   */
+  public static function get_setting($setting, $default=null) {
+    if (isset($GLOBALS['QNRWP_GLOBALS']['settingsArray'][$setting])) {
+      return $GLOBALS['QNRWP_GLOBALS']['settingsArray'][$setting];
+    } else return $default;
+  }
   
   /**
    * Includes code files, instantiates classes
@@ -232,6 +248,12 @@ final class QNRWP {
       require_once QNRWP_DIR . 'inc/classes/class-qnrwp-metabox-user-class.php';
       $this->metabox_user_class = QNRWP_Metabox_User_Class::instance();
     }
+    
+    // Samples
+    if (!class_exists('QNRWP_Samples')) {
+      require_once QNRWP_DIR . 'inc/classes/class-qnrwp-samples.php';
+      $this->samples = QNRWP_Samples::instance();
+    }
   }
   
   
@@ -279,9 +301,6 @@ final class QNRWP {
       wp_die('ERROR: '.__('No user agent detected.', 'qnrwp'));
     }
     
-    // Bail if WooCommerce is active
-    if (defined('WC_ABSPATH')) wp_die('ERROR: '.__('The QNRWP-A theme is not compatible with the WooCommerce plugin.', 'qnrwp'));
-    
     // Load theme text domain. First-loaded translation file overrides any following
     //   ones if the same translation is present
     // wp-content/themes/child-theme/languages/it_IT.mo
@@ -309,10 +328,38 @@ final class QNRWP {
       //'flex-height'   => true,
     //));
     
-    //add_theme_support('custom-logo');
+    add_theme_support('custom-logo');
     
     // Theme menu (locations) support is automatically declared by this function
     register_nav_menu('header_nav_menu', __('Header main navigation menu', 'qnrwp'));
+    
+    $this->woocommerce_theme_support();
+  }
+  
+  /**
+   * Declares WooCommerce support
+   */
+  public function woocommerce_theme_support() {
+    add_theme_support('woocommerce', apply_filters('qnrwp_woocommerce_args', array(
+      
+      //'single_image_width'    => 416,
+      //'thumbnail_image_width' => 324,
+
+      // Product grid theme settings
+      'product_grid'      => array(
+        'default_rows'    => 4,
+        'min_rows'        => 1,
+        'max_rows'        => 8,
+        
+        'default_columns' => 3,
+        'min_columns'     => 1,
+        'max_columns'     => 6,
+      ),
+    )));
+    
+    add_theme_support('wc-product-gallery-zoom');
+    add_theme_support('wc-product-gallery-lightbox');
+    add_theme_support('wc-product-gallery-slider');
   }
   
   
@@ -393,9 +440,6 @@ final class QNRWP {
         } else if ($actionType == 'samples') {
           
           // ----------------------- SAMPLES
-          if (!class_exists('QNRWP_Samples')) { // Should be redundant
-            require_once QNRWP_DIR . 'inc/classes/class-qnrwp-samples.php';
-          }
           echo rawurlencode(QNRWP_Samples::ajax_more_samples(stripslashes(rawurldecode($_POST['datajson']))));
           
         } else {
@@ -745,7 +789,7 @@ final class QNRWP {
 
   
   /**
-   * Layout type getter
+   * Records layout type in our global
    */
   public static function get_layout() {
     // Get layout type according to active sidebars and their widgets
@@ -755,9 +799,8 @@ final class QNRWP {
     if ($leftSidebar && $rightSidebar) $layout = 'three-cols';
     else if ($leftSidebar) $layout = 'left-sidebar';
     else if ($rightSidebar) $layout = 'right-sidebar';
-    return $layout;
+    $GLOBALS['QNRWP_GLOBALS']['layout'] = $layout;
   }
-  
   
 } // End QNRWP class
 

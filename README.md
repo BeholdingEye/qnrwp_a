@@ -12,9 +12,9 @@ Combined with disabling of automatic updates, the approach taken by this theme w
 
 QNRWP-A is more fully featured than most themes, offering functionality usually implemented with plugins, saving you money:
 
-* Meta tags and OpenGraph and Twitter cards support.
+* Meta tags, OpenGraph and Twitter cards support.
 
-* Contact Form shortcode, with all parameters controllable. Can be used in subscription popouts.
+* Contact Form shortcode, with all parameters controllable. May be used in subscription popouts.
 
 * An "include" shortcode with two modes: 1) files, to import any HTML/JS/CSS/PHP code anywhere; and 2) posts, including posts anywhere.
 
@@ -22,7 +22,7 @@ QNRWP-A is more fully featured than most themes, offering functionality usually 
 
 * Featured News widget, displaying 4 latest news items as a row of cards.
 
-* Samples shortcode, for Work Sample cards, linking to News posts about them.
+* Sample Cards shortcode, for cards linking to samples and News posts about them.
 
 * Improved image sharpness if the ImageMagick PHP module is installed on the server, and optimized image presentation for high Google Page Speed scores.
 
@@ -34,14 +34,13 @@ QNRWP-A is more fully featured than most themes, offering functionality usually 
 
 * Quick access to posts and pages for editing in the admin, and a simplified interface for editors there.
 
-* Categories on Posts are used to create different kinds of posts easily, with no need for custom post types. News posts, Testimonials, Work Samples are presently supported.
-
 * Semi-automated layout. Appearance of sidebars is controlled with visibility of widgets in them, a feature natively supported by the theme.
+
+* Tested and compatible with WooCommerce, Advanced Custom Fields, SiteOrigin Page Builder plugins. This theme should be compatible with all well-made plugins.
 
 ### Caveats
 
 * This is a business theme, supporting News postings without support for comments. Not a theme for bloggers.
-* QNRWP-A is not compatible with heavy-duty plugins that take over the page templating, such as WooCommerce and possibly others.
 
 ### Documentation
 

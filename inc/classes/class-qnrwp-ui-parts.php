@@ -10,21 +10,22 @@ class QNRWP_UI_Parts {
   /**
    * Renders the site logo
    */
-  public static function site_logo() {
-    $blockOpen = '<div id="header-site-logo" class="header-site-logo qnr-font-resize" data-qnr-font-min="70" data-qnr-win-max-width="1024">';
-    $blockOpen = apply_filters('qnrwp_site_logo_block_open', $blockOpen);
-    $blockClose = apply_filters('qnrwp_site_logo_block_close', '</div>');
-    $logoLinkURL = apply_filters('qnrwp_site_logo_link_url', esc_attr(trim(get_bloginfo('url'))));
-    $logoLinkHTML = apply_filters('qnrwp_site_logo_link_html', esc_html(get_bloginfo('name')));
-    $linkedLogo = apply_filters('qnrwp_site_logo_linked_logo', $linkedLogo);
-    echo $blockOpen .  '<a href="'. $logoLinkURL .'">' . $logoLinkHTML . '</a>' . $blockClose;
+  public static function render_site_logo() {
+    ?>
+    <div id="header-site-logo" class="header-site-logo qnr-font-resize" data-qnr-font-min="70" data-qnr-win-max-width="1024">
+      <?php if (has_custom_logo()): the_custom_logo(); ?>
+      <?php else: ?>
+      <a href="<?php echo esc_attr(trim(get_bloginfo('url'))); ?>"><?php echo esc_html(get_bloginfo('name')); ?></a>
+      <?php endif; ?>
+    </div>
+    <?php 
   }
   
   
   /**
    * Renders the header main navigation menu
    */
-  public static function main_navigation_menu() {
+  public static function render_main_navigation_menu() {
     wp_nav_menu(array('theme_location' => 'header_nav_menu', 'container_class' => 'qnr-navmenu', 'fallback_cb' => false));
   }
   
@@ -32,7 +33,7 @@ class QNRWP_UI_Parts {
   /**
    * Renders cookie notice as per theme options
    */
-  public static function cookie_notice() {
+  public static function render_cookie_notice() {
     if (!is_user_logged_in() && isset(get_option('qnrwp_settings_array')['cookie-notice']) && get_option('qnrwp_settings_array')['cookie-notice'] == 1): ?>
       <div class="qnrwp-cookie-notice">
         <p><?php 
@@ -56,6 +57,20 @@ class QNRWP_UI_Parts {
         <span class="qnr-glyph qnr-glyph-xicon" onclick="QNRWP.CookieNotice.close_cookie_notice(this, event);"></span>
       </div>
     <?php endif;
+  }
+  
+  
+  /**
+   * Returns content box classes, accounting for sidebars
+   */
+  public static function get_content_box_classes() {
+    if (!isset($GLOBALS['QNRWP_GLOBALS']['layout'])) QNRWP::get_layout();
+    $contentBoxClass = 'content-box';
+    if ($GLOBALS['QNRWP_GLOBALS']['layout'] == 'three-cols') $contentBoxClass .= ' three-col-content';
+    else if ($GLOBALS['QNRWP_GLOBALS']['layout'] == 'left-sidebar') $contentBoxClass .= ' two-col-content-right';
+    else if ($GLOBALS['QNRWP_GLOBALS']['layout'] == 'right-sidebar') $contentBoxClass .= ' two-col-content-left';
+    else if ($GLOBALS['QNRWP_GLOBALS']['layout'] == 'single') $contentBoxClass .= ' single-col-content';
+    return $contentBoxClass;
   }
   
 } // End QNRWP_UI_Parts class

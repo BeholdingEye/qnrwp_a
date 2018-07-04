@@ -35,7 +35,8 @@ class QNRWP_Widget_Custom extends WP_Widget {
     else if (stripos(get_post($instance['qnrwp_widget'])->post_title, 'SubHeader') !== false) {
       $rHtml = self::get_subheader_html($instance['qnrwp_widget']);
     }
-    echo $args['before_widget'] . $rHtml . $args['after_widget']; // Done
+    if ($rHtml) echo $args['before_widget'] . $rHtml . $args['after_widget']; // Done
+    else echo '';
 	}
   
   
@@ -116,7 +117,7 @@ class QNRWP_Widget_Custom extends WP_Widget {
     if (count($widgetChildren) > 0) {
       foreach ($widgetChildren as $widgetChild) {
         // Get any content from child page for its matching named page
-        if ($widgetChild->post_title == $GLOBALS['QNRWP_GLOBALS']['pageTitle']) {
+        if ($widgetChild->post_title == get_queried_object()->post_title) {
           $wcContent = apply_filters('the_content', get_post_field('post_content', $widgetChild->ID));
         }
         // Store name and img URL as key => value
@@ -126,14 +127,16 @@ class QNRWP_Widget_Custom extends WP_Widget {
       }
     }
     
-    $headerTitleText = $wcContent ? $wcContent : $GLOBALS['QNRWP_GLOBALS']['pageTitle']; // May be overriden below
-    
-    if ($GLOBALS['QNRWP_GLOBALS']['isNews']) { // Create News header, for all News pages, if no content defined
+    $headerTitleText = $wcContent ? $wcContent : get_queried_object()->post_title; // May be overriden below
+    if ($GLOBALS['QNRWP_GLOBALS']['pageTemplate'] == '404.php') {
+      $headerTitleText = '404 - ' . __('Page not found', 'qnrwp');
+      $attID = $shOptionsL['*'];
+    } else if (!is_singular() || get_queried_object()->post_type == 'post') { // Create News header, for all News pages, if no content defined
       $headerTitleText = $wcContent ? $wcContent : 'News';
       $attID = $shOptionsL['News'];
-    } else if ($GLOBALS['QNRWP_GLOBALS']['postsAmount'] == 'single') { // Create Page header
-      if (isset($shOptionsL[$GLOBALS['QNRWP_GLOBALS']['pageTitle']]) && !empty($shOptionsL[$GLOBALS['QNRWP_GLOBALS']['pageTitle']])) {
-        $attID = $shOptionsL[$GLOBALS['QNRWP_GLOBALS']['pageTitle']];
+    } else if (is_singular()) { // Create Page header
+      if (isset($shOptionsL[get_queried_object()->post_title]) && !empty($shOptionsL[get_queried_object()->post_title])) {
+        $attID = $shOptionsL[get_queried_object()->post_title];
       } else {
         $attID = $shOptionsL['*'];
       }

@@ -1,9 +1,9 @@
 <?php
 /**
- * 404.php
+ * home.php
  */
 
-$GLOBALS['QNRWP_GLOBALS']['pageTemplate'] = '404.php';
+$GLOBALS['QNRWP_GLOBALS']['pageTemplate'] = 'home.php';
 
 get_header(); // Includes start of content; sets our global
 
@@ -17,21 +17,36 @@ get_sidebar('subheader'); ?>
   
   <!-- Content Box -->
   <main id="content-box" class="<?php echo QNRWP_UI_Parts::get_content_box_classes(); // Will contain 'content-box' plus sidebar-dependent layout classes ?>">
+
+  <?php 
+  
+  if (have_posts()): 
+  
+    while (have_posts()): 
     
-    <div class="qnrwp-page-not-found-notice center" style="font-size:1.6em;line-height:1.4em;padding:2em 2em 10em;">
-      <?php esc_html_e('Sorry, the page you are looking for could not be found.', 'qnrwp'); ?>
-    </div>
+      the_post();
+      
+      get_template_part('template-parts/content', 'news_list');
     
+    endwhile;
+    
+    get_template_part('template-parts/content', 'news_list_links');
+  
+  else:
+  
+    get_template_part('template-parts/content', 'none');
+    
+  endif; ?>  
+
   </main><!-- End of Content Box -->
 
-  <?php
+  <?php 
 
   get_sidebar(); // Generic dummy for template-overriding plugins such as WooCommerce
-
+  
   get_sidebar('right'); ?>
   
 </section><!-- End of Middle Row -->
-
 <?php 
 
 get_sidebar('subcontent');

@@ -15,7 +15,7 @@ class QNRWP_Widget_Featured_News extends WP_Widget {
 		// Instantiate the parent object
 		$widget_ops = array( 
 			'classname'   => 'qnrwp_widget_featured_news',
-			'description' => esc_html__('Excerpts of 4 latest Posts, with category News or Uncategorized, with Featured Images, to appear as cards in a row.', 'qnrwp'),
+			'description' => esc_html__('Excerpts of 4 latest News posts, with Featured Images, to appear as cards in a row.', 'qnrwp'),
 		);
 		parent::__construct('qnrwp_widget_featured_news', 'QNRWP Featured News', $widget_ops);
 	}
@@ -35,7 +35,8 @@ class QNRWP_Widget_Featured_News extends WP_Widget {
       // ----------------------- The Loop
       while ($the_query->have_posts()) {
         $the_query->the_post();
-        if (in_category(array('news', 'uncategorized')) && has_post_thumbnail()) {
+        //if (in_category(array('news', 'uncategorized')) && has_post_thumbnail()) { // Disabled category filtering
+        if (has_post_thumbnail()) {
           //$thumbHtml = get_the_post_thumbnail(get_the_ID(), 'medium');
           //$thumbUrl = qnrwp_get_post_thumbnail_url($thumbHtml);
           $thumbUrl = wp_get_attachment_image_url(get_post_thumbnail_id(get_the_ID()), 'medium');
@@ -66,7 +67,7 @@ class QNRWP_Widget_Featured_News extends WP_Widget {
    * Output widget admin options form
    */
 	public function form($instance) {
-    echo '<p>'.esc_html__('Excerpts of 4 latest Posts, with category News or Uncategorized, with Featured Images, to appear as cards in a row.', 'qnrwp').'</p>';
+    echo '<p>'.esc_html__('Excerpts of 4 latest News posts, with Featured Images, to appear as cards in a row.', 'qnrwp').'</p>';
 	}
   
 } // End QNRWP_Widget_Featured_News class

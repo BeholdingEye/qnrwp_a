@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Shortcodes setup class (a singleton)
  */
-final class QNRWP_Shortcodes {
+class QNRWP_Shortcodes {
   
   use QNRWP_Singleton_Trait;
   
@@ -27,7 +27,7 @@ final class QNRWP_Shortcodes {
     add_shortcode('contact-form',     array($this, 'contact_form'));
     add_shortcode('menu',             array($this, 'menu'));
     add_shortcode('carousel',         array($this, 'carousel'));
-    add_shortcode('samples',          array($this, 'samples'));
+    add_shortcode('sample-cards',     array($this, 'sample_cards'));
   }
   
   
@@ -216,21 +216,16 @@ final class QNRWP_Shortcodes {
   /**
    * Samples shortcode definition
    * 
-   * [samples categories="cat1, cat2, cat3"]
+   * [sample-cards]
    */
-  public function samples($atts, $content = null) {
+  public function sample_cards($atts, $content = null) {
     $a = shortcode_atts(array(
-      'name' => 'Samples', // Title of the samples panel
+      'name' => __('Samples', 'qnrwp'), // Title of the samples panel
       'size' => 'medium_large', // Image size to use
       'number' => 6, // For best display, let this be a multiple of 6 (divisible by 3 and 2)
-      'categories' => 'sample-work', // Comma separated string of categories to show
     ), $atts);
-    //$sCatsL = preg_split('/,\s+/', $a['categories']);
-    if (!class_exists('QNRWP_Samples')) {
-      require_once QNRWP_DIR . 'inc/classes/class-qnrwp-samples.php';
-    }
-    //QNRWP_Samples::get_samples_html($sampleName, $sampleCategories, $sampleSize, $samplesNumber, $pageNumber)
-    $rHtml = QNRWP_Samples::get_samples_html(esc_attr($a['name']), esc_attr($a['categories']), esc_attr($a['size']), esc_attr($a['number']), 1);
+    //QNRWP_Samples::get_samples_html($sampleName, $sampleSize, $samplesNumber, $pageNumber)
+    $rHtml = QNRWP_Samples::get_samples_html($a['name'], $a['size'], $a['number'], 1);
     return $rHtml; // Could be empty
   }
   

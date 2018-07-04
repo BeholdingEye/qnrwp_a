@@ -12,15 +12,13 @@ QNRWP.Samples = {};
  * @param element   obj                Clicked button
  * @param event     event              Event
  * @param string    sampleName         Name
- * @param array     sampleCategories   Categories
  * @param int       sampleSize         Size of samples
  * @param int       sampleNumber       Number of samples to return
  * @param int       pageNumber         Paging number used by Wordpress
  */
-QNRWP.Samples.load_more = function (obj, event, sampleName, sampleCategories, sampleSize, samplesNumber, pageNumber) {
+QNRWP.Samples.load_more = function (obj, event, sampleName, sampleSize, samplesNumber, pageNumber) {
     var dataObj = {};
     dataObj.sampleName = sampleName;
-    dataObj.sampleCategories = sampleCategories;
     dataObj.sampleSize = sampleSize;
     dataObj.samplesNumber = samplesNumber;
     // Check button dataset for next page number (set on a previous button click), or use the parameter
@@ -42,7 +40,7 @@ QNRWP.Samples.load_more = function (obj, event, sampleName, sampleCategories, sa
         var samplesList = objClass("qnrwp-samples-list-block", obj.parentNode);
         samplesList.innerHTML = samplesList.innerHTML + "\n" + rT;
         // Delete button if all samples shown
-        if (rT.indexOf("<!-- All samples items displayed -->") != -1) {
+        if (rT.indexOf("<!-- All qnrwp_sample_cards displayed -->") != -1) {
             obj.parentNode.removeChild(obj);
         } else {
             // Add next page number dataset attribute to the button for next click

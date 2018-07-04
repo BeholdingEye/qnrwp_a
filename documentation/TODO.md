@@ -4,6 +4,10 @@ TODO
 
 Still to get done:
 
+* Convert Sample Card Info URL field to menu.
+
+* Add category filter option to Featured News widget.
+
 * No custom meta field.
 
 * To top arrow in Documentation.
@@ -14,19 +18,13 @@ Still to get done:
 
 * Make CPT option more fine grained in widget visibility.
 
-* Add logo preference.
-
 * Programming documentation.
-
-* Redo post nav links.
 
 * Finish Gallery CSS.
 
 * Fix menu drawer on click out.
 
 * Contact form Mailchimp integration.
-
-* get_search_query()
 
 * Add swipe to QI carousel.
 
@@ -44,9 +42,5 @@ platform.
 * wp_add_inline_style() to add inline style.
 
 * Markdown option for include shortcode, obtaining parts of a file.
-
-* Generalize Featured News to Featured Posts.
-
-* Load text domain.
 
 * Replace 'get_option' with global for speed.

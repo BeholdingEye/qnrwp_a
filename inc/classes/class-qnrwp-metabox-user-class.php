@@ -96,9 +96,9 @@ final class QNRWP_Metabox_User_Class {
     // If a new meta value was added and there was no previous value, add it
     if ($new_meta_value && $meta_value == '') add_post_meta($post_id, $meta_key, $new_meta_value, true);
     // If the new meta value does not match the old value, update it
-    elseif ($new_meta_value && $new_meta_value != $meta_value) update_post_meta($post_id, $meta_key, $new_meta_value);
+    else if ($new_meta_value && $new_meta_value != $meta_value) update_post_meta($post_id, $meta_key, $new_meta_value);
     // If there is no new meta value but an old value exists, delete it
-    elseif ($new_meta_value == '' && $meta_value) delete_post_meta($post_id, $meta_key, $meta_value);
+    else if ($new_meta_value == '' && $meta_value) delete_post_meta($post_id, $meta_key, $meta_value);
   }
 
   
