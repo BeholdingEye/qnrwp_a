@@ -4,9 +4,15 @@ TODO
 
 Still to get done:
 
+* Dark/bright on header with image.
+
+* Option for visibility control on page load.
+
 * Convert Sample Card Info URL field to menu.
 
 * Add category filter option to Featured News widget.
+
+* Improve image sizing in Featured News.
 
 * No custom meta field.
 
@@ -39,8 +45,6 @@ platform.
 
 * Simple page builder.
 
-* wp_add_inline_style() to add inline style.
-
 * Markdown option for include shortcode, obtaining parts of a file.
 
-* Replace 'get_option' with global for speed.
+* Replace 'get_option' with global for speed, throughout.

@@ -8,6 +8,20 @@ defined( 'ABSPATH' ) || exit;
 class QNRWP_UI_Parts {
   
   /**
+   * Renders header image
+   */
+  public static function render_header_image() {
+    if (has_header_image()) {
+      ?>
+      <div id="header-image-container" class="header-image-container flex-block flex-vertical-center-content flex-horizontal-center-content">
+        <?php echo get_header_image_tag(); ?>
+      </div>
+      <?php 
+    }
+  }
+  
+  
+  /**
    * Renders the site logo
    */
   public static function render_site_logo() {

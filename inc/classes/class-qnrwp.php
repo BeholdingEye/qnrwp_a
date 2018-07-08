@@ -53,6 +53,24 @@ final class QNRWP {
   
   
   /**
+   * QNRWP_Subheader instance
+   */
+  public $subheader = null;
+  
+  
+  /**
+   * QNRWP_Carousel instance
+   */
+  public $carousel = null;
+  
+  
+  /**
+   * QNRWP_Customizer instance NOT USED
+   */
+  //public $customizer = null;
+  
+  
+  /**
    * List JS files, in load order
    */
   public $jsFilesL = array( 
@@ -173,13 +191,17 @@ final class QNRWP {
    */
   private function global_settings() {
     $GLOBALS['QNRWP_GLOBALS']['pageTemplate'] = 'unknown'; // Avoid it being undefined TODO
-    // Set the content width equivalent to the very largest supported image size
-    global $content_width;
-    if (!isset($content_width)) {
-      $content_width = 2500;
-    }
     $themeSettings = get_option('qnrwp_settings_array'); // TODO theme mods
     if ($themeSettings) $GLOBALS['QNRWP_GLOBALS']['settingsArray'] = $themeSettings; 
+    // Set the content width to the max width specified by theme settings
+    global $content_width;
+    if (!isset($content_width)) {
+      try {
+        $content_width = min(2500,max(1200,intval(self::get_setting('max-page-width', 1600))));
+      } catch (Exception $e) {
+        $content_width = 1600;
+      }
+    }
   }
   
   
@@ -254,6 +276,25 @@ final class QNRWP {
       require_once QNRWP_DIR . 'inc/classes/class-qnrwp-samples.php';
       $this->samples = QNRWP_Samples::instance();
     }
+    
+    // Subheader
+    if (!class_exists('QNRWP_Subheader')) {
+      require_once QNRWP_DIR . 'inc/classes/class-qnrwp-subheader.php';
+      $this->subheader = QNRWP_Subheader::instance();
+    }
+    
+    // Carousel
+    if (!class_exists('QNRWP_Carousel')) {
+      require_once QNRWP_DIR . 'inc/classes/class-qnrwp-carousel.php';
+      $this->carousel = QNRWP_Carousel::instance();
+    }
+    
+    // Customizer NOT USED
+    //if (!class_exists('QNRWP_Customizer')) {
+      //require_once QNRWP_DIR . 'inc/classes/class-qnrwp-customizer.php';
+      //$this->customizer = QNRWP_Customizer::instance();
+    //}
+    
   }
   
   
@@ -320,13 +361,18 @@ final class QNRWP {
       'caption',
     ));
     
-    //add_theme_support('custom-background'); // TODO
+    add_theme_support('custom-background', array(
+      'default-color' => '#f6f6f6',
+    ));
     
-    //add_theme_support('custom-header', array(
-      //'header-text'   => false,
-      //'flex-width'    => true,
-      //'flex-height'   => true,
-    //));
+    global $content_width;
+    add_theme_support('custom-header', array(
+      'width'         => $content_width,
+      'height'        => intval(0.1*$content_width),
+      'header-text'   => false,
+      'flex-width'    => true,
+      'flex-height'   => true,
+    ));
     
     add_theme_support('custom-logo');
     
@@ -464,17 +510,30 @@ final class QNRWP {
    * Loads parent stylesheet before child's
    */
   public function enqueue_styles() {
+    // Custom CSS overriding max-width, tying us in with custom-header image dimensions
+    global $content_width;
+    $customCSS = '.header-row, .content-row, .middle-row, .content-box, .footer-row {max-width:'.$content_width.'px;}'.PHP_EOL;
+    
     $minify = isset(get_option('qnrwp_settings_array')['code-combine']) ? get_option('qnrwp_settings_array')['code-combine'] : 0;
     if ($minify) {
       $cfURI = $this->combine_minify_stylesheets();
       wp_enqueue_style('qnrwp-combo-stylesheet', $cfURI, null, null);
+      wp_add_inline_style('qnrwp-combo-stylesheet', $customCSS);
     } else { // TODO make contact loading conditional
+      $lastKey = '';
       foreach ($this->cssFilesL as $key => $cssFileURI) {
         wp_enqueue_style($key, get_template_directory_uri() . $cssFileURI, null, null);
+        $lastKey = $key;
       }
+      if (!is_child_theme()) wp_add_inline_style($lastKey, $customCSS); // If not minified and no child theme, we override last enqueued CSS
       if (is_child_theme()) {
         wp_enqueue_style('qnrwp-child-css', get_stylesheet_uri(), null, null); // Child theme style.css
-        wp_enqueue_style('qnrwp-child-child-css', get_stylesheet_directory_uri() . '/child-style.css', null, null); // Child theme actual, child-style.css
+        if (file_exists(get_stylesheet_directory() . '/child-style.css')) {
+          wp_enqueue_style('qnrwp-child-child-css', get_stylesheet_directory_uri() . '/child-style.css', null, null); // Child theme actual, child-style.css
+          wp_add_inline_style('qnrwp-child-child-css', $customCSS); // If not minified, we override child CSS
+        } else {
+          wp_add_inline_style('qnrwp-child-css', $customCSS);
+        }
       }
     }
   }

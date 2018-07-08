@@ -29,13 +29,14 @@ echo QNRWP_Meta_Tags::meta_opengraph_twitter_tags();
 wp_head(); // Required for title-tag and site icons
 ?>
 </head>
-<body <?php body_class('qnr-winscroller'); ?> data-qnr-offset="-4" style="visibility:hidden;opacity:0;">
+<body <?php if (has_header_image()) body_class('has-header-image qnr-winscroller'); else body_class('qnr-winscroller'); // TODO ?> data-qnr-offset="-4" style="visibility:hidden;opacity:0;">
 <!-- Error reporting: <?php echo error_reporting(); // Show in source that we're reporting errors ?> -->
 <!-- Header Row -->
 <header id="header-row" class="header-row widget-area<?php echo QNRWP::get_setting('header-fixed', $default=1)
                                                               ?' qnrwp-has-fixed-header'
                                                               :''; ?>">
   <?php 
+  QNRWP_UI_Parts::render_header_image();
   QNRWP_UI_Parts::render_cookie_notice();
   if (QNRWP_Widgets::is_active_sidebar_widgets('qnrwp-row-header')) {
       dynamic_sidebar('qnrwp-row-header');

@@ -191,21 +191,21 @@ class QNRWP_Shortcodes {
   /**
    * Carousel shortcode definition
    * 
-   * [carousel name="QNRWP-Widget-Carousel-1" size="large"]
+   * [carousel name="Carousel-1" size="large"]
    */
   public function carousel($atts, $content = null) {
     $a = shortcode_atts(array(
       'name' => '',
-      'size' => 'large',
+      'size' => 'qnrwp-largest',
     ), $atts);
-    $pages = get_pages(array('post_status' => 'private'));
+    $carousels = get_posts(array('post_parent' => 0, 'post_type' => 'qnrwp_carousel', 'post_status' => 'publish,private'));
     $rHtml = '';
-    foreach ($pages as $page) {
-      if ($page->post_title === $a['name']) {
+    foreach ($carousels as $carousel) {
+      if ($carousel->post_title === $a['name']) {
         if (!class_exists('QNRWP_Widget_Custom')) {
           require_once QNRWP_DIR . 'inc/classes/class-qnrwp-widget-custom.php';
         }
-        $rHtml = QNRWP_Widget_Custom::get_carousel_html($page->ID, $a['size']);
+        $rHtml = QNRWP_Widget_Custom::get_carousel_html($carousel->ID, $a['size']);
         break;
       }
     }

@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
  * Custom Widget definition
  * 
  * The point of the custom widget is to create HTML for display on more 
- * than one page, otherwise shortcodes are a better option
+ * than one page, otherwise shortcodes are a better option (for carousels)
  */
 class QNRWP_Widget_Custom extends WP_Widget {
   
@@ -16,7 +16,7 @@ class QNRWP_Widget_Custom extends WP_Widget {
 	public function __construct() {
 		$widget_ops = array( 
 			'classname'   => 'qnrwp_widget_custom',
-			'description' => esc_html__('Enables the selection of a custom widget to display. Custom widgets are defined in pages titled "QNRWP-Widget-WidgetType-XXXX", where "WidgetType" is either "Carousel" or "SubHeader", and the "XXXX" part is the unique identifier of the particular widget instance.', 'qnrwp'),
+			'description' => esc_html__('Enables the selection of a custom widget to display, Subheader or Carousel.', 'qnrwp'),
 		);
 		parent::__construct('qnrwp_widget_custom', 'QNRWP Custom Widget', $widget_ops);
 	}
@@ -28,11 +28,11 @@ class QNRWP_Widget_Custom extends WP_Widget {
 	public function widget($args, $instance) {
     $rHtml = '';
     // Carousel
-    if (stripos(get_post($instance['qnrwp_widget'])->post_title, 'Carousel') !== false) {
-      $rHtml = self::get_carousel_html($instance['qnrwp_widget'], 'large'); // Other sizes supported by shortcode
+    if (get_post($instance['qnrwp_widget'])->post_type == 'qnrwp_carousel') {
+      $rHtml = self::get_carousel_html($instance['qnrwp_widget'], 'qnrwp-largest'); // Other sizes supported by shortcode
     }
     // Sub Header
-    else if (stripos(get_post($instance['qnrwp_widget'])->post_title, 'SubHeader') !== false) {
+    else if (get_post($instance['qnrwp_widget'])->post_type == 'qnrwp_subheader') {
       $rHtml = self::get_subheader_html($instance['qnrwp_widget']);
     }
     if ($rHtml) echo $args['before_widget'] . $rHtml . $args['after_widget']; // Done
@@ -49,36 +49,35 @@ class QNRWP_Widget_Custom extends WP_Widget {
     $fieldWidgetID = esc_attr($this->get_field_id('qnrwp_widget'));
     $fieldWidgetName = esc_attr($this->get_field_name('qnrwp_widget'));
     // HTML form
-    //echo self::get_pages_form_for_widget($pagesVal, $pagesL, $pagesOutputID, $pagesOutputName); // TEST TODO
     echo self::get_widget_defs_menu($widget, $fieldWidgetID, $fieldWidgetName);
 	}
   
-  // ----------------------- OUR OWN METHODS:
   
   /**
-   * Returns HTML select/options menu listing widgets defined as "QNRWP-Widget-" prefixed pages
+   * Returns HTML select/options menu listing widgets
    * 
    * No output field required, the Widget updating works with "selected" <option> in <select>
    */
   public static function get_widget_defs_menu($existingVal, $outputID, $outputName) {
-    $pages = get_pages(array('post_status' => 'private'));
-    $rP = '';
+    $rP = '<option value="0">'.__('-- Select the widget --', 'qnrwp').'</option>'.PHP_EOL;
     $selected = '';
-    foreach ($pages as $page) {
-      // Omit pages that are children of other pages (widgets are defined as main pages)
-      // wp_get_post_parent_id is supposed to return false when no parent, but returns 0
-      if (! wp_get_post_parent_id($page->ID) && stripos($page->post_title, 'QNRWP-Widget-') !== false) {
-        // Save the page ID instead of name, for faster retrieval later
-        if ($page->ID == $existingVal) $selected = ' selected="selected"';
-        $rP .= '<option '.$selected.' value="'.esc_attr($page->ID).'">'.esc_html($page->post_title).'</option>'.PHP_EOL;
-        // Reset $selected for next item
-        $selected = '';
-      }
+    $subheaders = get_posts(array('post_parent' => 0, 'post_type' => 'qnrwp_subheader', 'post_status' => 'publish,private'));
+    foreach ($subheaders as $subheader) {
+      if ($subheader->ID == $existingVal) $selected = 'selected="selected" ';
+      $rP .= '<option '.$selected.'value="'.esc_attr($subheader->ID).'">'.esc_html($subheader->post_title).'</option>'.PHP_EOL;
+      $selected = '';
+    }
+    $carousels = get_posts(array('post_parent' => 0, 'post_type' => 'qnrwp_carousel', 'post_status' => 'publish,private'));
+    foreach ($carousels as $carousel) {
+      if ($carousel->ID == $existingVal) $selected = 'selected="selected" ';
+      $rP .= '<option '.$selected.'value="'.esc_attr($carousel->ID).'">'.esc_html($carousel->post_title).'</option>'.PHP_EOL;
+      $selected = '';
     }
     if ($rP) {
-      $rP = '<p>'.esc_html__('Select the widget to display', 'qnrwp').':</p><select name="'.$outputName.'" id="'.$outputID.'">'.PHP_EOL . $rP . '</select><br>'.PHP_EOL;
-    }
-    else $rP = '<p>'.esc_html__('No pages defining QNRWP widgets exist yet.', 'qnrwp').'</p>'.PHP_EOL;
+      $rP = '<p>'.esc_html__('Select the widget to display', 'qnrwp').':</p><select name="'.$outputName.'" id="'.$outputID.'">'.PHP_EOL 
+                      . $rP 
+                      . '</select><br>'.PHP_EOL;
+    } else $rP = '<p>'.esc_html__('No pages defining QNRWP widgets exist yet.', 'qnrwp').'</p>'.PHP_EOL;
     return $rP;
   }
   
@@ -89,13 +88,14 @@ class QNRWP_Widget_Custom extends WP_Widget {
    * @param   int   $widgetDefPageID    ID of page defining the subheader
    */
   public static function get_subheader_html($widgetDefPageID) {
+    if (!$widgetDefPageID) return ''; // Exit if 0, the first menu item in widget form
     // Get subheader attributes from the defining page
     $subheaderAttributes = '';
     // No validation, we trust the settings text to be untampered
     $rawS = get_post_field('post_content', $widgetDefPageID);
-    if (stripos($rawS, '{subheader-options') !== false) { // TODO make it JSON compliant and use functions ??
+    if (stripos($rawS, '{sub-header-options') !== false) { // TODO make it JSON compliant and use functions ??
       $rawS = preg_replace('@\s*//.*?(?:\n+|$)@i', ' ', $rawS); // Remove comments
-      $rawS = preg_replace('@\s*\{subheader-options\s*@i', '', $rawS); // Remove "{subheader=options"
+      $rawS = preg_replace('@\s*\{sub-header-options\s*@i', '', $rawS); // Remove "{sub-header-options"
       $rawS = preg_replace('@\s*\}@i', '', $rawS); // Remove ending "}"
       $rawS = preg_replace('@\s+@i', ' ', $rawS); // Convert whitespace to a space
       $subheaderAttributes = ' '.$rawS; // Add a space to place attributes in tag
@@ -105,7 +105,7 @@ class QNRWP_Widget_Custom extends WP_Widget {
     $wcContent = ''; // Widget child page content for display in subheader on matching named page
     $shOptionsL = array(); // Array of page name => image attachment ID
     $shOptionsL['*'] = ''; // Avoid an error later if key/value not set
-    $shOptionsL['News'] = ''; // Likewise, prefer no-URL if News not present
+    $shOptionsL['News'] = ''; // Likewise, prefer no-URL if News not present NO we use default image
     
     // Get Featured Image from definition page, as default for pages not defined by child pages
     if (has_post_thumbnail($widgetDefPageID)) {
@@ -113,7 +113,8 @@ class QNRWP_Widget_Custom extends WP_Widget {
     }
 
     // Get child pages and their Featured Images / content
-    $widgetChildren = get_page_children($widgetDefPageID, get_pages(array('post_status' => 'private')));
+    //$widgetChildren = get_page_children($widgetDefPageID, get_pages(array('post_status' => 'private')));
+    $widgetChildren = get_children(array('post_parent' => $widgetDefPageID, 'post_type' => 'qnrwp_subheader', 'post_status' => 'publish,private'));
     if (count($widgetChildren) > 0) {
       foreach ($widgetChildren as $widgetChild) {
         // Get any content from child page for its matching named page
@@ -127,14 +128,20 @@ class QNRWP_Widget_Custom extends WP_Widget {
       }
     }
     
+    if (!is_home() && is_front_page() && !$wcContent) { // Home TODO
+      $wcContent = '<div id="sub-header-content" class="sub-header-content">'
+                    .'<p class="qnr-font-resize" data-qnr-font-min="75" data-qnr-win-max-width="1024">'
+                    .get_bloginfo('description').'</p></div>';
+    }
     $headerTitleText = $wcContent ? $wcContent : get_queried_object()->post_title; // May be overriden below
     if ($GLOBALS['QNRWP_GLOBALS']['pageTemplate'] == '404.php') {
       $headerTitleText = '404 - ' . __('Page not found', 'qnrwp');
       $attID = $shOptionsL['*'];
     } else if (!is_singular() || get_queried_object()->post_type == 'post') { // Create News header, for all News pages, if no content defined
       $headerTitleText = $wcContent ? $wcContent : 'News';
-      $attID = $shOptionsL['News'];
-    } else if (is_singular()) { // Create Page header
+      if ($shOptionsL['News']) $attID = $shOptionsL['News'];
+      else $attID = $shOptionsL['*'];
+    } else if (is_singular()) { // Page
       if (isset($shOptionsL[get_queried_object()->post_title]) && !empty($shOptionsL[get_queried_object()->post_title])) {
         $attID = $shOptionsL[get_queried_object()->post_title];
       } else {
@@ -158,7 +165,7 @@ class QNRWP_Widget_Custom extends WP_Widget {
       if ($sizeArray['width'] > 600 && $sizeArray['height'] > 600) {
         // Prepend presumably increasing sizes to media html
         $mItem = '@media (max-width: '.$sizeArray['width'].'px) {'.PHP_EOL;
-        $mItem .= 'div#subheader {background-image:url("'.$imgPath.'");}'.PHP_EOL;
+        $mItem .= 'div#sub-header {background-image:url("'.$imgPath.'");}'.PHP_EOL;
         $mItem .= '}'.PHP_EOL;
         $mHtml = $mItem . $mHtml; // Concatenate in reverse
       }
@@ -167,13 +174,13 @@ class QNRWP_Widget_Custom extends WP_Widget {
     
     // Prepare style block for responsive bg image size
     $sHtml = '<style>'.PHP_EOL;
-    $sHtml .= 'div#subheader {background-image:url("'.$largestImage.'");}'.PHP_EOL;
+    $sHtml .= 'div#sub-header {background-image:url("'.$largestImage.'");}'.PHP_EOL;
     $sHtml .= $mHtml;
     $sHtml .= '</style>'.PHP_EOL;
     
-    $rHtml = $sHtml . '<div id="subheader"'.$subheaderAttributes.'>'.PHP_EOL;
+    $rHtml = $sHtml . '<div id="sub-header"'.$subheaderAttributes.'>'.PHP_EOL; // Further wrapped in "#sub-header-row" of sidebar template
     if ($wcContent) $rHtml .= $headerTitleText; // We already have all the code if $wcContent
-    else $rHtml .= '<div><p class="center-vertical">'.$headerTitleText.'</p></div>'; // TODO simplify?
+    else $rHtml .= '<div id="sub-header-content" class="sub-header-content"><p class="">'.$headerTitleText.'</p></div>'; // Similar to Home
     return $rHtml . '</div>' . PHP_EOL;
   }
   
@@ -186,6 +193,7 @@ class QNRWP_Widget_Custom extends WP_Widget {
    *                                    full, qnrwp-larger, qnrwp-largest, qnrwp-extra
    */
   public static function get_carousel_html($widgetDefPageID, $imageSize = 'qnrwp-largest') {
+    if (!$widgetDefPageID) return ''; // Exit if 0, the first menu item in widget form
     // Get carousel attributes from the defining page
     $carouselDataAttributes = '';
     // No validation, we trust the settings text to be untampered
@@ -211,7 +219,8 @@ class QNRWP_Widget_Custom extends WP_Widget {
     $attsSizesURLs = []; // List of attachment ID keys, values of size => URL array
     $slideIDs = []; // List of attachment IDs => timestamp DIV IDs for the slides
     
-    $widgetChildren = get_page_children($widgetDefPageID, get_pages(array('post_status' => 'private')));
+    //$widgetChildren = get_page_children($widgetDefPageID, get_pages(array('post_status' => 'private')));
+    $widgetChildren = get_children(array('post_parent' => $widgetDefPageID, 'post_type' => 'qnrwp_carousel', 'post_status' => 'publish,private', 'order' => 'ASC'));
     if (count($widgetChildren) < 1) return ''; // Exit if no slides defined
     
     // Get child pages as content DIVs

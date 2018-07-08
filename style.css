@@ -195,7 +195,7 @@ body {
     color: rgb(51,51,51);
     text-align: center;
     vertical-align: top;
-    background-color: #FFF;
+    background-color: #f6f6f6;
     /* Font rendering settings from Google */
     /* Support for all WebKit browsers. */
     -webkit-font-smoothing: antialiased;
@@ -268,6 +268,23 @@ div, header, main, section, article, footer, aside {                    /* On th
     border: none;
     border-bottom: solid thin #EEE;
 }
+
+/* ----------------------------- Header image */
+
+.header-image-container { /* Flex styling is by other classes on the element */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+.header-image-container > img {
+    opacity: 0.15;
+    min-width: 100%;
+    min-height: 100%;
+}
+
 
 /* ----------------------------- Header nav row (logo and nav menu) */
 
@@ -349,36 +366,48 @@ div, header, main, section, article, footer, aside {                    /* On th
 /* SUB-HEADER
  * ----------------------------------------------------- */
 
-.content-row .sub-header-row {
-    display: block;
+.sub-header-row {
     margin: 0 auto;
     text-align: center; /* Required for its content */
 }
 
-/* ----------------------------- QNR scroller override */
-    
-.sub-header-row .qnr-scroller {   /* ID 'subheader' */
-    height: 200px;  /* Required for the following */
+#sub-header {   /* Must use ID, not class, because class is set in widget-defining options string */
+    height: 200px;  /* Required for the content height */
     opacity: 1;
 }
-.sub-header-row .qnr-scroller div {
-    height: 100%;
-    text-align: center;
-    vertical-align: baseline;
-    background-image: linear-gradient(rgba(50,50,50,0.5), rgba(50,50,50,0.5));
+#sub-header.qnr-aspect-keeper { /* Aspect-keeper override */
+    min-height: 200px;
+    max-height: 600px;
 }
-/* TODO refactor for QNRWP_A site child style */
-.sub-header-row .qnr-scroller div p { /* Home page overrride below */
+
+.sub-header-content {
+    /* Flex attributes are from QI classes */
+    display: -webkit-flex;
+    display: flex;
+    /* Vertical align */
+    -webkit-align-items: center; /* Single line */
+    align-items: center;
+    -webkit-align-content: center; /* Multi line */
+    align-content: center;
+    /* Horizontal align */
+    -webkit-justify-content: center;
+    justify-content: center;
+    
+    height: 100%;
+    background-image: linear-gradient(rgba(50,50,50,0.5), rgba(50,50,50,0.5)); /* Darkening overlay */
+}
+.sub-header-content p { /* Home page override below */
     display: inline-block;
     position: relative;
-    margin: 0 auto;
+    margin: 0;
     padding: 0.1em;
-    padding-top: 10%;
+    padding-top: 35%;
     padding-bottom: 0.25em;
     width: auto;
     height: auto;
     font-size: 1.8em;
     font-weight: normal;
+    line-height: 1.2em;
     text-align: left;
     text-transform: lowercase;
     color: white;
@@ -386,21 +415,9 @@ div, header, main, section, article, footer, aside {                    /* On th
     border-bottom: dotted thin white;
     box-sizing: border-box;
 }
-
-/* ----------------------------- QNR aspect-keeper override */
-
-/* Brought in from child style */
-.content-row .sub-header-row .qnr-aspect-keeper {  /* ID 'subheader' */
-    min-height: 200px;
-    max-height: 600px;
-}
-
-/* Override on Home page (other overrides in child theme style.css) TODO refactor as above */
-body.home .sub-header-row .qnr-scroller div p {
-    font-weight: normal;
-    font-size: 1.8em;
-    line-height: 1.2em;
-    padding-top: 8%;
+body.home .sub-header-content p {
+    padding-top: 28%;
+    width: 11em;
     text-transform: none;
     border-bottom: none;
 }

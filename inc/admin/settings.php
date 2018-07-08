@@ -132,7 +132,7 @@
                                                   && !empty(get_option('qnrwp_settings_array')['cookie-notice-linktext']))
                                           echo esc_attr(get_option('qnrwp_settings_array')['cookie-notice-linktext']); 
                                         else echo esc_attr('Details');
-                                        ?>"></td>
+                                      ?>"></td>
           </tr>
           
         </table>
@@ -153,6 +153,21 @@
                                       : 'checked="checked"';
                                       ?>> 
                                     <?php esc_html_e('Fix header to top of window, not moving up out of view on scroll', 'qnrwp'); ?></label></td>
+          </tr>
+          
+          <!-- Max page width -->
+          <tr valign="top">
+            <th scope="row"><?php esc_html_e('Max page width', 'qnrwp'); ?></th>
+            <td><p><?php esc_html_e('Enter the maximum pixel width for pages, between 1200 and 2500. If left blank, the default of 1600 will be used. This setting will set the "max-width" CSS attribute on ".header-row, .content-row, .middle-row, .content-box, .footer-row". You must ensure that page components can accommodate.', 'qnrwp'); ?></p>
+            <input type="number" name="qnrwp_settings_array[max-page-width]" id="qnrwp_settings_array_max-page-width" 
+                                      min="1200"
+                                      max="2500"
+                                      value="<?php 
+                                        if (isset(get_option('qnrwp_settings_array')['max-page-width'])
+                                                  && !empty(get_option('qnrwp_settings_array')['max-page-width']))
+                                          echo max(min(intval(esc_attr(get_option('qnrwp_settings_array')['max-page-width'])), 2500), 1200);
+                                        else echo 1600;
+                                      ?>"></td>
           </tr>
           
         </table>
@@ -347,9 +362,9 @@
           require_once QNRWP_DIR . 'inc/markdown/MarkdownExtra.php';
         ?>
         <ul>
-          <li><a href="#tab-documentation-content">Content Editing</a></li>
-          <li><a href="#tab-documentation-programming">Programming</a></li>
-          <li><a href="#tab-documentation-todo">TODO</a></li>
+          <li><a href="#tab-documentation-content"><?php esc_html_e('Content Editing', 'qnrwp'); ?></a></li>
+          <li><a href="#tab-documentation-programming"><?php esc_html_e('Programming', 'qnrwp'); ?></a></li>
+          <li><a href="#tab-documentation-todo"><?php esc_html_e('TODO', 'qnrwp'); ?></a></li>
         </ul>
         
         <div id="tab-documentation-content">

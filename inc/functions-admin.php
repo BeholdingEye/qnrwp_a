@@ -532,9 +532,7 @@ function qnrwp_edit_pages_menus() {
                               ));
   $pageCount = 0;
   foreach ($pages as $key => $page) {
-    // Omit widget-defining pages
-    if ($pageCount < 20 && stripos($page->post_title, 'QNRWP-Widget-') === false 
-            && ($page->post_parent == 0 || stripos(get_post($page->post_parent)->post_title, 'QNRWP-Widget-') === false)) {
+    if ($pageCount < 20) {
       add_submenu_page(
                         'edit.php?post_type=page',                  // Parent menu slug
                         __('Edit Page', 'qnrwp'),                   // Page title
@@ -577,79 +575,6 @@ add_filter('submenu_file', 'qnrwp_filter_submenu', 10, 2);
 // ===================== SIMPLIFY DASHBOARD FOR NON-ADMINS =====================
 
 if (!current_user_can('manage_options') && (isset(get_option('qnrwp_settings_array')['admin-simplify']) && get_option('qnrwp_settings_array')['admin-simplify'] == 1)) {
-  
-  /**
-   * Simplify admin for non-admins
-   */
-  function qnrwp_admin_simplify() {
-    // ----------------------- Redirect from Dashboard to Posts
-    if (strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/index.php') !== false) {
-      wp_redirect('edit.php');
-      exit;
-    }
-    // ----------------------- Remove 'Drag boxes here' on Dashboard
-    // NOT USED, as we now redirect from Dashboard (and this spoils collapse bars generally)
-    // Disable the feature by deregistering script
-    //wp_deregister_script('postbox');
-    // ----------------------- Prepare global for hiding widget definition pages
-    // We do this here to avoid impossible recursion problem in pre_get_posts below,
-    //   taking care to control the flow with state of the qnrwpWidgetPageIDs global
-    if (strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/edit.php') !== false && strpos($_SERVER['QUERY_STRING'], 'post_type=page') !== false) {
-      if (!isset($GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'])) {
-        // Get IDs of widget pages
-        $allPages = get_posts(array(
-                      'numberposts' => -1,
-                      'nopaging' => true,
-                      'no_found_rows' => true,
-                      'post_type' => 'page',
-                      'post_status' => 'publish,future,draft,pending,private',
-                      'fields' => 'ids',
-                      'suppress_filters' => true, // Doesn't seem to work...
-                    ));
-        $GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'] = [];
-        foreach ($allPages as $pageID) {
-          $page = get_post($pageID);
-          if (strpos(get_the_title($pageID), 'QNRWP-Widget-') !== false) {
-            $GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'][] = $pageID;
-          } else if ($page->post_parent !== 0) {
-            if (strpos(get_the_title($page->post_parent), 'QNRWP-Widget-') !== false) {
-              $GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'][] = $pageID;
-            }
-          }
-        }
-      } // Else do nothing, the global is set
-    }
-  }
-  add_action('admin_init', 'qnrwp_admin_simplify');
-  
-  
-  /**
-   * Hide Pages defining QNRWP Widgets
-   */
-  function qnrwp_hide_widget_pages($query) {
-    // $query is global $wp_query object passed by reference
-    if ($query->is_admin && !$query->in_the_loop && strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/edit.php') !== false 
-            && strpos($_SERVER['QUERY_STRING'], 'post_type=page') !== false && isset($GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'])) {
-      // If we pass the test, we assume we're in WP_Posts_List_Table, can change query
-      $query->set('post__not_in', $GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs']);
-    }
-  }
-  add_action('pre_get_posts', 'qnrwp_hide_widget_pages');
-  
-  
-  /**
-   * Change posts count to actual
-   */
-  function qnrwp_posts_count_to_actual($counts, $type='page', $perm='readable') {
-    if (strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/edit.php') !== false && strpos($_SERVER['QUERY_STRING'], 'post_type=page') !== false 
-            && isset($GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs'])) {
-      //qnrwp_debug_printout($counts, $append=false);
-      $counts->publish -= count($GLOBALS['QNRWP_GLOBALS']['qnrwpWidgetPageIDs']); // We assume widget definition pages are published
-    }
-    return $counts;
-  }
-  add_filter('wp_count_posts', 'qnrwp_posts_count_to_actual', 10, 3);
-  
   
   /**
    * Remove from vertical menu on the left

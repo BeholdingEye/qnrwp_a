@@ -65,19 +65,11 @@ class QNRWP_Widgets {
   public static function get_pages_form_for_widget($pagesVal, $pagesL, $outputID, $outputName) {
     $pages = get_pages(); // 'publish' status only
     $rP = '';
-    $pageCheckbox = '';
-    $pageParentID = false;
     foreach ($pages as $page) {
-      // Omit pages set up as a widget's contents with "QNRWP-Widget-" prefix, and their children (one level only); should be redundant if these pages are private
-      $pageParentID = wp_get_post_parent_id($page->ID); // Returns 0 as false if no parent
-      $pageParentTitle = $pageParentID ? get_post($pageParentID)->post_title : '';
-      if (stripos($page->post_title, 'QNRWP-Widget-') === false && stripos($pageParentTitle, 'QNRWP-Widget-') === false) {
-        // Test if this page is in $pagesL array parameter, select if so
-        $checked = in_array($page->ID, $pagesL) ? ' checked="checked"' : ''; // Don't convert page ID to string...
-        $pageCheckbox = '&nbsp;&nbsp;<label><input onclick="javascript:qnrwp_collect_pages_options_for_widget(event)" type="checkbox"'.$checked
-                            .' value="'.$page->ID.'">'.esc_html($page->post_title).'</label><br>'.PHP_EOL;
-        $rP .= $pageCheckbox;
-      }
+      // Test if this page is in $pagesL array parameter, select if so
+      $checked = in_array($page->ID, $pagesL) ? ' checked="checked"' : ''; // Don't convert page ID to string...
+      $rP .= '&nbsp;&nbsp;<label><input onclick="javascript:qnrwp_collect_pages_options_for_widget(event)" type="checkbox"'.$checked
+                          .' value="'.$page->ID.'">'.esc_html($page->post_title).'</label><br>'.PHP_EOL;
     }
     //if ($rP) {
     

@@ -98,10 +98,11 @@ final class QNRWP_Admin_Options {
   public function sanitize_settings_array($input) {
     $cookieNotice = isset($input['cookie-notice']) ? $input['cookie-notice'] : 0;
     $cookieNoticeText = isset($input['cookie-notice-text']) ? $input['cookie-notice-text'] : '';
-    $cookieNoticePostid = isset($input['cookie-notice-postid']) ? $input['cookie-notice-postid'] : 0;
+    $cookieNoticePostid = isset($input['cookie-notice-postid']) ? intval($input['cookie-notice-postid']) : 0;
     $cookieNoticeLinkText = isset($input['cookie-notice-linktext']) ? $input['cookie-notice-linktext'] : '';
     
     $headerFixed = isset($input['header-fixed']) ? $input['header-fixed'] : 0;
+    $maxPageWidth = isset($input['max-page-width']) ? min(2500,max(1200, intval($input['max-page-width']))) : 1600;
     
     $codeCombine = isset($input['code-combine']) ? $input['code-combine'] : 0;
     
@@ -119,6 +120,7 @@ final class QNRWP_Admin_Options {
     $valArray['cookie-notice-linktext'] = $cookieNoticeLinkText;
     
     $valArray['header-fixed'] = $headerFixed;
+    $valArray['max-page-width'] = $maxPageWidth;
     
     $valArray['code-combine'] = $codeCombine;
     

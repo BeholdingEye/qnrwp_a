@@ -238,15 +238,12 @@ widget. Two attributes are supported in the shortcode:
 
 * name:
 
-    :   The title of a Page defining the parameters of the carousel. The
-        title must be "QNRWP-Widget-Carousel-XXXX" where the "XXXX" part
-        is the uniquely identifying string for the particular carousel
-        instance.
+    :   The title of a Carousel post defining the carousel.
         
-        The page content must be a "{carousel-options}" string that
-        contains lines of HTML attributes specifying the parameters. The
-        attributes are documented in the "res/js/qnr-interface.js" file.
-        Comments starting with "//" are supported.
+        The Carousel post content must be a "{carousel-options}" string 
+        containing lines of HTML attributes specifying the parameters. 
+        The attributes are documented in the "res/js/qnr-interface.js" 
+        file. Comments starting with "//" are supported.
         
         Example:
         
@@ -264,16 +261,9 @@ widget. Two attributes are supported in the shortcode:
             }
         
         
-        Child pages of the defining page will be slides of the carousel,
-        with the Featured Image assigned to the child page used as the
-        background image for the slide.
-        
-        The carousel defining page and its children must be published as
-        Private.
-        
-        It is good practice to set the Order of the carousel defining
-        page to a high value such as 9999 to push these pages to the
-        bottom of the list on the Pages page.
+        Child Carousel posts of the defining Carousel post will be 
+        slides of the carousel, with the Carousel Image assigned to the 
+        child post used as the background image for the slide.
 
 * size:
 
@@ -362,14 +352,12 @@ of widget visibility in the child theme.
 ### QNRWP Custom Widget                                            {#w2}
 
 Enables the selection of a custom widget to display. Custom widgets are 
-defined in pages titled "QNRWP-Widget-WidgetType-XXXX", where 
-"WidgetType" is either "Carousel" or "SubHeader", and the "XXXX" part 
-is the unique identifier of the particular widget instance.
+defined as Subheader or Carousel, using their custom post types.
         
 * Carousel:
 
-    :   The system of pages defining the carousel is the same as
-        used for the shortcode. The advantage of displaying the
+    :   The system of Carousel posts defining the carousel is the same 
+        as used for the shortcode. The advantage of displaying the
         carousel via the widget is that it can be set to appear
         in a sidebar, on a number of pages, rather than in the
         content of a specific page.
@@ -382,27 +370,25 @@ is the unique identifier of the particular widget instance.
         width, you may get better results using the shortcode with a 
         smaller size attribute, perhaps in a Custom HTML widget.
 
-* SubHeader:
+* Subheader:
 
-    :   The SubHeader widget is defined similarly to carousels, with a
-        "{subheader-options}" string containing lines of HTML attributes
-        controlling the appearance of the subheader. Example:
+    :   The Subheader widget is defined similarly to carousels, in a 
+        custom Subheader post, with a "{sub-header-options}" string 
+        containing lines of HTML attributes controlling the appearance 
+        of the subheader. Example:
         
-            {subheader-options // HTML attribute format
+            {sub-header-options // HTML attribute format
             class="qnr-aspect-keeper qnr-scroller" // Make it parallax
             data-qnr-aspect-ratio="3.8"
             }
         
-        Child pages of the widget defining page should be named the same
-        as the pages on which the widget is to appear. Featured Images
-        of the child pages will be used for the background image in the
-        subheader, and the child page content will be the subheader
-        content. The Featured Image of the widget defining page will be
+        Child posts of the widget defining post should be named the same
+        as the pages on which the widget is to appear. Subheader Images
+        of the child posts will be used for the background image in the
+        subheader, and the child post content will be the subheader
+        content. The Subheader Image of the widget defining page will be
         used as the subheader image on any page not represented by a 
-        child page.
-        
-        The SubHeader defining page and its children must be published 
-        as Private.
+        child post.
 
 ### QNRWP Featured News                                            {#w3}
 

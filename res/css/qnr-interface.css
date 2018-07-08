@@ -2309,6 +2309,8 @@ div.qnr-accordion div {
     align-content: space-between;
 }
 .flex-vertical-top-content {
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
     -webkit-align-content: flex-start;
     align-content: flex-start;
 }
