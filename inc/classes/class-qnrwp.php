@@ -76,7 +76,7 @@ final class QNRWP {
   public $jsFilesL = array( 
                             'qnrwp-startup-js'        => '/res/js/qnrwp-startup.js',
                             'qnrwp-interface-js'      => '/res/js/qnr-interface.js',
-                            'qnrwp-contact-js'        => '/res/js/contact.js',
+                            'qnrwp-contact-js'        => '/res/js/qnrwp-contact.js',
                             'qnrwp-ajax-js'           => '/res/js/qnrwp-ajax.js',
                             'qnrwp-samples-js'        => '/res/js/qnrwp-samples.js',
                             'qnrwp-cookie-notice-js'  => '/res/js/qnrwp-cookie-notice.js',
@@ -136,13 +136,15 @@ final class QNRWP {
                       ),
                       
       'contact' => array(
+                      'note1'  => esc_html__('Max 500 characters', 'qnrwp'),
+                      
                       'alert1' => esc_html__('Your message cannot be submitted', 'qnrwp'),
                       'alert2' => esc_html__('Please correct and try again.', 'qnrwp'),
                       'alert3' => esc_html__('Page session has expired. Reload the page to restart the session.', 'qnrwp'),
                       'alert4' => esc_html__('Not a valid email address.', 'qnrwp'),
                       'alert5' => esc_html__('Not a valid message.', 'qnrwp'),
-                      'alert6' => sprintf(esc_html__('Please check that %s is the correct email address. Click OK to send or Cancel to abort.', 'qnrwp'), 
-                                            '{this_email_address}'),
+                      
+                      'confirm1' => esc_html__('Please check that %s is the correct email address. Click OK to send or Cancel to abort.', 'qnrwp'),
                       ),
                       
       'admin' => array(

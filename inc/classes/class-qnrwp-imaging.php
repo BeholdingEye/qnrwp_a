@@ -57,24 +57,25 @@ final class QNRWP_Imaging {
    */
   public function reduce_uploaded_image($upload) {
     // There is also a $context argument, but we don't care about it
-    try {
-      // Load uploaded image into editor object
-      $uploaded_image_location = $upload['file'];
-      $imageFull = wp_get_image_editor($uploaded_image_location);
-      if ($imageFull->get_size()['width'] > 2500) {
-        // Set JPEG quality to half way between Media setting and 100, for better quality
-        $jpegQ = get_option('qnrwp_jpeg_quality', $default=60);
-        $imageFull->set_quality(((100 - $jpegQ)/2) + $jpegQ);
-        $imageFull->resize(2500, null, false);
-        $imageFull->save($uploaded_image_location);
-        unset($imageFull); // Just in case...
+    if (in_array($upload['type'], array('image/jpg', 'image/jpeg', 'image/gif', 'image/png'))) {
+      try {
+        // Load uploaded image into editor object
+        $uploaded_image_location = $upload['file'];
+        $imageFull = wp_get_image_editor($uploaded_image_location);
+        if ($imageFull->get_size()['width'] > 2500) {
+          // Set JPEG quality to half way between Media setting and 100, for better quality
+          $jpegQ = get_option('qnrwp_jpeg_quality', $default=60);
+          $imageFull->set_quality(intval((100 - $jpegQ)/2) + $jpegQ);
+          $imageFull->resize(2500, null, false);
+          $imageFull->save($uploaded_image_location);
+          unset($imageFull); // Just in case...
+        }
+        return $upload;
       }
-      //qnrwp_debug_printout(array('UPload file::', $upload), $append=false);
-      return $upload;
-    }
-    catch (Exception $e) {
-      wp_die($e->getMessage());
-    }
+      catch (Exception $e) {
+        wp_die($e->getMessage());
+      }
+    } else return $upload;
   }
   
   
@@ -219,20 +220,28 @@ final class QNRWP_Imaging {
           if ($image_data != $attach_data) wp_update_attachment_metadata($attach_id, $attach_data); // May be redundant, unavoidably
           $riSavedOptions['processed-ids'][] = $attach_id;
           $riSavedOptions['last-update'] = time();
-          // Reduce full-size original if larger than 2500px width (may be redundant if filter hook being used)
-          if ($attach_data['width'] > 2500) { // Due to the above, we are now testing possibly updated metadata, including by any filter hook
+          
+          // NEW: we re-make the original regardless of size, to avoid poorly compressed originals being served
+          
+          // OLD: Reduce full-size original if larger than 2500px width (may be redundant if filter hook being used)
+          //if ($attach_data['width'] > 2500) { // Due to the above, we are now testing possibly updated metadata, including by any filter hook
             $imageFull = wp_get_image_editor($uploaded_image_location);
             // Set JPEG quality to half way between Media setting and 100, for better quality
-            $imageFull->set_quality(((100 - $mSetsL['qnrwp_jpeg_quality'])/2) + $mSetsL['qnrwp_jpeg_quality']);
+            $imageFull->set_quality(intval((100 - $mSetsL['qnrwp_jpeg_quality'])/2) + $mSetsL['qnrwp_jpeg_quality']);
             //qnrwp_debug_printout(array('TEST in loop::', $imageFull, $uploaded_image_location, $attach_data)); // TEST
+            
+          if ($attach_data['width'] > 2500) { // Due to the above, we are now testing possibly updated metadata, including by any filter hook
             $imageFull->resize(2500, null, false);
+          }
+            
             $imageFull->save($uploaded_image_location);
             // Update the metadata array again
             $attach_data['width'] = $imageFull->get_size()['width'];
             $attach_data['height'] = $imageFull->get_size()['height'];
             wp_update_attachment_metadata($attach_id, $attach_data);
             unset($imageFull); // Just in case...
-          }
+          //}
+          
           // Save the options/record
           if (!update_option('qnrwp_regenerate_images_record', $riSavedOptions)) wp_die(__('Database options during processing for Regenerate Images could not be saved.', 'qnrwp'));
         }

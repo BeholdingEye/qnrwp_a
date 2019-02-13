@@ -34,16 +34,9 @@ Still to get done:
 
 * Add swipe to QI carousel.
 
-* Tidy up QI CSS, navmenu.
-
 * User login page.
 
 * Refactor functions-admin.php into classes.
-
-* Test website on iOS Safari 7, iPhone 4, as the lowest supported 
-platform.
-
-* Simple page builder.
 
 * Markdown option for include shortcode, obtaining parts of a file.
 

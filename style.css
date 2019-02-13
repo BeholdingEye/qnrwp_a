@@ -316,6 +316,7 @@ div, header, main, section, article, footer, aside {                    /* On th
     width: auto;
     height: 100%;
     text-decoration: none;
+    white-space: nowrap;
     z-index: 99;
 }
 .header-site-logo a:hover {
@@ -401,7 +402,7 @@ div, header, main, section, article, footer, aside {                    /* On th
     position: relative;
     margin: 0;
     padding: 0.1em;
-    padding-top: 35%;
+    padding-top: 10%;
     padding-bottom: 0.25em;
     width: auto;
     height: auto;
@@ -416,7 +417,9 @@ div, header, main, section, article, footer, aside {                    /* On th
     box-sizing: border-box;
 }
 body.home .sub-header-content p {
-    padding-top: 28%;
+/*
+    padding-top: 5%;
+*/
     width: 11em;
     text-transform: none;
     border-bottom: none;
@@ -1308,6 +1311,21 @@ button.qnrwp-samples-load-more:hover {
     background-color: #1e6594;
     clear: both;
 }
+.qnrwp-cookie-notice-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    z-index: 9999;
+}
+.qnrwp-cookie-notice-footer {
+    border-radius: 3px 3px 0 0;
+}
+.qnrwp-cookie-notice-fixed.qnrwp-cookie-notice-footer {
+    top: auto;
+    bottom: 0;
+}
 .qnrwp-cookie-notice p {
     margin: 0;
     margin-right: 2em;
@@ -1317,6 +1335,8 @@ button.qnrwp-samples-load-more:hover {
 }
 .qnrwp-cookie-notice p a {
     text-decoration: underline;
+}
+.qnrwp-cookie-notice.qnrwp-cookie-notice-footer p a {
 }
 .qnrwp-cookie-notice p a:hover {
     color: inherit;

@@ -1,9 +1,9 @@
 # Quicknr-Interface
 
 Javascript and CSS interface widgets for web pages and web apps.
------------------
+----------------------------------------------------------------
 
-A lighter alternative to Bootstrap, does not depend on jQuery
+A lighter alternative to Bootstrap, does not depend on jQuery.
 
 Documentation is presently available only as a comment block at the top of the "js/qnr-interface.js" file.
 
@@ -76,4 +76,8 @@ Included widgets are:
 16. **Popout Slider**
 
   Container for UI items that are hidden on page load, but on click of a button slide out from a window edge. By default set up for revealing a mailing subscription form, but can be adjusted for menu drawers etc. Callbacks may be defined for showing and hiding.
+
+17. **Thumb Strip**
+
+  Scrolling strip of thumbnail cells, bounded by next and previous navigation arrows. The strip may be horizontal or vertical. Scrolling is nicely animated, centering the clicked cell.
 

@@ -27,9 +27,10 @@ class QNRWP_Contact_Form {
       $sitewideBlockingMinutesRemaining = max(0, 5 - intval(ceil((time() - $tlmsOldRecord)/60)));
       if ($sitewideBlockingMinutesRemaining) {
         // Return special error
-        $sitewideBlockingMinutesRemaining;
-        $minutesInResponse = ($sitewideBlockingMinutesRemaining == 1) ? ' minute' : ' minutes';
-        return 'ERROR: '.sprintf(__('You have already sent a message using this form. You may try again in %s.', 'qnrwp'), $sitewideBlockingMinutesRemaining.$minutesInResponse);
+        $errorMinsRemain = esc_html__('You have already sent a message using this form.', 'qnrwp');
+        $errorMinsRemain .= ' ' . sprintf(esc_html(_n('You may try again in %s minute.', 'You may try again in %s minutes.', $sitewideBlockingMinutesRemaining, 'qnrwp')), 
+                                    $sitewideBlockingMinutesRemaining);
+        return 'ERROR: ' . $errorMinsRemain;
       }
     }
     if (!isset($sitewideBlockingMinutesRemaining) || !$sitewideBlockingMinutesRemaining) {
@@ -107,7 +108,7 @@ class QNRWP_Contact_Form {
             $emailMessage = __('Message from', 'qnrwp').' "' . $emailName . '":' . PHP_EOL . PHP_EOL . $emailMessage;
           }
           $mT = $emailMessage . PHP_EOL . PHP_EOL;
-          // Append a note about the message source
+          // Append a note about the message source TODO improve tranlations
           $mT .= '=========='.PHP_EOL;
           $mT .= __('Message sent from', 'qnrwp').' IP '.$dataL['clientip'].PHP_EOL;
           $mT .= __('using the online contact form at', 'qnrwp').' '.PHP_EOL;
@@ -161,11 +162,16 @@ class QNRWP_Contact_Form {
           id="<?php echo 'contact-form' . $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount']; ?>" 
           action="" 
           method="post"
-          onsubmit="QNR_CONTACT.send_email(this, event)"><?php // TODO namespace JS functions ?>
+          onsubmit="QNRWP.Contact.send_email(this, event)"><?php // TODO namespace JS functions ?>
       <input type="hidden" name="form-name-hidden" class="form-name-hidden" value="<?php echo 'contact-form' . $GLOBALS['QNRWP_GLOBALS']['ContactFormsCount']; ?>">
       <input type="hidden" name="client-ip-hidden" class="client-ip-hidden" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>">
       <input type="hidden" name="permalink-hidden" class="permalink-hidden" value="<?php echo esc_url(get_permalink()); ?>">
       <input type="hidden" name="options-hidden" class="options-hidden" value="<?php echo $optionsInt; ?>">
+      <?php 
+      // Thank you page, if set
+      if (isset($options['thank-slug']) && !empty($options['thank-slug'])): ?>
+      <input type="hidden" name="thank-slug-hidden" class="thank-slug-hidden" value="<?php echo base64_encode(get_permalink(get_page_by_path($options['thank-slug']))); ?>">
+      <?php endif; ?>
       <input type="hidden" name="sent-reply-hidden" class="sent-reply-hidden" value="<?php echo base64_encode($options['sent-reply']); ?>">
       <input type="hidden" name="fail-reply-hidden" class="fail-reply-hidden" value="<?php echo base64_encode($options['fail-reply']); ?>">
       <input type="hidden" name="form-class-hidden" class="form-class-hidden" value="<?php echo bin2hex($options['form-class']); ?>">
@@ -212,8 +218,8 @@ class QNRWP_Contact_Form {
                     rows="10" 
                     minlength="40" 
                     maxlength="500" 
-                    onkeyup="QNR_CONTACT.count_textarea(this,'count')" 
-                    onblur="QNR_CONTACT.count_textarea(this,'reset')"></textarea>
+                    onkeyup="QNRWP.Contact.count_text_area(this,'count')" 
+                    onblur="QNRWP.Contact.count_text_area(this,'reset')"></textarea>
   <?php if ($warningsBool): ?>
   <p class="user-info"><span class="textarea-count"><?php esc_html_e('Max 500 characters', 'qnrwp'); ?></span><span class="client-ip"><?php esc_html_e('Your IP', 'qnrwp'); ?>: <?php echo $_SERVER['REMOTE_ADDR']; ?></span>
   </p>
@@ -225,7 +231,7 @@ class QNRWP_Contact_Form {
                     type="submit" 
                     name="form-send" 
                     class="form-send" 
-                    value="Send" ><?php echo esc_html($options['label-submit']); ?></button>
+                    value="Send"><?php echo esc_html($options['label-submit']); ?></button>
       </div>
     </form>
   </div>

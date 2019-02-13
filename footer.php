@@ -30,6 +30,11 @@ $footerLowerActive = QNRWP_Widgets::is_active_sidebar_widgets('qnrwp-row-footer-
   </div>
   <?php endif; ?>
 <?php endif; ?>
+<?php
+if (isset(get_option('qnrwp_settings_array')['cookie-notice-placement']) && get_option('qnrwp_settings_array')['cookie-notice-placement'] == 1) {
+  QNRWP_UI_Parts::render_cookie_notice();
+}
+?>
 </footer><!-- End of page Footer -->
 <?php 
 

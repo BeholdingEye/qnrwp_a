@@ -231,6 +231,13 @@ Attributes and their default settings:
     as hex value of it will be used to id / block repeats*
 
 
+* thank-slug
+    :   ''
+    
+    *WordPress 'slug' of a page to redirect to after email is sent; by
+    default, this is not used, a notice appears on the same page*
+
+
 ### Carousel                                                       {#s3}
 
 The "carousel" shortcode uses the Quicknr Interface Javascript carousel

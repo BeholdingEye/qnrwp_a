@@ -1,6 +1,6 @@
 /* ==================================================================
  *
- *            QUICKNR INTERFACE 1.5.0+
+ *            QUICKNR INTERFACE 1.6+
  *
  *            Copyright 2016 Karl Dolenc, beholdingeye.com.
  *            All rights reserved.
@@ -937,11 +937,12 @@ var QNR_INTER = {};
         // Wrap-removing code did not work because the object does not resize when wrap removed,
         //   therefore we let the wrap always be there but invisible if not needed
         if (this.orientation == "horizontal") {
-            if (deviceIsMobile()) { // TODO eliminate reload...
-                window.setTimeout(function(){
-                    window.location.reload(false);
-                },10);
-            } else this.resizeWrapH();
+            this.resizeWrapH();
+            //if (deviceIsMobile()) { // TODO eliminate reload...
+                //window.setTimeout(function(){
+                    //window.location.reload(false);
+                //},10);
+            //} else this.resizeWrapH();
         } // No action needed on vertical
     }
     ThumbStripObject.prototype.resizeWrapH = function() {
@@ -1914,8 +1915,10 @@ var QNR_INTER = {};
         if (this.object.dataset.qnrMenuIconStill) this.menuIconStill = this.object.dataset.qnrMenuIconStill;
         if (this.object.dataset.qnrNavmenuType) this.navmenuType = this.object.dataset.qnrNavmenuType;
         if (this.object.dataset.qnrDirection) this.direction = this.object.dataset.qnrDirection;
-        this.menuUL = this.object.querySelector("ul");
-        this.menuItemsL = this.object.querySelectorAll("ul:first-child > li"); // Not a live collection...
+        //this.menuUL = this.object.querySelector("ul"); // OLD
+        this.menuUL = objTag("ul", this.object); // NEW
+        //this.menuItemsL = this.object.querySelectorAll("ul:first-child > li"); // Not a live collection... OLD
+        this.menuItemsL = this.menuUL.children; // NEW
         // Get dimensions of first LI item (traversing all does not work)
         this.itemHeight = this.menuItemsL[0].offsetHeight;
         // Is header fixed? Check for special class in doc (used in QNRWP-A on header and content rows)
@@ -1970,8 +1973,13 @@ var QNR_INTER = {};
             }
         }
         for (var i = 0; i < this.menuItemsL.length; i++) {
-            // Test for line wrap in nav menu, and collapse it
-            if (this.menuItemsL[i].offsetTop >= this.itemHeight) {
+            // Test for line wrap in nav menu, and collapse it (consider half of item height, and negative values, to avoid rounding errors and upward folding ?)
+            if (this.menuItemsL[i].offsetTop > (this.itemHeight/2) || this.menuItemsL[i].offsetTop < ((this.itemHeight/2)*-1.0)) {
+            //console.log("offsetTop of item:");
+            //console.log(this.menuItemsL[i].offsetTop);
+            //console.log("itemHeight:");
+            //console.log(this.itemHeight);
+            //if (true === false) { // TEST TODO
                 // Assign "qnr-hmenu-in-collapsed" class to any LI items as hmenu widgets
                 for (var x = 0; x < this.menuItemsL.length; x++) {
                     if (this.menuItemsL[x].classList.contains("qnr-hmenu")) {
@@ -1995,6 +2003,11 @@ var QNR_INTER = {};
                         // BG shim
                         this.bgShim = document.createElement("div");
                         this.bgShim.className = "qnr-background-shim";
+                        // Set onclick handler as window not working on mobile
+                        var thisBgShim = this;
+                        this.bgShim.onclick = function (event) {
+                            thisBgShim.hideVerticalMenu(event);
+                        }
                         //objTag("body").insertBefore(this.bgShim, objTag("body").firstChild);
                         objTag("body").appendChild(this.bgShim);
                     }
@@ -3489,7 +3502,7 @@ function ancestorObj(obj, queryTag, queryClass) {
     do {
         ancestor = ancestor.parentNode;
         if (ancestor) {
-            if (queryTag && !ancestor.tagName(queryTag.toUpperCase())) continue;
+            if (queryTag && ancestor.tagName != queryTag.toUpperCase()) continue;
             if (!queryClass || (queryClass && ancestor.className && ancestor.classList.contains(queryClass))) {
                 return ancestor;
             }
@@ -3537,7 +3550,7 @@ function wrapTag(insideText, outsideHTML) {
         }
     } catch (e) {
         var error4 = "Invalid HTML.";
-        try {error4 = QNRWP_JS_Global.i18n.interface.error4;} catch (e) {}
+        try {error4 = QNRWP_JS_Global.i18n.interface.error4;} catch (err) {}
         console.error(error4);
     }
     return openTag + insideText + closeTag + "\n";
@@ -3591,6 +3604,7 @@ function AjaxAsync(url, mode, request, contentTypeL, customHeaderL, timeOut, cb_
     // customHeaderL is array of header key and value
     // timeOut is in ms
     // cb_timeout, cb_success, cb_error are callback functions for each type of result
+    // The 'e' parameter received by onload and onerror callbacks is the ProgressEvent object
     var xhr=new XMLHttpRequest();
     if (mode == "GET") xhr.open("GET", url+request, true);
     else if (mode == "DELETE") xhr.open("DELETE", url+request, true);

@@ -37,7 +37,9 @@ wp_head(); // Required for title-tag and site icons
                                                               :''; ?>">
   <?php 
   QNRWP_UI_Parts::render_header_image();
-  QNRWP_UI_Parts::render_cookie_notice();
+  if (!isset(get_option('qnrwp_settings_array')['cookie-notice-placement']) || get_option('qnrwp_settings_array')['cookie-notice-placement'] == 0) {
+    QNRWP_UI_Parts::render_cookie_notice();
+  }
   if (QNRWP_Widgets::is_active_sidebar_widgets('qnrwp-row-header')) {
       dynamic_sidebar('qnrwp-row-header');
   }

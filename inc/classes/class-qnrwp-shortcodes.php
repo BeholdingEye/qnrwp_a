@@ -143,6 +143,7 @@ class QNRWP_Shortcodes {
       'placeholder-name' => __('First Last', 'qnrwp'),
       'placeholder-subject' => $subjectLine,
       'placeholder-message' => '',
+      'thank-slug' => '',
       'sent-reply' => __('Your message has been sent. You should receive a reply within 2 working days.', 'qnrwp'),
       'fail-reply' => __('Sorry, your message could not be sent.', 'qnrwp'),
       'form-class' => 'contact-form', // Should be unique to each form on page, hex of it will be used to id / block repeats

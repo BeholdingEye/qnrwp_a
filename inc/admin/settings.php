@@ -106,7 +106,7 @@
                                         if (isset(get_option('qnrwp_settings_array')['cookie-notice-text'])
                                                   && !empty(get_option('qnrwp_settings_array')['cookie-notice-text']))
                                           echo esc_html(get_option('qnrwp_settings_array')['cookie-notice-text']); 
-                                        else echo esc_html('By using this site you agree to our use of cookies.');
+                                        else echo esc_html_e('By using this site you agree to our use of cookies.', 'qnrwp');
                                         ?></textarea></td>
           </tr>
           
@@ -131,8 +131,34 @@
                                         if (isset(get_option('qnrwp_settings_array')['cookie-notice-linktext'])
                                                   && !empty(get_option('qnrwp_settings_array')['cookie-notice-linktext']))
                                           echo esc_attr(get_option('qnrwp_settings_array')['cookie-notice-linktext']); 
-                                        else echo esc_attr('Details');
+                                        else echo esc_attr_e('Details', 'qnrwp');
                                       ?>"></td>
+          </tr>
+          
+          <!-- Checkbox: Placement -->
+          <tr valign="top">
+            <th scope="row"><?php esc_html_e('Placement', 'qnrwp'); ?></th>
+            <td><label><input type="checkbox" name="qnrwp_settings_array[cookie-notice-placement]" id="qnrwp_settings_array_cookie-notice-placement" 
+                                    value="1" <?php 
+                                      echo isset(get_option('qnrwp_settings_array')['cookie-notice-placement'])
+                                      ? checked(1, get_option('qnrwp_settings_array')['cookie-notice-placement'], false)
+                                      : '';
+                                      ?>> 
+                                    <?php esc_html_e('Place the notice at the end of the document, below the footer', 'qnrwp'); ?></label>
+                                    <p><em><?php esc_html_e('If this is turned off, the notice will be at the top of the document, above the header.', 'qnrwp'); ?></em></p></td>
+          </tr>
+          
+          <!-- Checkbox: CSS Position -->
+          <tr valign="top">
+            <th scope="row"><?php esc_html_e('CSS Position', 'qnrwp'); ?></th>
+            <td><label><input type="checkbox" name="qnrwp_settings_array[cookie-notice-cssposition]" id="qnrwp_settings_array_cookie-notice-cssposition" 
+                                    value="1" <?php 
+                                      echo isset(get_option('qnrwp_settings_array')['cookie-notice-cssposition'])
+                                      ? checked(1, get_option('qnrwp_settings_array')['cookie-notice-cssposition'], false)
+                                      : '';
+                                      ?>> 
+                                    <?php esc_html_e('Position the notice fixed to the window edge above the document content', 'qnrwp'); ?></label>
+                                    <p><em><?php esc_html_e('If this is turned off, the notice will be positioned in the document content.', 'qnrwp'); ?></em></p></td>
           </tr>
           
         </table>

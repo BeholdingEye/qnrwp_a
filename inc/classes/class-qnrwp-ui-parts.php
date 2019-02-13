@@ -48,8 +48,16 @@ class QNRWP_UI_Parts {
    * Renders cookie notice as per theme options
    */
   public static function render_cookie_notice() {
-    if (!is_user_logged_in() && isset(get_option('qnrwp_settings_array')['cookie-notice']) && get_option('qnrwp_settings_array')['cookie-notice'] == 1): ?>
-      <div class="qnrwp-cookie-notice">
+    if (!is_user_logged_in() && isset(get_option('qnrwp_settings_array')['cookie-notice']) && get_option('qnrwp_settings_array')['cookie-notice'] == 1):
+      $cookieNoticeAddClass = '';
+      if (isset(get_option('qnrwp_settings_array')['cookie-notice-placement']) && get_option('qnrwp_settings_array')['cookie-notice-placement'] == 1) {
+        $cookieNoticeAddClass .= ' qnrwp-cookie-notice-footer';
+      }
+      if (isset(get_option('qnrwp_settings_array')['cookie-notice-cssposition']) && get_option('qnrwp_settings_array')['cookie-notice-cssposition'] == 1) {
+        $cookieNoticeAddClass .= ' qnrwp-cookie-notice-fixed';
+      }
+    ?>
+      <div class="qnrwp-cookie-notice<?php echo $cookieNoticeAddClass; ?>">
         <p><?php 
         // Notice
         if (isset(get_option('qnrwp_settings_array')['cookie-notice-text']) && !empty(get_option('qnrwp_settings_array')['cookie-notice-text'])) {
@@ -64,9 +72,9 @@ class QNRWP_UI_Parts {
               $cookieLink = ' <a href="'.get_permalink($cookiePostID).'">'.esc_html(get_option('qnrwp_settings_array')['cookie-notice-linktext']).'</a>';
               $cookieNotice .= $cookieLink;
             }
-            echo apply_filters('qnrwp_cookie_notice_html', $cookieNotice);
           }
         }
+        echo apply_filters('qnrwp_cookie_notice_html', $cookieNotice);
         ?></p>
         <span class="qnr-glyph qnr-glyph-xicon" onclick="QNRWP.CookieNotice.close_cookie_notice(this, event);"></span>
       </div>

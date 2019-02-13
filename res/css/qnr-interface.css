@@ -1570,6 +1570,8 @@ div.qnr-navmenu {
         display: flex;
     -webkit-align-items: center;   /* Vertically center contents */
     align-items: center;
+        -webkit-justify-content: flex-end;   /* Horizontally center contents */
+        justify-content: flex-end;
     
 /*
     display: block;
@@ -1989,6 +1991,7 @@ div.qnr-navmenu-wrapper > ul > li.qnr-hmenu.qnr-hmenu-hover::after {
 
 div.qnr-navmenu-icon {
     display: block;
+        display: inline-block;
     position: absolute;
         position: relative;
         
@@ -2015,6 +2018,7 @@ div.qnr-navmenu-icon {
 /*
         padding-top: 0;
 */
+        width: auto;
     font-family: Quicknr;
     font-size: 20px;
     line-height: 1em;

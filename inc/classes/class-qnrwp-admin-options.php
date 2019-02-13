@@ -100,6 +100,8 @@ final class QNRWP_Admin_Options {
     $cookieNoticeText = isset($input['cookie-notice-text']) ? $input['cookie-notice-text'] : '';
     $cookieNoticePostid = isset($input['cookie-notice-postid']) ? intval($input['cookie-notice-postid']) : 0;
     $cookieNoticeLinkText = isset($input['cookie-notice-linktext']) ? $input['cookie-notice-linktext'] : '';
+    $cookieNoticePlacement = isset($input['cookie-notice-placement']) ? $input['cookie-notice-placement'] : '';
+    $cookieNoticeCssPosition = isset($input['cookie-notice-cssposition']) ? $input['cookie-notice-cssposition'] : '';
     
     $headerFixed = isset($input['header-fixed']) ? $input['header-fixed'] : 0;
     $maxPageWidth = isset($input['max-page-width']) ? min(2500,max(1200, intval($input['max-page-width']))) : 1600;
@@ -118,6 +120,8 @@ final class QNRWP_Admin_Options {
     $valArray['cookie-notice-text'] = $cookieNoticeText;
     $valArray['cookie-notice-postid'] = $cookieNoticePostid;
     $valArray['cookie-notice-linktext'] = $cookieNoticeLinkText;
+    $valArray['cookie-notice-placement'] = $cookieNoticePlacement;
+    $valArray['cookie-notice-cssposition'] = $cookieNoticeCssPosition;
     
     $valArray['header-fixed'] = $headerFixed;
     $valArray['max-page-width'] = $maxPageWidth;
