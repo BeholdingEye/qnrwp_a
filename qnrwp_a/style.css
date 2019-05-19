@@ -1,0 +1,1512 @@
+/*
+Theme Name: qnrwp_a
+Theme URI: http://github.com/beholdingeye
+Author: Karl Dolenc, beholdingeye.com
+Author URI: http://www.beholdingeye.com
+Description: QNRWP-A is the first Quicknr WordPress theme.
+Version: 2.0.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: basic, blank
+Text Domain: qnrwp
+*/
+
+/*
+  QNRWP_A Stylesheet 
+*/
+
+/* 
+ * Colours:
+ * 
+ * dark blue #1e6594
+ * 
+ *  */
+
+/* EM sizes / font pixel sizes
+ * 
+ * at 14px font size:
+ * 
+ * 16px = 1.14em
+ * 20px = 1.43em
+ * 24px = 1.71em
+ * 32px = 2.29em
+ * 40px = 2.86em
+ * 48px = 3.43em
+ * 56px = 4.00em
+ * 72px = 5.14em
+ * 
+ *  */
+
+/* ----------------------------- Corrections */
+
+* {
+    box-sizing: border-box;
+}
+
+button, input {
+    overflow: visible;
+}
+button, select {
+    text-transform: none;
+}
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+    -webkit-appearance: button;
+}
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+    border: none;
+    outline: none;
+    padding: 0;
+}
+
+sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+sub {
+    bottom: -0.25em;
+}
+sup {
+    top: -0.5em;
+}
+
+code, kbd, samp, pre {
+    font-size: 1em;
+}
+
+small {
+    font-size: 80%;
+}
+
+abbr[title] {
+    border-bottom: none;
+    text-decoration: underline;
+    text-decoration: underline dotted;
+}
+
+legend {
+    color: inherit;
+    display: table;
+    max-width: 100%;
+    white-space: normal;
+}
+
+progress {
+    vertical-align: baseline;
+}
+
+textarea {
+    overflow: auto;
+}
+
+[type="checkbox"],
+[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+    height: auto;
+}
+
+[type="search"] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+}
+
+[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    font: inherit;
+}
+
+details {
+    display: block;
+}
+
+summary {
+    display: list-item;
+}
+
+template {
+    display: none;
+}
+
+[hidden] {
+    display: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    line-height: initial;
+}
+h1 {
+    font-size: 1.8em;
+}
+
+/* ----------------------------- Content_width related styles */
+
+.size-auto, 
+.size-full,
+.size-large,
+.size-medium,
+.size-thumbnail {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ----------------------------- Layout */
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: block;
+    position: absolute;
+/*
+    top: 0;
+    bottom: 0;
+*/
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    font-family: Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.43em;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    color: rgb(51,51,51);
+    text-align: center;
+    vertical-align: top;
+    background-color: #f6f6f6;
+    /* Font rendering settings from Google */
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+    /* Support for IE. */
+    font-feature-settings: "liga";
+    /* iPhone inconsistent text sizing fix */
+    -webkit-text-size-adjust: 100%;
+}
+
+a {
+    outline: none;
+    text-decoration: none;
+    font-weight: bold;
+    color: inherit;
+}
+a:hover {
+    text-decoration: underline;
+    color: black;
+}
+img {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    max-width: 100%; /* Prevent overflow */
+    height: auto; /* Prevent distortion */
+    border: none;
+}
+
+div, header, main, section, article, footer, aside {                    /* On these tags, we use class declarations only */
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+
+/* HEADER
+ * ----------------------------------------------------- */
+
+/* Relative positioned, scrolling with view */
+.header-row {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
+    /* Vertical */
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+    
+    /* Horizontal */
+    -webkit-justify-content: center;
+    justify-content: center;
+    
+    margin: 0 auto;
+    min-width: 320px;
+    max-width: 1600px;
+    height: auto;
+    text-align: right;
+    overflow: visible;
+    /* Provide a divider line, at least for any drop down menu */
+    border: none;
+    border-bottom: solid thin #EEE;
+    background-color: white;
+    z-index: 999;          /* Higher index than vertical navmenu */
+}
+/* Override for fixed to window (class set conditionally in WP) */
+.header-row.qnrwp-has-fixed-header {
+    position: fixed;
+    top:0;
+    /* Left right and auto margin to center */
+    left: 0;
+    right: 0;
+    /* Provide some layering */
+    box-shadow: 0 1px 1px rgba(1,1,1,0.2);
+    border: none;
+    border-bottom: solid thin #EEE;
+}
+
+/* ----------------------------- Header image */
+
+.header-image-container { /* Flex styling is by other classes on the element */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+.header-image-container > img {
+    opacity: 0.15;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+
+/* ----------------------------- Header nav row (logo and nav menu, generic) */
+
+.header-nav-row {
+    /* Same styling as QNR Navbar row */
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
+    /* Vertical */
+    -webkit-align-items: stretch;
+    align-items: stretch;
+    
+    /* Horizontal */
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    
+    position: relative;
+    margin: 0;
+    padding: 0 1em;
+    width: 100%;
+    height: 56px;
+    font-size: 1.1em;
+    box-shadow: none;
+    
+    z-index: 99;
+}
+
+/* ----------------------------- Logo */
+
+.header-site-logo {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
+    width: auto;
+    height: auto;
+    
+    /* Vertical */
+    -webkit-align-items: center;
+    align-items: center;
+    
+    /* Horizontal */
+    -webkit-justify-content: center;
+    justify-content: center;
+    
+    position: relative;
+    margin: 0;
+    margin-right: 2em;
+    padding: 0.25em;
+    
+    font-family: QNRWP;
+    font-size: 2em;
+    font-stretch: condensed;
+    font-weight: normal;
+    text-align: left;
+    color: #1e6594;
+}
+@media (max-width: 767px) {
+    .header-site-logo {
+        font-size: 1.8em;
+    }
+}
+@media (max-width: 479px) {
+    .header-site-logo {
+        font-size: 1.6em;
+    }
+}
+.header-site-logo a,
+.header-site-logo a img {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+/* Clickable logo */
+.header-site-logo a {
+    width: auto;
+    height: auto;
+    font-weight: normal;
+    text-decoration: none;
+    white-space: nowrap;
+    z-index: 99;
+}
+.header-site-logo a:hover {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.8; /* TODO replace with styling class */
+}
+
+
+/* ----------------------------- Header main nav menu OLD probably redundant */
+
+.header-main-nav-menu, /* Theme menu in its location */
+.header-row .widget_nav_menu { /* Widget menu, if used */
+    height: auto;
+    padding-top: 1em;
+    overflow: visible;  /* So that collapsed nav menu will show */
+}
+
+.qnr-navmenu li.current-menu-item a,
+.qnr-navmenu li.current_page_parent a,
+.qnr-navmenu li.current-menu-parent,
+.qnr-navmenu-wrapper li.current-menu-item a,
+.qnr-navmenu-wrapper li.current_page_parent a,
+.qnr-navmenu-wrapper li.current-menu-parent {
+    color: black;
+}
+
+/* CONTENT
+ * ----------------------------------------------------- */
+
+/* Assumes relative positioned header */
+.content-row {   /* May contain sub header before middle row */
+    margin: 0 auto;
+    padding-bottom: 1em;
+    min-width: 320px;
+    max-width: 1600px;
+    height: auto;
+    
+    /* Calculate the min height using basic assumptions about header and
+     * footer height, to be made exact by JS code, due to them being
+     * dynamic in height. */
+    
+    min-height: calc(100% - 56px - 320px);
+    text-align: center;
+    background-color: white;
+    opacity: 0;
+    z-index: 2;
+}
+@media (max-width: 599px) {
+    .content-row {
+        min-height: calc(100% - 56px - 450px);
+    }
+}
+/* Override for fixed header (class set conditionally in WP) */
+.content-row.qnrwp-has-fixed-header {
+}
+
+
+/* SUB-HEADER
+ * ----------------------------------------------------- */
+
+.sub-header-row {
+    margin: 0 auto;
+    text-align: center; /* Required for its content */
+}
+
+#sub-header {   /* Must use ID, not class, because class is set in widget-defining options string */
+    height: 200px;  /* Required for the content height */
+    opacity: 1;
+}
+#sub-header.qnr-aspect-keeper { /* Aspect-keeper override */
+    min-height: 200px;
+    max-height: 600px;
+}
+
+.sub-header-content {
+    /* Flex attributes are from QI classes */
+    display: -webkit-flex;
+    display: flex;
+    /* Vertical align */
+    -webkit-align-items: center; /* Single line */
+    align-items: center;
+    -webkit-align-content: center; /* Multi line */
+    align-content: center;
+    /* Horizontal align */
+    -webkit-justify-content: center;
+    justify-content: center;
+    
+    height: 100%;
+    background-image: linear-gradient(rgba(50,50,50,0.5), rgba(50,50,50,0.5)); /* Darkening overlay */
+}
+.sub-header-content p { /* Home page override below */
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0.1em;
+    padding-top: 10%;
+    padding-bottom: 0.25em;
+    width: auto;
+    height: auto;
+    font-size: 1.8em;
+    font-weight: normal;
+    line-height: 1.2em;
+    text-align: left;
+    text-transform: lowercase;
+    color: white;
+    opacity: 0.8;
+    border-bottom: dotted thin white;
+    box-sizing: border-box;
+}
+body.home .sub-header-content p {
+/*
+    padding-top: 5%;
+*/
+    width: 11em;
+    text-transform: none;
+    border-bottom: none;
+}
+
+
+/* Middle row after sub-header, containing one to three columns, flex displayed */
+
+.middle-row {
+    display: -webkit-inline-flex;
+    display: inline-flex;
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: stretch;
+    align-items: stretch;
+    min-width: 320px;
+    max-width: 1600px;
+    height: auto;
+    text-align: center;
+    vertical-align: top;
+    background-color: white; /* For bg-img opacity */
+}
+
+/* Content box, optionally between sidebars */
+
+.content-box {
+    -webkit-flex: 2 1 0;
+    flex: 2 1 0;
+    display: inline-block;
+    margin: 0;
+    padding: 2em 1em 0;
+    min-width: 320px;
+    max-width: 1600px;
+    height: auto;
+/*
+    min-height: 500px;
+*/
+    text-align: center;
+    background-color: white;
+}
+.content-box.single-col-content {
+    width: 100%;
+}
+.content-box.three-col-content {
+    width: 40%;
+}
+.content-box.two-col-content-left {
+    width: 70%;
+}
+.content-box.two-col-content-right {
+    width: 70%;
+}
+/* Limit changed LI to the content box */
+.content-box li {
+    margin-top: 1em;
+    padding-right: 3em; /* Overriden in @media */
+}
+
+/* Page Type, in Content box */
+
+.type-page {
+    text-align: left;
+}
+
+/* News Post Type, in Content box */
+
+.type-post {
+    text-align: left;
+}
+.type-post p {
+}
+.type-post p::after {    /* Clearing trick for floats */
+    content: "";
+    clear: both;
+    display: block;
+}
+.type-post img {
+    border: solid thin #EEE;
+}
+/* A filter moves the alignment classes from IMG to A, but when FIGURE
+ * is used, the class is alredy on the FIGURE, wrapping A */
+.type-post a.alignleft,
+.type-post figure.alignleft,
+.type-post img.alignleft {
+    float: left;
+    clear: left;
+    vertical-align: top;
+    margin: 0 1em 0 0;
+}
+.type-post a.alignright,
+.type-post figure.alignright,
+.type-post img.alignright {
+    float: right;
+    clear: right;
+    vertical-align: top;
+    margin: 0 0 0 1em;
+}
+.type-post a.aligncenter,
+.type-post figure.aligncenter,
+.type-post img.aligncenter {     /* Same as img at top */
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    max-width: 100%; /* Prevent overflow */
+    height: auto; /* Prevent distortion */
+    clear: both;
+    vertical-align: top;
+}
+.type-post figure figcaption.wp-caption-text {
+    text-align: center;
+    font-style: italic;
+    font-size: 0.85em;
+    color: #888;
+}
+.type-post img.wp-post-image {
+    margin: 0 auto; /* 1em margin top/bottom now done by sizing wrapper, inline in post thumbnail generation */
+    width: 100%;
+    max-width: 100%;
+}
+/* Expandable, clickable image overlay */
+.type-post a.news-post-expandable-image {
+    display: block;
+    position: relative;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    background-color: black; /* Fake 'overlay' for hover */
+}
+.type-post a.news-post-expandable-image::after {
+    content: "\01a5"; /* Expand icon */
+    font-family: Quicknr;
+    font-weight: normal;
+    font-size: 1.4em;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 0.25em;
+    color: white;
+    background-color: rgba(1,1,1,0.1);
+    opacity: 0.8;
+    z-index: 99;
+}
+.type-post a.news-post-expandable-image.news-post-image-link::after {
+    content: "I"; /* Magnifying glass icon */
+}
+.type-post a.news-post-expandable-image:hover::after {
+    background-color: rgba(1,1,1,0.4);
+    color: white;
+    opacity: 1;
+}
+.type-post a.news-post-expandable-image img {    /* Override img */
+    display: block;
+    position: relative;
+    float: none;
+    margin: 0;
+}
+.type-post a.news-post-expandable-image img:hover {
+    opacity: 0.95; /* Revealing A bg */
+}
+.post-date {
+    font-size: 0.9em;
+    font-style: normal;
+    color: #888;
+}
+.type-post h1.page-title {
+    margin: 0.5em auto;
+    text-align: left;
+    font-size: 2em;
+    font-weight: normal;
+}
+/* Style first paragraph of news posts */
+.type-post > p:first-of-type,
+p.news-post-first-para { /* Set by filter, perhaps after Featured Image */
+    margin-top: 1.5em;
+    font-weight: bold;
+}
+
+/* Previous and Next post links */
+
+.post-nav-links {
+    margin-top: 0;
+    padding-top: 0.5em;
+    margin-bottom: 1em;
+    text-align: justify;
+    border-top: solid thin #EEE;
+}
+.post-nav-links span.post-newer,
+.post-nav-links span.post-older {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 50%; /* Assume no whitespace between items */
+    font-weight: normal;
+    font-size: 1em;
+    vertical-align: top;
+    color: #444;
+}
+.post-nav-links span.post-newer,
+.post-nav-links span.post-newer p {
+    text-align: right;
+}
+.post-nav-links span.post-older {
+    text-align: left;
+}
+span.post-newer p,
+span.post-older p {
+    margin: 0.5em 0;
+}
+span.post-newer p:first-child,
+span.post-older p:first-child { /* Prev and Next labels above titles */
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #888;
+}
+
+@media (max-width: 1280px) {
+    /* Reduce pre/next links in smaller windows */
+    .post-nav-links span.post-newer,
+    .post-nav-links span.post-older {
+        font-size: 0.9em;
+    }
+}
+
+
+/* SIDEBARS
+ * ----------------------------------------------------- */
+
+.sidebar {
+    display: inline-block;
+    -webkit-flex: 1 2 0;
+    flex: 1 2 0;
+    padding-top: 1em;
+    min-width: 200px;
+    max-width: 400px;
+    text-align: center;
+    vertical-align: top;
+    background-color: white;
+}
+
+.sidebar-left {
+    width: 30%;     /* Here for sizing later */
+}
+.sidebar-right {
+    width: 30%;
+}
+
+
+/* WIDGET
+ * ----------------------------------------------------- */
+
+/* Footer widgets are in Footer section */
+
+.sidebar .widget {
+    display: inline-block;
+    margin: 1em auto;
+    padding: 0 1em;
+    width: 100%;
+    text-align: center;
+}
+.sidebar h2.widget-title {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-size: 0.9em;
+    font-weight: normal;
+    text-transform: uppercase;
+    text-align: center;
+    color: gray;
+}
+
+/* Calendar */
+
+.calendar_wrap {
+    display: inline-block;
+    padding-top: 1em;
+    text-align: center;
+}
+table#wp-calendar {
+    display: inline-block;
+}
+table#wp-calendar th {
+    font-weight: normal;
+    font-size: 0.9em;
+    color: black;
+}
+table#wp-calendar tbody td {
+    color: #888;
+}
+table#wp-calendar tbody td a {
+    color: black;
+}
+
+/* Recent Posts */
+
+.widget_recent_entries ul {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    max-width: 400px;
+    text-align: left;
+    list-style-type: none;
+}
+.widget_recent_entries span.post-date {
+    font-size: 0.85em;
+    font-style: normal;
+    color: #888;
+}
+.widget_recent_entries li {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.widget_recent_entries li a {
+    font-weight: normal;
+}
+.widget_recent_entries li a + span {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+/* FOOTER
+ * ----------------------------------------------------- */
+
+.footer-row {
+    display: block;
+    margin: 0 auto;
+    min-width: 320px;
+    max-width: 1600px;
+    color: #EEE;
+    text-align: center;
+    opacity: 0; /* JS code will change to 1 */
+    background-color: #666;
+}
+.footer-row a,
+.footer-row a:hover {
+    font-weight: normal;
+    text-decoration: none;
+    border: none;
+}
+.footer-row a:hover {
+    text-decoration: underline;
+    color: white;
+}
+
+/* Middle row of columns */
+
+.footer-row-middle {
+    display: -webkit-flex;
+    display: flex;
+
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+
+    /* Vertical align content */
+    -webkit-align-items: center; /* Single line */
+    align-items: center;
+    -webkit-align-content: center; /* Multi line */
+    align-content: center;
+
+    /* Horizontal align content */
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+.footer-row-middle .widget { /* Column, flex item */
+    display: inline-block;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1em;
+    width: 300px;
+    max-width: 360px;
+}
+
+/* Menus */
+
+.footer-row ul {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    list-style-type: none;
+    text-align: left;
+    vertical-align: top;
+}
+.footer-row li {
+    margin-top: 1em;
+}
+.footer-row .qnrwp-social-links ul { /* Not used any more */
+    margin: 0 1em;
+}
+.footer-row .qnrwp-social-links li {
+    margin-top: 1em;
+    font-size: 2em;
+    list-style-type: none;
+}
+.footer-row .qnrwp-social-links a:hover {
+    text-decoration: none;
+}
+
+
+/* FEATURED NEWS
+ * ----------------------------------------------------- */
+
+/* 4-item rows, responsively adjusting to 2-item, then singles */
+/* TODO refactor so that the layout is independent */
+
+.qnrwp-featured-news-block {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 2em;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    vertical-align: top;
+    text-align: center;
+}
+.qnrwp-featured-news-block > div {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0 2px;     /* 2px to correct middle 'gutter', overriden in @media */
+    min-width: 650px;
+    max-width: 100%;
+    width: 48%;
+    vertical-align: top;
+    text-align: center;
+}
+.qnrwp-featured-news-block > div:first-child {
+    text-align: right;
+}
+.qnrwp-featured-news-block > div:last-child {
+    text-align: left;
+}
+a.qnrwp-featured-news-item {
+    display: inline-block;
+    position: relative;
+    margin: 8px;
+    padding: 0;
+    min-width: 300px;
+    width: 47%;
+    height: 26em;
+    max-width: 380px;
+    vertical-align: top;
+    overflow: hidden;
+    box-sizing: border-box;
+    border-radius: 2px;
+    
+    outline: none;
+    text-decoration: none;
+    font-weight: inherit;
+    color: inherit;
+    
+    box-shadow: 0 1px 6px rgba(1,1,1,0.26);
+}
+a.qnrwp-featured-news-item:hover {
+    box-shadow: 0 1px 12px rgba(1,1,1,0.4);
+    background-color: #f8f8f8;
+}
+a.qnrwp-featured-news-item:hover .qnrwp-featured-news-item-header {
+/*
+    background-size: 105%;
+*/
+}
+a.qnrwp-featured-news-item:hover .qnrwp-featured-news-item-text {
+    color: black;
+}
+.qnrwp-featured-news-item-header {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 200px;
+    background-image: linear-gradient(gray,gray); /* Placeholder */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;
+}
+.qnrwp-featured-news-item-text {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0 1em 1em;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    color: #333;
+}
+.qnrwp-featured-news-item-text h1 {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 1em auto;
+}
+
+@media (max-width: 1320px) {
+    .qnrwp-featured-news-block > div {
+        padding: 0;
+        min-width: 320px;
+        max-width: 100%;
+        width: 100%;
+    }
+    .qnrwp-featured-news-block > div:first-child {
+        text-align: center;
+    }
+    .qnrwp-featured-news-block > div:last-child {
+        text-align: center;
+    }
+}
+@media (max-width: 650px) {
+    a.qnrwp-featured-news-item {
+        margin: 16px;
+        min-width: 288px;
+        width: 70%;
+        max-width: 70%;
+    }
+}
+
+/* NEWS EXCERPTS
+ * ----------------------------------------------------- */
+
+a.qnrwp-excerpt-item {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 1em;
+    padding: 0;
+    width: 100%;
+    max-width: 650px;
+    height: 150px;
+    font-weight: normal;
+    text-align: left;
+    color: #333;
+    box-sizing: border-box;
+}
+a.qnrwp-excerpt-item:hover {
+    text-decoration: none;
+    color: black;
+    background-color: #F2F2F2;
+}
+a.qnrwp-excerpt-item img.qnrwp-post-featured-img {
+    display: inline-block;
+    position: relative;
+    float: left;
+    width: 150px;
+    height: 150px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: solid thin #EEE;
+}
+a.qnrwp-excerpt-item:hover img.qnrwp-post-featured-img {
+/*
+    opacity: 0.9;
+*/
+}
+a.qnrwp-excerpt-item > .qnrwp-excerpt-item-block {
+    display: block;
+    padding: 0 1em;
+    width: auto;
+    height: 150px;
+    vertical-align: top;
+    overflow: hidden;
+}
+a.qnrwp-excerpt-item p.qnrwp-excerpt-date {
+    margin-top: 0;
+    padding: 0;
+    font-size: 0.9em;
+    font-style: normal;
+    color: #888;
+}
+a.qnrwp-excerpt-item h1 {
+    padding: 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    /* Override margins set above */
+    margin: 0 auto;
+}
+a.qnrwp-excerpt-item .qnrwp-excerpt-text {
+    margin: 0;
+    padding: 0;
+    line-height: 1.53em;
+}
+
+/* Previous and Next pages links */
+
+.qnrwp-excerpts-pages-links {
+    margin-top: 2em;
+    padding-top: 1em;
+    margin-bottom: 1em;
+    text-align: justify;
+    border-top: solid thin #EEE;
+}
+.qnrwp-excerpts-pages-links span.qnrwp-excerpts-newer,
+.qnrwp-excerpts-pages-links span.qnrwp-excerpts-older {
+    display: inline-block;
+    position: relative;
+    width: 50%; /* Assume no whitespace between items */
+    font-weight: normal;
+    font-size: 1em;
+    color: #444;
+}
+.qnrwp-excerpts-pages-links span.qnrwp-excerpts-newer {
+    text-align: right;
+}
+.qnrwp-excerpts-pages-links span.qnrwp-excerpts-older {
+    text-align: left;
+}
+
+@media (max-width: 460px) {
+    a.qnrwp-excerpt-item img.qnrwp-post-featured-img {
+        width: 50px;
+        height: 50px;
+    }
+    a.qnrwp-excerpt-item,
+    a.qnrwp-excerpt-item > .qnrwp-excerpt-item-block {
+        height: auto;
+    }
+}
+
+/* GALLERY
+ * ----------------------------------------------------- */
+
+.gallery {
+    text-align: left;
+    line-height: 0;
+}
+.gallery figure {
+    display: inline-block;
+    position: relative;
+    margin: 0.1em;
+    padding: 0;
+    vertical-align: top;
+    border: none;
+    box-sizing: border-box;
+}
+
+
+/* SEARCH FORM
+ * ----------------------------------------------------- */
+
+form.search-form input.search-field {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0 1em;
+    width: 70%;
+    height: 32px;
+    font-size: 0.9em;
+    vertical-align: middle;
+    border: solid thin silver;
+    border-radius: 6px 0 0 6px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+form.search-form input.search-submit {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0.1em;
+    width: 32px;
+    height: 32px;
+    font-family: Quicknr;
+    font-size: 1.4em;
+    color: white;
+    line-height: 0;
+    text-align: center;
+    vertical-align: middle;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    overflow: hidden;
+    background-color: gray;
+}
+form.search-form input.search-submit:hover {
+    cursor: pointer;
+    background-color: #666;
+}
+body.search-results {
+    text-align: center;
+}
+div.search-results { /* We specify DIV as separate from BODY */
+    padding: 0 2em 2em 0;
+    font-weight: normal;
+    font-size: 1.2em;
+    text-align: left;
+}
+
+@media (max-width: 480px) { /* iPhone */
+    form.search-form input.search-field {
+        -webkit-appearance: none;
+        -webkit-border-radius: 0;
+        border-radius: 0;
+    }
+    form.search-form input.search-submit {
+        -webkit-appearance: none;
+        -webkit-border-radius: 0;
+        border-radius: 0;
+    }
+}
+
+
+/* SAMPLES
+ * ----------------------------------------------------- */
+
+.qnrwp-samples-row,
+.qnrwp-samples-list-block,
+.qnrwp-samples-list-block div,
+.qnrwp-samples-list-block img {
+    position: relative;
+    box-sizing: border-box;
+}
+.qnrwp-samples-row,
+.qnrwp-samples-list-block,
+.qnrwp-samples-list-block img {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    vertical-align: top;
+}
+.qnrwp-samples-list-block {    
+/*
+    -moz-column-count: 4;
+    -moz-column-width: 260px;
+    -moz-column-gap: 1px;
+    -moz-column-fill: balance;
+    -moz-column-rule-width: 1px;
+    
+    -webkit-column-count: 4;
+    -webkit-column-width: 260px;
+    -webkit-column-gap: 1px;
+    -webkit-column-fill: balance;
+    -webkit-column-rule-width: 1px;
+    
+    column-count: 4;
+    column-width: 260px;
+    column-gap: 1px;
+    column-fill: balance;
+    column-rule-width: 1px;
+*/
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -webkit-justify-content: center;
+    justify-content: center;
+    
+    margin: 0 auto;
+    width: 100%;
+    min-width: 280px;
+    max-width: 1400px;
+    height: auto;
+    text-align: center;
+}
+.qnrwp-samples-row {
+    padding: 1em 1em 0;
+    text-align: center;
+}
+.archive .qnrwp-samples-row {
+    padding-top: 0;
+}
+h2.qnrwp-samples-list-title { /* Outside the block */
+    margin: 0 auto;
+    margin-top: 1em;
+    padding-top: 0.5em;
+/*
+    margin-bottom: 0.5em;
+*/
+    padding-bottom: 0.5em;
+    width: 100%;
+    min-width: 280px;
+    max-width: 1400px;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-align: center;
+    text-transform: uppercase;
+    color: gray;
+/*
+    border-bottom: solid thin #DDD;
+*/
+}
+.archive h2.qnrwp-samples-list-title {
+    margin-top: 0;
+    padding-top: 0;
+}
+.qnrwp-samples-list-item {
+    display: inline-block;
+    
+/*
+    page-break-inside: avoid;
+    -moz-break-inside: avoid-column;
+    -webkit-break-inside: avoid-column;
+    break-inside: avoid-column;
+    -moz-column-span: none;
+    -webkit-column-span: none;
+    column-span: none;
+*/
+    
+    -webkit-flex: 2 1 400px;
+    flex: 2 1 400px;
+    
+    margin: 1em;
+    padding: 0;
+    width: auto;
+    min-width: 260px;
+    max-width: 500px;
+    height: auto;
+    vertical-align: top;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(1,1,1,0.4);
+    background-color: #f8f8f8;
+}
+.qnrwp-samples-list-item div {
+    width: 100%;
+}
+.qnrwp-samples-list-item-text {
+    display: block;
+    padding: 0 1em;
+    height: 5em;
+    text-align: left;
+    box-sizing: border-box;
+}
+.qnrwp-samples-list-item-text h3 {
+    margin: 1em auto 0;
+}
+/* Reduce the space between title and text in blurb */
+.qnrwp-samples-list-item-text p:first-of-type {
+    margin-top: 0.5em;
+}
+.qnrwp-samples-list-item-buttons {
+    display: block;
+    width: 100%;
+    font-size: 1.2em;
+    text-align: right;
+    padding: 0.5em;
+    padding-bottom: 1em;
+}
+.qnrwp-samples-list-item-buttons a {
+    padding: 0.5em;
+    margin: 0.5em;
+}
+
+/* Load more button */
+button.qnrwp-samples-load-more {
+    display: block;
+    position: relative;
+    margin: 1em auto;
+    padding: 0.5em 1em;
+    font-weight: normal;
+    color: #333;
+    border: solid thin #DDD;
+    outline: none;
+    cursor: pointer;
+    border-radius: 6px;
+    background-color: gray;
+    background-image: linear-gradient(#f0f0f0, #DDD);
+}
+button.qnrwp-samples-load-more:hover {
+    color: #666;
+    border: solid thin #EEE;
+    background-color: silver;
+    background-image: linear-gradient(#DDD, #f0f0f0);
+}
+
+
+/* ----------------------------- Cookie notice */
+
+.qnrwp-cookie-notice {
+    display: none; /* Changed by JS code */
+    position: relative;
+    margin: 0 auto;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    box-sizing: border-box;
+    border-radius: 0 0 3px 3px;
+    background-color: #1e6594;
+    clear: both;
+}
+.qnrwp-cookie-notice-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    z-index: 9999;
+}
+.qnrwp-cookie-notice-footer {
+    border-radius: 3px 3px 0 0;
+}
+.qnrwp-cookie-notice-fixed.qnrwp-cookie-notice-footer {
+    top: auto;
+    bottom: 0;
+}
+.qnrwp-cookie-notice p {
+    margin: 0;
+    margin-right: 2em;
+    padding: 0;
+    text-align: left;
+    background-color: transparent;
+}
+.qnrwp-cookie-notice p a {
+    text-decoration: underline;
+}
+.qnrwp-cookie-notice.qnrwp-cookie-notice-footer p a {
+}
+.qnrwp-cookie-notice p a:hover {
+    color: inherit;
+    opacity: 0.7;
+}
+.qnrwp-cookie-notice .qnr-glyph-xicon {
+    display: block;
+    position: absolute;
+    top: 1.2em;
+    right: 1em;
+    line-height: 0;
+}
+.qnrwp-cookie-notice .qnr-glyph-xicon:hover {
+    cursor: pointer;
+}
+
+
+/**
+ * Media Queries
+ */
+
+/**
+ * Does the same thing as <meta name="viewport" content="width=device-width">,
+ * but in the future W3C standard way. -ms- prefix is required for IE10+ to
+ * render responsive styling in Windows 8 "snapped" views; IE10+ does not honor
+ * the meta tag. See https://core.trac.wordpress.org/ticket/25888.
+ */
+@-ms-viewport {
+	width: device-width;
+}
+
+@viewport {
+	width: device-width;
+}
+
+
+/* Width */
+
+@media (max-width: 910px) {
+    .sidebar-right {
+        display: block;
+        -webkit-flex: none;
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+@media (max-width: 710px) {
+    .content-box {
+        display: block;
+        -webkit-flex: none; /* iPhone */
+        min-width: 100%; /* Changed from 90% to remove the extra margin */
+        width: 100%;
+    }
+    .content-box li {
+        padding-right: 2em;
+    }
+    .sidebar-left {
+        -webkit-order: 1;
+        order: 1;
+        -webkit-flex: 1 1 320px; /* iPhone */
+        width: 50%;
+    }
+    .sidebar-right {
+        -webkit-order: 2;
+        order: 2;
+        display: inline-block;
+        -webkit-flex: 1 1 320px; /* iPhone */
+        flex: 1 2 0;
+        width: 50%;
+        min-width: 200px;
+        max-width: 400px;
+    }
+}
+@media (max-width: 320px) { /* iPhone */
+    .content-row,
+    .middle-row {
+        width: 320px;
+    }
+    .sidebar,
+    .sidebar-left,
+    .sidebar-right {
+        -webkit-flex: 1 1 320px;
+        width: 320px;
+    }
+}

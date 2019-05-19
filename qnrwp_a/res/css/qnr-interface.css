@@ -1,0 +1,2397 @@
+/*
+  * QNR Interface Stylesheet
+  * 
+  * Indented-and-commented-out lines are overriden in a later stylesheet
+*/
+
+@font-face {
+    font-family: "Quicknr";
+    src: url("../font/quicknr-interface.woff") format("woff");
+}
+@font-face {
+    font-family: "QuicknrLogos";
+    src: url("../font/quicknr-logos.woff") format("woff");
+}
+@font-face {
+    font-family: "QuicknrIcons";
+    src: url("../font/quicknr-icons.woff") format("woff");
+}
+
+
+/* GENERIC ANIMATION
+ * ----------------------------------------------------- */
+
+/* Popout: slide out from window edge */
+
+/* Webkit version */
+@-webkit-keyframes qnr-anim-popout-down { from { -webkit-transform: translateY(-100%); } to { -webkit-transform: translateY(0%); }  }
+@-webkit-keyframes qnr-anim-popout-down-back { from { -webkit-transform: translateY(0%); } to { -webkit-transform: translateY(-100%); }  }
+@-webkit-keyframes qnr-anim-popout-up { from { -webkit-transform: translateY(100%); } to { -webkit-transform: translateY(0%); }  }
+@-webkit-keyframes qnr-anim-popout-up-back { from { -webkit-transform: translateY(0%); } to { -webkit-transform: translateY(100%); }  }
+@-webkit-keyframes qnr-anim-popout-left { from { -webkit-transform: translateX(100%); } to { -webkit-transform: translateX(0%); }  }
+@-webkit-keyframes qnr-anim-popout-left-back { from { -webkit-transform: translateX(0%); } to { -webkit-transform: translateX(100%); }  }
+@-webkit-keyframes qnr-anim-popout-right { from { -webkit-transform: translateX(-100%); } to { -webkit-transform: translateX(0%); }  }
+@-webkit-keyframes qnr-anim-popout-right-back { from { -webkit-transform: translateX(0%); } to { -webkit-transform: translateX(-100%); }  }
+@-webkit-keyframes qnr-anim-fade-in { from { opacity: 0; } to { opacity: 1; }  }
+@-webkit-keyframes qnr-anim-fade-out { from { opacity: 1; } to { opacity: 0; } }
+
+@-webkit-keyframes qnr-anim-popin { from { -webkit-transform: translateY(-10%); opacity: 0; } to { -webkit-transform: translateY(0%); opacity: 1; } }
+@-webkit-keyframes qnr-anim-popin-back { from { -webkit-transform: translateY(0%); opacity: 1; } to { -webkit-transform: translateY(-10%); opacity: 0; } }
+
+/* Regular version */
+@keyframes qnr-anim-popout-down { from { transform: translateY(-100%); } to { transform: translateY(0%); }  }
+@keyframes qnr-anim-popout-down-back { from { transform: translateY(0%); } to { transform: translateY(-100%); }  }
+@keyframes qnr-anim-popout-up { from { transform: translateY(100%); } to { transform: translateY(0%); }  }
+@keyframes qnr-anim-popout-up-back { from { transform: translateY(0%); } to { transform: translateY(100%); }  }
+@keyframes qnr-anim-popout-left { from { transform: translateX(100%); } to { transform: translateX(0%); }  }
+@keyframes qnr-anim-popout-left-back { from { transform: translateX(0%); } to { transform: translateX(100%); }  }
+@keyframes qnr-anim-popout-right { from { transform: translateX(-100%); } to { transform: translateX(0%); }  }
+@keyframes qnr-anim-popout-right-back { from { transform: translateX(0%); } to { transform: translateX(-100%); }  }
+@keyframes qnr-anim-fade-in { from { opacity: 0; } to { opacity: 1; }  }
+@keyframes qnr-anim-fade-out { from { opacity: 1; } to { opacity: 0; } }
+
+@keyframes qnr-anim-popin { from { transform: translateY(-10%); opacity: 0; } to { transform: translateY(0%); opacity: 1; } }
+@keyframes qnr-anim-popin-back { from { transform: translateY(0%); opacity: 1; } to { transform: translateY(-10%); opacity: 0; } }
+
+
+.qnr-anim-popin {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popin;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popin;
+}
+.qnr-anim-popin-back {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popin-back;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popin-back;
+}
+
+.qnr-anim-popout-down {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-down;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-down;
+}
+.qnr-anim-popout-down-back {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-down-back;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-down-back;
+}
+.qnr-anim-popout-up {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-up;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-up;
+}
+.qnr-anim-popout-up-back {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-up-back;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-up-back;
+}
+.qnr-anim-popout-left {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-left;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-left;
+}
+.qnr-anim-popout-left-back {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-left-back;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-left-back;
+}
+.qnr-anim-popout-right {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-right;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-right;
+}
+.qnr-anim-popout-right-back {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-popout-right-back;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-popout-right-back;
+}
+.qnr-anim-fade-in {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-fade-in;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-fade-in;
+}
+.qnr-anim-fade-out {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-fade-out;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-fade-out;
+}
+
+
+/* BACKGROUND SHIM
+ * ----------------------------------------------------- */
+
+.qnr-background-shim {
+    display: none;  /* Displayed by JS code */
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 1;
+    transition: all 0.3s;
+    background-color: rgba(1,1,1,0.6);
+    z-index: 999;
+}
+
+
+/* THUMB STRIP
+ * ----------------------------------------------------- */
+
+/* Horizontal */
+div.qnr-thumb-strip-wrap,
+div.qnr-thumb-strip,
+div.qnr-thumb-strip * {
+    box-sizing: border-box;
+}
+div.qnr-thumb-strip {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%; /* Best as odd multiple of cell width TODO */
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+/*
+    background-color: #F0F0F0;
+    border: solid thin blue;
+*/
+}
+div.qnr-thumb-strip-wrap {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: auto; /* Accounting for nav arrows width + 5px margin */
+    text-align: center;
+/*
+    border: solid thin red;
+*/
+}
+span.qnr-thumb-strip-nav-left,
+span.qnr-thumb-strip-nav-right {
+    display: table-cell;
+    position: absolute;
+    font-family: Quicknr;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.7em;
+    line-height: 0;
+    margin: 0;
+    padding: 1em 0.25em;
+    width: 30px; /* See above */
+    height: 100%;
+    vertical-align: middle;
+    speak: none;
+/*
+    border: solid thin silver;
+*/
+}
+span.qnr-thumb-strip-nav-left {
+    left: 0;
+    border-radius: 10px 0 0 10px;
+}
+span.qnr-thumb-strip-nav-right {
+    top: 0;
+    right: 0;
+    border-radius: 0 10px 10px 0;
+}
+span.qnr-thumb-strip-nav-left::before {
+    content: "C";
+    vertical-align: middle;
+}
+span.qnr-thumb-strip-nav-right::before {
+    content: "D";
+}
+span.qnr-thumb-strip-nav-left:hover,
+span.qnr-thumb-strip-nav-right:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+span.qnr-thumb-strip-nav-disabled,
+span.qnr-thumb-strip-nav-disabled:hover {
+    cursor: default !important;
+    opacity: 0.2 !important;
+}
+.qnr-thumb-strip-cell {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 15px 5px;
+    width: 100px;
+    outline: solid thin silver;
+    background-color: #EEF;
+}
+.qnr-thumb-strip-cell:hover {
+    cursor: pointer;
+}
+
+/* Vertical, partly overrides horizontal */
+div.qnr-thumb-strip-wrap-vertical,
+div.qnr-thumb-strip-vertical,
+div.qnr-thumb-strip-vertical * {
+    box-sizing: border-box;
+}
+div.qnr-thumb-strip-vertical {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: auto;
+    height: 100%; /* Best as odd multiple of cell height TODO */
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+/*
+    background-color: #F0F0F0;
+    border: solid thin blue;
+*/
+}
+div.qnr-thumb-strip-wrap-vertical {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: auto;
+    height: auto; /* Accounting for nav arrows height + 5px margin */
+    text-align: center;
+/*
+    border: solid thin red;
+*/
+}
+span.qnr-thumb-strip-nav-top,
+span.qnr-thumb-strip-nav-bottom {
+    display: block;
+    position: relative;
+    font-family: Quicknr;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.7em;
+    line-height: 0;
+    margin: 0 auto;
+    padding: 0.25em 0;
+    padding-top: 0.5em;
+    width: auto;
+    height: 30px; /* See above */
+    vertical-align: middle;
+    speak: none;
+/*
+    border: solid thin silver;
+*/
+}
+span.qnr-thumb-strip-nav-top {
+    margin-bottom: 5px; /* Matching JS code */
+    border-radius: 10px 10px 0 0;
+}
+span.qnr-thumb-strip-nav-bottom {
+    margin-top: 5px;
+    border-radius: 0 0 10px 10px;
+}
+span.qnr-thumb-strip-nav-top::before {
+    content: "B";
+    vertical-align: middle;
+}
+span.qnr-thumb-strip-nav-bottom::before {
+    content: "A";
+}
+span.qnr-thumb-strip-nav-top:hover,
+span.qnr-thumb-strip-nav-bottom:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+span.qnr-thumb-strip-nav-disabled { /* TODO */
+    cursor: default;
+    opacity: 0.6; /* Matching hover */
+}
+.qnr-thumb-strip-cell-vertical {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 5px 15px;
+    width: auto;
+    height: 50px;
+    outline: solid thin silver;
+    background-color: #EEF;
+}
+.qnr-thumb-strip-cell-vertical:hover {
+    cursor: pointer;
+}
+
+
+/* POPOUT SLIDER
+ * ----------------------------------------------------- */
+
+/* By default, styled as reveal of email subscription form */
+
+.qnr-popout-slider,
+.qnr-popout-slider * {
+    box-sizing: border-box;
+}
+
+.qnr-popout-slider {
+    display: block;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    top: 70px;
+    right: 0;
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%); /* Place it offscreen by its width */
+    width: 100%;
+    min-width: 280px;
+    max-width: 400px;
+    height: auto;
+    background-color: white;
+    z-index: 99;
+}
+
+button.qnr-popout-slider-button-show {
+    display: block;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    padding-left: 0.5em;
+    top: 80px;
+    right: 0;
+    width: 2.2em;
+    height: 2.2em;
+    font-family: Quicknr;
+    font-size: 1.2em;
+    line-height: 0;
+    text-align: left;
+    color: #666;
+    border-radius: 0.5em 0 0 0.5em;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(1,1,1,0.4);
+    background-color: rgba(255,255,255,0.9); /* Partly transparent */
+    z-index: 99;
+}
+button.qnr-popout-slider-button-hide {
+    display: block;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    margin: 0;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    font-family: Quicknr;
+    font-size: 20px;
+    line-height: 0;
+    color: #888;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: white;
+}
+@media (max-width: 500px) {
+    button.qnr-popout-slider-button-hide {
+        top: 8px;
+        right: 8px;
+    }
+}
+button.qnr-popout-slider-button-show > span::before {
+    content: "h"; /* Email icon */
+}
+button.qnr-popout-slider-button-hide > span::before {
+    content: "H"; /* X icon circle */
+}
+button.qnr-popout-slider-button-show:hover {
+    width: 2.6em;
+    color: black;
+    box-shadow: 0 0 12px rgba(1,1,1,0.2);
+    background-color: white;
+    transition: all 0.2s;
+}
+button.qnr-popout-slider-button-hide:hover {
+    color: black;
+}
+
+
+/* TOGGLE BUTTON
+ * ----------------------------------------------------- */
+
+.qnr-button-toggle {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0.5em;
+    width: auto;
+    height: auto;
+    cursor: pointer;
+    border: none;
+    /* Same as -up override */
+    border-right: solid thin silver;
+    border-bottom: solid thin silver;
+    background-color: #f0f0f0;
+    background-image: linear-gradient(#f0f0f0, #dadada);
+}
+.qnr-button-toggle-up {
+    border: none;
+    border-right: solid thin silver;
+    border-bottom: solid thin silver;
+    background-color: #f0f0f0;
+    background-image: linear-gradient(#f0f0f0, #dadada);
+}
+.qnr-button-toggle-down {
+    border: none;
+    border-left: solid thin silver;
+    border-top: solid thin silver;
+    background-color: #dadada;
+    background-image: linear-gradient(#dadada, #f0f0f0);
+}
+
+
+/* ARROW ANIM
+ * ----------------------------------------------------- */
+
+@keyframes qnr-arrow-anim-down {
+    from {
+        top: -10px;
+        opacity: 0.2;
+    }
+    10% {
+        top: 4px;
+        opacity: 1;
+    }
+    13% {
+        top: -2px;
+        opacity: 0.6;
+    }
+    15% {
+        top: 2px;
+        opacity: 1;
+    }
+    to {
+        top: 2px;
+        opacity: 1;
+    }
+}
+@keyframes qnr-arrow-anim-up {
+    from {
+        top: 10px;
+        opacity: 0.2;
+    }
+    10% {
+        top: -4px;
+        opacity: 1;
+    }
+    13% {
+        top: 2px;
+        opacity: 0.6;
+    }
+    15% {
+        top: -2px;
+        opacity: 1;
+    }
+    to {
+        top: -2px;
+        opacity: 1;
+    }
+}
+@keyframes qnr-arrow-anim-left {
+    from {
+        left: 10px;
+        opacity: 0.2;
+    }
+    10% {
+        left: -4px;
+        opacity: 1;
+    }
+    13% {
+        left: 2px;
+        opacity: 0.6;
+    }
+    15% {
+        left: -2px;
+        opacity: 1;
+    }
+    to {
+        left: -2px;
+        opacity: 1;
+    }
+}
+@keyframes qnr-arrow-anim-right {
+    from {
+        right: 12px;
+        opacity: 0.2;
+    }
+    10% {
+        right: -2px;
+        opacity: 1;
+    }
+    13% {
+        right: 4px;
+        opacity: 0.6;
+    }
+    15% {
+        right: 0px;
+        opacity: 1;
+    }
+    to {
+        right: 0px;
+        opacity: 1;
+    }
+}
+
+div.qnr-arrow-anim {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0.3em;
+    width: 1em;
+    height: 1em;
+    font-size: 2em; /* TODO */
+    line-height: 1em;
+    color: #EEE;
+    border-radius: 50%;
+    border: solid 3px #EEE;
+    overflow: hidden;
+}
+div.qnr-arrow-anim:hover {
+    color: white;
+    border-color: white;
+    cursor: pointer;
+}
+div.qnr-arrow-anim:active {
+    box-shadow: 0 0 6px white;
+}
+
+/* SPAN created by Javascript */
+
+div.qnr-arrow-anim span {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    animation-duration: 4s;
+    animation-fill-mode: both;
+    animation-iteration-count: infinite;
+}
+span.qnr-arrow-anim-down {
+    animation-name: qnr-arrow-anim-down;
+}
+span.qnr-arrow-anim-up {
+    animation-name: qnr-arrow-anim-up;
+}
+span.qnr-arrow-anim-left {
+    animation-name: qnr-arrow-anim-left;
+}
+span.qnr-arrow-anim-right {
+    animation-name: qnr-arrow-anim-right;
+}
+span.qnr-arrow-anim-still {
+    animation-name: none;
+    animation-iteration-count: 0;
+}
+
+
+/* RESPONSIVE
+ * ----------------------------------------------------- */
+
+div.qnr-responsive {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    -moz-flex-flow: row wrap;
+    flex-flow: row wrap;
+    position: relative;
+    margin: 0 auto 0 auto;
+    padding: 0;
+    width: auto;
+    min-width: 280px;
+    max-width: 94%;
+    text-align: center;
+    -webkit-align-content: flex-start;
+    align-content: flex-start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    -moz-justify-content: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+div.qnr-responsive-item {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 280px;
+    -ms-flex: 1 0 280px;
+    -moz-flex: 1 0 280px;
+    -webkit-flex: 1 0 280px;
+    flex: 1 0 280px;
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0.5em 2em;
+    width: 280px;
+    min-width: 280px;
+    max-width: 600px;
+    box-sizing: border-box;     /* Never mind IE, it isn't a mobile browser much... */
+}
+@media (max-width: 400px) {
+    div.qnr-responsive {
+        min-width: 280px;
+    }
+    div.qnr-responsive-item {
+        width: 280px;
+        min-width: 280px;
+        padding: 0.5em 1em;
+    }
+}
+
+/* WINSCROLLER
+ * ----------------------------------------------------- */
+
+.qnr-winscroller {
+    /* Widget itself */
+}
+
+/* The arrow, if widget is BODY */
+span.qnr-winscroller-arrow {
+    display: block;
+    position: fixed;
+    margin: 0;
+    padding: 0.2em;
+    bottom: 30px;
+    right: 0;
+    top: auto;
+    left: auto;
+    width: 35px;
+    height: 35px;
+    font-family: Quicknr;
+    font-size: 24px;
+    line-height: 1em;
+    color: #999;
+    text-decoration: none;
+    visibility: hidden;
+    speak: none;
+    border-radius: 5px 0 0 5px;
+    opacity: 0.8;
+    background-color: rgba(1,1,1,0.2);
+    z-index: 10000;
+}
+span.qnr-winscroller-arrow::before {
+    content: "6"; /* Up arrow */
+}
+span.qnr-winscroller-arrow:link, span.qnr-winscroller-arrow:visited {
+    color: #999;
+}
+span.qnr-winscroller-arrow:hover {
+    cursor: pointer;
+    color: #EEE;
+}
+span.qnr-winscroller-arrow:active {
+    color: white;
+}
+
+
+/* CAROUSEL
+ * ----------------------------------------------------- */
+
+@keyframes qnr-carousel-fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes qnr-carousel-slidefade-rtl {
+    from {
+        left: 100%;
+        opacity: 0;
+    }
+    to {
+        left: 0;
+        opacity: 1;
+    }
+}
+@keyframes qnr-carousel-slidefade-ltr {
+    from {
+        left: -100%;
+        opacity: 0;
+    }
+    to {
+        left: 0;
+        opacity: 1;
+    }
+}
+@keyframes qnr-carousel-slidein-rtl {
+    from {
+        left: 100%;
+    }
+    to {
+        left: 0;
+    }
+}
+@keyframes qnr-carousel-slidein-ltr {
+    from {
+        left: -100%;
+    }
+    to {
+        left: 0;
+    }
+}
+@keyframes qnr-carousel-slideout-rtl {
+    from {
+        left: 0;
+    }
+    to {
+        left: -100%;
+    }
+}
+@keyframes qnr-carousel-slideout-ltr {
+    from {
+        left: 0;
+    }
+    to {
+        left: 100%;
+    }
+}
+
+div.qnr-carousel,
+div.qnr-carousel-caption {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* Override font settings for consistency across sites */
+    font-family: Arial,sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+
+    text-align: center;
+    overflow: hidden;
+}
+div.qnr-carousel-caption {
+    padding: 1em;
+    height: auto;
+    box-sizing: border-box;
+}
+
+/* Carousel item */
+
+div.qnr-carousel-item {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+div.qnr-carousel-slidefade-rtl {
+    animation-name: qnr-carousel-slidefade-rtl;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+div.qnr-carousel-slidefade-ltr {
+    animation-name: qnr-carousel-slidefade-ltr;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+div.qnr-carousel-slidein-rtl {
+    animation-name: qnr-carousel-slidein-rtl;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+div.qnr-carousel-slidein-ltr {
+    animation-name: qnr-carousel-slidein-ltr;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+div.qnr-carousel-slideout-rtl {
+    animation-name: qnr-carousel-slideout-rtl;
+    animation-duration: 1s;
+    animation-fill-mode: backwards;
+}
+div.qnr-carousel-slideout-ltr {
+    animation-name: qnr-carousel-slideout-ltr;
+    animation-duration: 1s;
+    animation-fill-mode: backwards;
+}
+div.qnr-carousel-fadein {
+    animation-name: qnr-carousel-fadein;
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+
+/* Control strip */
+
+div.qnr-carousel-controlstrip {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    left: 50%;
+    margin-right: -50%;
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%); 
+    bottom: 16px;
+    width: auto;
+    max-width: 90%;
+/*
+    height: 40px;
+*/
+    text-align: center;
+    vertical-align: middle;
+    opacity: 1;
+    border-radius: 10px;
+    background-color: rgba(1,1,1,0.1);
+    z-index: 3;
+}
+div.qnr-carousel-controlstrip:hover {
+    background-color: rgba(1,1,1,0.06);
+}
+span.qnr-carousel-thumb {
+    display: inline-block;
+    position: relative;
+    margin: 12px 17px 12px 17px;
+    padding: 2px;
+    width: 6px;
+    height: 6px;
+    font-size: 1.5em; /* TODO */
+    font-weight: bold;
+    line-height: 1em;
+    vertical-align: top;
+    color: white;
+    border: solid 3px silver;
+    background-color: transparent;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    border-radius: 50%;
+    opacity: 1;
+    overflow: hidden;
+    cursor: pointer;
+    box-sizing: content-box;    /* Fixes thumb size */
+}
+span.qnr-carousel-thumb-inactive {
+    border-color: #CCC;
+    background-color: transparent;
+}
+span.qnr-carousel-thumb-active {
+    border-color: #DDD;
+    background-color: #EEE;
+}
+span.qnr-carousel-thumb-number-inactive {
+    border-color: black;
+    background-color: black;
+}
+span.qnr-carousel-thumb-number-active {
+    border-color: orange;
+    background-color: orange;
+}
+span.qnr-carousel-thumb:hover {
+/*
+    border-color: #DDD;
+    background-color: transparent;
+*/
+}
+
+/* Preview thumbs */
+span.qnr-carousel-thumb-preview:hover {
+    width: 54px;
+    height: 54px;
+    margin: -9px -4px -9px -4px;
+    padding: 0;
+    border: solid 2px #DDD;
+    opacity: 1;
+    /* Transitions developed from 'height' only, because of flashing problem on Wordpress in Firefox */
+    transition-property: height, margin-top, margin-bottom, padding-top, padding-bottom;
+    transition-duration: 0.1s;
+    z-index: 4;
+}
+
+/* Prev Next arrow navigators */
+
+span.qnr-carousel-arrow-left,
+span.qnr-carousel-arrow-right,
+span.qnr-carousel-stickyarrow-left,
+span.qnr-carousel-stickyarrow-right,
+span.qnr-carousel-bigarrow-left,
+span.qnr-carousel-bigarrow-right {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 8px;
+/*
+    top: 50%;
+    transform: translateY(-50%);
+*/
+    
+    top: 50%;
+    -o-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    
+    font-family: Quicknr;
+}
+
+/* Regular */
+span.qnr-carousel-arrow-left,
+span.qnr-carousel-arrow-right {
+    font-size: 32px;
+    font-weight: normal;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+    border-radius: 50%;
+    opacity: 0.3;
+    background-color: rgba(100,100,100,0.5);
+    speak: none;
+    z-index: 5;
+}
+span.qnr-carousel-arrow-left {
+    left: 1%;
+}
+span.qnr-carousel-arrow-right {
+    right: 1%;
+}
+span.qnr-carousel-arrow-left::before {
+    content: "4";
+}
+span.qnr-carousel-arrow-right::before {
+    content: "5";
+}
+
+/* Bigarrow */
+span.qnr-carousel-bigarrow-left,
+span.qnr-carousel-bigarrow-right {
+    padding: 0;
+    font-size: 74px;
+    font-weight: normal;
+    text-decoration: none;
+    color: silver;
+    cursor: pointer;
+    opacity: 0.6;
+    background-color: transparent;
+    speak: none;
+    z-index: 5;
+}
+span.qnr-carousel-bigarrow-left {
+    left: 0.5%;
+}
+span.qnr-carousel-bigarrow-right {
+    right: 0.5%;
+}
+span.qnr-carousel-bigarrow-left::before {
+    content: "2";
+}
+span.qnr-carousel-bigarrow-right::before {
+    content: "3";
+}
+
+/* Stickyarrow */
+span.qnr-carousel-stickyarrow-left,
+span.qnr-carousel-stickyarrow-right {
+    font-size: 32px;
+    line-height: 1.4em;
+    font-weight: normal;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    opacity: 0.6;
+    background-color: rgba(1,1,1,0.5);
+    speak: none;
+    z-index: 5;
+}
+span.qnr-carousel-stickyarrow-left {
+    left: 0;
+    border-radius: 0 10px 10px 0;
+}
+span.qnr-carousel-stickyarrow-right {
+    right: 0;
+    border-radius: 10px 0 0 10px;
+}
+span.qnr-carousel-stickyarrow-left::before {
+    content: "2";
+}
+span.qnr-carousel-stickyarrow-right::before {
+    content: "3";
+}
+
+span.qnr-carousel-arrow-left:hover,
+span.qnr-carousel-arrow-right:hover,
+span.qnr-carousel-stickyarrow-left:hover,
+span.qnr-carousel-stickyarrow-right:hover,
+span.qnr-carousel-bigarrow-left:hover,
+span.qnr-carousel-bigarrow-right:hover {
+    color: white;
+    opacity: 0.9;
+}
+span.qnr-carousel-arrow-left:active,
+span.qnr-carousel-arrow-right:active,
+span.qnr-carousel-stickyarrow-left:active,
+span.qnr-carousel-stickyarrow-right:active,
+span.qnr-carousel-bigarrow-left:active,
+span.qnr-carousel-bigarrow-right:active {
+    color: white;
+}
+
+
+/* STICKY BAR
+ * ----------------------------------------------------- */
+
+/* TODO needs work */
+div.qnr-stickybar {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+/* Essential styling of fixed version - override for other parameters */
+div.qnr-stickybar-fixed {
+    position: fixed;
+    top: 0;
+    z-index: 9999;  /* All other z-index settings should be lower */
+}
+
+
+/* SLIDER
+ * ----------------------------------------------------- */
+
+@keyframes qnr-slide-rtl {
+    from {
+        left: 100%;
+    }
+    25% {
+        left: 0;
+    }
+    75% {
+        left: 0;
+    }
+    to {
+        left: -100%;
+    }
+}
+@keyframes qnr-slide-ltr {
+    from {
+        left: -100%;
+    }
+    20% {
+        left: 0;
+    }
+    80% {
+        left: 0;
+    }
+    to {
+        left: 100%;
+    }
+}
+@keyframes qnr-slide-up {
+    from {
+        top: 100%;
+    }
+    20% {
+        top: 0;
+    }
+    80% {
+        top: 0;
+    }
+    to {
+        top: -100%;
+    }
+}
+@keyframes qnr-slide-down {
+    from {
+        top: -100%;
+    }
+    20% {
+        top: 0;
+    }
+    80% {
+        top: 0;
+    }
+    to {
+        top: 100%;
+    }
+}
+
+/* Stopping variants */
+
+@keyframes qnr-slide-rtl-stop {
+    from {
+        left: 100%;
+    }
+    to {
+        left: 0;
+    }
+}
+@keyframes qnr-slide-ltr-stop {
+    from {
+        left: -100%;
+    }
+    to {
+        left: 0;
+    }
+}
+@keyframes qnr-slide-up-stop {
+    from {
+        top: 100%;
+    }
+    to {
+        top: 0;
+    }
+}
+@keyframes qnr-slide-down-stop {
+    from {
+        top: -100%;
+    }
+    to {
+        top: 0;
+    }
+}
+div.qnr-slider {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    overflow: hidden;
+}
+div.qnr-slide-item {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    animation-duration: 4s;         /* JS may override */
+    animation-fill-mode: both;
+    animation-timing-function: ease;
+    animation-iteration-count: 1;
+    opacity: 1;
+}
+
+/* Slide turned off to prevent onload flashing... */
+div.qnr-slide-none {
+    display: none;
+}
+
+/* Animations */
+
+div.qnr-slide-rtl {
+    animation-name: qnr-slide-rtl;
+}
+div.qnr-slide-ltr {
+    animation-name: qnr-slide-ltr;
+}
+div.qnr-slide-up {
+    animation-name: qnr-slide-up;
+}
+div.qnr-slide-down {
+    animation-name: qnr-slide-down;
+}
+
+div.qnr-slide-rtl-stop {
+    animation-name: qnr-slide-rtl-stop;
+}
+div.qnr-slide-ltr-stop {
+    animation-name: qnr-slide-ltr-stop;
+}
+div.qnr-slide-up-stop {
+    animation-name: qnr-slide-up-stop;
+}
+div.qnr-slide-down-stop  {
+    animation-name: qnr-slide-down-stop;
+}
+
+
+/* IMAGE ANIMATOR
+ * ----------------------------------------------------- */
+
+@keyframes qnr-img-zoom-in {
+    from {
+        width: 100%;
+        opacity: 1;
+    }
+    66% {
+        opacity: 1;
+    }
+    to {
+        width: 110%;
+        opacity: 0;
+    }
+}
+@keyframes qnr-img-zoom-out {
+    from {
+        width: 110%;
+        opacity: 1;
+    }
+    66% {
+        opacity: 1;
+    }
+    to {
+        width: 100%;
+        opacity: 0;
+    }
+}
+@keyframes qnr-img-zoom-in-opaque {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 110%;
+    }
+}
+@keyframes qnr-img-zoom-out-opaque {
+    from {
+        width: 110%;
+    }
+    to {
+        width: 100%;
+    }
+}
+div.qnr-img-anim {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* imgDIVs replacing the IMGs */
+
+div.qnr-img-anim-div {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: silver;
+    background-position: 50% 50%;   /* Ready for bg-img by JS */
+    background-size: cover;
+    background-repeat: no-repeat;
+    animation-duration: 4s;         /* JS may override */
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    opacity: 1;
+}
+
+/* For centered zooming, plus other anchorings, lopleft is default */
+
+div.qnr-centered {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+div.qnr-topright {
+    top: 0;
+    right: 0;
+}
+div.qnr-topleft {
+    top: 0;
+    left: 0;
+}
+div.qnr-bottomright {
+    right: 0;
+    bottom: 0;
+}
+div.qnr-bottomleft {
+    left: 0;
+    bottom: 0;
+}
+div.qnr-leftcenter {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+div.qnr-rightcenter {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+/* Animations */
+
+div.qnr-img-zoom-in {
+    animation-name: qnr-img-zoom-in;
+}
+div.qnr-img-zoom-out {
+    animation-name: qnr-img-zoom-out;
+}
+div.qnr-img-zoom-in-opaque  {
+    animation-name: qnr-img-zoom-in-opaque ;
+}
+div.qnr-img-zoom-out-opaque  {
+    animation-name: qnr-img-zoom-out-opaque ;
+}
+
+/* Animation timing function */
+
+div.qnr-ease {
+    animation-timing-function: ease;
+}
+div.qnr-ease-in {
+    animation-timing-function: ease-in;
+}
+div.qnr-ease-out {
+    animation-timing-function: ease-out;
+}
+div.qnr-linear {
+    animation-timing-function: linear;
+}
+
+/* Translucent cover over the images */
+
+div.qnr-img-translucent-cover {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.5;
+}
+
+
+/* PARALLAX SCROLLER
+ * ----------------------------------------------------- */
+
+div.qnr-scroller {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+/*
+    height: 300px;
+*/
+    color: white;
+    text-align: center;
+    background-color: #EEE;
+    opacity: 1;
+    background-image: url("img/omega.jpg");  /* Override */
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* ----------------------------- Carousel Item Scroller Override */
+
+div.qnr-carousel > div.qnr-carousel-item.qnr-scroller {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+
+/* X-ICON
+ * ----------------------------------------------------- */
+
+.qnr-x-icon-btn {      /* block & absolute set in JS */
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    margin: 0;
+    padding: 0;
+    font-family: Verdana,sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 0.3em;
+    color: silver;
+    text-shadow: 0 0 1px silver;
+    transform: scaleX(1.3);
+}
+.qnr-x-icon-btn:hover {
+    cursor: pointer;
+    color: gray;
+}
+
+
+/* ACCORDION
+ * ----------------------------------------------------- */
+
+div.qnr-accordion {
+    display: inline-block;
+    position: relative;
+    margin: 1em;
+    padding: 0;
+    width: 50%;
+    min-width: 300px;
+    text-align: left;
+    opacity: 0;                 /* Overriden in code */
+}
+
+/* Questions */
+
+div.qnr-accordion > p {
+    display: block;
+    position: relative;
+    margin: -8px 0;             /* Negative margin to hide DIV */
+    padding: 0.5em 2%;
+    width: 96%;
+    font-weight: bold;
+    border-radius: 10px;
+    box-shadow: 1px 1px 2px silver;
+    background-color: #EEF;
+    z-index: 10;                 /* Over the answer */
+}
+div.qnr-accordion > p:hover {
+    cursor: pointer;
+    background-color: #E4E4FA;
+}
+
+/* Answers */
+
+div.qnr-accordion div {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 1em 2em;
+    width: 90%;
+}
+
+
+/* NAVBAR
+ * ----------------------------------------------------- */
+
+/* Desktop */
+
+.qnr-navbar-header {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
+    /* Vertical */
+    -webkit-align-items: stretch;
+    align-items: stretch;
+    
+    /* Horizontal */
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    
+    position: relative;
+    margin: 0;
+    padding: 0 1em;
+    width: 100%;
+    height: 56px;
+    font-size: 1.1em;
+    box-shadow: none;
+    
+    z-index: 99;
+}
+.qnr-navbar-header a {
+    font-weight: normal;
+}
+
+/* Mobile */
+
+.qnr-navbar-drawer {
+    display: block;
+    
+    position: fixed;
+    top:0;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 280px;
+    height: 100%;
+    font-size: 1.1em;
+    overflow: auto; /* Doesn't work with flex in Chrome, but block is fine */
+    box-shadow: 0 0 12px rgba(0,0,0,0.26);
+    
+    z-index: 9999;
+}
+.qnr-navbar-drawer a {
+    font-weight: normal;
+}
+
+/* ----------------------------- Logo */
+
+/* Desktop */
+
+.qnr-navbar-header .qnr-navbar-logo {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
+    width: auto;
+    height: auto;
+    
+    /* Vertical */
+    -webkit-align-items: center;
+    align-items: center;
+    
+    /* Horizontal */
+    -webkit-justify-content: center;
+    justify-content: center;
+    
+    position: relative;
+    margin: 0;
+    margin-right: 2em;
+    padding: 0.25em;
+    
+    font-family: QNRWP;
+    font-size: 2em;
+    font-stretch: condensed;
+    font-weight: normal;
+    text-align: left;
+    color: #1e6594;
+}
+@media (max-width: 767px) {
+    .qnr-navbar-header .qnr-navbar-logo {
+        font-size: 1.8em;
+    }
+}
+@media (max-width: 479px) {
+    .qnr-navbar-header .qnr-navbar-logo {
+        font-size: 1.6em;
+    }
+}
+.qnr-navbar-header .qnr-navbar-logo a,
+.qnr-navbar-header .qnr-navbar-logo a img {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+/* Clickable logo */
+.qnr-navbar-header .qnr-navbar-logo a {
+    width: auto;
+    height: auto;
+    text-decoration: none;
+    white-space: nowrap;
+    z-index: 99;
+}
+.qnr-navbar-header .qnr-navbar-logo a:hover {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.8; /* TODO replace with styling class */
+}
+
+/* Mobile */
+
+.qnr-navbar-drawer .qnr-navbar-logo {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
+    width: 100%;
+    height: auto;
+    
+    /* Vertical */
+    -webkit-align-items: center;
+    align-items: center;
+    
+    /* Horizontal */
+    -webkit-justify-content: center;
+    justify-content: center;
+    
+    position: relative;
+    margin: 1em auto;
+    padding: 0;
+    
+    font-family: QNRWP;
+    font-size: 1.6em;
+    font-stretch: condensed;
+    font-weight: normal;
+    text-align: left;
+    color: #1e6594;
+}
+.qnr-navbar-drawer .qnr-navbar-logo a,
+.qnr-navbar-drawer .qnr-navbar-logo a img {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+/* Clickable logo */
+.qnr-navbar-drawer .qnr-navbar-logo a {
+    width: auto;
+    height: auto;
+    text-decoration: none;
+    white-space: nowrap;
+    z-index: 99;
+}
+.qnr-navbar-drawer .qnr-navbar-logo a:hover {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.8; /* TODO replace with styling class */
+}
+
+/* ----------------------------- Widget */
+
+/* Desktop */
+
+.qnr-navbar-header .qnr-navbar-widget-wrap {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
+    /* Vertical */
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+    
+    /* Horizontal */
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    
+    position: relative;
+    margin: 0.5em 1em;
+    padding: 0;
+    width: auto;
+    background-color: red;
+}
+.qnr-navbar-header .qnr-navbar-widget-wrap .qnr-navbar-widget {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    background-color: blue;
+}
+
+@media (max-width: 767px) {
+    .qnr-navbar-header .qnr-navbar-widget-wrap {
+        display: none;
+    }
+}
+
+/* Mobile */
+
+.qnr-navbar-drawer .qnr-navbar-widget-wrap {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
+    /* Vertical */
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+    
+    /* Horizontal */
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    
+    position: relative;
+    margin: 1em 0;
+    padding: 0;
+    width: 100%;
+    background-color: red;
+}
+.qnr-navbar-drawer .qnr-navbar-widget-wrap .qnr-navbar-widget {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: auto;
+    background-color: blue;
+}
+
+/* ----------------------------- Menu */
+
+/* Desktop */
+
+.qnr-navbar-header .qnr-navbar-menu {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
+    /* Vertical */
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+    
+    position: relative;
+    margin: 0;
+    padding: 0;
+    margin-top: 1em;
+    width: auto;
+    height: auto;
+    
+    font-weight: normal;
+}
+
+@media (max-width: 767px) {
+    .qnr-navbar-header .qnr-navbar-menu {
+        display: none;
+    }
+}
+
+/* Mobile */
+
+.qnr-navbar-drawer .qnr-navbar-menu {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
+    /* Vertical */
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    
+    position: relative;
+    margin: 1em 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    
+    font-weight: normal;
+    z-index: 999;
+}
+
+/* ----------------------------- Menu item */
+
+/* Desktop */
+
+.qnr-navbar-header .qnr-navbar-menu a {
+    font-weight: normal;
+    line-height: 1.2em;
+}
+.qnr-navbar-header .qnr-navbar-menu ul li,
+.qnr-navbar-header .qnr-navbar-menu-item {
+    display: block;
+    position: relative;
+    margin: 0 0.5em;
+    padding: 0;
+    width: auto;
+}
+.qnr-navbar-header .qnr-navbar-menu ul li a,
+.qnr-navbar-header .qnr-navbar-menu-item a {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0.5em 1em;
+    width: auto;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.qnr-navbar-header .qnr-navbar-menu ul li a:hover,
+.qnr-navbar-header .qnr-navbar-menu-item a:hover {
+    background-color: inherit;
+}
+
+/* Mobile */
+
+.qnr-navbar-drawer .qnr-navbar-menu a {
+    font-weight: normal;
+    line-height: 1.2em;
+}
+.qnr-navbar-drawer .qnr-navbar-menu ul li,
+.qnr-navbar-drawer .qnr-navbar-menu-item {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: left;
+}
+.qnr-navbar-drawer .qnr-navbar-menu ul li a,
+.qnr-navbar-drawer .qnr-navbar-menu-item a {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 1em 1em;
+    width: 100%;
+    font-size: 1.1em;
+    text-align: left;
+    text-transform: none;
+    white-space: wrap;
+    border: none;
+    border-bottom: dotted thin rgba(128,128,128,0.3);
+}
+.qnr-navbar-drawer .qnr-navbar-menu > ul li:first-of-type a,
+.qnr-navbar-drawer .qnr-navbar-menu-item:first-of-type a {
+    border-top: dotted thin rgba(128,128,128,0.3);
+}
+.qnr-navbar-drawer .qnr-navbar-menu ul li a:hover,
+.qnr-navbar-drawer .qnr-navbar-menu-item a:hover {
+    background-color: #f8f8f8;
+}
+
+/* ----------------------------- Submenu */
+
+/* Desktop */
+
+.qnr-navbar-header .qnr-navbar-submenu-toggle::after {
+    content: "\00c0";   /* Triangle down */
+    display: block;
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    top: 1em;
+    right: 0;
+    color: inherit;
+    font-family: Quicknr;
+    font-size: 0.7em;
+    vertical-align: top;
+    line-height: 1em;
+}
+.qnr-navbar-header .qnr-navbar-submenu {
+    display: none;  /* display: block; */
+    position: absolute;
+    top: 100%;
+    margin: 0;
+    left: 0;
+    padding: 0.5em 0;
+    width: auto;
+    
+    color: black;
+    box-shadow: 0 0 6px rgba(0,0,0,0.26);
+    border: solid thin #ddd;
+    background-color: white;
+}
+.qnr-navbar-header .qnr-navbar-submenu-holder:last-of-type .qnr-navbar-submenu {
+    left: auto;
+    right: 0;
+}
+
+/* Mobile */
+
+.qnr-navbar-drawer .qnr-navbar-submenu-toggle::after {
+    content: "\00c0";   /* Triangle down */
+    display: block;
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    top: 1.8em;
+    right: 1em;
+    color: inherit;
+    font-family: Quicknr;
+    font-size: 0.7em;
+    vertical-align: top;
+    line-height: 1em;
+}
+.qnr-navbar-drawer .qnr-navbar-menu .qnr-navbar-submenu {
+    display: none;  /* display: block; */
+    position: relative;
+    top: auto;
+    margin: 0;
+    left: 0;
+    padding: 0;
+    width: auto;
+    
+    color: inherit;
+    box-shadow: none;
+    border: none;
+    background-color: transparent;
+}
+
+/* ----------------------------- Submenu menu item */
+
+/* Desktop */
+
+.qnr-navbar-header .qnr-navbar-submenu ul li,
+.qnr-navbar-header .qnr-navbar-submenu .qnr-navbar-menu-item {
+    margin: 0;
+}
+.qnr-navbar-header .qnr-navbar-submenu ul li a,
+.qnr-navbar-header .qnr-navbar-submenu .qnr-navbar-menu-item a {
+    margin: 0;
+    padding: 0.5em 1.5em;
+    text-align: left;
+    text-transform: none;
+}
+.qnr-navbar-header .qnr-navbar-submenu ul li a:hover,
+.qnr-navbar-header .qnr-navbar-submenu .qnr-navbar-menu-item a:hover {
+    background-color: #f8f8f8;
+}
+
+/* Mobile */
+
+.qnr-navbar-drawer .qnr-navbar-submenu ul li,
+.qnr-navbar-drawer .qnr-navbar-submenu .qnr-navbar-menu-item {
+    margin: 0;
+}
+.qnr-navbar-drawer .qnr-navbar-submenu ul li a,
+.qnr-navbar-drawer .qnr-navbar-submenu .qnr-navbar-menu-item a {
+    margin: 0;
+    padding: 1em 1.5em;
+    padding-left: 2em;
+    text-align: left;
+    text-transform: none;
+}
+.qnr-navbar-drawer .qnr-navbar-submenu ul li a:hover,
+.qnr-navbar-drawer .qnr-navbar-submenu .qnr-navbar-menu-item a:hover {
+    background-color: #f8f8f8;
+}
+
+/* ----------------------------- Toggle icon */
+
+/* Desktop */
+
+.qnr-navbar-header .qnr-navbar-menu-toggle-wrap {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
+    width: auto;
+    height: auto;
+    
+    /* Vertical */
+    -webkit-align-items: center;
+    align-items: center;
+    
+    /* Horizontal */
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+.qnr-navbar-header .qnr-navbar-menu-toggle {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 16px 6px 6px 6px;
+    width: 38px;
+    height: 38px;
+    font-size: 22px;
+    line-height: 0;
+    text-align: center;
+    border: solid thin rgba(128,128,128,0.3);
+}
+
+@media (min-width: 768px) {
+    .qnr-navbar-header .qnr-navbar-menu-toggle-wrap {
+        display: none;
+    }
+}
+
+/* Mobile */
+
+.qnr-navbar-drawer .qnr-navbar-menu-toggle-wrap {
+    display: none;
+}
+
+
+
+/* LAYOUT HELPERS
+ * ----------------------------------------------------- */
+
+
+/* ----------------------------- Centering */
+
+.center-bottom {
+    position: absolute !important;
+    margin: auto auto !important;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.center {
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+.center-horizontal {
+    left: 50%;
+    margin-right: -50%;
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+.center-vertical {
+    top: 50%;
+    -o-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+/* ----------------------------- Blocks */
+
+.display-block {
+    display: block;
+}
+.display-inline-block {
+    display: inline-block;
+}
+.position-relative {
+    position: relative;
+}
+.position-absolute {
+    position: absolute;
+}
+.position-fixed {
+    position: fixed;
+}
+.margin-0 {
+    margin: 0;
+}
+.margin-0-auto {
+    margin: 0 auto;
+}
+.padding-0 {
+    padding: 0;
+}
+.width-100 {
+    width: 100%;
+}
+.width-auto {
+    width: auto;
+}
+.height-100 {
+    height: 100%;
+}
+.height-auto {
+    height: auto;
+}
+
+/* ----------------------------- Flex */
+
+.flex-block {
+    display: -webkit-flex;
+    display: flex;
+}
+.flex-inline-block {
+    display: -webkit-inline-flex;
+    display: inline-flex;
+}
+
+.flex-vertical-center-content {
+    -webkit-align-items: center; /* Single line */
+    align-items: center;
+    -webkit-align-content: center; /* Multi line */
+    align-content: center;
+}
+.flex-vertical-justify-content {
+    -webkit-align-content: space-between; /* Multi line only */
+    align-content: space-between;
+}
+.flex-vertical-top-content {
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    -webkit-align-content: flex-start;
+    align-content: flex-start;
+}
+.flex-vertical-bottom-content {
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+    -webkit-align-content: flex-end;
+    align-content: flex-end;
+}
+
+.flex-horizontal-center-content {
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+.flex-horizontal-justify-content {
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+.flex-horizontal-right-content {
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+}
+
+/* ----------------------------- Float */
+
+.float-left {
+    float: left;
+}
+.float-right {
+    float: right;
+}
+.clear {
+    clear: both;
+}
+
+/* ----------------------------- Typography */
+
+.bold {
+    font-weight: bold;
+}
+.italic {
+    font-style: italic;
+}
+.normal {
+    font-weight: normal;
+    font-style: normal;
+}
+.underline {
+    text-decoration: underline;
+}
+.uppercase {
+    text-transform: uppercase;
+}
+
+
+/* STYLES
+ * ----------------------------------------------------- */
+
+
+/* ----------------------------- Dark / Light */
+
+.qnr-style-dark {
+    color: white;
+    background-color: #444;
+}
+.qnr-style-light {
+    color: black;
+    background-color: white;
+}
+
+
+/* ----------------------------- Interactive */
+
+.qnr-style-interactive {
+    opacity: 0.8;
+}
+.qnr-style-interactive {
+    text-decoration: none;
+}
+.qnr-style-interactive:hover {
+    cursor: pointer;
+    text-decoration: none;
+    opacity: 1;
+}
+
+
+
+/* GLYPHS - INTERFACE
+ * ----------------------------------------------------- */
+
+/* Not exhaustive, more glyphs are in the font file */
+
+.qnr-glyph {
+    font-family: Quicknr;
+    font-weight: normal;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    speak: none;
+}
+.qnr-glyph-menuicon::before             {content: "0";}
+.qnr-glyph-xicon::before                {content: "1";}
+.qnr-glyph-bigarrow-left::before        {content: "2";}
+.qnr-glyph-bigarrow-right::before       {content: "3";}
+.qnr-glyph-arrow-left::before           {content: "4";}
+.qnr-glyph-arrow-right::before          {content: "5";}
+.qnr-glyph-arrow-up::before             {content: "6";}
+.qnr-glyph-arrow-down::before           {content: "7";}
+.qnr-glyph-checkmark::before            {content: "8";}
+.qnr-glyph-xmark::before                {content: "9";}
+.qnr-glyph-triangle-down::before        {content: "A";}
+.qnr-glyph-triangle-up::before          {content: "B";}
+.qnr-glyph-triangle-left::before        {content: "C";}
+.qnr-glyph-triangle-right::before       {content: "D";}
+.qnr-glyph-gear::before                 {content: "E";}
+.qnr-glyph-arrow-close::before          {content: "F";}
+.qnr-glyph-circle-checkmark::before     {content: "G";}
+.qnr-glyph-circle-xmark::before         {content: "H";}
+.qnr-glyph-zoom-in::before              {content: "I";}
+.qnr-glyph-zoom-out::before             {content: "J";}
+.qnr-glyph-circle-down::before          {content: "K";}
+.qnr-glyph-circle-up::before            {content: "L";}
+.qnr-glyph-circle-left::before          {content: "M";}
+.qnr-glyph-circle-right::before         {content: "N";}
+.qnr-glyph-globe::before                {content: "Y";}
+.qnr-glyph-cart::before                 {content: "Z";}
+.qnr-glyph-enlarge::before              {content: "a";}
+.qnr-glyph-reduce::before               {content: "b";}
+.qnr-glyph-search::before               {content: "g";}
+.qnr-glyph-home::before                 {content: "k";}
+.qnr-glyph-profile::before              {content: "o";}
+.qnr-glyph-share::before                {content: "s";}
+.qnr-glyph-thumb-down::before           {content: "u";}
+.qnr-glyph-thumb-up::before             {content: "v";}
+.qnr-glyph-embed::before                {content: "z";}
+.qnr-glyph-expand::before               {content: "{";}
+.qnr-glyph-arrowthin-down::before       {content: "\00c0";}
+.qnr-glyph-arrowthin-up::before         {content: "\00c1";}
+.qnr-glyph-arrowthin-left::before       {content: "\00c2";}
+.qnr-glyph-arrowthin-right::before      {content: "\00c3";}
+.qnr-glyph-phone::before                {content: "\00c5";}
+.qnr-glyph-waterdrop::before            {content: "\0166";}
+.qnr-glyph-lightning::before            {content: "\0168";}
+.qnr-glyph-connections::before          {content: "\0169";}
+.qnr-glyph-chart::before                {content: "\016a";}
+.qnr-glyph-barchart::before             {content: "\0172";}
+.qnr-glyph-bell::before                 {content: "\0177";}
+.qnr-glyph-calculator::before           {content: "\0184";}
+.qnr-glyph-camera::before               {content: "\0186";}
+.qnr-glyph-clock::before                {content: "\0188";}
+.qnr-glyph-quoteopen::before            {content: "\019a";}
+.qnr-glyph-quoteclose::before           {content: "\019b";}
+.qnr-glyph-more::before                 {content: "\019e";}
+.qnr-glyph-openpage::before             {content: "\01a5";}
+.qnr-glyph-eye::before                  {content: "\01a6";}
+.qnr-glyph-image::before                {content: "\01ae";}
+.qnr-glyph-info::before                 {content: "\01b0";}
+.qnr-glyph-link::before                 {content: "\01b8";}
+.qnr-glyph-marker::before               {content: "\01c0";}
+.qnr-glyph-minus::before                {content: "\01cc";}
+.qnr-glyph-paperclip::before            {content: "\01cf";}
+.qnr-glyph-piechart::before             {content: "\01d2";}
+.qnr-glyph-pin::before                  {content: "\01d3";}
+.qnr-glyph-plus::before                 {content: "\01d5";}
+.qnr-glyph-pulse::before                {content: "\01d9";}
+.qnr-glyph-puzzle::before               {content: "\01da";}
+.qnr-glyph-question::before               {content: "\01db";}
+.qnr-glyph-shield::before               {content: "\01e0";}
+.qnr-glyph-signpost::before             {content: "\01e2";}
+.qnr-glyph-wrench::before               {content: "\01f7";}
+.qnr-glyph-star::before                 {content: "\01ff";}
+
+
+/* GLYPHS - ICONS
+ * ----------------------------------------------------- */
+
+.qnr-glyph-icons {
+    font-family: QuicknrIcons;
+    font-weight: normal;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    speak: none;
+}
+
+/* Font Awesome */
+.qnr-glyph-team::before                 {content: "A";}
+.qnr-glyph-gears::before                {content: "B";}
+.qnr-glyph-film::before                 {content: "C";}
+.qnr-glyph-spinner::before              {content: "D";}
+.qnr-glyph-flag::before                 {content: "E";}
+.qnr-glyph-boxes::before                {content: "F";}
+
+/* BeholdingEye icons */
+.qnr-glyph-gears-be::before             {content: "0";}
+.qnr-glyph-bulb-be::before              {content: "1";}
+
+
+/* GLYPHS - LOGOS
+ * ----------------------------------------------------- */
+
+.qnr-glyph-logo {
+    font-family: QuicknrLogos;
+    font-weight: normal;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    speak: none;
+}
+.qnr-glyph-blogger::before              {content: "b";}
+.qnr-glyph-email::before                {content: "e";}
+.qnr-glyph-facebook::before             {content: "f";}
+.qnr-glyph-googleplus::before           {content: "g";}
+.qnr-glyph-instagram::before            {content: "i";}
+.qnr-glyph-linkedin::before             {content: "l";}
+.qnr-glyph-pinterest::before            {content: "p";}
+.qnr-glyph-skype::before                {content: "s";}
+.qnr-glyph-twitter::before              {content: "t";}
+.qnr-glyph-youtube::before              {content: "y";}
+
+

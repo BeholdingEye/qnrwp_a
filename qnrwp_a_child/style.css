@@ -1,0 +1,19 @@
+/*
+Theme Name: qnrwp_child
+Theme URI: http://github.com/beholdingeye
+Author: Karl Dolenc, beholdingeye.com
+Author URI: http://www.beholdingeye.com
+Description: Child theme of QNRWP-A, the first Quicknr WordPress theme.
+Template: qnrwp_a
+Version: 2.0.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: basic, blank
+Text Domain: qnrwp_child
+*/
+
+/* Actual stylesheet to wok with is "child-style.css", used for easier 
+ * identification in Dev Tools. This stylesheet must remain in place, 
+ * WordPress requires it.
+ * */
+

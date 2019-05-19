@@ -1,0 +1,1 @@
+Place custom code files in this folder, for use with the "[include]" shortcode. The shortcode is described in the Documentation panel of theme settings.
