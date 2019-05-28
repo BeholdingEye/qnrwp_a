@@ -1,0 +1,16 @@
+
+/* ----------------------------- MORE WP ADMIN OVERRIDES */
+
+
+/* Widen Gutenberg block editor
+ * 
+ * Derived from "Editor Full Width Gutenberg" plugin by Anibal Ardid:
+ * https://ardid.com.ar/gutenberg-full-width-editor
+ *  */
+
+body.gutenberg-editor-page .editor-post-title__block,
+body.gutenberg-editor-page .editor-default-block-appender,
+body.gutenberg-editor-page .editor-block-list__block,
+.block-editor__container .wp-block {
+    max-width: 90% !important;
+}

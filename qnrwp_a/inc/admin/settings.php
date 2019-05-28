@@ -393,7 +393,20 @@ defined( 'ABSPATH' ) || exit;
                                       : 'checked="checked"';
                                       ?>> 
                                     <?php esc_html_e('Simplify admin interface for editors and other non-admins', 'qnrwp'); ?></label>
-                                    <p><em><?php esc_html_e('This will not prevent access to things that WP permits access to according to user permissions, but will streamline the interface to better focus on content. The most important change is that pages defining QNRWP Widgets will not appear on the Pages page.', 'qnrwp'); ?></em></p></td>
+                                    <p><em><?php esc_html_e('This will not prevent access to things that WP permits access to according to user permissions, but will streamline the interface to better focus on content.', 'qnrwp'); ?></em></p></td>
+          </tr>
+          
+          <!-- Checkbox: Wider Editor -->
+          <tr valign="top">
+            <th scope="row"><?php esc_html_e('Wider block editor', 'qnrwp'); ?></th>
+            <td><label><input type="checkbox" name="qnrwp_settings_array[admin-wider-editor]" id="qnrwp_settings_array_admin-wider-editor" 
+                                    value="1" <?php 
+                                      echo isset(get_option('qnrwp_settings_array')['admin-wider-editor'])
+                                      ? checked(1, get_option('qnrwp_settings_array')['admin-wider-editor'], false)
+                                      : 'checked="checked"';
+                                      ?>> 
+                                    <?php esc_html_e('Make the block editor wider', 'qnrwp'); ?></label>
+                                    <p><em><?php esc_html_e('Disable this option if you encounter problems or a WP update solves the problem of the narrow block editor.', 'qnrwp'); ?></em></p></td>
           </tr>
           
         </table>

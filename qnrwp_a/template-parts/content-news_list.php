@@ -17,8 +17,8 @@ if (has_post_thumbnail()) {
     // We use "get_" version because "the_date()" is buggy, does not fetch the date on all posts in a list of posts published on the same date
     echo get_the_date();
     ?></p>
-    <h1><?php the_title(); ?></h1>
-    <div class="qnrwp-excerpt-text">
+    <h1 class="<?php echo apply_filters('qnrwp_content_news_list_title_class', 'qnrwp-text-dark'); ?>"><?php the_title(); ?></h1>
+    <div class="qnrwp-excerpt-text <?php echo apply_filters('qnrwp_content_post_excerpt_class', 'qnrwp-text-dark'); ?>">
       <?php $htmlExcerpt = apply_filters('the_excerpt', get_the_excerpt());
         if (!$htmlExcerpt) $htmlExcerpt = '<p>'.esc_html__('Click here to see this post.', 'qnrwp').'</p>';
         echo $htmlExcerpt;

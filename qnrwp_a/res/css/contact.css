@@ -435,8 +435,7 @@ div.subscription-popout.contact-block p.contact-title {
     overflow: hidden;
     border: none;
     border-bottom: solid thin #888;
-    background-color: teal;
-    background-image: linear-gradient(350deg, #009090, #005070);
+    background-color: #3771c8;
 }
 @media (max-width: 500px) {
     div.subscription-popout.contact-block p.contact-title {
@@ -588,12 +587,12 @@ div.subscription-popout.contact-block button.form-send {
     border: none;
     outline: none;
     box-shadow: 1px 1px 4px rgba(1,1,1,0.4);
-    background-color: teal;
+    background-color: #3771c8;
 }
 div.subscription-popout.contact-block button.form-send:hover {
     cursor: pointer;
     box-shadow: 2px 2px 12px rgba(1,1,1,0.3);
-    background-color: darkcyan;
+    background-color: cornflowerblue;
 }
 div.subscription-popout.contact-block button.form-send:active {
     top: 1px;
@@ -603,6 +602,6 @@ div.subscription-popout.contact-block button.form-send:active {
     border: none;
     outline: none;
     box-shadow: 2px 2px 12px rgba(1,1,1,0.3);
-    background-color: darkcyan;
+    background-color: cornflowerblue;
 } /* End sub popout override */
 

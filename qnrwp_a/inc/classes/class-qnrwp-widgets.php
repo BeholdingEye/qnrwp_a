@@ -33,6 +33,31 @@ class QNRWP_Widgets {
     
     // Populate our global with widget data
     add_filter('sidebars_widgets', array($this, 'sidebars_widgets'));
+    
+    // Widget titles
+    add_filter('widget_title', array($this, 'remove_widget_title'));
+  }
+  
+  
+  /**
+   * Removes titles on widgets that shouldn't have them displayed
+   * 
+   * Note that our "style.css" also declares ".widget_custom_html .widget-title"
+   * to not display
+   */
+  public function remove_widget_title($wtitle) {
+    $originalWidgetTitle = $wtitle;
+    $newWidgetTitle = $wtitle;
+    if (  stripos($wtitle, 'Copyright') !== false || 
+          stripos($wtitle, 'Menu') !== false || 
+          stripos($wtitle, 'Logo') !== false || 
+          stripos($wtitle, 'Search') !== false || 
+          stripos($wtitle, 'Social Links') !== false   ) {
+      $newWidgetTitle = '';
+    }
+    // Let the child theme decide
+    $newWidgetTitle = apply_filters('qnrwp_widget_title', $newWidgetTitle, $originalWidgetTitle);
+    return $newWidgetTitle;
   }
   
 

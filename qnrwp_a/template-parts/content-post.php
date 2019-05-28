@@ -10,7 +10,7 @@ $postClass = join(' ', get_post_class()).' '.get_post_field('post_name'); // Slu
 <div id="post-<?php echo get_the_ID(); ?>" class="<?php echo apply_filters('qnrwp_content_post_post_class', $postClass); ?>">
 
   <div class="post-date"><?php echo get_the_date(); // We use "get_" version because "the_date()" is buggy (see note in "content-news_list.php") ?></div>
-  <h1 class="page-title"><?php the_title(); ?></h1>
+  <h1 class="page-title <?php echo apply_filters('qnrwp_content_post_title_class', 'qnrwp-heading-dark'); ?>"><?php the_title(); ?></h1>
   
   <?php 
     // Place Featured Image at start of content

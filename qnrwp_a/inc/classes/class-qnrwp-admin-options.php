@@ -64,6 +64,9 @@ final class QNRWP_Admin_Options {
     //wp_die($hook); // To find the screen slug of page we're on
     wp_enqueue_style('qnr-interface-stylesheet', get_template_directory_uri() . '/res/css/qnr-interface.css', null, null);
     wp_enqueue_style('qnrwp-admin-stylesheet', get_template_directory_uri() . '/res/css/qnrwp-admin-style.css', null, null);
+    if (QNRWP::get_setting('admin-wider-editor') !== 0 && $hook == 'post.php') {
+      wp_enqueue_style('qnrwp-admin-wider-editor-stylesheet', get_template_directory_uri() . '/res/css/qnrwp-admin-wider-block-editor.css', null, null);
+    }
     if ($hook == 'settings_page_qnrwp_theme_options_submenu') {
       wp_enqueue_script('jquery-ui-core');
       wp_enqueue_script('jquery-effects-core');
@@ -120,6 +123,7 @@ final class QNRWP_Admin_Options {
     $newsWPEmojisDisabled = isset($input['news-wpemojisdisabled']) ? $input['news-wpemojisdisabled'] : 0;
     
     $adminSimplify = isset($input['admin-simplify']) ? $input['admin-simplify'] : 0;
+    $adminWiderEditor = isset($input['admin-wider-editor']) ? $input['admin-wider-editor'] : 0;
     
     $widgetVisibility = isset($input['widget-visibility']) ? $input['widget-visibility'] : 0;
     
@@ -149,6 +153,7 @@ final class QNRWP_Admin_Options {
     $valArray['news-wpemojisdisabled'] = $newsWPEmojisDisabled;
     
     $valArray['admin-simplify'] = $adminSimplify;
+    $valArray['admin-wider-editor'] = $adminWiderEditor;
     
     $valArray['widget-visibility'] = $widgetVisibility;
     return $valArray;

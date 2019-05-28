@@ -298,7 +298,6 @@ class QNRWP_Samples {
    * Returns samples HTML, called by QNRWP Ajax handler, using POST to pass datajson
    */
   public static function ajax_more_samples($datajson) {
-    // 
     $dataL = json_decode($datajson, $assoc = true);
     // On error, returned string must begin with "ERROR:"
     if (!isset($dataL) || empty($dataL)) return 'ERROR: '.__('No request parameters sent', 'qnrwp');

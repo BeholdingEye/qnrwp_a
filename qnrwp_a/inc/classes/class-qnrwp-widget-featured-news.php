@@ -45,9 +45,11 @@ class QNRWP_Widget_Featured_News extends WP_Widget {
           $rHtml .= '<a class="qnrwp-featured-news-item" href="'.$postLink.'">'.PHP_EOL; // Opening item
           $rHtml .= '<div class="qnrwp-featured-news-item-header" style="background-image:url(\''.$thumbUrl.'\')">&nbsp;</div>'.PHP_EOL;
           $rHtml .= '<div class="qnrwp-featured-news-item-text">'.PHP_EOL;
-          $rHtml .= '<h1>'.get_the_title().'</h1>'.PHP_EOL;
+          $rHtml .= '<h1 class="'.apply_filters('qnrwp_featured_news_title_class', 'qnrwp-text-dark').'">'.get_the_title().'</h1>'.PHP_EOL;
           $GLOBALS['QNRWP_GLOBALS']['MaxExcerptLength'] = 115; // TODO ??
-          $rHtml .= '<div class="qnrwp-featured-news-item-excerpt">'.PHP_EOL.get_the_excerpt().PHP_EOL.'</div>'.PHP_EOL;
+          $rHtml .= '<div class="qnrwp-featured-news-item-excerpt '
+                        .apply_filters('qnrwp_featured_news_excerpt_class', 'qnrwp-text-dark').'">'.PHP_EOL
+                        .get_the_excerpt().PHP_EOL.'</div>'.PHP_EOL;
           $GLOBALS['QNRWP_GLOBALS']['MaxExcerptLength'] = 110;
           $rHtml .= '</div>'.PHP_EOL.'</a>'.PHP_EOL; // Closing item
           $featuredCount += 1;

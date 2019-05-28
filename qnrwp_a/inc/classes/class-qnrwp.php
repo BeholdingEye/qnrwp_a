@@ -371,9 +371,6 @@ final class QNRWP {
     add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts')); // Also sets up cookies/Ajax security
     // Admin enqueue done in admin options class
     
-    // Widget titles
-    add_filter('widget_title', array($this, 'remove_widget_title'));
-    
     // Menus
     if (self::get_setting('feature-mainnavmenu') !== 0) {
       add_filter('nav_menu_css_class', array($this, 'menu_classes'), 10, 4);
@@ -604,7 +601,7 @@ final class QNRWP {
           //}
           
           // Echo returns to Ajax caller; encode again to be sure
-          // On error, returned string will begin with "ERROR:", else "Success:"
+          // On error, returned string will begin with "ERROR:", else "Success:" (not for samples)
           if (!class_exists('QNRWP_Contact_Form')) {
             require_once QNRWP_DIR . 'inc/classes/class-qnrwp-contact-form.php';
           }
@@ -816,21 +813,6 @@ final class QNRWP {
     } catch (Exception $e) {
       wp_die($e->getMessage());
     }
-  }
-  
-  
-  /**
-   * Removes titles on widgets that shouldn't have them displayed TODO
-   */
-  public function remove_widget_title($wtitle) {
-    if (  stripos($wtitle, 'Copyright') !== false || 
-          stripos($wtitle, 'Menu') !== false || 
-          stripos($wtitle, 'Logo') !== false || 
-          stripos($wtitle, 'Search') !== false || 
-          stripos($wtitle, 'Social Links') !== false   ) {
-      return '';
-    }
-    return $wtitle;
   }
   
   

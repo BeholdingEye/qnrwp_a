@@ -237,6 +237,193 @@ div, header, main, section, article, footer, aside {                    /* On th
 }
 
 
+/* TYPOGRAPHY, COLORS & BORDERS
+ * ----------------------------------------------------- */
+
+.qnrwp-button a {
+    width: 20em;
+    max-width: 90%;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.3);
+    text-decoration: none;
+}
+.qnrwp-button a:hover {
+    box-shadow: 1px 2px 12px rgba(0,0,0,0.3);
+    opacity: 0.9;
+}
+
+.qnrwp-text-light {
+    color: #fff;
+}
+.qnrwp-text-dark {
+    color: #444;
+}
+.qnrwp-heading-light {
+    font-weight: normal;
+    color: #d0d4d6;
+}
+.qnrwp-heading-dark {
+    font-weight: normal;
+    color: #678;
+}
+
+.qnrwp-font-large {
+    font-size: 1.15em;
+    line-height: 1.5em;
+}
+.qnrwp-font-larger {
+    font-size: 1.2em;
+    line-height: 1.5em;
+}
+.qnrwp-font-largest {
+    font-size: 1.4em;
+    line-height: 1.5em;
+}
+
+.qnrwp-border-bottom-light {
+    border-bottom-color: white;
+}
+.qnrwp-border-bottom-dark {
+    border-bottom-color: gray;
+}
+.qnrwp-border-bottom-solid {
+    border-bottom-style: solid;
+}
+.qnrwp-border-bottom-dotted {
+    border-bottom-style: dotted;
+}
+.qnrwp-border-bottom-thin {
+    border-bottom-width: thin;
+}
+.qnrwp-border-bottom-thick {
+    border-bottom-width: thick;
+}
+
+.qnrwp-heading-left-border {
+    width: 100%;
+    text-align: left;
+    padding-bottom: 0.25em;
+    border-bottom: dotted thin gray;
+}
+
+
+/* COLUMNS OVERRIDES
+ * ----------------------------------------------------- */
+
+.qnrwp-columns-2-flex {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    
+    width: 100%;
+    height: auto;
+    
+    /* Vertical */
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    
+    /* Horizontal */
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+    
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+.qnrwp-columns-2-flex .wp-block-column {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    
+    width: 260px;
+    min-width: 260px;
+    max-width: 500px;
+    height: auto;
+    
+    /* Vertical */
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    
+    /* Horizontal */
+    -webkit-justify-content: center;
+    justify-content: center;
+    
+    position: relative;
+    margin: 0;
+    padding: 1.5em 1em;
+}
+.qnrwp-columns-2-flex .wp-block-column .wp-block-media-text {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+}
+.qnrwp-columns-2-flex .wp-block-column .wp-block-media-text figure {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: auto;
+    height: 64px;
+    max-height: 64px;
+}
+.qnrwp-columns-2-flex .wp-block-column .wp-block-media-text figure img {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: auto;
+    height: 64px;
+}
+.qnrwp-columns-2-flex .wp-block-column .wp-block-media-text h2 {
+    font-weight: normal;
+}
+.qnrwp-columns-2-flex .wp-block-column .wp-block-media-text p {
+    text-align: left;
+}
+
+
+/* CUSTOM HTML WIDGET
+ * ----------------------------------------------------- */
+
+/* Don't display Custom HTML widget title - if you need the title, make 
+ * it part of the HTML. The widget title is useful in admin, helping 
+ * identify what the code is for.
+ *  */
+
+.widget_custom_html .widget-title {
+    display: none;
+}
+
+
+/* ROW HEADER
+ * ----------------------------------------------------- */
+
+.qnrwp-row-header {
+    display: inline-block;
+    padding: 0;
+    padding-bottom: 0.5em;
+    margin: 1em auto;
+    width: auto;
+    font-weight: normal;
+    text-align: center;
+}
+h2.qnrwp-row-header {
+    font-size: 2em;
+}
+
+
 /* HEADER
  * ----------------------------------------------------- */
 
@@ -267,7 +454,7 @@ div, header, main, section, article, footer, aside {                    /* On th
     overflow: visible;
     /* Provide a divider line, at least for any drop down menu */
     border: none;
-    border-bottom: solid thin #EEE;
+    border-bottom: none;
     background-color: white;
     z-index: 999;          /* Higher index than vertical navmenu */
 }
@@ -281,7 +468,7 @@ div, header, main, section, article, footer, aside {                    /* On th
     /* Provide some layering */
     box-shadow: 0 1px 1px rgba(1,1,1,0.2);
     border: none;
-    border-bottom: solid thin #EEE;
+    border-bottom: none;
 }
 
 /* ----------------------------- Header image */
@@ -426,7 +613,6 @@ div, header, main, section, article, footer, aside {                    /* On th
 /* Assumes relative positioned header */
 .content-row {   /* May contain sub header before middle row */
     margin: 0 auto;
-    padding-bottom: 1em;
     min-width: 320px;
     max-width: 1600px;
     height: auto;
@@ -472,11 +658,19 @@ div, header, main, section, article, footer, aside {                    /* On th
     /* Flex attributes are from QI classes */
     display: -webkit-flex;
     display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
     /* Vertical align */
     -webkit-align-items: center; /* Single line */
     align-items: center;
     -webkit-align-content: center; /* Multi line */
     align-content: center;
+    
     /* Horizontal align */
     -webkit-justify-content: center;
     justify-content: center;
@@ -484,7 +678,7 @@ div, header, main, section, article, footer, aside {                    /* On th
     height: 100%;
     background-image: linear-gradient(rgba(50,50,50,0.5), rgba(50,50,50,0.5)); /* Darkening overlay */
 }
-.sub-header-content p { /* Home page override below */
+.sub-header-content p.sub-header-content-auto { /* Home page override below */
     display: inline-block;
     position: relative;
     margin: 0;
@@ -503,7 +697,7 @@ div, header, main, section, article, footer, aside {                    /* On th
     border-bottom: dotted thin white;
     box-sizing: border-box;
 }
-body.home .sub-header-content p {
+body.home .sub-header-content p.sub-header-content-auto {
 /*
     padding-top: 5%;
 */
@@ -737,6 +931,15 @@ span.post-older p:first-child { /* Prev and Next labels above titles */
 }
 
 
+/* SUB-CONTENT ROW
+ * ----------------------------------------------------- */
+
+.sub-content-row {
+    padding: 1em 0;
+    background-color: #f0f4f6;
+}
+
+
 /* SIDEBARS
  * ----------------------------------------------------- */
 
@@ -835,6 +1038,7 @@ table#wp-calendar tbody td a {
     padding: 0;
 }
 
+
 /* FOOTER
  * ----------------------------------------------------- */
 
@@ -846,7 +1050,7 @@ table#wp-calendar tbody td a {
     color: #EEE;
     text-align: center;
     opacity: 0; /* JS code will change to 1 */
-    background-color: #666;
+    background-color: #242729;
 }
 .footer-row a,
 .footer-row a:hover {
@@ -925,8 +1129,8 @@ table#wp-calendar tbody td a {
     display: block;
     position: relative;
     margin: 0 auto;
-    margin-bottom: 2em;
     padding: 0;
+    padding-bottom: 2em;
     width: 100%;
     height: auto;
     vertical-align: top;
@@ -969,6 +1173,7 @@ a.qnrwp-featured-news-item {
     color: inherit;
     
     box-shadow: 0 1px 6px rgba(1,1,1,0.26);
+    background-color: white;
 }
 a.qnrwp-featured-news-item:hover {
     box-shadow: 0 1px 12px rgba(1,1,1,0.4);
@@ -1001,7 +1206,7 @@ a.qnrwp-featured-news-item:hover .qnrwp-featured-news-item-text {
     margin: 0;
     padding: 0 1em 1em;
     width: 100%;
-    height: 100%;
+    height: auto;
     text-align: left;
     color: #333;
 }

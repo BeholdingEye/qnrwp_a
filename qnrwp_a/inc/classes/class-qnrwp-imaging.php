@@ -24,6 +24,9 @@ final class QNRWP_Imaging {
   private function hooks() {
     add_action('after_setup_theme', array($this, 'setup'));
     
+    // Add SVG support
+    add_filter( 'upload_mimes', array($this, 'upload_mimes'));
+    
     add_filter('wp_handle_upload', array($this, 'reduce_uploaded_image'));
     add_filter('image_size_names_choose', array($this, 'custom_image_sizes'));
     
@@ -34,6 +37,15 @@ final class QNRWP_Imaging {
     add_filter('pre_update_option_qnrwp_regenerate_images', array($this, 'pre_update_option_qnrwp_regenerate_images'), 10, 3);
     
     add_action('qnrwp_regenerate_images_hook', array($this, 'regenerate_images_cron'), 10); // Our own hook
+  }
+  
+  
+  /**
+   * Adds support for SVG uploads
+   */
+  public function upload_mimes($mimes) {
+    $mimes['svg']  = 'image/svg+xml';
+    return $mimes;
   }
   
   

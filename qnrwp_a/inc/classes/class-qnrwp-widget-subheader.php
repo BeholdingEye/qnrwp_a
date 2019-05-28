@@ -166,7 +166,7 @@ class QNRWP_Widget_Subheader extends WP_Widget {
     
     $rHtml = $sHtml . '<div id="sub-header"'.$subheaderAttributes.'>'.PHP_EOL; // Further wrapped in "#sub-header-row" of sidebar template
     if ($wcContent) $rHtml .= $headerTitleText; // We already have all the code if $wcContent
-    else $rHtml .= '<div id="sub-header-content" class="sub-header-content"><p class="">'.$headerTitleText.'</p></div>'; // Similar to Home
+    else $rHtml .= '<div id="sub-header-content" class="sub-header-content"><p class="sub-header-content-auto">'.$headerTitleText.'</p></div>'; // Similar to Home
     return $rHtml . '</div>' . PHP_EOL;
   }
 
