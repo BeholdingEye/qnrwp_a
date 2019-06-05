@@ -1,7 +1,4 @@
 
-CONTENT EDITING
-===============
-
 Table of Contents:
 -----------------
 
@@ -45,10 +42,11 @@ Getting started                                                     {#g}
 ### Instructions                                                   {#g1}
 
 After installing WordPress, the theme and the child theme, a few things 
-must be done to start your website:
+must be done to start your website. Use the Setup tool in QNRWP Theme ->
+Tools screen to automatically perform the following steps:
 
-* Create a Home page, using some placeholder content to begin with. This
-will be the front page of your site.
+* Create a Home page, perhaps using some placeholder content to begin 
+with. This will be the front page of your site.
 
 * If you will have a News page, create the page, with no content.
 
@@ -60,11 +58,6 @@ page.
 "Allow people to post comments...". QNRWP-A is not a blogging theme and 
 does not support comments on News posts.
 
-* In Permalinks settings, choose the "Post name" option; this will 
-alter the editable field of the "Custom Structure" option. You may like 
-to remove the trailing slash, to have `/%postname%` instead of 
-`/%postname%/` as the permalink format.
-
 * In Media settings, set Medium size to 360x360. Leave the "Organize my
 uploads into month- and year-based folders" option checked. (This 
 feature is designed for bloggers, but WP doesn't offer a viable 
@@ -75,6 +68,8 @@ alternative for businesses.)
 way you ensure that you're seeing the site exactly as it will appear to
 visitors.
 
+With that done, complete the setup with five manual steps:
+
 * In the Appearance->Theme screen, activate the QNRWP-A child theme. You
 will use it to adapt the theme to your requirements.
 
@@ -82,7 +77,16 @@ will use it to adapt the theme to your requirements.
 menu" location. This will be the site navigation menu in the header. One
 level of submenus is supported, hierarchical submenus are not supported.
 
-* Review the rest of the settings, including those for "QNRWP Theme".
+* In Permalinks settings, choose the "Post name" option; this will 
+alter the editable field of the "Custom Structure" option. You may like 
+to remove the trailing slash, to have `/%postname%` instead of 
+`/%postname%/` as the permalink format.
+
+* Review the rest of the settings, including those for this theme (in 
+Settings menu).
+
+* If WordPress does not support the Group block natively yet, install 
+the Gutenberg plugin.
 
 ### Child theme                                                    {#g2}
 

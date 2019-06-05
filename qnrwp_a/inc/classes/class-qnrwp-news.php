@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * News setup class (a singleton)
  */
-final class QNRWP_News {
+class QNRWP_News {
   
   use QNRWP_Singleton_Trait;
   
@@ -193,11 +193,11 @@ final class QNRWP_News {
 
   
   /**
-   * Returns pretty excerpt
+   * Returns pretty excerpt, called statically
    * 
    * Used in both excerpt hook in this class and custom calls
    */
-  public function get_pretty_excerpt($excerpt) {
+  public static function get_pretty_excerpt($excerpt) {
     // Reduce length to max 110 chars
     $excerptDecode = wp_kses_decode_entities($excerpt); // Decode numerical entities, only for counting
     $eLen = 110;

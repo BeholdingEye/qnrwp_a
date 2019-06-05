@@ -89,3 +89,42 @@ function qnrwp_minify_css($text) {
   $text = str_replace(': ', ':', $text);
   return $text;
 }
+
+
+/**
+ * Returns array of filepaths in a directory tree
+ * 
+ * The directory should not have a trailing slash
+ */
+function qnrwp_get_directory_tree_filepaths_array($directory) {
+  $filePathsL = array();
+  $strFilePaths = qnrwp_get_directory_tree_filepaths_string($directory);
+  if ($strFilePaths) {
+    $filePathsL = explode("\n", $strFilePaths);
+    if (empty($filePathsL[count($filePathsL)-1])) array_pop($filePathsL);
+  }
+  return $filePathsL;
+}
+
+/**
+ * Returns file paths in a directory tree as string of lines, called from array-returning function
+ * 
+ * The directory should not have a trailing slash
+ */
+function qnrwp_get_directory_tree_filepaths_string($directory) {
+  $filePaths = '';
+  $handle = @opendir($directory); // Suppress any errors with @
+  if ($handle) {
+    while (true) {
+      $file = readdir($handle);
+      if ($file === false) break;
+      if (in_array($file, array('.', '..'))) continue;
+      if (is_dir($directory . '/' . $file)) {
+        $filePaths .= qnrwp_get_directory_tree_filepaths_string($directory . '/' . $file);
+      } else $filePaths .= $directory . '/' . $file . "\n";
+    }
+    closedir($handle);
+  }
+  return $filePaths;
+}
+

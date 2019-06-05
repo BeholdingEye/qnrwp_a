@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Our main class (a singleton)
  */
-final class QNRWP {
+class QNRWP {
   
   use QNRWP_Singleton_Trait;
   
@@ -74,6 +74,7 @@ final class QNRWP {
    * List JS files, in load order
    */
   public $jsFilesL = array( 
+                            'bootstrap-bundle-js'     => '/res/js/bootstrap-4.3.1.bundle.min.js',
                             'qnrwp-startup-js'        => '/res/js/qnrwp-startup.js',
                             'qnrwp-interface-js'      => '/res/js/qnr-interface.js',
                             'qnrwp-navmenu-hmenu-js'  => '/res/js/qnr-navmenu-hmenu.js',
@@ -89,8 +90,10 @@ final class QNRWP {
    * List CSS files, in load order
    */
   public $cssFilesL = array(
+                            'bootstrap-css'           => '/res/css/bootstrap-4.3.1.min.css',
                             'qnrwp-interface-css'     => '/res/css/qnr-interface.css',
                             'qnrwp-navmenu-hmenu-css' => '/res/css/qnr-navmenu-hmenu.css',
+                            'qnrwp-blocks-css'        => '/res/css/qnrwp-blocks.css',
                             'qnrwp-contact-css'       => '/res/css/contact.css',
                             'qnrwp-style-css'         => '/style.css',
                             );
@@ -138,6 +141,10 @@ final class QNRWP {
    * Edits variables according to what features are enabled
    */
   private function edit_vars() {
+    if (self::get_setting('feature-bootstrap') !== 1) {
+      unset($this->jsFilesL['bootstrap-bundle-js']);
+      unset($this->cssFilesL['bootstrap-css']);
+    }
     if (self::get_setting('feature-menushortcode') !== 1) {
       unset($this->jsFilesL['qnrwp-navmenu-hmenu-js']);
       unset($this->cssFilesL['qnrwp-navmenu-hmenu-css']);
@@ -282,10 +289,15 @@ final class QNRWP {
     if (is_admin()) { // Also when calling admin-ajax.php?
       require_once QNRWP_DIR . 'inc/functions-admin.php';
     
-      // Admin
+      // Admin options
       if (!class_exists('QNRWP_Admin_Options')) {
         require_once QNRWP_DIR . 'inc/classes/class-qnrwp-admin-options.php';
         $this->admin = QNRWP_Admin_Options::instance();
+      }
+    
+      // Admin tools
+      if (!class_exists('QNRWP_Admin_Tools')) {
+        require_once QNRWP_DIR . 'inc/classes/class-qnrwp-admin-tools.php';
       }
     }
     
@@ -638,9 +650,15 @@ final class QNRWP {
     global $content_width;
     $customCSS = '.header-row, .content-row, .middle-row, .content-box, .footer-row {max-width:'.$content_width.'px;}'.PHP_EOL;
     
+    // Bootstrap
+    if (self::get_setting('feature-bootstrap') == 1) {
+      wp_enqueue_style('bootstrap-css', get_template_directory_uri() . $this->cssFilesL['bootstrap-css'], null, null);
+    }
+    
     $minify = isset(get_option('qnrwp_settings_array')['code-combine']) ? get_option('qnrwp_settings_array')['code-combine'] : 0;
-    if ($minify) {
-      $cfURI = $this->combine_minify_stylesheets();
+    $cfURI = '';
+    if ($minify) $cfURI = $this->combine_minify_stylesheets();
+    if ($minify && $cfURI) {
       wp_enqueue_style('qnrwp-combo-stylesheet', $cfURI, null, null);
       wp_add_inline_style('qnrwp-combo-stylesheet', $customCSS);
     } else {
@@ -668,8 +686,14 @@ final class QNRWP {
    */
   public function enqueue_scripts() {
     $minify = isset(get_option('qnrwp_settings_array')['code-combine']) ? get_option('qnrwp_settings_array')['code-combine'] : 0;
-    if ($minify) {
-      $cfURI = $this->combine_minify_js();
+    // Bootstrap
+    if (self::get_setting('feature-bootstrap') == 1) {
+      wp_enqueue_script('jquery');
+      if (!$minify) $this->jsFilesL['bootstrap-bundle-js'] = '/res/js/bootstrap-4.3.1.bundle.js';
+    }
+    $cfURI = '';
+    if ($minify) $cfURI = $this->combine_minify_js();
+    if ($minify && $cfURI) {
       wp_enqueue_script('qnrwp-combo-js', $cfURI, null, null, true); // In footer
       wp_localize_script('qnrwp-combo-js', 'QNRWP_JS_Global', $this->JS_Global);
     } else {
@@ -689,26 +713,30 @@ final class QNRWP {
    * Combines theme/child-theme CSS stylesheet files, from class property list, into a minified combo file and returns its URI
    */
   public function combine_minify_stylesheets() {
-    // Create array of stylesheet file paths, theme files first
+    // Test that the directory, and combo file if it exists, is writable
     $tF = get_template_directory();
+    if (is_child_theme()) {
+      if (!is_writable(get_stylesheet_directory())) return '';
+      $cfPath = get_stylesheet_directory() . '/combo-style.css';
+      $cfURI = get_stylesheet_directory_uri() . '/combo-style.css';
+    } else {
+      if (!is_writable($tF)) return '';
+      $cfPath = $tF . '/combo-style.css';
+      $cfURI = get_template_directory_uri() . '/combo-style.css';
+    }
+    $fX = file_exists($cfPath);
+    if ($fX && !is_writable($cfPath)) return '';
+    
+    // Create array of stylesheet file paths, theme files first
     foreach ($this->cssFilesL as $style) $stylesheetPathsL[] = $tF . $style;
     // Add child stylesheet file; child 'res/css' files are not included in combo, 
     //   enqueued conditionally in child functions.php
     if (is_child_theme()) $stylesheetPathsL[] = get_stylesheet_directory() . '/style.css';
     // If 'child-style.css' exists, load it (useful for clearer file identification in Dev Tools)
     if (file_exists(get_stylesheet_directory() . '/child-style.css')) $stylesheetPathsL[] = get_stylesheet_directory() . '/child-style.css';
+    
     // Test for combo file, in child folder or main
-    $fX = false; // File exists?
     $updateCombo = false; // Update combo file?
-    if (is_child_theme()) {
-      $cfPath = get_stylesheet_directory() . '/combo-style.css';
-      $cfURI = get_stylesheet_directory_uri() . '/combo-style.css';
-    }
-    else {
-      $cfPath = get_template_directory() . '/combo-style.css';
-      $cfURI = get_template_directory_uri() . '/combo-style.css';
-    }
-    $fX = file_exists($cfPath);
     if ($fX) { // Combo file exists
       // Test if modification date of any stylesheets is newer than combo file
       $cT = filemtime($cfPath);
@@ -751,13 +779,20 @@ final class QNRWP {
   public function combine_minify_js() {
     // Create array of full JS file paths
     $tF = get_template_directory();
-    foreach ($this->jsFilesL as $jsF) $jsPathsL[] = $tF . $jsF;
+    
+    // Test that the directory is writable
+    if (!is_writable($tF)) return '';
+    
     // Test for combo file, in main
-    $fX = false; // File exists?
-    $updateCombo = false; // Update combo file?
-    $cfPath = get_template_directory() . '/combo-js.js';
-    $cfURI = get_template_directory_uri() . '/combo-js.js';
+    $cfPath = $tF . '/combo-js.js';
     $fX = file_exists($cfPath);
+    
+    // Test that combo file is writable
+    if ($fX && !is_writable($cfPath)) return '';
+    
+    foreach ($this->jsFilesL as $jsF) $jsPathsL[] = $tF . $jsF;
+    $cfURI = get_template_directory_uri() . '/combo-js.js';
+    $updateCombo = false; // Update combo file?
     if ($fX) { // Combo file exists
       // Test if modification date of any JS files is newer than combo file
       $cT = filemtime($cfPath);
@@ -780,7 +815,7 @@ final class QNRWP {
         }
         $comboFull .= $script . "\n";
       }
-      file_put_contents($cfPath, '"use strict";' . "\n" . $comboFull);
+      file_put_contents($cfPath, '"use strict";' . "\n" . $comboFull); // Assume all our scripts are strict
     }
     return $cfURI; // Used by enqueueing caller
   }

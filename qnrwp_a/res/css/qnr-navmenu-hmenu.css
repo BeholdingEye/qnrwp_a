@@ -36,9 +36,9 @@
 */
     text-align: left;
     list-style-type: none;
-    box-shadow: 0px 1px 4px rgba(1,1,1,0.4);
+    box-shadow: 0px 1px 4px rgba(0,0,0,0.4);
 /*
-        box-shadow: 0px 6px 6px rgba(1,1,1,0.26);
+        box-shadow: 0px 6px 6px rgba(0,0,0,0.26);
 */
     background-color: white;
     z-index: 1000;
@@ -366,7 +366,7 @@ div.qnr-navmenu-wrapper-fixed {
     top: 0; /* Overriden in code */
     bottom: 0;
 /*
-    background-color: rgba(1,1,1,0.9);
+    background-color: rgba(0,0,0,0.9);
 */
     /* No bg color... */
 }
@@ -378,7 +378,7 @@ div.qnr-navmenu-wrapper-drawer {
     width: 280px;
     overflow: auto;
     background-color: white;
-    box-shadow: 0 0 16px rgba(1,1,1,0.4);
+    box-shadow: 0 0 16px rgba(0,0,0,0.4);
     z-index: 9999; /* Must be top */
 }
 div.qnr-navmenu-wrapper * {
@@ -676,7 +676,7 @@ div.qnr-navmenu-icon-close-still::before {
     position: absolute;
     margin: 0;
     padding: 0;
-    box-shadow: 0 2px 4px rgba(1,1,1,0.2);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     z-index: 200;
 }
 .qnr-navmenu-vertical {               /* Animated up-down */

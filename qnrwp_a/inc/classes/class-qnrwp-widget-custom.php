@@ -118,7 +118,7 @@ class QNRWP_Widget_Custom extends WP_Widget {
     if (count($widgetChildren) > 0) {
       foreach ($widgetChildren as $widgetChild) {
         // Get any content from child page for its matching named page
-        if ($widgetChild->post_title == get_queried_object()->post_title) {
+        if (is_singular() && $widgetChild->post_title == get_queried_object()->post_title) {
           $wcContent = apply_filters('the_content', get_post_field('post_content', $widgetChild->ID));
         }
         // Store name and img URL as key => value
@@ -133,7 +133,8 @@ class QNRWP_Widget_Custom extends WP_Widget {
                     .'<p class="qnr-font-resize" data-qnr-font-min="75" data-qnr-win-max-width="1024">'
                     .get_bloginfo('description').'</p></div>';
     }
-    $headerTitleText = $wcContent ? $wcContent : get_queried_object()->post_title; // May be overriden below
+    if (is_singular()) $headerTitleText = $wcContent ? $wcContent : get_queried_object()->post_title; // May be overriden below
+    else $headerTitleText = wp_get_document_title();
     if ($GLOBALS['QNRWP_GLOBALS']['pageTemplate'] == '404.php') {
       $headerTitleText = '404 - ' . __('Page not found', 'qnrwp');
       $attID = $shOptionsL['*'];

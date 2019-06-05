@@ -1,0 +1,5 @@
+{
+  "__file": "wp_block",
+  "title": "Promo Row 2 Item Image and Text",
+  "content": "<!-- wp:group {\"className\":\"qnr-responsive\"} -->\n<div class=\"wp-block-group qnr-responsive\"><!-- wp:group -->\n<div class=\"wp-block-group\"><!-- wp:image {\"align\":\"center\"} -->\n<div class=\"wp-block-image\"><figure class=\"aligncenter\"><img alt=\"\"/></figure></div>\n<!-- /wp:image -->\n\n<!-- wp:paragraph -->\n<p>Your text goes here your text goes here your text goes here your text goes here your text goes here your text goes here your text goes here your text goes here</p>\n<!-- /wp:paragraph --></div>\n<!-- /wp:group -->\n\n<!-- wp:group -->\n<div class=\"wp-block-group\"><!-- wp:image {\"align\":\"center\"} -->\n<div class=\"wp-block-image\"><figure class=\"aligncenter\"><img alt=\"\"/></figure></div>\n<!-- /wp:image -->\n\n<!-- wp:paragraph -->\n<p>Your text goes here your text goes here your text goes here your text goes here your text goes here your text goes here your text goes here your text goes here</p>\n<!-- /wp:paragraph --></div>\n<!-- /wp:group --></div>\n<!-- /wp:group -->"
+}

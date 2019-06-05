@@ -1,0 +1,5 @@
+{
+  "__file": "wp_block",
+  "title": "Card Title Paragraph Button",
+  "content": "<!-- wp:group {\"className\":\"qnrwp-block-card-title-paragraph-button\"} -->\n<div class=\"wp-block-group qnrwp-block-card-title-paragraph-button\"><!-- wp:heading {\"align\":\"center\"} -->\n<h2 style=\"text-align:center\">Your text here</h2>\n<!-- /wp:heading -->\n\n<!-- wp:paragraph -->\n<p>Your text here your text here your text here your text here your text here your text here your text here your text here your text here your text here</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:button {\"align\":\"center\",\"className\":\"is-style-squared qnrwp-button\"} -->\n<div class=\"wp-block-button aligncenter is-style-squared qnrwp-button\"><a class=\"wp-block-button__link\" href=\"\">Your text here</a></div>\n<!-- /wp:button --></div>\n<!-- /wp:group -->"
+}

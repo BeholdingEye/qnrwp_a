@@ -5,7 +5,7 @@ defined('ABSPATH') || exit;
 /**
  * Admin options class (a singleton)
  */
-final class QNRWP_Admin_Options {
+class QNRWP_Admin_Options {
     
   use QNRWP_Singleton_Trait;
   
@@ -22,8 +22,10 @@ final class QNRWP_Admin_Options {
    * Filter and action hooks
    */
   private function hooks() {
-    // Theme submenu
-    add_action('admin_menu', array($this, 'theme_options_submenu'));
+    // Theme menu / submenus
+    add_action('admin_menu', array($this, 'theme_menu'));
+    add_action('admin_menu', array($this, 'theme_submenus'));
+    
     // Admin scripts
     add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts_admin'));
     
@@ -32,17 +34,69 @@ final class QNRWP_Admin_Options {
   
   
   /**
-   * Theme options submenu
+   * Theme menu
    */
-  public function theme_options_submenu() {
+  public function theme_menu() {
+    add_menu_page(
+                      __('QNRWP Theme', 'qnrwp'),                       // Page title
+                      __('QNRWP Theme', 'qnrwp'),                       // Menu title
+                      'manage_options',                                 // User capability
+                      'qnrwp_theme_menu',                               // Menu slug (same as submenu...)
+                      array($this, 'theme_menu_tools_page')             // Callback (same as submenu...)
+                      );
+  }
+  
+  
+  /**
+   * Theme submenus
+   */
+  public function theme_submenus() {
+    
+    // ----------------------- QNRWP submenus
+    add_submenu_page(
+                      'qnrwp_theme_menu',                               // Parent menu slug
+                      __('Tools', 'qnrwp'),                             // Page title
+                      __('Tools', 'qnrwp'),                             // Submenu title
+                      'manage_options',                                 // User capability
+                      'qnrwp_theme_menu',                               // Submenu slug (same as menu...)
+                      array($this, 'theme_menu_tools_page')             // Callback (same as menu...)
+                      );
+    add_submenu_page(
+                      'qnrwp_theme_menu',                               // Parent menu slug
+                      __('Documentation', 'qnrwp'),                     // Page title
+                      __('Documentation', 'qnrwp'),                     // Submenu title
+                      'manage_options',                                 // User capability
+                      'qnrwp_theme_documentation_submenu',              // Submenu slug
+                      array($this, 'theme_menu_documentation_page')     // Callback
+                      );
+    
+    // ----------------------- Options / Settings submenu
     add_submenu_page(
                       'options-general.php',                            // Parent menu slug
-                      __('QNRWP Theme', 'qnrwp'),               // Page title
-                      __('QNRWP Theme', 'qnrwp'),               // Submenu title
+                      __('QNRWP Theme Settings', 'qnrwp'),              // Page title
+                      __('QNRWP Theme Settings', 'qnrwp'),              // Submenu title
                       'manage_options',                                 // User capability
                       'qnrwp_theme_options_submenu',                    // Submenu slug
                       array($this, 'theme_options_submenu_page')        // Callback
                       );
+  }
+
+  
+  /**
+   * Output the tools page
+   */
+  public function theme_menu_tools_page() {
+    if (!current_user_can('manage_options')) wp_die(__('You do not have permission to access this page.', 'qnrwp'));
+    else require_once QNRWP_DIR . 'inc/admin/tools.php';
+  }
+
+  
+  /**
+   * Output the documentation page
+   */
+  public function theme_menu_documentation_page() {
+    if (!current_user_can('manage_options')) wp_die(__('You do not have permission to access this page.', 'qnrwp'));
+    else require_once QNRWP_DIR . 'inc/admin/documentation.php';
   }
 
   
@@ -99,6 +153,8 @@ final class QNRWP_Admin_Options {
    * Sanitize callback for register_setting in admin_init
    */
   public function sanitize_settings_array($input) {
+    $featureBootstrap = isset($input['feature-bootstrap']) ? $input['feature-bootstrap'] : 0;
+    
     $featureContactForms = isset($input['feature-contactforms']) ? $input['feature-contactforms'] : 0;
     $featureCarousels = isset($input['feature-carousels']) ? $input['feature-carousels'] : 0;
     $featureSubheaders = isset($input['feature-subheaders']) ? $input['feature-subheaders'] : 0;
@@ -129,6 +185,8 @@ final class QNRWP_Admin_Options {
     
     // Return validated setting array
     $valArray = array();
+    $valArray['feature-bootstrap'] = $featureBootstrap;
+    
     $valArray['feature-contactforms'] = $featureContactForms;
     $valArray['feature-carousels'] = $featureCarousels;
     $valArray['feature-subheaders'] = $featureSubheaders;

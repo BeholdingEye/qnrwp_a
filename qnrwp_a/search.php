@@ -35,9 +35,11 @@ get_sidebar('subheader'); ?>
     <?php while (have_posts()): 
       
             the_post();
-            
-            get_template_part('template-parts/content', 'news_list');
       
+            if (get_option('qnrwp_news_page_items') == 1) get_template_part('template-parts/content', 'post');
+            
+            else get_template_part('template-parts/content', 'news_list');
+            
           endwhile;
       
       get_template_part('template-parts/content', 'news_list_links');

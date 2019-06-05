@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
  * 
  * Code adapted from https://www.smashingmagazine.com/2011/10/create-custom-post-meta-boxes-wordpress
  */
-final class QNRWP_Metabox_User_Class {
+class QNRWP_Metabox_User_Class {
     
   use QNRWP_Singleton_Trait;
   

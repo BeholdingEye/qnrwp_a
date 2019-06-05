@@ -11,6 +11,36 @@ defined( 'ABSPATH' ) || exit;
 // ===================== ADMIN DASHBOARD SETTINGS =====================
 
 /**
+ * Reading admin settings setup and registration
+ */
+function qnrwp_admin_settings_reading() {
+  /**
+   * ----------------------- QNRWP settings on Reading page
+   * 
+   * Settings for News page items: list of excerpts or full posts
+   * 
+   */
+  
+  add_settings_section(
+    'qnrwp_reading_section',        // ID attribute of tags
+    __('QNRWP Reading Settings', 'qnrwp'),     // Section title
+    'qnrwp_reading_section',        // Callback to echo section content
+    'reading'                       // Admin page to use
+  );
+  
+  // News page items
+  add_settings_field(
+    'qnrwp_news_page_items',        // ID attribute of tags
+    __('On News page, show', 'qnrwp'), // Field title
+    'qnrwp_news_page_items',        // Callback to echo input control
+    'reading',                      // Admin page to use
+    'qnrwp_reading_section'         // Section to use
+  );
+  
+  register_setting('reading', 'qnrwp_news_page_items');
+}
+
+/**
  * Meta tags admin settings setup and registration
  */
 function qnrwp_admin_settings_metatags() {
@@ -41,7 +71,7 @@ function qnrwp_admin_settings_metatags() {
   // Use Meta Tags
   add_settings_field(
     'qnrwp_use_meta_tags',          // ID attribute of tags
-    __('Use Meta Tags', 'qnrwp'),                // Field title
+    __('Use Meta Tags', 'qnrwp'),   // Field title
     'qnrwp_use_meta_tags',          // Callback to echo input control
     'writing',                      // Admin page to use
     'qnrwp_metatags_section'        // Section to use
@@ -49,7 +79,7 @@ function qnrwp_admin_settings_metatags() {
   // Meta Description
   add_settings_field(
     'qnrwp_meta_description',       // ID attribute of tags
-    __('Meta Description', 'qnrwp'),             // Field title
+    __('Meta Description', 'qnrwp'),// Field title
     'qnrwp_meta_description',       // Callback to echo input control
     'writing',                      // Admin page to use
     'qnrwp_metatags_section'        // Section to use
@@ -57,7 +87,7 @@ function qnrwp_admin_settings_metatags() {
   // Meta Keywords
   add_settings_field(
     'qnrwp_meta_keywords',         // ID attribute of tags
-    __('Meta Keywords', 'qnrwp'),               // Field title
+    __('Meta Keywords', 'qnrwp'),  // Field title
     'qnrwp_meta_keywords',         // Callback to echo input control
     'writing',                     // Admin page to use
     'qnrwp_metatags_section'       // Section to use
@@ -65,7 +95,7 @@ function qnrwp_admin_settings_metatags() {
   // Meta Author
   add_settings_field(
     'qnrwp_meta_author',           // ID attribute of tags
-    __('Meta Author', 'qnrwp'),                 // Field title
+    __('Meta Author', 'qnrwp'),    // Field title
     'qnrwp_meta_author',           // Callback to echo input control
     'writing',                     // Admin page to use
     'qnrwp_metatags_section'       // Section to use
@@ -73,7 +103,7 @@ function qnrwp_admin_settings_metatags() {
   // Use OpenGraph Tags
   add_settings_field(
     'qnrwp_use_opengraph_tags',          // ID attribute of tags
-    __('Use OpenGraph Tags', 'qnrwp'),                // Field title
+    __('Use OpenGraph Tags', 'qnrwp'),   // Field title
     'qnrwp_use_opengraph_tags',          // Callback to echo input control
     'writing',                           // Admin page to use
     'qnrwp_metatags_section'             // Section to use
@@ -81,7 +111,7 @@ function qnrwp_admin_settings_metatags() {
   // OpenGraph Title
   add_settings_field(
     'qnrwp_opengraph_title',         // ID attribute of tags
-    __('OpenGraph Title', 'qnrwp'),               // Field title
+    __('OpenGraph Title', 'qnrwp'),  // Field title
     'qnrwp_opengraph_title',         // Callback to echo input control
     'writing',                       // Admin page to use
     'qnrwp_metatags_section'         // Section to use
@@ -89,7 +119,7 @@ function qnrwp_admin_settings_metatags() {
   // OpenGraph Description
   add_settings_field(
     'qnrwp_opengraph_description',         // ID attribute of tags
-    __('OpenGraph Description', 'qnrwp'),               // Field title
+    __('OpenGraph Description', 'qnrwp'),  // Field title
     'qnrwp_opengraph_description',         // Callback to echo input control
     'writing',                             // Admin page to use
     'qnrwp_metatags_section'               // Section to use
@@ -97,7 +127,7 @@ function qnrwp_admin_settings_metatags() {
   // OpenGraph Image URL
   add_settings_field(
     'qnrwp_opengraph_imageurl',            // ID attribute of tags
-    __('OpenGraph Image URL', 'qnrwp'),                 // Field title
+    __('OpenGraph Image URL', 'qnrwp'),    // Field title
     'qnrwp_opengraph_imageurl',            // Callback to echo input control
     'writing',                             // Admin page to use
     'qnrwp_metatags_section'               // Section to use
@@ -105,7 +135,7 @@ function qnrwp_admin_settings_metatags() {
   // Use Twitter Tags
   add_settings_field(
     'qnrwp_use_twitter_tags',          // ID attribute of tags
-    __('Use Twitter Tags', 'qnrwp'),                // Field title
+    __('Use Twitter Tags', 'qnrwp'),   // Field title
     'qnrwp_use_twitter_tags',          // Callback to echo input control
     'writing',                         // Admin page to use
     'qnrwp_metatags_section'           // Section to use
@@ -113,7 +143,7 @@ function qnrwp_admin_settings_metatags() {
   // Twitter Title
   add_settings_field(
     'qnrwp_twitter_title',           // ID attribute of tags
-    __('Twitter Title', 'qnrwp'),                 // Field title
+    __('Twitter Title', 'qnrwp'),    // Field title
     'qnrwp_twitter_title',           // Callback to echo input control
     'writing',                       // Admin page to use
     'qnrwp_metatags_section'         // Section to use
@@ -121,7 +151,7 @@ function qnrwp_admin_settings_metatags() {
   // Twitter Description
   add_settings_field(
     'qnrwp_twitter_description',           // ID attribute of tags
-    __('Twitter Description', 'qnrwp'),                 // Field title
+    __('Twitter Description', 'qnrwp'),    // Field title
     'qnrwp_twitter_description',           // Callback to echo input control
     'writing',                             // Admin page to use
     'qnrwp_metatags_section'               // Section to use
@@ -129,7 +159,7 @@ function qnrwp_admin_settings_metatags() {
   // Twitter Image URL
   add_settings_field(
     'qnrwp_twitter_imageurl',              // ID attribute of tags
-    __('Twitter Image URL', 'qnrwp'),                   // Field title
+    __('Twitter Image URL', 'qnrwp'),      // Field title
     'qnrwp_twitter_imageurl',              // Callback to echo input control
     'writing',                             // Admin page to use
     'qnrwp_metatags_section'               // Section to use
@@ -137,7 +167,7 @@ function qnrwp_admin_settings_metatags() {
   // Use Twitter Large Image
   add_settings_field(
     'qnrwp_use_twitter_largeimage',         // ID attribute of tags
-    __('Use Twitter Large Image', 'qnrwp'),              // Field title
+    __('Use Twitter Large Image', 'qnrwp'), // Field title
     'qnrwp_use_twitter_largeimage',         // Callback to echo input control
     'writing',                              // Admin page to use
     'qnrwp_metatags_section'                // Section to use
@@ -145,7 +175,7 @@ function qnrwp_admin_settings_metatags() {
   // Twitter Site
   add_settings_field(
     'qnrwp_twitter_site',                  // ID attribute of tags
-    __('Twitter Site', 'qnrwp'),                        // Field title
+    __('Twitter Site', 'qnrwp'),           // Field title
     'qnrwp_twitter_site',                  // Callback to echo input control
     'writing',                             // Admin page to use
     'qnrwp_metatags_section'               // Section to use
@@ -192,7 +222,7 @@ function qnrwp_admin_settings_media() {
   // JPEG Quality
   add_settings_field(
     'qnrwp_jpeg_quality',       // ID attribute of tags
-    __('JPEG Quality', 'qnrwp'),             // Field title
+    __('JPEG Quality', 'qnrwp'),// Field title
     'qnrwp_jpeg_quality',       // Callback to echo input control
     'media',                    // Admin page to use
     'qnrwp_media_section'       // Section to use
@@ -209,10 +239,48 @@ function qnrwp_admin_settings_media() {
   register_setting('media', 'qnrwp_regenerate_images');
 }
 
+add_action('admin_init', 'qnrwp_admin_settings_reading');
 if (QNRWP::get_setting('feature-metatags') !== 0) {
   add_action('admin_init', 'qnrwp_admin_settings_metatags');
 }
 add_action('admin_init', 'qnrwp_admin_settings_media');
+
+
+// ----------------------- READING
+
+// ----------------------- Sections
+
+/**
+ * Callback function for the News page items section; display info
+ */
+function qnrwp_reading_section() {
+  ?>
+  <div style="font-size:1.1em"><p><?php esc_html_e('Choose how the News page displays posts, as a list of excerpts or full posts. The latter may be preferred if you publish short posts without large images.', 'qnrwp'); ?></p>
+  </div>
+  <?php
+}
+
+
+// ----------------------- Options
+
+/**
+ * Echoes the input control for News page items
+ */
+function qnrwp_news_page_items() {
+  ?>
+  <fieldset>
+    <p><label><input type="radio" name="qnrwp_news_page_items" id="qnrwp_news_page_items_radio1" 
+                                  value="0" <?php 
+                                                  if (get_option('qnrwp_news_page_items') != 1) echo 'checked="checked"'; ?>> <?php 
+                                                  esc_html_e('Post excerpts', 'qnrwp'); ?></label><br>
+              <label><input type="radio" name="qnrwp_news_page_items" id="qnrwp_news_page_items_radio2" 
+                                  value="1" <?php 
+                                                  if (get_option('qnrwp_news_page_items') == 1) echo 'checked="checked"'; ?>> <?php 
+                                                  esc_html_e('Full posts', 'qnrwp'); ?></label></p>
+  </fieldset>
+  <?php
+}
+
 
 
 // ----------------------- MEDIA
@@ -585,7 +653,7 @@ function qnrwp_filter_submenu($submenu_file, $parent_file) {
 add_filter('submenu_file', 'qnrwp_filter_submenu', 10, 2);
 
 
-// ===================== SIMPLIFY DASHBOARD FOR NON-ADMINS =====================
+// ===================== SIMPLIFY DASHBOARD FOR NON-ADMINS / ADMIN =====================
 
 if (!current_user_can('manage_options') && (isset(get_option('qnrwp_settings_array')['admin-simplify']) && get_option('qnrwp_settings_array')['admin-simplify'] == 1)) {
   
@@ -643,5 +711,19 @@ if (!current_user_can('manage_options') && (isset(get_option('qnrwp_settings_arr
   }
   add_filter('screen_options_show_screen', 'qnrwp_remove_screen_options_tab');
   
+} elseif (isset(get_option('qnrwp_settings_array')['admin-simplify']) && get_option('qnrwp_settings_array')['admin-simplify'] == 1) {
+  
+  /**
+   * Edit Logged in menu
+   */
+  function qnrwp_edit_loggedin_menu($wp_admin_bar) {
+    // Edit 'Howdy,' on the right
+    $my_account = $wp_admin_bar->get_node('my-account');
+    $newtitle = str_replace('Howdy,', '', $my_account->title);
+    // add_node() will update existing
+    $wp_admin_bar->add_node(array('id' => 'my-account', 'title' => $newtitle));
+  }
+  add_action('admin_bar_menu', 'qnrwp_edit_loggedin_menu', 999);
+
 } // End of simplifying
 

@@ -96,7 +96,7 @@ var QNR_INTER = {};
      * the same way, the sizing will be according to window width.
      * 
      * 
-     *                         Responsive
+     *                         Responsive (not used, will be removed)
      * 
      * A DIV with the class of "qnr-responsive" is a widget whose child
      * elements will be laid out in a responsive flexible grid at any 
@@ -118,6 +118,9 @@ var QNR_INTER = {};
      * 
      * Remember that a responsive row of more than 4 blocks makes for 
      * poor user experience (except for image galleries).
+     * 
+     * This JS will be removed as it is unnecessary. In CSS the items 
+     * are now handled as " > div" children of "qnr-responsive".
      * 
      * 
      *                         Carousel
@@ -694,8 +697,8 @@ var QNR_INTER = {};
     QNR_INTER.winscrollersL = [];
     QNR_INTER.winscrollerObjectsL = [];
     
-    QNR_INTER.responsivesL = [];
-    QNR_INTER.responsiveObjectsL = [];
+    //QNR_INTER.responsivesL = [];
+    //QNR_INTER.responsiveObjectsL = [];
     
     QNR_INTER.fontresizesL = [];
     QNR_INTER.fontresizeObjectsL = [];
@@ -1317,7 +1320,7 @@ var QNR_INTER = {};
     };
     
     
-    // ----------------------- RESPONSIVE
+    // ----------------------- RESPONSIVE (not used any more, will be removed)
     
     function ResponsiveObject() {
         this.object                 = null;
@@ -2260,18 +2263,18 @@ var QNR_INTER = {};
         
         // ----------------------- Responsives
         
-        QNR_INTER.responsivesL = classObjs("qnr-responsive");
-        if (QNR_INTER.responsivesL.length > 0) {
-            for (var i = 0; i < QNR_INTER.responsivesL.length; i++) {
-                // Create a data- id attribute on the responsive
-                QNR_INTER.responsivesL[i].dataset.qnrResponsiveId = i;
-                // Create a new JS object for the responsive
-                QNR_INTER.responsiveObjectsL.push(new ResponsiveObject());
-                QNR_INTER.responsiveObjectsL[i].object = QNR_INTER.responsivesL[i];
-                // Initialize object
-                QNR_INTER.responsiveObjectsL[i].initialize();
-            }
-        }
+        //QNR_INTER.responsivesL = classObjs("qnr-responsive");
+        //if (QNR_INTER.responsivesL.length > 0) {
+            //for (var i = 0; i < QNR_INTER.responsivesL.length; i++) {
+                //// Create a data- id attribute on the responsive
+                //QNR_INTER.responsivesL[i].dataset.qnrResponsiveId = i;
+                //// Create a new JS object for the responsive
+                //QNR_INTER.responsiveObjectsL.push(new ResponsiveObject());
+                //QNR_INTER.responsiveObjectsL[i].object = QNR_INTER.responsivesL[i];
+                //// Initialize object
+                //QNR_INTER.responsiveObjectsL[i].initialize();
+            //}
+        //}
         
         
         // ----------------------- Winscrollers

@@ -18,6 +18,3 @@ Still to get done:
 
 * Make CPT option more fine grained in widget visibility.
 
-* Programming documentation.
-
-* Finish Gallery CSS.

@@ -16,9 +16,37 @@ Text Domain: qnrwp
 */
 
 /* 
- * Colours:
+ * Colors:
  * 
- * dark blue #1e6594
+ * 
+ * ------- Defaults:
+ * 
+ * text dark #444
+ * text gray #888
+ * text light gray on dark bg #DDD
+ * 
+ * heading light #d0d4d6
+ * heading dark desat blue #678
+ * 
+ * logo dark blue #1e6594
+ * 
+ * button/banner blue #3771c8
+ * 
+ * body background #f6f6f6
+ * background dark, "black" #242729
+ * background light bluish #f0f8ff
+ * background white hover darken #f6f6f6
+ * background white hover darken lighter #f8f8f8 TODO
+ * background gray input on dark bg #999
+ * 
+ * border faint #EEE
+ * 
+ * error light red #F08080
+ * 
+ * 
+ * ------- Other:
+ * 
+ * Bootstrap blue #0069d9
  * 
  *  */
 
@@ -26,6 +54,7 @@ Text Domain: qnrwp
  * 
  * at 14px font size:
  * 
+ * 15px = 1.07em
  * 16px = 1.14em
  * 20px = 1.43em
  * 24px = 1.71em
@@ -185,13 +214,13 @@ body {
     width: 100%;
     height: 100%;
     min-height: 100%;
-    font-family: Arial,sans-serif;
+    font-family: Roboto,Arial,sans-serif;
     font-size: 14px;
     line-height: 1.43em;
     font-weight: normal;
     font-style: normal;
     font-stretch: normal;
-    color: rgb(51,51,51);
+    color: #444;
     text-align: center;
     vertical-align: top;
     background-color: #f6f6f6;
@@ -218,7 +247,8 @@ a:hover {
     text-decoration: underline;
     color: black;
 }
-img {
+
+figure, img {
     display: block;
     position: relative;
     margin: 0 auto;
@@ -240,23 +270,8 @@ div, header, main, section, article, footer, aside {                    /* On th
 /* TYPOGRAPHY, COLORS & BORDERS
  * ----------------------------------------------------- */
 
-.qnrwp-button a {
-    width: 20em;
-    max-width: 90%;
-    box-shadow: 0 1px 6px rgba(0,0,0,0.3);
-    text-decoration: none;
-}
-.qnrwp-button a:hover {
-    box-shadow: 1px 2px 12px rgba(0,0,0,0.3);
-    opacity: 0.9;
-}
+/* ----------------------------- Type & borders */
 
-.qnrwp-text-light {
-    color: #fff;
-}
-.qnrwp-text-dark {
-    color: #444;
-}
 .qnrwp-heading-light {
     font-weight: normal;
     color: #d0d4d6;
@@ -277,6 +292,17 @@ div, header, main, section, article, footer, aside {                    /* On th
 .qnrwp-font-largest {
     font-size: 1.4em;
     line-height: 1.5em;
+}
+.qnrwp-font-28 {
+    font-size: 28px;
+    line-height: 1.5em;
+}
+
+.qnrwp-border-bottom {
+    border-bottom: solid thin silver;
+}
+.qnrwp-border-top {
+    border-top: solid thin silver;
 }
 
 .qnrwp-border-bottom-light {
@@ -299,98 +325,35 @@ div, header, main, section, article, footer, aside {                    /* On th
 }
 
 .qnrwp-heading-left-border {
+    display: inline-block;
+    position: relative;
     width: 100%;
-    text-align: left;
+    margin: 1em auto 0.5em;
     padding-bottom: 0.25em;
-    border-bottom: dotted thin gray;
-}
-
-
-/* COLUMNS OVERRIDES
- * ----------------------------------------------------- */
-
-.qnrwp-columns-2-flex {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-flex: 1 1 auto;
-    flex: 1 1 auto;
-    
-    width: 100%;
-    height: auto;
-    
-    /* Vertical */
-    -webkit-align-items: flex-start;
-    align-items: flex-start;
-    
-    /* Horizontal */
-    -webkit-justify-content: space-around;
-    justify-content: space-around;
-    
-    position: relative;
-    margin: 0;
-    padding: 0;
-}
-.qnrwp-columns-2-flex .wp-block-column {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-flex: 1 1 auto;
-    flex: 1 1 auto;
-    
-    width: 260px;
-    min-width: 260px;
-    max-width: 500px;
-    height: auto;
-    
-    /* Vertical */
-    -webkit-align-items: flex-start;
-    align-items: flex-start;
-    
-    /* Horizontal */
-    -webkit-justify-content: center;
-    justify-content: center;
-    
-    position: relative;
-    margin: 0;
-    padding: 1.5em 1em;
-}
-.qnrwp-columns-2-flex .wp-block-column .wp-block-media-text {
-    display: block;
-    position: relative;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    text-align: center;
-}
-.qnrwp-columns-2-flex .wp-block-column .wp-block-media-text figure {
-    display: block;
-    position: relative;
-    margin: 0 auto;
-    padding: 0;
-    width: auto;
-    height: 64px;
-    max-height: 64px;
-}
-.qnrwp-columns-2-flex .wp-block-column .wp-block-media-text figure img {
-    display: block;
-    position: relative;
-    margin: 0 auto;
-    padding: 0;
-    width: auto;
-    height: 64px;
-}
-.qnrwp-columns-2-flex .wp-block-column .wp-block-media-text h2 {
     font-weight: normal;
-}
-.qnrwp-columns-2-flex .wp-block-column .wp-block-media-text p {
+    font-size: 2em;
+    line-height: 1.2em;
     text-align: left;
+    border-bottom: dotted thin #888;
+}
+
+/* ----------------------------- Colors */
+
+.qnrwp-banner-button-background-color {
+    background-color: #3771c8;
+}
+.qnrwp-banner-button-background-color-light {
+    background-color: #f0f8ff;
+}
+
+.qnrwp-text-light {
+    color: #fff;
+}
+.qnrwp-text-dark {
+    color: #444;
+}
+.qnrwp-text-blue {
+    color: #3771c8;
 }
 
 
@@ -448,7 +411,7 @@ h2.qnrwp-row-header {
     
     margin: 0 auto;
     min-width: 320px;
-    max-width: 1600px;
+    max-width: 1600px; /* Overriden inline by user setting */
     height: auto;
     text-align: right;
     overflow: visible;
@@ -466,7 +429,7 @@ h2.qnrwp-row-header {
     left: 0;
     right: 0;
     /* Provide some layering */
-    box-shadow: 0 1px 1px rgba(1,1,1,0.2);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.2);
     border: none;
     border-bottom: none;
 }
@@ -604,7 +567,7 @@ h2.qnrwp-row-header {
 .qnr-navmenu-wrapper li.current-menu-item a,
 .qnr-navmenu-wrapper li.current_page_parent a,
 .qnr-navmenu-wrapper li.current-menu-parent {
-    color: black;
+    color: black; /* Outdated, but left as not used any more */
 }
 
 /* CONTENT
@@ -614,7 +577,7 @@ h2.qnrwp-row-header {
 .content-row {   /* May contain sub header before middle row */
     margin: 0 auto;
     min-width: 320px;
-    max-width: 1600px;
+    max-width: 1600px; /* Overriden inline by user setting */
     height: auto;
     
     /* Calculate the min height using basic assumptions about header and
@@ -719,7 +682,7 @@ body.home .sub-header-content p.sub-header-content-auto {
     -webkit-align-items: stretch;
     align-items: stretch;
     min-width: 320px;
-    max-width: 1600px;
+    max-width: 1600px; /* Overriden inline by user setting */
     height: auto;
     text-align: center;
     vertical-align: top;
@@ -733,9 +696,9 @@ body.home .sub-header-content p.sub-header-content-auto {
     flex: 2 1 0;
     display: inline-block;
     margin: 0;
-    padding: 2em 1em 0;
+    padding: 2em 1em 1em;
     min-width: 320px;
-    max-width: 1600px;
+    max-width: 1600px; /* Overriden inline by user setting */
     height: auto;
 /*
     min-height: 500px;
@@ -745,6 +708,7 @@ body.home .sub-header-content p.sub-header-content-auto {
 }
 .content-box.single-col-content {
     width: 100%;
+    padding: 0;
 }
 .content-box.three-col-content {
     width: 40%;
@@ -772,7 +736,15 @@ body.home .sub-header-content p.sub-header-content-auto {
 .type-post {
     text-align: left;
 }
+.type-post.post-on-news-page {
+    margin-bottom: 2em;
+    border-bottom: solid thin #EEE;
+}
+.type-post.post-on-news-page:last-of-type {
+    border-bottom: none;
+}
 .type-post p {
+    font-size: 1.07em;
 }
 .type-post p::after {    /* Clearing trick for floats */
     content: "";
@@ -843,7 +815,7 @@ body.home .sub-header-content p.sub-header-content-auto {
     right: 0;
     padding: 0.25em;
     color: white;
-    background-color: rgba(1,1,1,0.1);
+    background-color: rgba(0,0,0,0.1);
     opacity: 0.8;
     z-index: 99;
 }
@@ -851,7 +823,7 @@ body.home .sub-header-content p.sub-header-content-auto {
     content: "I"; /* Magnifying glass icon */
 }
 .type-post a.news-post-expandable-image:hover::after {
-    background-color: rgba(1,1,1,0.4);
+    background-color: rgba(0,0,0,0.4);
     color: white;
     opacity: 1;
 }
@@ -869,7 +841,8 @@ body.home .sub-header-content p.sub-header-content-auto {
     font-style: normal;
     color: #888;
 }
-.type-post h1.page-title {
+.type-post h1.page-title,
+.type-post h2.page-title {
     margin: 0.5em auto;
     text-align: left;
     font-size: 2em;
@@ -936,7 +909,7 @@ span.post-older p:first-child { /* Prev and Next labels above titles */
 
 .sub-content-row {
     padding: 1em 0;
-    background-color: #f0f4f6;
+    background-color: #fff;
 }
 
 
@@ -983,7 +956,7 @@ span.post-older p:first-child { /* Prev and Next labels above titles */
     font-weight: normal;
     text-transform: uppercase;
     text-align: center;
-    color: gray;
+    color: #888;
 }
 
 /* Calendar */
@@ -999,7 +972,7 @@ table#wp-calendar {
 table#wp-calendar th {
     font-weight: normal;
     font-size: 0.9em;
-    color: black;
+    color: #444;
 }
 table#wp-calendar tbody td {
     color: #888;
@@ -1045,9 +1018,10 @@ table#wp-calendar tbody td a {
 .footer-row {
     display: block;
     margin: 0 auto;
+    padding-top: 1em;
     min-width: 320px;
-    max-width: 1600px;
-    color: #EEE;
+    max-width: 1600px; /* Overriden inline by user setting */
+    color: #DDD;
     text-align: center;
     opacity: 0; /* JS code will change to 1 */
     background-color: #242729;
@@ -1118,6 +1092,22 @@ table#wp-calendar tbody td a {
     text-decoration: none;
 }
 
+/* Copyright Notice (Custom HTML Widget) */
+
+.footer-row .qnrwp-copyright {
+    display: inline-block;
+    margin-top: 2em;
+    padding-bottom: 1em;
+    width: auto;
+    font-size: 0.9em;
+    text-align: center;
+    border-top: dotted thin silver;
+    opacity: 0.6;
+}
+.footer-row .qnrwp-copyright p:first-child {
+    width: auto;
+}
+
 
 /* FEATURED NEWS
  * ----------------------------------------------------- */
@@ -1172,11 +1162,11 @@ a.qnrwp-featured-news-item {
     font-weight: inherit;
     color: inherit;
     
-    box-shadow: 0 1px 6px rgba(1,1,1,0.26);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.26);
     background-color: white;
 }
 a.qnrwp-featured-news-item:hover {
-    box-shadow: 0 1px 12px rgba(1,1,1,0.4);
+    box-shadow: 0 1px 12px rgba(0,0,0,0.4);
     background-color: #f8f8f8;
 }
 a.qnrwp-featured-news-item:hover .qnrwp-featured-news-item-header {
@@ -1194,7 +1184,7 @@ a.qnrwp-featured-news-item:hover .qnrwp-featured-news-item-text {
     padding: 0;
     width: 100%;
     height: 200px;
-    background-image: linear-gradient(gray,gray); /* Placeholder */
+    background-image: linear-gradient(#888,#888); /* Placeholder */
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -1208,7 +1198,7 @@ a.qnrwp-featured-news-item:hover .qnrwp-featured-news-item-text {
     width: 100%;
     height: auto;
     text-align: left;
-    color: #333;
+    color: #444;
 }
 .qnrwp-featured-news-item-text h1 {
     font-size: 1.1em;
@@ -1253,13 +1243,15 @@ a.qnrwp-excerpt-item {
     height: 150px;
     font-weight: normal;
     text-align: left;
-    color: #333;
+    color: #444;
     box-sizing: border-box;
 }
 a.qnrwp-excerpt-item:hover {
     text-decoration: none;
     color: black;
-    background-color: #F2F2F2;
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: #f6f6f6;
 }
 a.qnrwp-excerpt-item img.qnrwp-post-featured-img {
     display: inline-block;
@@ -1393,11 +1385,11 @@ form.search-form input.search-submit {
     border: none;
     border-radius: 0 4px 4px 0;
     overflow: hidden;
-    background-color: gray;
+    background-color: #888;
 }
 form.search-form input.search-submit:hover {
     cursor: pointer;
-    background-color: #666;
+    background-color: #444;
 }
 body.search-results {
     text-align: center;
@@ -1498,7 +1490,7 @@ h2.qnrwp-samples-list-title { /* Outside the block */
     font-size: 1.2em;
     text-align: center;
     text-transform: uppercase;
-    color: gray;
+    color: #888;
 /*
     border-bottom: solid thin #DDD;
 */
@@ -1532,7 +1524,7 @@ h2.qnrwp-samples-list-title { /* Outside the block */
     vertical-align: top;
     border-radius: 2px;
     overflow: hidden;
-    box-shadow: 0 1px 4px rgba(1,1,1,0.4);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
     background-color: #f8f8f8;
 }
 .qnrwp-samples-list-item div {
@@ -1572,19 +1564,19 @@ button.qnrwp-samples-load-more {
     margin: 1em auto;
     padding: 0.5em 1em;
     font-weight: normal;
-    color: #333;
-    border: solid thin #DDD;
+    color: #444;
+    border: solid thin #DDD; /* TODO */
     outline: none;
     cursor: pointer;
     border-radius: 6px;
-    background-color: gray;
-    background-image: linear-gradient(#f0f0f0, #DDD);
+    background-color: #888;
+    background-image: linear-gradient(#f0f0f0, #DDD); /* TODO */
 }
 button.qnrwp-samples-load-more:hover {
-    color: #666;
+    color: #888;
     border: solid thin #EEE;
-    background-color: silver;
-    background-image: linear-gradient(#DDD, #f0f0f0);
+    background-color: silver; /* TODO */
+    background-image: linear-gradient(#DDD, #f0f0f0); /* TODO */
 }
 
 
@@ -1715,3 +1707,37 @@ button.qnrwp-samples-load-more:hover {
         width: 320px;
     }
 }
+
+
+/* TODO
+ * ----------------------------------------------------- */
+
+/* ----------------------------- About */
+
+
+
+/* We use overrides rather than a padding wrapper so that we can 
+ * easily change layout with sidebar widget visibility */
+
+/* Wrapper for part of About page content */
+.override-max-width-1200 {
+    margin: 0 auto;
+    padding: 0 1em 2em;
+    width: 100%;
+    min-width: 280px;
+    max-width: 1200px;
+    text-align: left;
+}
+.override-max-width-640,
+.type-page.contact,
+.type-page.legal {
+    margin: 0 auto;
+    padding: 0 1em 2em;
+    width: 100%;
+    min-width: 280px;
+    max-width: 640px;
+    text-align: left;
+}
+
+
+

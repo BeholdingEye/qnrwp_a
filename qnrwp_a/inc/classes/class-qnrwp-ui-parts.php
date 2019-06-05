@@ -11,6 +11,7 @@ class QNRWP_UI_Parts {
    * Renders post thumbnail in a sizer, to reduce flashing of content on page load
    */
   public static function render_post_thumbnail($postID) {
+    if (!has_post_thumbnail($postID)) return;
     // Get post thumbnail dimensions so we can style width/height of IMG element
     $ptID = get_post_thumbnail_id($postID);
     $attMeta = wp_get_attachment_metadata($ptID);

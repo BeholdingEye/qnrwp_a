@@ -1,6 +1,0 @@
-
-PROGRAMMING
-===========
-
-Under construction.
-

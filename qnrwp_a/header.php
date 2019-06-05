@@ -5,21 +5,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-// -----------------------  Error-to-exception Handler
-
-//error_reporting(E_ALL); // Report all PHP errors
-error_reporting(E_ALL ^ (E_NOTICE | E_WARNING | E_DEPRECATED));
-ini_set('display_errors', 1); // Change default PHP config
-
-function exception_error_handler($severity, $message, $file, $line) {
-  if (!(error_reporting() & $severity)) {
-    // This error code is not included in error_reporting
-    return;
-  }
-  throw new ErrorException($message, 0, $severity, $file, $line);
-}
-set_error_handler('exception_error_handler');
-
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -33,7 +18,7 @@ wp_head(); // Required for title-tag and site icons
 ?>
 </head>
 <body <?php if (has_header_image()) body_class('has-header-image qnr-winscroller'); else body_class('qnr-winscroller'); // TODO ?> data-qnr-offset="-4">
-<!-- Error reporting: <?php echo error_reporting(); // Show in source that we're reporting errors ?> -->
+<?php if (QNRWP_DEBUG) echo '<!-- Error reporting: ' . error_reporting() . ' -->' . PHP_EOL; // Show we're reporting errors only in debug mode ?>
 <!-- Header Row -->
 <header id="header-row" class="header-row widget-area<?php echo QNRWP::get_setting('header-fixed', $default=1)
                                                               ?' qnrwp-has-fixed-header'

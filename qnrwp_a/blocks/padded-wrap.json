@@ -1,0 +1,5 @@
+{
+  "__file": "wp_block",
+  "title": "Padded Wrap",
+  "content": "<!-- wp:group {\"className\":\"qnrwp-block-padded-wrap\"} -->\n<div class=\"wp-block-group qnrwp-block-padded-wrap\"></div>\n<!-- /wp:group -->"
+}

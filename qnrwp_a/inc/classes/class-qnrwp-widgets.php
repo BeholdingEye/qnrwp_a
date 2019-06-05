@@ -70,7 +70,8 @@ class QNRWP_Widgets {
     if ($widget->number != '__i__') {
       // Page(s) to display the widget field
       $pagesVal = !empty($instance['qnrwp_pages']) ? $instance['qnrwp_pages'] : '';
-      $pagesL = explode(',', $pagesVal);
+      $pagesL = array();
+      if ($pagesVal) $pagesL = explode(',', $pagesVal);
       $pagesOutputID = esc_attr($widget->get_field_id('qnrwp_pages'));
       $pagesOutputName = esc_attr($widget->get_field_name('qnrwp_pages'));
       // HTML form
@@ -155,7 +156,8 @@ class QNRWP_Widgets {
       // Child theme may use the same WP hook (at priority 11+) for its own functionality; returning false will prevent widget display
       return $instance;
     }
-    $pagesL = explode(',', $instance['qnrwp_pages']);
+    $pagesL = array();
+    if (isset($instance['qnrwp_pages'])) $pagesL = explode(',', $instance['qnrwp_pages']);
     // Decide whether to show the widget on this page
     $showWidget = self::is_widget_visible($pagesL);
     //if ($showWidget) {
@@ -213,7 +215,8 @@ class QNRWP_Widgets {
         if ($wiBase !== $widgetInstanceID) { // Multiwidget, the usual kind TODO single use widgets??
           $wiNumber = substr($widgetInstanceID, strrpos($widgetInstanceID, '-')+1);
           $wiOption = get_option('widget_'.$wiBase);
-          $pagesL = explode(',', $wiOption[$wiNumber]['qnrwp_pages']);
+          $pagesL = array();
+          if (isset($wiOption[$wiNumber]['qnrwp_pages'])) $pagesL = explode(',', $wiOption[$wiNumber]['qnrwp_pages']);
           if (self::is_widget_visible($pagesL)) return true;
         }
       }

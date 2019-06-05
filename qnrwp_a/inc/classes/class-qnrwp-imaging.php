@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Imaging setup class (a singleton)
  */
-final class QNRWP_Imaging {
+class QNRWP_Imaging {
   
   use QNRWP_Singleton_Trait;
   

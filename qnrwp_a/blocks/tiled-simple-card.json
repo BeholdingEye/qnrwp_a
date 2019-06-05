@@ -1,0 +1,5 @@
+{
+  "__file": "wp_block",
+  "title": "Tiled Simple Card",
+  "content": "<!-- wp:media-text {\"isStackedOnMobile\":true,\"verticalAlignment\":\"top\",\"className\":\"qnrwp-block-tiled-simple\"} -->\n<div class=\"wp-block-media-text alignwide is-stacked-on-mobile is-vertically-aligned-top qnrwp-block-tiled-simple\"><figure class=\"wp-block-media-text__media\"></figure><div class=\"wp-block-media-text__content\"><!-- wp:heading {\"align\":\"center\"} -->\n<h2 style=\"text-align:center\">Your text here</h2>\n<!-- /wp:heading -->\n\n<!-- wp:paragraph -->\n<p>Your text here your text here your text here your text here your text here your text here your text here your text here your text here your text here</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:button {\"align\":\"center\",\"className\":\"is-style-squared qnrwp-button\"} -->\n<div class=\"wp-block-button aligncenter is-style-squared qnrwp-button\"><a class=\"wp-block-button__link\" href=\"\">Your text here</a></div>\n<!-- /wp:button --></div></div>\n<!-- /wp:media-text -->"
+}

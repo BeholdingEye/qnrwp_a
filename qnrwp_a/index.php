@@ -26,9 +26,12 @@ get_sidebar('subheader'); ?>
     while (have_posts()) {
       the_post();
       
-      if (!is_singular()) get_template_part('template-parts/content', 'news_list');
-      else if (is_singular() && get_post_type() == 'post') get_template_part('template-parts/content', 'post');
-      else if (is_singular() && get_post_type() == 'page') get_template_part('template-parts/content', 'page');
+      if (!is_singular()) {
+        if (get_option('qnrwp_news_page_items') == 1) get_template_part('template-parts/content', 'post');
+        else get_template_part('template-parts/content', 'news_list');
+      }
+      elseif (is_singular() && get_post_type() == 'post') get_template_part('template-parts/content', 'post');
+      elseif (is_singular() && get_post_type() == 'page') get_template_part('template-parts/content', 'page');
     }
     if (!is_singular()) get_template_part('template-parts/content', 'news_list_links');
   } else {
