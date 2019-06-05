@@ -116,7 +116,7 @@ defined( 'ABSPATH' ) || exit;
                                   : ''; // Unchecked by default
                                   ?>>
                                 <?php esc_html_e('Enable Bootstrap 4.3.1', 'qnrwp'); ?></label>
-                                <p><em><?php esc_html_e('Use at your own risk: Bootstrap 4.3.1 is said to require jQuery 1.9.1+, but WordPress uses jQuery 1.12.4. If in doubt, leave this disabled.', 'qnrwp'); ?></em></p></td>
+                                <p><em><?php esc_html_e('Use at your own risk: Bootstrap 4.3.1 requires jQuery 1.9.1 - 3, WordPress uses jQuery 1.12.4. If in doubt, leave this disabled.', 'qnrwp'); ?></em></p></td>
       </tr>
       
     </table>
