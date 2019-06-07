@@ -649,12 +649,6 @@ class QNRWP {
     // Custom CSS overriding max-width, tying us in with custom-header image dimensions
     global $content_width;
     $customCSS = '.header-row, .content-row, .middle-row, .content-box, .footer-row {max-width:'.$content_width.'px;}'.PHP_EOL;
-    
-    // Bootstrap
-    if (self::get_setting('feature-bootstrap') == 1) {
-      wp_enqueue_style('bootstrap-css', get_template_directory_uri() . $this->cssFilesL['bootstrap-css'], null, null);
-    }
-    
     $minify = isset(get_option('qnrwp_settings_array')['code-combine']) ? get_option('qnrwp_settings_array')['code-combine'] : 0;
     $cfURI = '';
     if ($minify) $cfURI = $this->combine_minify_stylesheets();
@@ -689,7 +683,6 @@ class QNRWP {
     // Bootstrap
     if (self::get_setting('feature-bootstrap') == 1) {
       wp_enqueue_script('jquery');
-      if (!$minify) $this->jsFilesL['bootstrap-bundle-js'] = '/res/js/bootstrap-4.3.1.bundle.js';
     }
     $cfURI = '';
     if ($minify) $cfURI = $this->combine_minify_js();
