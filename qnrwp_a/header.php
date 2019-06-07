@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 ?>
 <!DOCTYPE html>
-<html <?php language_attributes(); ?>>
+<html <?php if (QNRWP::get_setting('feature-bootstrap') == 1 && apply_filters('qnrwp_bootstrap_class_html_and_body', false)) echo 'class="bootstrap431" '; language_attributes(); ?>>
 <head>
 <meta charset="<?php bloginfo('charset'); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,7 +17,12 @@ if (class_exists('QNRWP_Meta_Tags')) echo QNRWP_Meta_Tags::meta_opengraph_twitte
 wp_head(); // Required for title-tag and site icons
 ?>
 </head>
-<body <?php if (has_header_image()) body_class('has-header-image qnr-winscroller'); else body_class('qnr-winscroller'); // TODO ?> data-qnr-offset="-4">
+<body <?php
+  $bodyClass = 'qnr-winscroller';
+  if (has_header_image()) $bodyClass .= ' has-header-image';
+  if (QNRWP::get_setting('feature-bootstrap') == 1 && apply_filters('qnrwp_bootstrap_class_html_and_body', false)) $bodyClass .= ' bootstrap431';
+  body_class($bodyClass);
+  ?> data-qnr-offset="-4">
 <?php if (QNRWP_DEBUG) echo '<!-- Error reporting: ' . error_reporting() . ' -->' . PHP_EOL; // Show we're reporting errors only in debug mode ?>
 <!-- Header Row -->
 <header id="header-row" class="header-row widget-area<?php echo QNRWP::get_setting('header-fixed', $default=1)

@@ -115,8 +115,8 @@ defined( 'ABSPATH' ) || exit;
                                   ? checked(1, get_option('qnrwp_settings_array')['feature-bootstrap'], false)
                                   : ''; // Unchecked by default
                                   ?>>
-                                <?php esc_html_e('Enable Bootstrap 4.3.1', 'qnrwp'); ?></label>
-                                <p><em><?php esc_html_e('Use at your own risk: Bootstrap 4.3.1 requires jQuery 1.9.1 - 3, WordPress uses jQuery 1.12.4. If in doubt, leave this disabled.', 'qnrwp'); ?></em></p></td>
+                                <?php esc_html_e('Enable namespaced Bootstrap 4.3.1', 'qnrwp'); ?></label>
+                                <p><em><?php esc_html_e('When this is enabled some interactive Bootstrap features such as modals may not work because they apply classes to the BODY, bypassing your namespacing container. A filter on HTML and BODY tags allows our namespacing class "bootstrap431" to be placed there. Other workarounds also exist.', 'qnrwp'); ?></em></p></td>
       </tr>
       
     </table>

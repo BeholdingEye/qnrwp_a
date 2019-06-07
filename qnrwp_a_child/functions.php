@@ -23,3 +23,13 @@ add_filter('wp_fatal_error_handler_enabled', function($bool) {return true;});
  */
 add_filter('qnrwp_debug_constant', function($debug) {return false;});
 
+
+/**
+ * Enable/disable 'bootstrap431' class in HTML and BODY tags. Should usually
+ * return false, unless Bootstrap is enabled in theme settings and you want
+ * the namespacing for it on the entire page
+ * 
+ * If you only want Bootstrap in part of the page, let this return false 
+ * and apply the 'bootstrap431' namespacing class to the relevant container
+ */
+add_filter('qnrwp_bootstrap_class_html_and_body', function($bool) {return false;});

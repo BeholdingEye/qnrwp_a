@@ -90,7 +90,7 @@ class QNRWP {
    * List CSS files, in load order
    */
   public $cssFilesL = array(
-                            'bootstrap-css'           => '/res/css/bootstrap-4.3.1.min.css',
+                            'bootstrap-css'           => '/res/css/bootstrap431namespaced.css',
                             'qnrwp-interface-css'     => '/res/css/qnr-interface.css',
                             'qnrwp-navmenu-hmenu-css' => '/res/css/qnr-navmenu-hmenu.css',
                             'qnrwp-blocks-css'        => '/res/css/qnrwp-blocks.css',

@@ -909,7 +909,7 @@ var QNR_INTER = {};
             var newObjW = objWidth - this.arrowsSizePlusMargin;
             var numVisCells = Math.floor(newObjW/this.cellItemsL[0].offsetWidth);
             newObjW = numVisCells * this.cellItemsL[0].offsetWidth;
-            if (numVisCells/2 == Math.floor(numVisCells/2)) newObjW -= this.cellItemsL[0].offsetWidth;
+            if (numVisCells/2 == Math.floor(numVisCells/2)) newObjW -= this.cellItemsL[0].offsetWidth; // TODO % ??
             oWrap.style.width = (newObjW + this.arrowsSizePlusMargin) + "px";
             this.object.style.width = newObjW + "px";
             // Insert object in wrap
@@ -923,6 +923,7 @@ var QNR_INTER = {};
             aRight.className = "qnr-thumb-strip-nav-right";
             this.object.parentNode.appendChild(aRight);
             this.objectWrap = oWrap;
+            this.objectWrap.style.display = "";
             var this2 = this;
             aLeft.addEventListener("click", function(event) {
                 this2.navClicked(event, "left");
@@ -937,6 +938,8 @@ var QNR_INTER = {};
             } else {
                 aLeft.style.visibility = "visible";
                 aRight.style.visibility = "visible";
+                // Hide strip if fewer than 3 cells visible
+                if (newObjW < 3 * this.cellItemsL[0].offsetWidth) this.objectWrap.style.display = "none";
             }
         } else { // Vertical
             var oWrap = document.createElement("div");
@@ -946,7 +949,7 @@ var QNR_INTER = {};
             var newObjH = objHeight - this.arrowsSizePlusMargin;
             var numVisCells = Math.floor(newObjH/this.cellItemsL[0].offsetHeight);
             newObjH = numVisCells * this.cellItemsL[0].offsetHeight;
-            if (numVisCells/2 == Math.floor(numVisCells/2)) newObjH -= this.cellItemsL[0].offsetHeight;
+            if (numVisCells/2 == Math.floor(numVisCells/2)) newObjH -= this.cellItemsL[0].offsetHeight; // TODO % ??
             oWrap.style.height = (newObjH + this.arrowsSizePlusMargin) + "px";
             this.object.style.height = newObjH + "px";
             // Insert object in wrap
@@ -1082,6 +1085,7 @@ var QNR_INTER = {};
         } // No action needed on vertical
     };
     ThumbStripObject.prototype.resizeWrapH = function() {
+        this.objectWrap.style.display = "";
         // Parent object of wrap assumed to have no horizontal padding
         var objectWrapParent = this.objectWrap.parentNode;
         if (this.objectWrap.offsetWidth != objectWrapParent.offsetWidth) {
@@ -1098,6 +1102,8 @@ var QNR_INTER = {};
             } else {
                 objClass("qnr-thumb-strip-nav-left", this.objectWrap).style.visibility = "visible";
                 objClass("qnr-thumb-strip-nav-right", this.objectWrap).style.visibility = "visible";
+                // Hide strip if fewer than 3 cells visible
+                if (newObjW < 3 * this.cellItemsL[0].offsetWidth) this.objectWrap.style.display = "none";
             }
         }
     };
