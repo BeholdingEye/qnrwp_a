@@ -21,63 +21,55 @@ Included widgets are:
 
   Resizes the font of the element, usually BODY, in step with changes in the total screen area
 
-3. **Responsive**
-
-  Makes a row of DIVs responsively adjust to screen width
-
-4. **Carousel**
+3. **Carousel**
 
   Fully featured carousel, the centrepiece of the package, with many options
 
-5. **Stickybar**
-
-  A bar lower on the page than the top, that on scrolling the page down, will stick to the top of the page
-
-6. **Slider**
+4. **Slider**
 
   Non-looping introductory slider, can be used with just one slide for an animated reveal of the element
 
-7. **Image Animator**
+5. **Image Animator**
 
   Non-looping introductory image animator, that can zoom images for a fake moving appearance, and accepts an overlay object
 
-8. **Navigator Menu**
+6. **Navigator Menu**
 
   Simple collapsible menu that automatically responds to changes in screen width, vailable separately in "qnr-navmenu-hmenu.js"/"qnr-navmenu-hmenu.css"
 
-9. **Scroller**
+7. **Scroller**
 
   Parallax scrolling widget
 
-10. **Winscroller**
+8. **Winscroller**
 
   Any clickable object can be made a winscroller, animatedly scrolling the page to a target object. On the BODY tag, will create a "return to top" arrow on the bottom right of the window
 
-11. **X Icon**
+9. **X Icon**
 
   Close icon that can be applied to objects for hiding or removing them from the page
 
-12. **Accordion**
+10. **Accordion**
 
   Clickable questions that reveal answers
 
-13. **Hierarchical Menu**
+11. **Hierarchical Menu**
 
   Advanced hierarchical menu that may be combines with Navigator Menu, available separately in "qnr-navmenu-hmenu.js"/"qnr-navmenu-hmenu.css"
 
-14. **Aspect Keeper**
+12. **Aspect Keeper**
 
   New in version 1.5.0 is this widget, preserving the object's aspect ratio at different screen sizes. This helps prevent images and videos displaying "tall" when they should be "narrow", usually on mobile screens in portrait mode.
 
-15. **Button Toggle**
+13. **Button Toggle**
 
   Button with two states, on / off. Callback functions may be defined for each state.
 
-16. **Popout Slider**
+14. **Popout Slider**
 
   Container for UI items that are hidden on page load, but on click of a button slide out from a window edge. By default set up for revealing a mailing subscription form, but can be adjusted for menu drawers etc. Callbacks may be defined for showing and hiding.
 
-17. **Thumb Strip**
+15. **Thumb Strip**
 
   Scrolling strip of thumbnail cells, bounded by next and previous navigation arrows. The strip may be horizontal or vertical. Scrolling is nicely animated, centering the clicked cell.
 

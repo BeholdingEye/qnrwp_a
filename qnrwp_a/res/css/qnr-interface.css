@@ -38,6 +38,15 @@
 @-webkit-keyframes qnr-anim-popin { from { -webkit-transform: translateY(-10%); opacity: 0; } to { -webkit-transform: translateY(0%); opacity: 1; } }
 @-webkit-keyframes qnr-anim-popin-back { from { -webkit-transform: translateY(0%); opacity: 1; } to { -webkit-transform: translateY(-10%); opacity: 0; } }
 
+@-webkit-keyframes qnr-anim-height { from { height: 0; } to { height: 100px; } }
+@-webkit-keyframes qnr-anim-height-back { from { height: 100px; } to { height: 0; } }
+
+@-webkit-keyframes qnr-anim-topdown { from { top: -100%; } to { top: 0; } }
+@-webkit-keyframes qnr-anim-topdown-back { from { top: 0; } to { top: -100%; } }
+
+@-webkit-keyframes qnr-anim-rotatecw-180 { from { -webkit-transform: rotate(0); } to { -webkit-transform: rotate(-180deg); }  }
+@-webkit-keyframes qnr-anim-rotatecw-180-back { from { -webkit-transform: rotate(-180deg); } to { -webkit-transform: rotate(0); }  }
+
 /* Regular version */
 @keyframes qnr-anim-popout-down { from { transform: translateY(-100%); } to { transform: translateY(0%); }  }
 @keyframes qnr-anim-popout-down-back { from { transform: translateY(0%); } to { transform: translateY(-100%); }  }
@@ -53,6 +62,66 @@
 @keyframes qnr-anim-popin { from { transform: translateY(-10%); opacity: 0; } to { transform: translateY(0%); opacity: 1; } }
 @keyframes qnr-anim-popin-back { from { transform: translateY(0%); opacity: 1; } to { transform: translateY(-10%); opacity: 0; } }
 
+@keyframes qnr-anim-height { from { height: 0; } to { height: 100px; } }
+@keyframes qnr-anim-height-back { from { height: 100px; } to { height: 0; } }
+
+@keyframes qnr-anim-topdown { from { top: -100%; } to { top: 0; } }
+@keyframes qnr-anim-topdown-back { from { top: 0; } to { top: -100%; } }
+
+@keyframes qnr-anim-rotatecw-180 { from { transform: rotate(0); } to { transform: rotate(-180deg); }  }
+@keyframes qnr-anim-rotatecw-180-back { from { transform: rotate(-180deg); } to { transform: rotate(0); }  }
+
+
+.qnr-anim-rotatecw-180 {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-rotatecw-180;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-rotatecw-180;
+}
+.qnr-anim-rotatecw-180-back {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-rotatecw-180-back;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-rotatecw-180-back;
+}
+
+.qnr-anim-topdown {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-topdown;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-topdown;
+}
+.qnr-anim-topdown-back {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-topdown-back;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-topdown-back;
+}
+
+.qnr-anim-height {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-height;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-height;
+}
+.qnr-anim-height-back {
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-name: qnr-anim-height-back;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-name: qnr-anim-height-back;
+}
 
 .qnr-anim-popin {
     -webkit-animation-fill-mode: both;
@@ -762,6 +831,8 @@ span.qnr-arrow-anim-still {
     /* Widget itself */
 }
 
+/* ----------------------------- Fixed tab style */
+
 /* The arrow, if widget is BODY */
 span.qnr-winscroller-arrow {
     display: block;
@@ -784,7 +855,7 @@ span.qnr-winscroller-arrow {
     border-radius: 5px 0 0 5px;
     opacity: 0.8;
     background-color: rgba(0,0,0,0.2);
-    z-index: 10000;
+    z-index: 999;
 }
 span.qnr-winscroller-arrow::before {
     content: "6"; /* Up arrow */
@@ -798,6 +869,47 @@ span.qnr-winscroller-arrow:hover {
 }
 span.qnr-winscroller-arrow:active {
     color: white;
+}
+
+/* ----------------------------- Circle style */
+
+/* The arrow, if widget is BODY */
+span.qnr-winscroller-arrow {
+    display: block;
+    position: fixed;
+    margin: 0;
+    padding: 18px 0 0 2px;
+    bottom: 30px;
+    right: 20px;
+    top: auto;
+    left: auto;
+    width: 38px;
+    height: 38px;
+    font-family: Quicknr;
+    font-size: 20px;
+    line-height: 0;
+    color: #444;
+    text-decoration: none;
+    visibility: hidden;
+    speak: none;
+    border-radius: 50%;
+    border: solid thin #444;
+    opacity: 1;
+    background-color: rgba(255,255,255,0.6);
+    z-index: 999;
+}
+span.qnr-winscroller-arrow::before {
+    content: "\00c1"; /* Up arrow */
+}
+span.qnr-winscroller-arrow:link, span.qnr-winscroller-arrow:visited {
+    color: #444;
+}
+span.qnr-winscroller-arrow:hover {
+    cursor: pointer;
+    color: #000;
+}
+span.qnr-winscroller-arrow:active {
+    color: #444;
 }
 
 
@@ -1156,26 +1268,6 @@ span.qnr-carousel-stickyarrow-right:active,
 span.qnr-carousel-bigarrow-left:active,
 span.qnr-carousel-bigarrow-right:active {
     color: white;
-}
-
-
-/* STICKY BAR
- * ----------------------------------------------------- */
-
-/* TODO needs work */
-div.qnr-stickybar {
-    display: block;
-    position: relative;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-}
-
-/* Essential styling of fixed version - override for other parameters */
-div.qnr-stickybar-fixed {
-    position: fixed;
-    top: 0;
-    z-index: 9999;  /* All other z-index settings should be lower */
 }
 
 
@@ -1549,44 +1641,111 @@ div.qnr-carousel > div.qnr-carousel-item.qnr-scroller {
 /* ACCORDION
  * ----------------------------------------------------- */
 
-div.qnr-accordion {
+.qnr-accordion,
+.qnr-accordion * {
+    box-sizing: border-box;
+}
+.qnr-accordion {
     display: block;
     position: relative;
     margin: 0 auto;
     padding: 0;
     width: 100%;
-    min-width: 280px;
+    min-width: 260px;
     text-align: left;
     opacity: 0;                 /* Overriden in code */
 }
 
-/* Questions */
+/* Questions Ps */
 
-div.qnr-accordion > p {
+.qnr-accordion-question {
     display: block;
+    display: -webkit-flex;
+    display: flex;
+    
+    -webkit-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    
+    /* Vertical */
+    -webkit-align-items: center; /* Single line */
+    align-items: center;
+    -webkit-align-content: center; /* Multi line */
+    align-content: center;
+    
     position: relative;
-    margin: -8px 0;             /* Negative margin to hide DIV */
-    padding: 0.5em 2%;
-    width: 96%;
+    margin: 0;
+    padding: 0.5em 1em;
+    width: 100%;
     font-weight: bold;
     border-radius: 2px;
     box-shadow: 1px 1px 2px silver;
     background-color: #f0f0f0;
     z-index: 10;                 /* Over the answer */
 }
-div.qnr-accordion > p:hover {
+.qnr-accordion-question:hover {
     cursor: pointer;
     background-color: #f8f8f8;
+}
+/* Span wrapping P content, so we also have an arrow icon */
+.qnr-accordion-question-text {
+    display: block;
+    
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    
+    position: relative;
+    margin: 0;
+    padding: 0 1em 0 0;
+    width: 100%;
+}
+.qnr-accordion-question-icon {
+    display: block;
+    
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
+    
+    position: relative;
+    margin: 0;
+    padding: 0;
+    
+    font-family: Quicknr;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 0;
+}
+.qnr-accordion-question-icon::before {
+    content: "\00c0"; /* Up: content: "\00c1"; */
+}
+
+
+/* Wraps, created by JS */
+
+.qnr-accordion-item-wrap {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.4s;
 }
 
 /* Answers */
 
-div.qnr-accordion div {
-    display: block;
+.qnr-accordion > .qnr-accordion-item-wrap > div {
+    display: inline-block;
     position: relative;
+/*
+    top: -100%;
+*/
     margin: 0;
     padding: 1em 2em;
-    width: 90%;
+    width: 100%;
+/*
+    opacity: 0;
+    transition: all 0.6s;
+*/
 }
 
 

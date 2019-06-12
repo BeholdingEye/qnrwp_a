@@ -1,6 +1,6 @@
 /* ==================================================================
  *
- *            QUICKNR INTERFACE 1.7+
+ *            QUICKNR INTERFACE 1.8+
  *
  *            Copyright 2019 Karl Dolenc, beholdingeye.com.
  *            All rights reserved.
@@ -94,33 +94,6 @@ var QNR_INTER = {};
      * 
      * Likewise, if the "data-qnr-win-max-width" attribute is used in 
      * the same way, the sizing will be according to window width.
-     * 
-     * 
-     *                         Responsive (not used, will be removed)
-     * 
-     * A DIV with the class of "qnr-responsive" is a widget whose child
-     * elements will be laid out in a responsive flexible grid at any 
-     * screen size, to a minimum of 320px. The child elements must be
-     * DIVs. The widget works well with 2 to 5 DIV items, not so well 
-     * with more. For best results, the containing element of the widget
-     * (BODY, if no other) should span the entire page and have padding 
-     * and margins set to 0.
-     * 
-     * Item DIVs will be assigned the class of "qnr-responsive-item",
-     * with margins of 0, and padding set to "0.5em 2em". In some use
-     * cases, particularly at small display sizes, you may need to
-     * override this.
-     * 
-     * Further overrides may be needed when narrower minimum widths of
-     * the item DIVs are desired, as in columns of links in a footer. In
-     * this case, override the flex and width properties of the two 
-     * classes mentioned above.
-     * 
-     * Remember that a responsive row of more than 4 blocks makes for 
-     * poor user experience (except for image galleries).
-     * 
-     * This JS will be removed as it is unnecessary. In CSS the items 
-     * are now handled as " > div" children of "qnr-responsive".
      * 
      * 
      *                         Carousel
@@ -270,18 +243,6 @@ var QNR_INTER = {};
      * set to false (and auto resume is on).
      * 
      * 
-     *                         Stickybar
-     * 
-     * If you want a DIV, that spans 100% of the page width and appears
-     * at a distance down from the top, perhaps after a header image, to
-     * "stick" to the top of the window like a menu bar when the window
-     * is scrolled down beyond it, mark the DIV with the "qnr-stickybar"
-     * class.
-     * 
-     * The widget will be assigned the class of "qnr-stickybar-fixed" 
-     * for its fixed appearance.
-     * 
-     * 
      *                         Slider
      * 
      * A DIV marked with the class of "qnr-slider" is a non-looping,
@@ -410,14 +371,25 @@ var QNR_INTER = {};
      * 
      * Accordions are widgets with the class of "qnr-accordion".
      * 
-     * Accordions with additional class of "qnr-multi" will show more
-     * than one item at a time if more than one is clicked.
-     * 
      * Accordion items consist of <P> questions and <DIV> answers. They
      * don't require any classes, and the DIVs may contain <P> and 
      * <DIV> tags, as well as others. Other tags such as headings 
      * may be placed between question-answer groups, but the question 
      * <P> and answer <DIV> must be next to each other.
+     * 
+     * Question elements will have the contained text wrapped in SPAN 
+     * tag with the class of "qnr-accordion-question-text", and another 
+     * SPAN placed alongside with class of "qnr-accordion-question-icon"
+     * for the rotating arrow icon on the right end of the question.
+     * 
+     * Answer DIVs will be wrapped in SPANs with the class of 
+     * "qnr-accordion-item-wrap".
+     * 
+     * Usually, only one answer will be shown at a time, but if a 
+     * dataset attribute "qnr-accordion-multiple" is set to "yes", 
+     * multiple answers may be open. The same will be true if a class 
+     * "qnr-accordion-multiple" is assigned on the widget. The dataset 
+     * will override the class.
      * 
      * 
      *                         Aspect Keeper
@@ -569,107 +541,35 @@ var QNR_INTER = {};
      * style rules, with 2 items: ".center" and ".center-bottom". These
      * are not widgets but can be applied to block elements.
      * 
-     * -------------------------------------------------------------- */ 
+     * 
+     *                         Responsive (CSS widget, no JS)
+     * 
+     * A DIV with the class of "qnr-responsive" is a widget whose child
+     * elements will be laid out in a responsive flexible grid at any 
+     * screen size, to a minimum of 320px. The child elements must be
+     * DIVs. The widget works well with 2 to 5 DIV items, not so well 
+     * with more. For best results, the containing element of the widget
+     * (BODY, if no other) should span the entire page and have padding 
+     * and margins set to 0.
+     * 
+     * Item DIVs will be assigned the class of "qnr-responsive-item",
+     * with margins of 0, and padding set to "0.5em 2em". In some use
+     * cases, particularly at small display sizes, you may need to
+     * override this.
+     * 
+     * Further overrides may be needed when narrower minimum widths of
+     * the item DIVs are desired, as in columns of links in a footer. In
+     * this case, override the flex and width properties of the two 
+     * classes mentioned above.
+     * 
+     * Remember that a responsive row of more than 4 blocks makes for 
+     * poor user experience (except for image galleries).
+     * 
+     * This JS has been removed as it is unnecessary. In CSS the items 
+     * are now handled as " > div" children of "qnr-responsive".
+     * 
+     * -------------------------------------------------------------- */
 
-
-    // ===================== ANIMATION =====================
-
-    function animCallback(obj, intervalObj, args) {
-        
-        /* ----------------------- INFO ---------------------------------
-         * 
-         * The "obj" argument is the object to animate:
-         * 
-         *  * window scroll:
-         *      - the object to animatedly scroll to
-         * 
-         *  * accordion hide/show:
-         *      - the generated SPAN wrapper, containing the answer DIV
-         * 
-         * the "intervalObj" is the object returned by setInterval
-         * 
-         * The "args" argument is a list, its first item being one of:
-         * 
-         *  - "window scroll"
-         *  - "accordion hide"
-         *  - "accordion show"
-         * 
-         * Subsequent "args" items are:
-         * 
-         * * window scroll:
-         *      - position offset number due to header height,
-         *          usually negative
-         * 
-         * * accordion hide/show:
-         *      - none
-         * 
-         * Call the animCallback() like so (last param is milliseconds):
-         * 
-         *  var intervalObj = null;
-         *  window.setTimeout(function()
-         *      {window.clearInterval(intervalObj);}, 1000);
-         *  intervalObj = window.setInterval(function() 
-         *      {animCallback(obj, intervalObj, [mode]);}, 8);
-         * 
-         * -------------------------------------------------------------- */ 
-        
-        
-        // ----------------------- Accordion hide
-        
-        if (args[0] == "accordion hide") {
-            var divObj = obj.firstElementChild;
-            var objHeight = parseInt(obj.dataset.qnrAccordionItemHeight);
-            obj.style.opacity = "0";
-            divObj.style.opacity = "0";
-            if (obj.offsetHeight > 0) {
-                // Make the number of steps proportional to height
-                var divisor = Math.min(30, 30 * (objHeight/300));
-                obj.style.height = Math.max(0,obj.offsetHeight - (objHeight/divisor)) + "px";
-                divObj.style.top = Math.max((-1 * objHeight),divObj.offsetTop - (objHeight/divisor)) + "px";
-            }
-            else {
-                window.clearInterval(intervalObj);
-                return;
-            }
-        }
-        
-        // ----------------------- Accordion show
-        
-        if (args[0] == "accordion show") {
-            var divObj = obj.firstElementChild;
-            var objHeight = parseInt(obj.dataset.qnrAccordionItemHeight);
-            obj.style.opacity = "1";
-            divObj.style.opacity = "1";
-            if (obj.offsetHeight < objHeight) {
-                // Make the number of steps proportional to height
-                var divisor = Math.min(30, 30 * (objHeight/300));
-                obj.style.height = Math.min(objHeight,obj.offsetHeight + (objHeight/divisor)) + "px";
-                divObj.style.top = Math.min(0,divObj.offsetTop + (objHeight/divisor)) + "px";
-            }
-            else {
-                window.clearInterval(intervalObj);
-                return;
-            }
-        }
-        
-        // ----------------------- Window scroll
-        
-        if (args[0] == "window scroll") {
-            var offsetPos = args[1];
-            var pos = window.pageYOffset;
-            if ((pos > QNR.getYPos(obj, offsetPos)) && (pos - QNR.getYPos(obj, offsetPos) > 2)) {
-                // Let the scroll last 8 steps
-                window.scrollTo(0, pos - (pos - QNR.getYPos(obj, offsetPos))/7);
-            }
-            else if ((pos < QNR.getYPos(obj, offsetPos)) && (QNR.getYPos(obj, offsetPos) - pos > 2)) {
-                window.scrollTo(0, pos + (QNR.getYPos(obj, offsetPos) - pos)/7);
-            }
-            else {
-                window.clearInterval(intervalObj);
-                return;
-            }
-        }
-    }
 
     // ===================== STARTUP ===================== 
     
@@ -682,8 +582,6 @@ var QNR_INTER = {};
     
     QNR_INTER.scrollersL = [];
     QNR_INTER.scrollerObjectsL = [];
-    
-    QNR_INTER.stickybarObject = null;
 
     QNR_INTER.imageanimsL = [];
     QNR_INTER.imageanimObjectsL = [];
@@ -696,9 +594,6 @@ var QNR_INTER = {};
     
     QNR_INTER.winscrollersL = [];
     QNR_INTER.winscrollerObjectsL = [];
-    
-    //QNR_INTER.responsivesL = [];
-    //QNR_INTER.responsiveObjectsL = [];
     
     QNR_INTER.fontresizesL = [];
     QNR_INTER.fontresizeObjectsL = [];
@@ -752,7 +647,6 @@ var QNR_INTER = {};
         if (!this.displayLogoInDrawer) {
             var logoObjInDrawer = objClass("qnr-navbar-logo", this.drawer);
             if (logoObjInDrawer !== undefined && logoObjInDrawer) {
-                print("not in drawer")
                 logoObjInDrawer.style.display = "none";
             }
         }
@@ -1326,21 +1220,6 @@ var QNR_INTER = {};
     };
     
     
-    // ----------------------- RESPONSIVE (not used any more, will be removed)
-    
-    function ResponsiveObject() {
-        this.object                 = null;
-        this.divItemsL              = [];
-    };
-    ResponsiveObject.prototype.initialize = function() {
-        var objChildren = this.object.children;
-        for (var i = 0; i < objChildren.length; i++) {
-            objChildren[i].classList.add("qnr-responsive-item");
-            this.divItemsL.push(objChildren[i]);
-        }
-    };
-    
-    
     // ----------------------- WINSCROLLER
     
     function WinscrollerObject() {
@@ -1370,12 +1249,23 @@ var QNR_INTER = {};
         this.object.addEventListener("click",function(event){
             var intervalObj = null;
             var obj = that.targetObj;
-            var off = that.offset;
+            var offsetPos = that.offset;
             window.setTimeout(function() {
                 window.clearInterval(intervalObj);
             }, 1000);
             intervalObj = window.setInterval(function() {
-                animCallback(obj, intervalObj, ["window scroll", off]);
+                var pos = window.pageYOffset;
+                if ((pos > QNR.getYPos(obj, offsetPos)) && (pos - QNR.getYPos(obj, offsetPos) > 2)) {
+                    // Let the scroll last 8 steps
+                    window.scrollTo(0, pos - (pos - QNR.getYPos(obj, offsetPos))/7);
+                }
+                else if ((pos < QNR.getYPos(obj, offsetPos)) && (QNR.getYPos(obj, offsetPos) - pos > 2)) {
+                    window.scrollTo(0, pos + (QNR.getYPos(obj, offsetPos) - pos)/7);
+                }
+                else {
+                    window.clearInterval(intervalObj);
+                    return;
+                }
             }, 16);
             if (that.object.tagName == "A") event.preventDefault();
         },true);
@@ -1786,52 +1676,6 @@ var QNR_INTER = {};
     };
     
     
-    // ----------------------- STICKYBAR
-    
-    function StickybarObject() { // TODO needs work
-        this.object = null;
-        this.newObject = null;
-        this.madesticky = false;
-        this.objYPos = 0;
-    };
-    StickybarObject.prototype.initialize = function() {
-        this.objYPos = QNR.getYPos(this.object, 0);
-        // Clone object, without child nodes, as placeholder TODO
-        this.newObject = this.object.cloneNode(false);
-        // Size the placeholder height the same as actual widget height
-        // Used independently on window resize
-        this.sizePlaceholder();
-        // Update UI
-        this.manageSticky();
-    };
-    StickybarObject.prototype.sizePlaceholder = function() {
-        // Width is assumed to be expressed as 100%
-        this.newObject.style.height = this.object.offsetHeight + "px";
-        // Update scrollers, accounting for change of scroll
-        // This is the only solution that works
-        if (QNR_INTER.scrollerObjectsL && QNR_INTER.scrollerObjectsL.length > 0) {
-            for (var i = 0; i < QNR_INTER.scrollerObjectsL.length; i++) {
-                QNR_INTER.scrollerObjectsL[i].parallaxScroll();
-            }
-        }
-    };
-    StickybarObject.prototype.manageSticky = function() {
-        if (!this.madesticky && window.pageYOffset >= this.objYPos) {
-            // Place new object before original
-            this.newObject = this.object.parentNode.insertBefore(this.newObject,this.object);
-            // Display original fixed
-            this.object.classList.add("qnr-stickybar-fixed");
-            this.madesticky = true;
-        }
-        else if (this.madesticky && window.pageYOffset < this.objYPos) {
-            // Remove newObject and remove fixed styling
-            this.newObject.parentNode.removeChild(this.newObject);
-            this.object.classList.remove("qnr-stickybar-fixed");
-            this.madesticky = false;
-        }
-    };
-    
-    
     // ----------------------- SLIDER
     
     function SliderObject() {
@@ -2048,6 +1892,28 @@ var QNR_INTER = {};
         xSpan.style.position            = "absolute";
         this.object.style.transition    = "opacity 0.2s";
         this.object.appendChild(xSpan);
+        var this1 = this;
+        xSpan.onclick = function (event) {
+            this1.xClose();
+        };
+    };
+    XiconObject.prototype.xClose = function() {
+        this.object.style.opacity = 0;
+        if (this.object.className && this.object.classList.contains("qnr-remove")) {
+            var this1 = this;
+            window.setTimeout(function(){
+                this1.object.style.display = "none";
+                // Update scrollers, accounting for change of scroll
+                // This is the only solution that works
+                if (QNR_INTER.scrollerObjectsL.length > 0) {
+                    for (var i = 0; i < QNR_INTER.scrollerObjectsL.length; i++) {
+                        QNR_INTER.scrollerObjectsL[i].parallaxScroll();
+                    }
+                }
+            },400);
+        } else {
+            window.setTimeout(function(){this.object.style.visibility = "hidden";},400);
+        }
     };
     
     
@@ -2055,122 +1921,93 @@ var QNR_INTER = {};
     
     function AccordionObject() {
         this.object = null;
-        this.heights = []; // Heights of accordion answer DIVs
+        this.questions = [];
+        this.answers = [];
+        this.wrapSpans = [];
+        this.showMultiple = false;
     };
     AccordionObject.prototype.initializeItems = function() {
+        if (this.object.classList.contains("qnr-accordion-multiple")) this.showMultiple = true;
+        if (this.object.dataset.qnrAccordionMultiple && QNR.isTruthValue(this.object.dataset.qnrAccordionMultiple)) this.showMultiple = true;
         // Initialize accordion items, with SPAN wraps and data- attributes
         var accordionChildren = this.object.childNodes;
-        var accordionItems = [];
         for (var i = 0; i < accordionChildren.length; i++) {
-            if (accordionChildren[i].tagName == "DIV") accordionItems.push(accordionChildren[i]);
+            if (accordionChildren[i].tagName == "P") this.questions.push(accordionChildren[i]);
+            else if (accordionChildren[i].tagName == "DIV") this.answers.push(accordionChildren[i]);
         }
-        for (var i = 0; i < accordionItems.length; i++) {
-            var aItem = accordionItems[i];
-            // Record item height
-            this.heights.push(aItem.offsetHeight);
-            // Style item hidden
-            aItem.style.display     = "inline-block";
-            aItem.style.position    = "relative";
-            aItem.style.opacity     = "0";
-            aItem.style.top         = "-"+aItem.offsetHeight+"px";
-            aItem.style.transition  = "opacity 0.6s";
-            // Wrap item DIV in outer control SPAN
-            // Using SPAN instead of DIV because the item collection is live (<- not any more)
-            aItem.outerHTML = "<span class='qnr-accordion-item-wrap'>"+aItem.outerHTML+"</span>";
+        // ----------------------- Questions
+        for (var i = 0; i < this.questions.length; i++) {
+            this.questions[i].dataset.qnrAccordionItemId = i; // Same as wrap SPAN
+            this.questions[i].classList.add("qnr-accordion-question");
+            this.questions[i].innerHTML = "<span class='qnr-accordion-question-text'>"+this.questions[i].innerHTML+"</span><span class='qnr-accordion-question-icon'></span>";
+            var this1 = this;
+            this.questions[i].onclick = function (event) {
+                var targetWrap = this1.wrapSpans[event.currentTarget.dataset.qnrAccordionItemId];
+                this1.toggleAccordionItem(targetWrap);
+            };
         }
-        // Style & hide the SPANs, must be done in new loop as aItem.outerHTML doesn't include the SPAN
-        var newItems = classObjs("qnr-accordion-item-wrap", this.object);
-        for (var i = 0; i < newItems.length; i++) {
-            // Create ID and height data- attributes on the SPANs
-            newItems[i].dataset.qnrAccordionItemId = i;
-            newItems[i].dataset.qnrAccordionItemHeight = this.heights[i];
-            // Style item hidden
-            newItems[i].style.display       = "inline-block";
-            newItems[i].style.position      = "relative";
-            newItems[i].style.margin        = "0";
-            newItems[i].style.padding       = "0";
-            newItems[i].style.height        = "0";
-            newItems[i].style.overflow      = "hidden";
-            newItems[i].style.opacity       = "0";
-            newItems[i].style.transition    = "opacity 0.6s";
+        // ----------------------- Answers
+        for (var i = 0; i < this.answers.length; i++) {
+            this.answers[i].outerHTML = "<span class='qnr-accordion-item-wrap'>"+this.answers[i].outerHTML+"</span>";
+        }
+        // ----------------------- Wraps
+        var wItems = classObjs("qnr-accordion-item-wrap", this.object);
+        for (var i = 0; i < wItems.length; i++) {
+            this.wrapSpans.push(wItems[i]);
+            wItems[i].dataset.qnrAccordionItemId = i; // Same as question P
         }
         this.object.style.opacity = 1; // Show the widget now that it is initialized
     };
-    AccordionObject.prototype.itemWrapAnim = function(obj, mode) {
-        var intervalObj = null;
-        window.setTimeout(function(){
-            window.clearInterval(intervalObj);
-        }, 1000);
-        intervalObj = window.setInterval(function(){
-            animCallback(obj, intervalObj, [mode]);
-            // Update scrollers, accounting for change of scroll
-            // This is the only solution that works
-            if (QNR_INTER.scrollerObjectsL.length > 0) {
-                for (var i = 0; i < QNR_INTER.scrollerObjectsL.length; i++) {
-                    QNR_INTER.scrollerObjectsL[i].parallaxScroll();
-                }
+    AccordionObject.prototype.toggleAccordionItem = function(targetWrap) {
+        if (window.getComputedStyle(targetWrap, "").opacity == "0") {
+            this.showAnswer(targetWrap);
+        } else {
+            this.hideAnswer(targetWrap);
+        }
+        // Update scrollers, accounting for change of scroll
+        // This is the only solution that works
+        if (QNR_INTER.scrollerObjectsL.length > 0) {
+            for (var i = 0; i < QNR_INTER.scrollerObjectsL.length; i++) {
+                QNR_INTER.scrollerObjectsL[i].parallaxScroll();
             }
-        }, 8);
+        }
+    };
+    AccordionObject.prototype.showAnswer = function (targetWrap) {
+        if (!this.showMultiple) this.hideAllAnswers();
+        targetWrap.style.opacity = "1";
+        targetWrap.style.height = objTag("div", targetWrap).offsetHeight + "px";
+        //QNR.animObj = function (obj, slideType, fadeType, animDuration)
+        //QNR.animObj(objTag("div", targetWrap), "topdown", "", 0.4); // Height not working well
+        
+        var targetQIcon = objClass("qnr-accordion-question-icon", this.questions[targetWrap.dataset.qnrAccordionItemId]);
+        QNR.animObj(targetQIcon, "rotatecw-180", "", 0.4);
+    };
+    AccordionObject.prototype.hideAnswer = function (targetWrap) {
+        targetWrap.style.opacity = "0";
+        targetWrap.style.height = "";
+        //QNR.animObj(objTag("div", targetWrap), "back", "", 0.4); // Not good either, a bit jerky
+        
+        var targetQIcon = objClass("qnr-accordion-question-icon", this.questions[targetWrap.dataset.qnrAccordionItemId]);
+        QNR.animObj(targetQIcon, "back", "", 0.4);
+    };
+    AccordionObject.prototype.hideAllAnswers = function () {
+        for (var i = 0; i < this.wrapSpans.length; i++) {
+            if (window.getComputedStyle(this.wrapSpans[i], "").opacity != "0") {
+                this.hideAnswer(this.wrapSpans[i]);
+            }
+        }
+    };
+    AccordionObject.prototype.resizeWrapH = function () {
+        for (var i = 0; i < this.wrapSpans.length; i++) {
+            if (window.getComputedStyle(this.wrapSpans[i], "").opacity != "0") {
+                this.wrapSpans[i].style.height = objTag("div", this.wrapSpans[i]).offsetHeight + "px";
+            }
+        }
     };
     
     
-    // ----------------------- WIDGET ACTION
     
-    function widgetAction(widget, clicked, eventType) { // TODO inline in handler
-        // "clicked" can be null if eventType is "scroll"
-        
-        if (eventType == "click") {
-            // ----------------------- X-icon
-            
-            if (clicked.className && clicked.classList.contains("qnr-x-icon-btn")) {
-                widget.style.opacity = 0;
-                if (widget.className && widget.classList.contains("qnr-remove")) {
-                    window.setTimeout(function(){
-                        widget.style.display = "none";
-                        // Update scrollers, accounting for change of scroll
-                        // This is the only solution that works
-                        if (QNR_INTER.scrollerObjectsL.length > 0) {
-                            for (var i = 0; i < QNR_INTER.scrollerObjectsL.length; i++) {
-                                QNR_INTER.scrollerObjectsL[i].parallaxScroll();
-                            }
-                        }
-                    },400);
-                }
-                else {
-                    window.setTimeout(function(){widget.style.visibility = "hidden";},400);
-                }
-                // TODO: callback to window, for more activity if needed (or just another function)
-            }
-            
-            // ----------------------- Accordion
-            
-            if ((widget.nodeName == "DIV" && widget.className && widget.classList.contains("qnr-accordion")) &&
-                (clicked.nodeName == "P" && clicked.parentNode.className && clicked.parentNode.classList.contains("qnr-accordion"))) {
-                // Identify the clicked widget object
-                var thisAccordion = QNR_INTER.accordionObjectsL[parseInt(widget.dataset.qnrAccordionId)];
-                // Next element after the P is assumed to be SPAN wrap
-                var toggleSpan = clicked.nextElementSibling;
-                // SPAN was shown
-                if (toggleSpan.style.opacity != 0) {
-                    thisAccordion.itemWrapAnim(toggleSpan, "accordion hide");
-                }
-                else { // SPAN was hidden
-                    if (!widget.classList.contains("qnr-multi")) {
-                        // Hide any shown SPANs
-                        var togglableSpans = classObjs("qnr-accordion-item-wrap", widget);
-                        for (var i = 0; i < togglableSpans.length; i++) {
-                            if (togglableSpans[i].style.opacity != 0) {
-                                thisAccordion.itemWrapAnim(togglableSpans[i], "accordion hide");
-                            }
-                        }
-                    }
-                    // Show our SPAN
-                    thisAccordion.itemWrapAnim(toggleSpan, "accordion show");
-                }
-            }
-            
-        }
-    }
+    // ===================== EVENTS =====================
     
     
     // ----------------------- ONLOAD
@@ -2267,22 +2104,6 @@ var QNR_INTER = {};
         }
         
         
-        // ----------------------- Responsives
-        
-        //QNR_INTER.responsivesL = classObjs("qnr-responsive");
-        //if (QNR_INTER.responsivesL.length > 0) {
-            //for (var i = 0; i < QNR_INTER.responsivesL.length; i++) {
-                //// Create a data- id attribute on the responsive
-                //QNR_INTER.responsivesL[i].dataset.qnrResponsiveId = i;
-                //// Create a new JS object for the responsive
-                //QNR_INTER.responsiveObjectsL.push(new ResponsiveObject());
-                //QNR_INTER.responsiveObjectsL[i].object = QNR_INTER.responsivesL[i];
-                //// Initialize object
-                //QNR_INTER.responsiveObjectsL[i].initialize();
-            //}
-        //}
-        
-        
         // ----------------------- Winscrollers
         
         QNR_INTER.winscrollersL = classObjs("qnr-winscroller");
@@ -2330,14 +2151,6 @@ var QNR_INTER = {};
                 // Initialize object
                 QNR_INTER.scrollerObjectsL[i].initialize();
             }
-        }
-        
-        // ----------------------- Stickybar JS object
-        
-        if (objClass("qnr-stickybar")) {
-            QNR_INTER.stickybarObject = new StickybarObject();
-            QNR_INTER.stickybarObject.object = objClass("qnr-stickybar");
-            QNR_INTER.stickybarObject.initialize();
         }
         
         // ----------------------- Slider JS objects
@@ -2452,39 +2265,6 @@ var QNR_INTER = {};
         
     }, true);
     
-    // Find the widget the clicked object belongs to
-    // UI elements working independently must capture their events
-    window.addEventListener("click", function(event) {
-        var clicked = event.target;
-        var widget = clicked;  
-        var clickedWidget = false;
-        
-        // ----------------------- X-icon
-        
-        if (clicked.className && clicked.classList.contains("qnr-x-icon-btn")) {
-            widget = clicked.parentNode;
-            clickedWidget = true;
-        }
-        
-        // ----------------------- Accordion
-        
-        else if (widget) {
-            // Test if clicked in widget
-            while (widget && widget.nodeName != "BODY" && widget.nodeName != "HTML") {
-                if (widget.className && widget.classList.contains("qnr-accordion")) {
-                    clickedWidget = true;
-                    break;
-                } else {
-                    widget = widget.parentNode;
-                }
-            }
-        }
-        
-        if (!clickedWidget) return;
-        // We have a widget
-        widgetAction(widget, clicked, "click");
-    }, false);
-    
     
     // ----------------------- ONKEYDOWN
     
@@ -2554,10 +2334,14 @@ var QNR_INTER = {};
     // ----------------------- ONRESIZE
     
     window.addEventListener("resize", function(event) {
-        if (QNR_INTER.stickybarObject && QNR_INTER.stickybarObject.madesticky) QNR_INTER.stickybarObject.sizePlaceholder();
         if (QNR_INTER.thumbstripsL.length > 0) {
             for (var i = 0; i < QNR_INTER.thumbstripObjectsL.length; i++) {
                 QNR_INTER.thumbstripObjectsL[i].resize();
+            }
+        }
+        if (QNR_INTER.accordionsL.length > 0) {
+            for (var i = 0; i < QNR_INTER.accordionObjectsL.length; i++) {
+                QNR_INTER.accordionObjectsL[i].resizeWrapH();
             }
         }
         if (QNR_INTER.aspectkeepersL.length > 0) {
@@ -2608,11 +2392,6 @@ var QNR_INTER = {};
             for (var i = 0; i < QNR_INTER.scrollerObjectsL.length; i++) {
                 QNR_INTER.scrollerObjectsL[i].parallaxScroll();
             }
-        }
-        
-        // ----------------------- Stickybar
-        if (QNR_INTER.stickybarObject) {
-            QNR_INTER.stickybarObject.manageSticky();
         }
     }, false);
     
@@ -3027,6 +2806,15 @@ QNR.animObj = function (obj, slideType, fadeType, animDuration) {
     } else if (slideType == "popin") {
         if (obj.className) obj.classList.remove("qnr-anim-popin-back");
         obj.classList.add("qnr-anim-popin");
+    } else if (slideType == "height") {
+        if (obj.className) obj.classList.remove("qnr-anim-height-back");
+        obj.classList.add("qnr-anim-height");
+    } else if (slideType == "topdown") {
+        if (obj.className) obj.classList.remove("qnr-anim-topdown-back");
+        obj.classList.add("qnr-anim-topdown");
+    } else if (slideType == "rotatecw-180") {
+        if (obj.className) obj.classList.remove("qnr-anim-rotatecw-180-back");
+        obj.classList.add("qnr-anim-rotatecw-180");
     } else if (slideType == "back") {
         if (obj.className && obj.classList.contains("qnr-anim-popout-up")) {
             obj.classList.remove("qnr-anim-popout-up");
@@ -3043,6 +2831,15 @@ QNR.animObj = function (obj, slideType, fadeType, animDuration) {
         } else if (obj.className && obj.classList.contains("qnr-anim-popin")) {
             obj.classList.remove("qnr-anim-popin");
             obj.classList.add("qnr-anim-popin-back");
+        } else if (obj.className && obj.classList.contains("qnr-anim-height")) {
+            obj.classList.remove("qnr-anim-height");
+            obj.classList.add("qnr-anim-height-back");
+        } else if (obj.className && obj.classList.contains("qnr-anim-topdown")) {
+            obj.classList.remove("qnr-anim-topdown");
+            obj.classList.add("qnr-anim-topdown-back");
+        } else if (obj.className && obj.classList.contains("qnr-anim-rotatecw-180")) {
+            obj.classList.remove("qnr-anim-rotatecw-180");
+            obj.classList.add("qnr-anim-rotatecw-180-back");
         }
     }
     if (fadeType == "in") {
