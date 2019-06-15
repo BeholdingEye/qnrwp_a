@@ -1254,7 +1254,8 @@ var QNR_INTER = {};
                 window.clearInterval(intervalObj);
             }, 1000);
             intervalObj = window.setInterval(function() {
-                var pos = window.pageYOffset;
+                //var pos = window.pageYOffset;
+                var pos = QNR_INTER.winScrollY;
                 if ((pos > QNR.getYPos(obj, offsetPos)) && (pos - QNR.getYPos(obj, offsetPos) > 2)) {
                     // Let the scroll last 8 steps
                     window.scrollTo(0, pos - (pos - QNR.getYPos(obj, offsetPos))/7);
@@ -1472,11 +1473,13 @@ var QNR_INTER = {};
         }
     };
     CarouselObject.prototype.onScrollCarousel = function() {
-        if (window.pageYOffset >= this.object.offsetHeight + QNR.getYPos(this.object) - this.scrollOffset && this.carouselTimer) {
+        //if (window.pageYOffset >= this.object.offsetHeight + QNR.getYPos(this.object) - this.scrollOffset && this.carouselTimer) {
+        if (QNR_INTER.winScrollY >= this.object.offsetHeight + QNR.getYPos(this.object) - this.scrollOffset && this.carouselTimer) {
             this.pauseCarousel();
         }
         else if (!this.hardStop && this.resumeAuto == "on") {
-            if (window.pageYOffset < this.object.offsetHeight + QNR.getYPos(this.object) && !this.carouselTimer) {
+            //if (window.pageYOffset < this.object.offsetHeight + QNR.getYPos(this.object) && !this.carouselTimer) {
+            if (QNR_INTER.winScrollY < this.object.offsetHeight + QNR.getYPos(this.object) && !this.carouselTimer) {
                 this.resumeCarousel();
             }
         }
@@ -1860,8 +1863,10 @@ var QNR_INTER = {};
     ScrollerObject.prototype.parallaxScroll = function() {
         var objYPos             = QNR.getYPos(this.object, 0);
         var objYPosBottom       = objYPos + this.object.offsetHeight;
-        var objVisPos           = objYPos - window.pageYOffset;
-        var objVisPosBottom     = objYPosBottom - window.pageYOffset;
+        //var objVisPos           = objYPos - window.pageYOffset;
+        var objVisPos           = objYPos - QNR_INTER.winScrollY;
+        //var objVisPosBottom     = objYPosBottom - window.pageYOffset;
+        var objVisPosBottom     = objYPosBottom - QNR_INTER.winScrollY;
         var cW                  = objHtml().clientWidth;
         var cH                  = objHtml().clientHeight;
         var cHW                 = cH/cW;
@@ -2016,6 +2021,8 @@ var QNR_INTER = {};
         // Needed for accurate element position measurement on load
         window.scrollBy(0, 1);
         window.scrollBy(0, -1);
+        
+        QNR_INTER.winScrollY = window.pageYOffset; // Let's get started with scroll
         
         // ----------------------- Navbar JS object
         
@@ -2365,14 +2372,40 @@ var QNR_INTER = {};
             
     // ----------------------- ONSCROLL
     
-    // Set up scroll event listener, must be on window
-    window.addEventListener("scroll", function(event){
+    /**
+     * Debounce a function used in animation, decoupling it from events
+     * 
+     * Receives a function as a parameter and returns it as animation frame callback
+     * 
+     * Adapted from:
+     * https://pqina.nl/blog/applying-styles-based-on-the-user-scroll-position-with-smart-css/
+     */
+    QNR_INTER.debounceAnimFunc = function (fn) {
+        var frame;
+        return function () {
+            var args = Array.prototype.slice.call(arguments);
+            if (frame) {
+                cancelAnimationFrame(frame);
+            }
+            frame = requestAnimationFrame(function () {
+                fn.apply(null, args);
+            });
+        };
+    };
+
+    QNR_INTER.onScroll = function () {
+        QNR_INTER.winScrollY = window.pageYOffset;
+        QNR_INTER.onScrollDo();
+    };
+
+    QNR_INTER.onScrollDo = function () {
         
         // ----------------------- Winscroller arrow
         if (objClass("qnr-winscroller-arrow")) {
             var wsArrow = objClass("qnr-winscroller-arrow"); // Only one arrow can exist
             // Show winscroller arrow if we're scrolled down > this.winscrollFraction
-            if (window.pageYOffset > window.innerHeight * wsArrow.dataset.qnrWinscrollFraction) {
+            //if (window.pageYOffset > window.innerHeight * wsArrow.dataset.qnrWinscrollFraction) {
+            if (QNR_INTER.winScrollY > window.innerHeight * wsArrow.dataset.qnrWinscrollFraction) {
                 wsArrow.style.visibility = "visible";
             }
             else {
@@ -2393,7 +2426,10 @@ var QNR_INTER = {};
                 QNR_INTER.scrollerObjectsL[i].parallaxScroll();
             }
         }
-    }, false);
+    };
+
+    // Set up scroll event listener, must be on window
+    window.addEventListener("scroll", QNR_INTER.debounceAnimFunc(QNR_INTER.onScroll));
     
 
     // ----------------------- Widget JS object getters
@@ -2850,6 +2886,7 @@ QNR.animObj = function (obj, slideType, fadeType, animDuration) {
         obj.classList.add("qnr-anim-fade-out");
     }
 };
+
 
 // ----------------------- Convenience object-getting functions
 

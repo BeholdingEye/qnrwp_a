@@ -135,7 +135,6 @@ li.qnr-hmenu-subholder::before {
     color: silver;
     margin: 0;
     padding: 0;
-    speak: none;
 }
 /* Override for appearance of widget while menu is displayed (overriden with triangle in navmenu) */
 .qnr-hmenu-hover {
